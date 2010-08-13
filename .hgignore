@@ -1,1 +1,4 @@
-^vimeo-project/bin/*
+^bin/*
+
+.project
+.classpath
