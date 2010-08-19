@@ -18,5 +18,30 @@ package org.vimeoid.dto;
  *
  */
 public class User {
+    
+    public int id;
+    public String displayName;
+    public /*long*/ String createdOn;
+    public boolean fromStaff;
+    public boolean isPlusMember;
+    
+    public String profileUrl;
+    public String videosUrl;
+    
+    public int videosUploaded;
+    public int videosAppearsIn;
+    public int videosLiked;
+    
+    public int contactsCount;
+    public int albumsCount;
+    public int channelsCount;
+    
+    public String location;
+    public String websiteUrl;
+    public String biography; 
+    
+    public String smallPortraitUrl;
+    public String mediumPortraitUrl;
+    public String largePortraitUrl;
 
 }
