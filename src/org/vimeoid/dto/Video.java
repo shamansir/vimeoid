@@ -22,29 +22,28 @@ public class Video {
     public int id;
     public String url;
     public String title;
-    public /*long*/ String uploadedOn;
+    public String description;
     
     public int width;
     public int height;
-    
     public int duration; /* in seconds */
-    public String description;
-    
-    public String uploaderName;
-    public String uploaderProfileUrl;
-    
-    public String smallUploaderPortraitUrl;
-    public String mediumUploaderPortraitUrl;
-    public String largeUploaderPortraitUrl;
-    
-    public String smallThumbnailUrl;
-    public String mediumThumbnailUrl;
-    public String largeThumbnailUrl;
     
     public int likesCount;
     public int playsCount;
     public int commentsCount;
     
-    public String[] tags;
+    public String[] tags;    
 
+    public /*long*/ String uploadedOn;
+    public String uploaderName;
+    public String uploaderProfileUrl;
+    
+    public String smallThumbnailUrl;
+    public String mediumThumbnailUrl;
+    public String largeThumbnailUrl;
+    
+    public String smallUploaderPortraitUrl;
+    public String mediumUploaderPortraitUrl;
+    public String largeUploaderPortraitUrl;
+    
 }

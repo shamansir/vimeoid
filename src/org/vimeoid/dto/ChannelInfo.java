@@ -11,7 +11,7 @@ package org.vimeoid.dto;
  *
  * <code>ChannelInfo</code>
  *
- * <p>Vimeo ChannelInfo representation</p>
+ * <p>Vimeo channel representation</p>
  *
  * @author Ulric Wilfred <shaman.sir@gmail.com>
  * @date Aug 19, 2010 8:56:39 PM 
@@ -19,4 +19,20 @@ package org.vimeoid.dto;
  */
 public class ChannelInfo {
 
+    public int id;
+    public String name;
+    public String description;
+    
+    public String logoHeader;
+    public String pageUrl;
+    public String rssUrl;
+    
+    public /*long*/ String createdOn;
+    public int creatorId;
+    public String creatorDisplayName;
+    public String creatorProfileUrl;
+    
+    public int videosCount;
+    public int subscribersCount;
+    
 }

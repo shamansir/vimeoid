@@ -18,5 +18,26 @@ package org.vimeoid.dto;
  *
  */
 public class GroupInfo {
+    
+    public int id;
+    public String name;
+    public String description;
+    
+    public String pageUrl;
+    public String logoHeader;
+    public String thumbnail;
+    
+    public /*long*/ String createdOn;
+    public int creatorId;
+    public String creatorDisplayName;
+    public String creatorProfileUrl;
+    
+    public int membersCount;
+    public int videosCount;
+    
+    public int filesCount;
+    public int forumTopicsCount;
+    public int eventsCount;
+    public int upcomingEventsCount;
 
 }

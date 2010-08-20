@@ -11,12 +11,28 @@ package org.vimeoid.dto;
  *
  * <code>AlbumInfo</code>
  *
- * <p>Vimeo videos album information</p>
+ * <p>Vimeo album information</p>
  *
  * @author Ulric Wilfred <shaman.sir@gmail.com>
  * @date Aug 20, 2010 9:55:45 AM 
  *
  */
 public class AlbumInfo {
-
+    
+    public int id;
+    public String title;
+    public String description;
+    
+    public String pageUrl;
+    public String thumbnail;    
+    
+    public /*long*/ String createdOn;
+    public int creatorId;
+    public String creatorDisplayName;
+    public String creatorProfileUrl;    
+    
+    public int videosCount;    
+    
+    public /*long*/ String lastModifiedOn;
+    
 }
