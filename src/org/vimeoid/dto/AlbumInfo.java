@@ -3,6 +3,10 @@
  */
 package org.vimeoid.dto;
 
+import org.vimeoid.VimeoProvider;
+
+import android.net.Uri;
+
 /**
  * <dl>
  * <dt>Project:</dt> <dd>vimeoid</dd>
@@ -18,6 +22,12 @@ package org.vimeoid.dto;
  *
  */
 public class AlbumInfo {
+    
+    public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoProvider.AUTHORITY +
+                                                                   "/albums");
+
+    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.vimeo.album";
+    public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.vimeo.album";    
     
     public int id;
     public String title;

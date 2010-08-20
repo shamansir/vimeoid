@@ -14,7 +14,7 @@ import android.net.Uri;
  * <dt>Package:</dt> <dd>org.vimeoid.providers</dd>
  * </dl>
  *
- * <code>VimeoApiProvider</code>
+ * <code>VimeoProvider</code>
  *
  * <p>Description</p>
  *
@@ -22,7 +22,9 @@ import android.net.Uri;
  * @date Aug 20, 2010 5:29:21 PM 
  *
  */
-public class VimeoApiProvider extends ContentProvider {
+public class VimeoProvider extends ContentProvider {
+    
+    public static final String AUTHORITY = "com.vimeo.provider";
 
     /* (non-Javadoc)
      * @see android.content.ContentProvider#delete(android.net.Uri, java.lang.String, java.lang.String[])
