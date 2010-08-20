@@ -9,14 +9,14 @@ package org.vimeoid.dto;
  * <dt>Package:</dt> <dd>org.vimeoid.dto</dd>
  * </dl>
  *
- * <code>Group</code>
+ * <code>AlbumInfo</code>
  *
- * <p>Vimeo group representation</p>
+ * <p>Vimeo videos album information</p>
  *
  * @author Ulric Wilfred <shaman.sir@gmail.com>
- * @date Aug 19, 2010 8:57:20 PM 
+ * @date Aug 20, 2010 9:55:45 AM 
  *
  */
-public class Group {
+public class AlbumInfo {
 
 }

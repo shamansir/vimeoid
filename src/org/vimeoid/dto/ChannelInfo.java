@@ -9,14 +9,14 @@ package org.vimeoid.dto;
  * <dt>Package:</dt> <dd>org.vimeoid.dto</dd>
  * </dl>
  *
- * <code>Channel</code>
+ * <code>ChannelInfo</code>
  *
- * <p>Vimeo Channel representation</p>
+ * <p>Vimeo ChannelInfo representation</p>
  *
  * @author Ulric Wilfred <shaman.sir@gmail.com>
  * @date Aug 19, 2010 8:56:39 PM 
  *
  */
-public class Channel {
+public class ChannelInfo {
 
 }

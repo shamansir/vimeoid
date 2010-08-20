@@ -9,15 +9,15 @@ package org.vimeoid.dto;
  * <dt>Package:</dt> <dd>org.vimeoid.dto</dd>
  * </dl>
  *
- * <code>User</code>
+ * <code>UserInfo</code>
  *
- * <p>Vimeo User information</p>
+ * <p>Vimeo UserInfo information</p>
  *
  * @author Ulric Wilfred <shaman.sir@gmail.com>
  * @date Aug 19, 2010 8:54:34 PM 
  *
  */
-public class User {
+public class UserInfo {
     
     public int id;
     public String displayName;
