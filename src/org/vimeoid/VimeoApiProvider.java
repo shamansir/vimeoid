@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vimeoid.providers;
+package org.vimeoid;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -14,7 +14,7 @@ import android.net.Uri;
  * <dt>Package:</dt> <dd>org.vimeoid.providers</dd>
  * </dl>
  *
- * <code>VimeoSimpleApiProvider</code>
+ * <code>VimeoApiProvider</code>
  *
  * <p>Description</p>
  *
@@ -22,7 +22,7 @@ import android.net.Uri;
  * @date Aug 20, 2010 5:29:21 PM 
  *
  */
-public class VimeoSimpleApiProvider extends ContentProvider {
+public class VimeoApiProvider extends ContentProvider {
 
     /* (non-Javadoc)
      * @see android.content.ContentProvider#delete(android.net.Uri, java.lang.String, java.lang.String[])
