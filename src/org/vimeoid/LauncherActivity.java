@@ -8,7 +8,17 @@ public class LauncherActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.items_list);
+        setContentView(R.layout.popular_view);
+        
+        /*
+        Cursor c = getContentResolver().query(People.CONTENT_URI,
+null, null, null, null);
+        startManagingCursor(c);
+        String[] cols = new String[]{People.NAME};
+        int[] names = new int[]{R.id.row_tv};
+        adapter = new SimpleCursorAdapter(this,R.layout.list_item,c,cols,names);
+        this.setListAdapter(adapter);
+         */
         
         /* Button sampleButton = (Button) findViewById(R.id.stubButton);
         sampleButton.setOnClickListener(new OnClickListener() {

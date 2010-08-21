@@ -573,7 +573,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="0.6128254"
      inkscape:cx="684.10586"
-     inkscape:cy="1101.5976"
+     inkscape:cy="579.42603"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -601,7 +601,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -989,7 +989,7 @@
          sodipodi:role="line"
          id="tspan4018"
          x="363.50879"
-         y="481.13409"></tspan></text>
+         y="481.13409" /></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
@@ -1710,7 +1710,7 @@
          sodipodi:role="line"
          id="tspan4900"
          x="67.981499"
-         y="820.62964"></tspan></text>
+         y="820.62964" /></text>
     <text
        xml:space="preserve"
        style="font-size:25.25317001px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
@@ -1772,7 +1772,7 @@
          sodipodi:role="line"
          id="tspan5043"
          x="79.394447"
-         y="882.65656"></tspan></text>
+         y="882.65656" /></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
@@ -2187,7 +2187,7 @@
          id="tspan3923-4-0"
          x="592.77374"
          y="414.87793"
-         style="font-size:32px;font-weight:bold;-inkscape-font-specification:'10.15 Saturday Night BRK Bold'">Album view</tspan></text>
+         style="font-size:32px;font-weight:bold;-inkscape-font-specification:'10.15 Saturday Night BRK Bold'">Gallery view</tspan></text>
     <g
        transform="matrix(5.7033334,0,0,5.7033334,853.24304,-845.56743)"
        id="g4777-3">

@@ -5,10 +5,13 @@
         android:layout_height="fill_parent">
     <ImageView android:layout_width="@dimen/item_thumb_size"
                android:layout_height="fill_parent"
+               android:layout_gravity="left"
                android:background="#f00" />
     <LinearLayout android:orientation="vertical"
                   android:layout_width="fill_parent"
-                  android:layout_height="fill_parent">
+                  android:layout_height="fill_parent"
+                  android:layout_weight="1"
+                  android:layout_gravity="left">
 	    <TextView android:layout_width="fill_parent" 
 	              android:layout_height="wrap_content" 
 	              android:text="Title"
