@@ -16,7 +16,7 @@ null, null, null, null);
         startManagingCursor(c);
         String[] cols = new String[]{People.NAME};
         int[] names = new int[]{R.id.row_tv};
-        adapter = new SimpleCursorAdapter(this,R.layout.list_item,c,cols,names);
+        adapter = new SimpleCursorAdapter(this,R.layout.video_item,c,cols,names);
         this.setListAdapter(adapter);
          */
         
