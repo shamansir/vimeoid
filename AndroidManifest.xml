@@ -5,8 +5,8 @@
       android:versionName="1.0">
     <application android:icon="@drawable/icon" android:label="@string/app_name">
         <provider android:name="VimeoProvider"
-                  android:authorities="com.vimeo.provider" />
-        <activity android:label="@string/app_name" android:name="VideosListActivity">
+                  android:authorities="org.vimeoid.provider" />
+        <activity android:label="@string/app_name" android:name="LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -17,8 +17,16 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-                <data android:mimeType="vnd.android.cursor.dir/vnd.vimeo.video" />            
-            </intent-filter>            
+                <action android:name="android.intent.action.EDIT" />
+                <action android:name="android.intent.action.PICK" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="vnd.android.cursor.dir/vnd.vimeo.video" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.GET_CONTENT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.vimeo.video" />
+            </intent-filter>
         </activity>
     </application>
     <uses-sdk android:minSdkVersion="4" />    
