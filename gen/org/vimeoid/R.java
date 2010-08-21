@@ -10,16 +10,45 @@ package org.vimeoid;
 public final class R {
     public static final class attr {
     }
+    public static final class dimen {
+        public static final int info_font_size=0x7f040006;
+        public static final int item_thumb_size=0x7f040001;
+        public static final int param_font_size=0x7f040005;
+        public static final int single_thumb_size=0x7f040002;
+        public static final int subtitle_font_size=0x7f040004;
+        public static final int tabbar_height=0x7f040000;
+        /**  fonts 
+         */
+        public static final int title_font_size=0x7f040003;
+    }
     public static final class drawable {
         public static final int icon=0x7f020000;
     }
     public static final class id {
-        public static final int stubButton=0x7f050000;
+        public static final int channelsOfVideoButton=0x7f06000e;
+        public static final int creditsOfVideoButton=0x7f06000c;
+        public static final int myAlbumsButton=0x7f060001;
+        public static final int myChannelsButton=0x7f060002;
+        public static final int myGroupsButton=0x7f060004;
+        public static final int myLikesButton=0x7f060003;
+        public static final int mySearchButton=0x7f060005;
+        public static final int myVideosButton=0x7f060000;
+        public static final int popularChannelsButton=0x7f060007;
+        public static final int popularGroupsButton=0x7f060008;
+        public static final int popularPeopleButton=0x7f060009;
+        public static final int popularSearchButton=0x7f06000b;
+        public static final int popularTagsButton=0x7f06000a;
+        public static final int popularVideosButton=0x7f060006;
+        public static final int tagsOfVideoButton=0x7f06000d;
     }
     public static final class layout {
-        public static final int main=0x7f030000;
+        public static final int items_list=0x7f030000;
+        public static final int my_top_menu=0x7f030001;
+        public static final int popular_top_menu=0x7f030002;
+        public static final int video_item=0x7f030003;
+        public static final int video_single=0x7f030004;
     }
     public static final class string {
-        public static final int app_name=0x7f040000;
+        public static final int app_name=0x7f050000;
     }
 }

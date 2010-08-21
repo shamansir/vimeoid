@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	<dimen name="tabbar_height">53dp</dimen>
+	<dimen name="item_thumb_size">86dp</dimen>
+	<dimen name="single_thumb_size">106dp</dimen>
+	<!-- fonts -->
+    <dimen name="title_font_size">28sp</dimen>
+    <dimen name="subtitle_font_size">18sp</dimen>
+    <dimen name="param_font_size">16sp</dimen>
+    <dimen name="info_font_size">14sp</dimen>
+</resources>

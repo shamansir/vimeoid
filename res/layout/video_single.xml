@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="wrap_content"
+                  android:layout_height="fill_parent">
+        <TextView android:layout_width="fill_parent" 
+                  android:layout_height="wrap_content" 
+                  android:text="Title"
+                  android:textSize="@dimen/title_font_size" />
+        <TextView android:layout_width="fill_parent" 
+                  android:layout_height="wrap_content" 
+                  android:text="author"
+                  android:textSize="@dimen/subtitle_font_size" />
+        <TextView android:layout_width="fill_parent" 
+                  android:layout_height="wrap_content" 
+                  android:text="duration"
+                  android:textSize="@dimen/param_font_size" />
+        <TextView android:layout_width="fill_parent" 
+                  android:layout_height="wrap_content" 
+                  android:text="tags"
+                  android:textSize="@dimen/info_font_size" />
+        <TextView android:layout_width="fill_parent" 
+                  android:layout_height="wrap_content" 
+                  android:text="created on"
+                  android:textSize="@dimen/info_font_size" />
+        <TextView android:layout_width="fill_parent" 
+                  android:layout_height="wrap_content" 
+                  android:text="some more info"
+                  android:textSize="@dimen/info_font_size" />
+        <LinearLayout android:orientation="horizontal"
+                  android:layout_width="wrap_content"
+                  android:layout_height="fill_parent">
+			<Button android:id="@+id/creditsOfVideoButton"
+			        android:layout_width="@dimen/tabbar_height"
+			        android:layout_height="fill_parent"
+			        android:padding="0dp"        
+			        android:text="Credits" />
+			<Button android:id="@+id/tagsOfVideoButton"
+			        android:layout_width="@dimen/tabbar_height"
+			        android:layout_height="fill_parent"
+			        android:padding="0dp"        
+			        android:text="Tags" />
+            <Button android:id="@+id/channelsOfVideoButton"
+                    android:layout_width="@dimen/tabbar_height"
+                    android:layout_height="fill_parent"
+                    android:padding="0dp"        
+                    android:text="Channels" />
+        </LinearLayout>                                                         
+    </LinearLayout>
+    <ImageView android:layout_width="@dimen/single_thumb_size"
+               android:layout_height="fill_parent"
+               android:background="#f00" />    
+</LinearLayout>
