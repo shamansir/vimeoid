@@ -23,7 +23,7 @@ import android.net.Uri;
  */
 public class Video {
     
-    public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoProvider.AUTHORITY +
+    public static final Uri CONTENT_URI = Uri.parse("vimeo://" + VimeoProvider.AUTHORITY +
                                                                    "/videos");
 
     public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.vimeo.video";

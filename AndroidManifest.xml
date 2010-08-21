@@ -6,11 +6,19 @@
     <application android:icon="@drawable/icon" android:label="@string/app_name">
         <provider android:name="VimeoProvider"
                   android:authorities="com.vimeo.provider" />
-        <activity android:label="@string/app_name" android:name="VimeoActivity">
+        <activity android:label="@string/app_name" android:name="VideosListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>        
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <data android:scheme="vimeo" />            
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <data android:mimeType="vnd.android.cursor.dir/vnd.vimeo.video" />            
+            </intent-filter>            
         </activity>
     </application>
     <uses-sdk android:minSdkVersion="4" />    

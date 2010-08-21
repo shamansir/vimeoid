@@ -32,7 +32,7 @@ import android.net.Uri;
  */
 public class VimeoProvider extends ContentProvider {
     
-    public static final String AUTHORITY = "com.vimeo.provider";
+    public static final String AUTHORITY = "org.vimeoid.provider";
     
     private static final UriMatcher uriMatcher;
     private static final int ACTIONS_LIST_URI_TYPE   = 1;
