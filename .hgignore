@@ -1,5 +1,6 @@
 ^bin/*
 ^\.settings/*
+.*\.apk
 
 .project
 .classpath

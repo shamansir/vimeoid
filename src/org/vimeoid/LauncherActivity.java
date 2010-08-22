@@ -1,7 +1,14 @@
 package org.vimeoid;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.vimeoid.dto.Video;
+
 import android.app.ListActivity;
-import android.content.Intent;
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -19,8 +26,7 @@ public class LauncherActivity extends ListActivity {
         
         // this.registerForContextMenu();
         
-        /*
-        Cursor c = getContentResolver().query(People.CONTENT_URI,
+        /* Cursor c = getContentResolver().query(People.CONTENT_URI,
 null, null, null, null);
         startManagingCursor(c);
         String[] cols = new String[]{People.NAME};
@@ -38,21 +44,59 @@ null, null, null, null);
 			}
 		}); */
         
-        /*
-        Intent intent = getIntent();
+        /* Intent intent = getIntent();
         String path = intent.getStringExtra("com.example.android.apis.Path");
         
         if (path == null) {
             path = "";
-        }
+        } */
 
-        setListAdapter(new SimpleAdapter(this, getData(path),
-                android.R.layout.simple_list_item_1, new String[] { "title" },
-                new int[] { android.R.id.text1 }));
-        getListView().setTextFilterEnabled(true);
-         */
+        setListAdapter(new SimpleAdapter(this, makeStubVideosList(),
+                R.layout.video_item, 
+                new String[] { Video.FieldsKeys.TITLE, 
+                               Video.FieldsKeys.AUTHOR, 
+                               Video.FieldsKeys.DURATION, 
+                               Video.FieldsKeys.TAGS },
+                new int[] { R.id.videoItemTitle, R.id.videoItemAuthor,
+                            R.id.videoItemDuration, R.id.videoItemTags }));
+        
+        //getListView().setTextFilterEnabled(true);
     }
     
+    /**
+     * @return stub list of videos
+     */
+    private List<Map<String, Object>> makeStubVideosList() {
+        final List<Map<String, Object>> values = new ArrayList<Map<String, Object>>(); 
+        
+        for (int i = 0; i <= 20; i++) {
+            
+            final Video videoStub = new Video();
+            videoStub.id = i + 400;
+            videoStub.title = "Video " + i;
+            videoStub.description = "Video " + i + " description";
+            videoStub.tags = new String[] { ("aa" + i), ("bb" + i), ("cc" + i) };
+            videoStub.duration = 25777 + i;
+            
+            values.add(adaptContent(videoStub.extract()));
+        }
+        
+        return values;
+    }
+    
+    protected static Map<String, Object> adaptContent(ContentValues values) {
+        if (values == null) return new HashMap<String, Object>();
+        
+        final Map<String, Object> result = new HashMap<String, Object>();        
+
+        for (final Map.Entry<String, Object> entry: values.valueSet()) {
+            result.put(entry.getKey(), entry.getValue());
+        }
+        
+        return result;
+        
+    }
+
     /* (non-Javadoc)
      * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
      */

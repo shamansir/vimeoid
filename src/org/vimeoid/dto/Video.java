@@ -3,8 +3,11 @@
  */
 package org.vimeoid.dto;
 
+import java.util.Arrays;
+
 import org.vimeoid.VimeoProvider;
 
+import android.content.ContentValues;
 import android.net.Uri;
 
 /**
@@ -21,7 +24,7 @@ import android.net.Uri;
  * @date Aug 19, 2010 8:55:56 PM 
  *
  */
-public class Video {
+public class Video implements Extractable {
     
     public static final Uri CONTENT_URI = Uri.parse("vimeo://" + VimeoProvider.AUTHORITY +
                                                                    "/videos");
@@ -55,5 +58,28 @@ public class Video {
     public String smallUploaderPortraitUrl;
     public String mediumUploaderPortraitUrl;
     public String largeUploaderPortraitUrl;
+    
+    public final static class FieldsKeys {
+        
+        public static final String ID = "id";
+        public static final String TITLE = "title";
+        public static final String AUTHOR = "author";
+        public static final String DESCRIPTION = "description";
+        public static final String TAGS = "tags";
+        public static final String DURATION = "duration";
+        
+    }
+    
+    @Override
+    public ContentValues extract() {
+        final ContentValues result = new ContentValues();
+        result.put(FieldsKeys.ID, this.id);
+        result.put(FieldsKeys.TITLE, this.title);
+        result.put(FieldsKeys.AUTHOR, this.uploaderName);
+        result.put(FieldsKeys.DESCRIPTION, this.description);
+        result.put(FieldsKeys.DURATION, this.duration);
+        result.put(FieldsKeys.TAGS, Arrays.toString(this.tags));
+        return result;
+    }
     
 }
