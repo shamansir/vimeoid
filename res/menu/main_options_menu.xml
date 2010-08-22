@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/menuGroup_Main">
+        <item android:id="@+id/menu_Login"
+             android:orderInCategory="1"
+             android:title="Log in" 
+             android:checkable="true" 
+             android:checked="false"/>
+        <item android:id="@+id/menu_Preferences"
+             android:orderInCategory="2"
+             android:title="Preferences" />
+        <item android:id="@+id/menu_SwitchView"
+             android:orderInCategory="3"
+             android:title="Switch view (to Gallery)" 
+             android:titleCondensed="Switch view"/>
+    </group>
+</menu>

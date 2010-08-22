@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/menuGroup_VideoContext">
+        <item android:id="@+id/menu_Play"
+             android:orderInCategory="1"
+             android:alphabeticShortcut="p"
+             android:numericShortcut="1"
+             android:title="Play" />
+        <item android:id="@+id/menu_watchLater"
+             android:orderInCategory="2"
+             android:alphabeticShortcut="w"
+             android:numericShortcut="2"             
+             android:title="Watch Later" />
+        <item android:id="@+id/menu_viewInfo"
+             android:orderInCategory="3"
+             android:alphabeticShortcut="i"
+             android:numericShortcut="3"             
+             android:title="View Info" />
+        <item android:id="@+id/menu_viewAuthorInfo"
+             android:orderInCategory="4"
+             android:alphabeticShortcut="a"
+             android:numericShortcut="4"
+             android:title="View Author Info" />             
+    </group>
+</menu>
