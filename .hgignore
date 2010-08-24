@@ -2,5 +2,6 @@
 ^\.settings/*
 .*\.apk
 
+cook.sh
 .project
 .classpath

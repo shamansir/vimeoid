@@ -3,7 +3,7 @@
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-    <ImageView android:id="@+id/videoItemImage"
+    <ImageView android:id="@+id/tagItemImage"
                android:layout_width="@dimen/item_thumb_size"
                android:layout_height="fill_parent"
                android:layout_gravity="left"
@@ -13,25 +13,15 @@
                   android:layout_height="fill_parent"
                   android:layout_weight="1"
                   android:layout_gravity="left">
-	    <TextView android:id="@+id/videoItemTitle"
+	    <TextView android:id="@+id/tagItemName"
                   android:layout_width="fill_parent" 
 	              android:layout_height="wrap_content" 
-	              android:text="title"
+	              android:text="name"
 	              android:textSize="@dimen/title_font_size" />
-        <TextView android:id="@+id/videoItemAuthor"
+        <TextView android:id="@+id/tagItemUsageCount"
                   android:layout_width="fill_parent" 
                   android:layout_height="wrap_content" 
-                  android:text="author"
+                  android:text="usageCount"
                   android:textSize="@dimen/subtitle_font_size" />
-        <TextView android:id="@+id/videoItemDuration"
-                  android:layout_width="fill_parent" 
-                  android:layout_height="wrap_content" 
-                  android:text="duration"
-                  android:textSize="@dimen/param_font_size" />
-        <TextView android:id="@+id/videoItemTags"
-                  android:layout_width="fill_parent" 
-                  android:layout_height="wrap_content" 
-                  android:text="tags"
-                  android:textSize="@dimen/info_font_size" />                            	              
     </LinearLayout>
 </LinearLayout>

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.vimeoid.dto.TagInfo;
 import org.vimeoid.dto.Video;
 
 import android.app.ListActivity;
@@ -15,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.SimpleAdapter;
 
 public class LauncherActivity extends ListActivity {
@@ -61,6 +64,21 @@ null, null, null, null);
                             R.id.videoItemDuration, R.id.videoItemTags }));
         
         //getListView().setTextFilterEnabled(true);
+        
+        Button tagsButton = (Button) findViewById(R.id.popularTagsButton);
+        
+        tagsButton.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                setListAdapter(new SimpleAdapter(LauncherActivity.this, makeStubTagsList(),
+                        R.layout.tag_item, 
+                        new String[] { TagInfo.FieldsKeys.NAME, 
+                                       TagInfo.FieldsKeys.USAGE_COUNT },
+                        new int[] { R.id.tagItemName, R.id.tagItemUsageCount }));
+                onContentChanged();  
+            }
+        });
     }
     
     /**
@@ -83,6 +101,25 @@ null, null, null, null);
         
         return values;
     }
+    
+    /**
+     * @return stub list of videos
+     */
+    private List<Map<String, Object>> makeStubTagsList() {
+        final List<Map<String, Object>> values = new ArrayList<Map<String, Object>>(); 
+        
+        for (int i = 0; i <= 20; i++) {
+            
+            final TagInfo tagStub = new TagInfo();
+            tagStub.name = "Tag" + 300 + i;
+            tagStub.url = "tag/" + i;
+            tagStub.usageCount = 12 * i;
+            
+            values.add(adaptContent(tagStub.extract()));
+        }
+        
+        return values;
+    }    
     
     protected static Map<String, Object> adaptContent(ContentValues values) {
         if (values == null) return new HashMap<String, Object>();
