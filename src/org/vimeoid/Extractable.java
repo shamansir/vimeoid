@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vimeoid.dto;
+package org.vimeoid;
 
 import android.content.ContentValues;
 
@@ -22,5 +22,6 @@ import android.content.ContentValues;
 public interface Extractable {
 
     public ContentValues extract();
+    /* public ContentValues extract(String[] fields); */
     
 }

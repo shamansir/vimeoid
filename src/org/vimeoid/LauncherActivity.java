@@ -50,7 +50,7 @@ null, null, null, null);
         if (path == null) {
             path = "";
         } */
-
+        
         setListAdapter(new SimpleAdapter(this, makeStubVideosList(),
                 R.layout.video_item, 
                 new String[] { Video.FieldsKeys.TITLE, 
