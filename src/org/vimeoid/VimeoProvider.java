@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.vimeoid;
 
 import org.vimeoid.dto.Action;
@@ -25,6 +22,8 @@ import android.net.Uri;
  * <code>VimeoProvider</code>
  *
  * <p>Description</p>
+ * 
+ * URLs are: http://vimeo.com/m/play_redirect?quality=mobile&clip_id=14294054
  *
  * @author Ulric Wilfred <shaman.sir@gmail.com>
  * @date Aug 20, 2010 5:29:21 PM 
@@ -33,6 +32,20 @@ import android.net.Uri;
 public class VimeoProvider extends ContentProvider {
     
     public static final String AUTHORITY = "org.vimeoid.provider";
+    
+    public static enum ContentType { USER, VIDEO, GROUP, CHANNEL, ALBUM, ACTIVITY;
+    
+        public static ContentType fromValue(String subjectType) {
+            if ("user".equals(subjectType)) return USER;
+            if ("video".equals(subjectType)) return VIDEO;
+            if ("group".equals(subjectType)) return GROUP;
+            if ("channel".equals(subjectType)) return CHANNEL;
+            if ("album".equals(subjectType)) return ALBUM;
+            if ("activity".equals(subjectType)) return ACTIVITY;
+            throw new IllegalArgumentException("Unknown subject type: " + subjectType);
+        }
+    
+    };    
     
     private static final UriMatcher uriMatcher;
     private static final int ACTIONS_LIST_URI_TYPE   = 1;
@@ -78,22 +91,8 @@ public class VimeoProvider extends ContentProvider {
         uriMatcher.addURI(AUTHORITY, "activity/*/happened",  ACTIONS_LIST_URI_TYPE);
         uriMatcher.addURI(AUTHORITY, "activity/*/cdid",      ACTIONS_LIST_URI_TYPE); // contacts did
         uriMatcher.addURI(AUTHORITY, "activity/*/chappened", ACTIONS_LIST_URI_TYPE); // happened to contacts
-        uriMatcher.addURI(AUTHORITY, "activity/*/cdid",      ACTIONS_LIST_URI_TYPE);
         uriMatcher.addURI(AUTHORITY, "activity/*/edid",      ACTIONS_LIST_URI_TYPE); // everyone did
         
-        /*
-        uriMatcher.addURI(AUTHORITY, "actions",    ACTIONS_LIST_URI_TYPE);
-        uriMatcher.addURI(AUTHORITY, "action/#",   ACTION_SINGLE_URI_TYPE);
-        uriMatcher.addURI(AUTHORITY, "albums",     ALBUMS_LIST_URI_TYPE);
-        uriMatcher.addURI(AUTHORITY, "album/#",    ALBUM_SINGLE_URI_TYPE);
-        uriMatcher.addURI(AUTHORITY, "channels",   CHANNELS_LIST_URI_TYPE);
-        uriMatcher.addURI(AUTHORITY, "channel/#",  CHANNEL_SINGLE_URI_TYPE);
-        uriMatcher.addURI(AUTHORITY, "groups",     GROUPS_LIST_URI_TYPE);
-        uriMatcher.addURI(AUTHORITY, "group/#",    GROUP_SINGLE_URI_TYPE);
-        uriMatcher.addURI(AUTHORITY, "users",      USERS_LIST_URI_TYPE);
-        uriMatcher.addURI(AUTHORITY, "user/#",     USER_SINGLE_URI_TYPE);
-        uriMatcher.addURI(AUTHORITY, "videos",     VIDEOS_LIST_URI_TYPE);
-        uriMatcher.addURI(AUTHORITY, "video/#",    VIDEO_SINGLE_URI_TYPE); */        
     }
 
     /* (non-Javadoc)
@@ -127,6 +126,42 @@ public class VimeoProvider extends ContentProvider {
         }
     }
 
+    public static ContentType getReturnedContentType(Uri uri) {
+        switch (uriMatcher.match(uri)) {
+            case ACTIONS_LIST_URI_TYPE:
+            case ACTION_SINGLE_URI_TYPE:  return ContentType.ACTIVITY;
+            case ALBUMS_LIST_URI_TYPE:
+            case ALBUM_SINGLE_URI_TYPE:   return ContentType.ALBUM;
+            case CHANNELS_LIST_URI_TYPE:
+            case CHANNEL_SINGLE_URI_TYPE: return ContentType.CHANNEL;
+            case GROUPS_LIST_URI_TYPE:
+            case GROUP_SINGLE_URI_TYPE:   return ContentType.GROUP;
+            case USERS_LIST_URI_TYPE:
+            case USER_SINGLE_URI_TYPE:    return ContentType.USER;
+            case VIDEOS_LIST_URI_TYPE:
+            case VIDEO_SINGLE_URI_TYPE:   return ContentType.VIDEO;
+            default: throw new IllegalArgumentException("Unknown URI type: " + uri);
+        }        
+    }
+    
+    public static boolean getReturnsMultipleResults(Uri uri) {
+        switch (uriMatcher.match(uri)) {
+            case ACTIONS_LIST_URI_TYPE:
+            case ALBUMS_LIST_URI_TYPE:
+            case CHANNELS_LIST_URI_TYPE:
+            case GROUPS_LIST_URI_TYPE:
+            case USERS_LIST_URI_TYPE:
+            case VIDEOS_LIST_URI_TYPE:    return true;            
+            case ACTION_SINGLE_URI_TYPE:  
+            case ALBUM_SINGLE_URI_TYPE:
+            case CHANNEL_SINGLE_URI_TYPE:
+            case GROUP_SINGLE_URI_TYPE:
+            case USER_SINGLE_URI_TYPE:
+            case VIDEO_SINGLE_URI_TYPE:   return false;
+            default: throw new IllegalArgumentException("Unknown URI type: " + uri);
+        }        
+    }    
+    
     /* (non-Javadoc)
      * @see android.content.ContentProvider#insert(android.net.Uri, android.content.ContentValues)
      */
