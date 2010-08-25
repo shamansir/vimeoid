@@ -1,5 +1,7 @@
-^bin/*
-^\.settings/*
+^apk/bin/*
+^test-apk/bin/*
+
+\.settings
 .*\.apk
 
 cook.sh
