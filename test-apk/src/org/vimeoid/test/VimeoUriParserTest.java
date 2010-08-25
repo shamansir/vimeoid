@@ -12,7 +12,6 @@ import org.vimeoid.VimeoProvider.ContentType;
 import android.net.Uri;
 import android.net.Uri.Builder;
 import android.test.AndroidTestCase;
-import android.util.Log;
 
 /**
  * <dl>
@@ -32,9 +31,9 @@ public class VimeoUriParserTest extends AndroidTestCase {
     
     private static final String[] testUsers = {"aaa", "user1616", "17373"};
     
-    public void testUriParsingAndResults() throws Throwable {
-        Builder builder = new Uri.Builder().scheme("content").authority(VimeoProvider.AUTHORITY);
-        
+    final Builder builder = new Uri.Builder().scheme("content").authority(VimeoProvider.AUTHORITY);    
+    
+    public void testUserMethods() throws Throwable {
         for (String userId: testUsers) {
             final Uri infoUri = builder.path("user/" + userId + "/info").build();
             Assert.assertEquals(makeApiCallUrl(null, userId, "info"), 
