@@ -34,7 +34,9 @@ public class VimeoUriParser {
     public static final String VIMEO_API_CALL_PREFIX = VIMEO_API_URL +
                                                        "/v" + VIMEO_API_VERSION;
     
-    private static final String DEFAULT_RESPONSE_FORMAT = "json";
+    public static final String DEFAULT_RESPONSE_FORMAT = "json";
+    
+    private VimeoUriParser() { };
     
     /* public static class ApiCallInfo {
         
@@ -46,11 +48,11 @@ public class VimeoUriParser {
     } */
         
     // TODO: make tests on this method
-    public final String getApiCallUrlForUri(Uri contentUri) {
+    public static final String getApiCallUrlForUri(Uri contentUri) {
         final List<String> segments = contentUri.getPathSegments();
         final StringBuffer urlBuffer = new StringBuffer().append(VIMEO_API_CALL_PREFIX).append('/');
         Log.d(TAG, "generating API Call URL for URI " + contentUri.toString());
-        switch (ContentType.valueOf(segments.get(0))) {
+        switch (ContentType.fromAlias(segments.get(0))) {
             case USER: urlBuffer.append(segments.get(1))
                                 .append('/')
                                 .append(resolveUserAction(segments.get(2))); break;
@@ -75,7 +77,7 @@ public class VimeoUriParser {
         return urlBuffer.toString();
     }
 
-    private String resolveUserAction(String action) {
+    private static String resolveUserAction(String action) {
         if ("all".equals(action)) return "all_videos";        
         if ("appears".equals(action)) return "appears_in";
         if ("subsrc".equals(action)) return "subsriptions";
@@ -84,7 +86,7 @@ public class VimeoUriParser {
         return action;
     }
     
-    private String resolveActivityAction(String action) {
+    private static String resolveActivityAction(String action) {
         if ("did".equals(action)) return "user_did";        
         if ("happened".equals(action)) return "happened_to_user";
         if ("cdid".equals(action)) return "contacts_did";
@@ -93,15 +95,15 @@ public class VimeoUriParser {
         return action;
     }
     
-    private String resolveGroupAction(String action) {
+    private static String resolveGroupAction(String action) {
         return action;
     }
     
-    private String resolveAlbumAction(String action) {
+    private static String resolveAlbumAction(String action) {
         return action;
     }    
     
-    private String resolveChannelAction(String action) {
+    private static String resolveChannelAction(String action) {
         return action;
     }    
 

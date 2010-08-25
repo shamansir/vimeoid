@@ -35,7 +35,7 @@ public class VimeoProvider extends ContentProvider {
     
     public static enum ContentType { USER, VIDEO, GROUP, CHANNEL, ALBUM, ACTIVITY;
     
-        public static ContentType fromValue(String subjectType) {
+        public static ContentType fromAlias(String subjectType) {
             if ("user".equals(subjectType)) return USER;
             if ("video".equals(subjectType)) return VIDEO;
             if ("group".equals(subjectType)) return GROUP;
