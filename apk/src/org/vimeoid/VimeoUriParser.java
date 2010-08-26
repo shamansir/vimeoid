@@ -47,28 +47,26 @@ public class VimeoUriParser {
         
     } */
         
-    // TODO: make tests on this method
-    public static final String getApiCallUrlForUri(Uri contentUri) {
+    public static String getApiCallUrlForUri(Uri contentUri) {
         final List<String> segments = contentUri.getPathSegments();
         final StringBuffer urlBuffer = new StringBuffer().append(VIMEO_API_CALL_PREFIX).append('/');
         Log.d(TAG, "generating API Call URL for URI " + contentUri.toString());
         switch (ContentType.fromAlias(segments.get(0))) {
-            case USER: urlBuffer.append(segments.get(1))
-                                .append('/')
+            case USER: urlBuffer.append(validateShortcutOrId(segments.get(1))).append('/')                                
                                 .append(resolveUserAction(segments.get(2))); break;
             case VIDEO: urlBuffer.append("video/")
-                                 .append(segments.get(1)); break;
+                                 .append(validateId(segments.get(1))); break;
             case GROUP: urlBuffer.append("group/")
-                                 .append(segments.get(1))
+                                 .append(validateShortcutOrId(segments.get(1))).append('/')
                                  .append(resolveGroupAction(segments.get(2))); break;
             case CHANNEL: urlBuffer.append("channel/")
-                                   .append(segments.get(1))
+                                   .append(validateShortcutOrId(segments.get(1))).append('/')
                                    .append(resolveChannelAction(segments.get(2))); break;
             case ALBUM: urlBuffer.append("album/")
-                                 .append(segments.get(1))
+                                 .append(validateId(segments.get(1))).append('/')
                                  .append(resolveAlbumAction(segments.get(2))); break;            
             case ACTIVITY: urlBuffer.append("activity/")
-                                    .append(segments.get(1))
+                                    .append(validateShortcutOrId(segments.get(1))).append('/')
                                     .append(resolveActivityAction(segments.get(2))); break;
                                     
         }
@@ -76,14 +74,29 @@ public class VimeoUriParser {
         Log.d(TAG, "generated result: " + urlBuffer.toString());
         return urlBuffer.toString();
     }
+    
+    protected static String validateShortcutOrId(final String shortcut) { 
+        if (!shortcut.matches("^[\\d\\w_]+$")) throw new IllegalArgumentException("Not correct schortcut or ID: " + shortcut);
+        return shortcut;
+    }
+    
+    protected static String validateId(final String id) { 
+        if (!id.matches("^\\d+$")) throw new IllegalArgumentException("Not correct ID: " + id);
+        return id;
+    }
+    
+    protected static String validateActionName(String action) {
+        if (!action.matches("^[\\w_]+$")) throw new IllegalArgumentException("Not correct action name: " + action);
+        return action;
+    }
 
     private static String resolveUserAction(String action) {
         if ("all".equals(action)) return "all_videos";        
         if ("appears".equals(action)) return "appears_in";
-        if ("subsrc".equals(action)) return "subsriptions";
+        if ("subscr".equals(action)) return "subscriptions";
         if ("ccreated".equals(action)) return "contacts_videos";
         if ("clikes".equals(action)) return "contacts_like";
-        return action;
+        return validateActionName(action);
     }
     
     private static String resolveActivityAction(String action) {
@@ -92,19 +105,19 @@ public class VimeoUriParser {
         if ("cdid".equals(action)) return "contacts_did";
         if ("chappened".equals(action)) return "happened_to_contacts";
         if ("edid".equals(action)) return "everyone_did";
-        return action;
+        return validateActionName(action);
     }
     
     private static String resolveGroupAction(String action) {
-        return action;
+        return validateActionName(action);
     }
     
     private static String resolveAlbumAction(String action) {
-        return action;
+        return validateActionName(action);
     }    
     
     private static String resolveChannelAction(String action) {
-        return action;
+        return validateActionName(action);
     }    
 
 }
