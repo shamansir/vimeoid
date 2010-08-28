@@ -23,6 +23,7 @@ import android.content.ContentValues;
  * @date Aug 19, 2010 8:55:56 PM 
  *
  */
+//URLs are: http://vimeo.com/m/play_redirect?quality=mobile&clip_id=14294054
 public class Video implements Extractable {
     
     /* public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoUnauthorizedProvider.AUTHORITY +
@@ -60,7 +61,7 @@ public class Video implements Extractable {
     
     public final static class FieldsKeys {
         
-        public static final String ID = "id";
+        public static final String _ID = "_id";
         public static final String TITLE = "title";
         public static final String AUTHOR = "author";
         public static final String DESCRIPTION = "description";
@@ -69,10 +70,15 @@ public class Video implements Extractable {
         
     }
     
+    public final static String[] SHORT_EXTRACT_PROJECTION = {
+        FieldsKeys._ID, FieldsKeys.TITLE, FieldsKeys.AUTHOR,
+        FieldsKeys.DESCRIPTION, FieldsKeys.DURATION, FieldsKeys.TAGS
+    };
+    
     @Override
     public ContentValues extract() {
         final ContentValues result = new ContentValues();
-        result.put(FieldsKeys.ID, this.id);
+        result.put(FieldsKeys._ID, this.id);
         result.put(FieldsKeys.TITLE, this.title);
         result.put(FieldsKeys.AUTHOR, this.uploaderName);
         result.put(FieldsKeys.DESCRIPTION, this.description);
@@ -80,5 +86,5 @@ public class Video implements Extractable {
         result.put(FieldsKeys.TAGS, Arrays.toString(this.tags));
         return result;
     }
-    
+
 }

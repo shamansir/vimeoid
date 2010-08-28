@@ -20,8 +20,11 @@ import android.content.ContentValues;
  *
  */
 public interface Extractable {
-
-    public ContentValues extract();
-    /* public ContentValues extract(String[] fields); */
     
+    //public static enum ValueType { DOUBLE, FLOAT, INT, LONG, SHORT, STRING, ARRAY, OBJECT };
+    
+    public abstract ContentValues extract();
+    
+    // public abstract ContentValues extract(String[] projection);
+        
 }

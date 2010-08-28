@@ -44,35 +44,23 @@ public class JsonOverHttp {
     
     private static final String NL = System.getProperty("line.separator");
     
-    public static JSONArray askForArray(URI uri) {
+    public static JSONArray askForArray(URI uri) throws JSONException, ClientProtocolException, IOException {
         return askForArray(uri, null);
     }
     
-    public static JSONArray askForArray(URI uri, Map<String, String> params) {
-        try {
-            return new JSONArray(execute(uri, params));
-        } catch (JSONException jsone) {
-            Log.e(TAG, "JSONException while calling " + uri.toString() + ": " + jsone.getLocalizedMessage());
-            jsone.printStackTrace();
-            return null;
-        }
+    public static JSONArray askForArray(URI uri, Map<String, String> params) throws JSONException, ClientProtocolException, IOException {
+        return new JSONArray(execute(uri, params));
     } 
     
-    public static JSONObject askForObject(URI uri) throws JSONException {
+    public static JSONObject askForObject(URI uri) throws JSONException, ClientProtocolException, IOException {
         return askForObject(uri, null);
     }
     
-    public static JSONObject askForObject(URI uri, Map<String, String> params) {
-        try {
-            return new JSONObject(execute(uri, params));
-        } catch (JSONException jsone) {
-            Log.e(TAG, "JSONException while calling " + uri.toString() + ": " + jsone.getLocalizedMessage());
-            jsone.printStackTrace();
-            return null;
-        }
+    public static JSONObject askForObject(URI uri, Map<String, String> params) throws JSONException, ClientProtocolException, IOException {
+        return new JSONObject(execute(uri, params));
     }    
     
-    public static String execute(URI uri, Map<String, String> paramsMap) {
+    protected static String execute(URI uri, Map<String, String> paramsMap) throws ClientProtocolException, IOException {
         HttpClient client = new DefaultHttpClient();
         HttpGet request = new HttpGet(uri);
         if (paramsMap != null) {
@@ -95,12 +83,6 @@ public class JsonOverHttp {
                 instream.close();       
                 return result;
             }
-        } catch (ClientProtocolException cpe) {
-            Log.e(TAG, "Protocol while calling " + uri.toString() + ": " + cpe.getLocalizedMessage());
-            cpe.printStackTrace();            
-        } catch (IOException ioe) {
-            Log.e(TAG, "IOException while calling " + uri.toString() + ": " + ioe.getLocalizedMessage());
-            ioe.printStackTrace();
         } finally {
             if (instream != null) {
                 try {

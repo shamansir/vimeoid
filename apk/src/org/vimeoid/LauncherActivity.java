@@ -1,12 +1,15 @@
 package org.vimeoid;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.client.ClientProtocolException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,9 +20,9 @@ import org.vimeoid.dto.simple.Video;
 
 import android.app.ListActivity;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,10 +31,12 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.SimpleAdapter;
+import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 public class LauncherActivity extends ListActivity {
     
-    private static final String TAG = "LauncherActivity";
+    private static final int TOAST_KEEPS_HOT = 10000;    
     
     /** Called when the activity is first created. */
     @Override
@@ -42,14 +47,31 @@ public class LauncherActivity extends ListActivity {
         
         // this.registerForContextMenu();
         
-        setListAdapter(new SimpleAdapter(this, callStubVideosList(),
+        /* setListAdapter(new SimpleAdapter(this, callStubVideosList(),
                 R.layout.video_item, 
                 new String[] { Video.FieldsKeys.TITLE, 
                                Video.FieldsKeys.AUTHOR, 
                                Video.FieldsKeys.DURATION, 
                                Video.FieldsKeys.TAGS },
                 new int[] { R.id.videoItemTitle, R.id.videoItemAuthor,
-                            R.id.videoItemDuration, R.id.videoItemTags }));
+                            R.id.videoItemDuration, R.id.videoItemTags })); */
+        
+        Cursor cursor = getContentResolver().query(
+                Uri.withAppendedPath(
+                        VimeoUnauthorizedProvider.BASE_URI, "/user/shamansir/videos"), 
+                Video.SHORT_EXTRACT_PROJECTION, null, null, null);
+        startManagingCursor(cursor);
+        this.setListAdapter(new SimpleCursorAdapter(this,
+                                        R.layout.video_item, 
+                                        cursor,
+                                        new String[] { Video.FieldsKeys.TITLE, 
+                                                       Video.FieldsKeys.AUTHOR, 
+                                                       Video.FieldsKeys.DURATION, 
+                                                       Video.FieldsKeys.TAGS },
+                                        new int[] { R.id.videoItemTitle, 
+                                                    R.id.videoItemAuthor,
+                                                    R.id.videoItemDuration, 
+                                                    R.id.videoItemTags }));                
         
         //getListView().setTextFilterEnabled(true);
         
@@ -66,17 +88,9 @@ public class LauncherActivity extends ListActivity {
                         new int[] { R.id.tagItemName, R.id.tagItemUsageCount }));
                 onContentChanged();  
             }
+            
         });
         
-        /* Cursor c = getContentResolver().query(People.CONTENT_URI,
-        null, null, null, null);
-        startManagingCursor(c);
-        String[] cols = new String[]{People.NAME};
-        int[] names = new int[]{R.id.row_tv};
-        adapter = new SimpleCursorAdapter(this,R.layout.video_item,c,cols,names);
-        this.setListAdapter(adapter);
-        */
-                
         /* Button sampleButton = (Button) findViewById(R.id.stubButton);
         sampleButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -104,9 +118,8 @@ public class LauncherActivity extends ListActivity {
     private List<Video> getVideosFor(String user) {
         final URI vimeoApiUri = VimeoApiUtils.resolveUriForSimpleApi(
                 Uri.withAppendedPath(VimeoUnauthorizedProvider.BASE_URI, "/user/" + user + "/videos"));
-        JSONArray videosArr = JsonOverHttp.askForArray(vimeoApiUri);
-        
         try {
+            JSONArray videosArr = JsonOverHttp.askForArray(vimeoApiUri);
             final List<Video> result = new LinkedList<Video>();
             for (int i = 0; i < videosArr.length(); i++) {
                  JSONObject videoObj = (JSONObject)videosArr.get(i);
@@ -120,11 +133,17 @@ public class LauncherActivity extends ListActivity {
                  result.add(video);
             }
             return result;
+        } catch (ClientProtocolException cpe) {
+            makeExceptionToast("Client protocol exception", cpe);
+            cpe.printStackTrace();
         } catch (JSONException jsone) {
-            Log.e(TAG, "JSON error while getting videos list: " + jsone.getLocalizedMessage());
+            makeExceptionToast("JSON parsing exception", jsone);
             jsone.printStackTrace();
-            return null;
+        } catch (IOException ioe) {
+            makeExceptionToast("Connection/IO exception", ioe);
+            ioe.printStackTrace();
         }
+        return Collections.emptyList();
     }
     
     /**
@@ -157,6 +176,11 @@ public class LauncherActivity extends ListActivity {
         
         return result;
         
+    }
+    
+    private void makeExceptionToast(String description, Exception e) {
+        Toast t = Toast.makeText(getApplicationContext(), description + " " + e.getLocalizedMessage(), TOAST_KEEPS_HOT);
+        t.show();        
     }
 
     /* (non-Javadoc)

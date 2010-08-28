@@ -104,12 +104,12 @@ public class VimeoApiUtils {
     }
     
     protected static String validateShortcutOrId(final String shortcut) { 
-        if (!shortcut.matches("^[\\d\\w_]+$")) throw new IllegalArgumentException("Not correct schortcut or ID: " + shortcut);
+        if (!shortcut.matches("^[\\d\\w_]+$")) throw new IllegalArgumentException("Not correct schortcut or _ID: " + shortcut);
         return shortcut;
     }
     
     protected static String validateId(final String id) { 
-        if (!id.matches("^\\d+$")) throw new IllegalArgumentException("Not correct ID: " + id);
+        if (!id.matches("^\\d+$")) throw new IllegalArgumentException("Not correct _ID: " + id);
         return id;
     }
     

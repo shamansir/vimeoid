@@ -1,7 +1,11 @@
 package org.vimeoid;
 
+import java.io.IOException;
 import java.net.URI;
 
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.connection.JsonOverHttp;
 import org.vimeoid.connection.VimeoApiUtils;
@@ -18,6 +22,7 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
 
 /**
  * <dl>
@@ -29,17 +34,16 @@ import android.net.Uri;
  *
  * <p>Description</p>
  * 
- * @deprecated Currently not implemented finally
- *
  * @author Ulric Wilfred <shaman.sir@gmail.com>
  * @date Aug 20, 2010 5:29:21 PM 
  *
  */
-// URLs are: http://vimeo.com/m/play_redirect?quality=mobile&clip_id=14294054
-@Deprecated
+
 public class VimeoUnauthorizedProvider extends ContentProvider {
     
     public static final String AUTHORITY = "org.vimeoid.simple.provider";
+    
+    public static final String TAG = "VimeoUnauthorizedProvider";
     
     public static final Uri BASE_URI = new Uri.Builder().scheme("content").authority(VimeoUnauthorizedProvider.AUTHORITY).build();
     
@@ -166,13 +170,9 @@ public class VimeoUnauthorizedProvider extends ContentProvider {
         throw new UnsupportedOperationException("Insertion of something in not supported in VimeoUnauthorizedProvider");
     }
 
-    /* (non-Javadoc)
-     * @see android.content.ContentProvider#onCreate()
-     */
     @Override
     public boolean onCreate() {
-        // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     /* (non-Javadoc)
@@ -184,8 +184,26 @@ public class VimeoUnauthorizedProvider extends ContentProvider {
         if ((selection != null) || (selectionArgs != null))
             throw new UnsupportedOperationException("SQL Where-selections are not supported in VimeoUnauthorizedProvider, please use URI to filter the selection query");
         if (sortOrder != null) throw new UnsupportedOperationException("SQL-styled sorting is not supported in VimeoUnauthorizedProvider, please use URI parameters to specify sorting order (if supported by the method)");
-        // final URI vimeoApiUri = VimeoApiUtils.resolveUriForSimpleApi(contentUri);
-        //JSONObject object = JsonOverHttp.execute(vimeoApiUri);
+        if (projection == null) throw new IllegalArgumentException("Please specify projection, at least empty one");
+        final URI vimeoApiUri = VimeoApiUtils.resolveUriForSimpleApi(contentUri);
+        try {
+            if (getReturnsMultipleResults(contentUri)) {
+                final JSONArray jsonArr = JsonOverHttp.askForArray(vimeoApiUri);
+                return new JsonObjectsCursor(jsonArr, projection);
+            } else {
+                final JSONObject jsonObj = JsonOverHttp.askForObject(vimeoApiUri);
+                return new JsonObjectsCursor(jsonObj, projection);
+            }
+        } catch (ClientProtocolException cpe) {
+            Log.e(TAG, "Client protocol exception" + cpe.getLocalizedMessage());
+            cpe.printStackTrace();
+        } catch (JSONException jsone) {
+            Log.e(TAG, "JSON parsing exception " + jsone.getLocalizedMessage());
+            jsone.printStackTrace();
+        } catch (IOException ioe) {
+            Log.e(TAG, "Connection/IO exception " + ioe.getLocalizedMessage());
+            ioe.printStackTrace();
+        }
         return null;
     }
 
@@ -195,8 +213,6 @@ public class VimeoUnauthorizedProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection,
             String[] selectionArgs) {
-        /* if ((selection != null) || (selectionArgs != null))
-            throw new UnsupportedOperationException("SQL Where-selections are not supported in VimeoUnauthorizedProvider, please use URI to filter the selection query"); */
         throw new UnsupportedOperationException("Updation of something in not supported in VimeoUnauthorizedProvider");
     }
 
