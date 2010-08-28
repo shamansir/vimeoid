@@ -31,7 +31,7 @@ import android.util.Log;
  * <dt>Package:</dt> <dd>org.vimeoid.providers</dd>
  * </dl>
  *
- * <code>VimeoUnauthorizedProvider</code>
+ * <code>VimeoSimpleApiProvider</code>
  *
  * <p>Description</p>
  * 
@@ -40,13 +40,13 @@ import android.util.Log;
  *
  */
 
-public class VimeoUnauthorizedProvider extends ContentProvider {
+public class VimeoSimpleApiProvider extends ContentProvider {
     
     public static final String AUTHORITY = "org.vimeoid.simple.provider";
     
-    public static final String TAG = "VimeoUnauthorizedProvider";
+    public static final String TAG = "VimeoSimpleApiProvider";
     
-    public static final Uri BASE_URI = new Uri.Builder().scheme("content").authority(VimeoUnauthorizedProvider.AUTHORITY).build();
+    public static final Uri BASE_URI = new Uri.Builder().scheme("content").authority(VimeoSimpleApiProvider.AUTHORITY).build();
     
     private static final UriMatcher uriMatcher;
     
@@ -98,11 +98,11 @@ public class VimeoUnauthorizedProvider extends ContentProvider {
     }
 
     /**
-     * This method is not supported in <code>VimeoUnauthorizedProvider</code>
+     * This method is not supported in <code>VimeoSimpleApiProvider</code>
      */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        throw new UnsupportedOperationException("Deletion of something in not supported in VimeoUnauthorizedProvider");
+        throw new UnsupportedOperationException("Deletion of something in not supported in VimeoSimpleApiProvider");
     }
 
     /* (non-Javadoc)
@@ -164,11 +164,11 @@ public class VimeoUnauthorizedProvider extends ContentProvider {
     }    
     
     /**
-     * This method is not supported in <code>VimeoUnauthorizedProvider</code>
+     * This method is not supported in <code>VimeoSimpleApiProvider</code>
      */
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        throw new UnsupportedOperationException("Insertion of something in not supported in VimeoUnauthorizedProvider");
+        throw new UnsupportedOperationException("Insertion of something in not supported in VimeoSimpleApiProvider");
     }
 
     @Override
@@ -183,8 +183,8 @@ public class VimeoUnauthorizedProvider extends ContentProvider {
     public Cursor query(Uri contentUri, String[] projection, String selection,
             String[] selectionArgs, String sortOrder) {
         if ((selection != null) || (selectionArgs != null))
-            throw new UnsupportedOperationException("SQL Where-selections are not supported in VimeoUnauthorizedProvider, please use URI to filter the selection query");
-        if (sortOrder != null) throw new UnsupportedOperationException("SQL-styled sorting is not supported in VimeoUnauthorizedProvider, please use URI parameters to specify sorting order (if supported by the method)");
+            throw new UnsupportedOperationException("SQL Where-selections are not supported in VimeoSimpleApiProvider, please use URI to filter the selection query");
+        if (sortOrder != null) throw new UnsupportedOperationException("SQL-styled sorting is not supported in VimeoSimpleApiProvider, please use URI parameters to specify sorting order (if supported by the method)");
         if (projection == null) throw new IllegalArgumentException("Please specify projection, at least empty one");
         final URI vimeoApiUri = VimeoApiUtils.resolveUriForSimpleApi(contentUri);
         try {
@@ -209,12 +209,12 @@ public class VimeoUnauthorizedProvider extends ContentProvider {
     }
 
     /**
-     * This method is not supported in <code>VimeoUnauthorizedProvider</code>
+     * This method is not supported in <code>VimeoSimpleApiProvider</code>
      */
     @Override
     public int update(Uri uri, ContentValues values, String selection,
             String[] selectionArgs) {
-        throw new UnsupportedOperationException("Updation of something in not supported in VimeoUnauthorizedProvider");
+        throw new UnsupportedOperationException("Updation of something in not supported in VimeoSimpleApiProvider");
     }
 
 }

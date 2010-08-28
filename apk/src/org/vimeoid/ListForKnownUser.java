@@ -87,7 +87,7 @@ public class ListForKnownUser extends ListActivity {
     
     private List<Video> getVideosFor(String user) {
         final URI vimeoApiUri = VimeoApiUtils.resolveUriForSimpleApi(
-                Uri.withAppendedPath(VimeoUnauthorizedProvider.BASE_URI, "/user/" + user + "/videos"));
+                Uri.withAppendedPath(VimeoSimpleApiProvider.BASE_URI, "/user/" + user + "/videos"));
         try {
             JSONArray videosArr = JsonOverHttp.askForArray(vimeoApiUri);
             final List<Video> result = new LinkedList<Video>();

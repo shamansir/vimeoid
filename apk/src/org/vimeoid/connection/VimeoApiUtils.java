@@ -36,7 +36,7 @@ public class VimeoApiUtils {
     
     /**
      * <p>Returns Simple (unauthorized) Vimeo API URL using the passed Content URI
-     * (see <code>VimeoUnauthorizedProvider</code> for the supported URIs types)</p>
+     * (see <code>VimeoSimpleApiProvider</code> for the supported URIs types)</p>
      * 
      * <p>For example, for URI <code>content://[unauthorized-provider-authority]/user/shamansir/videos</code>,
      * URI <code>http://vimeo.com/api/v2/shamansir/videos.json</code> will be returned and for 

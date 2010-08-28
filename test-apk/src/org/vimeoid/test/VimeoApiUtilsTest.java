@@ -5,7 +5,7 @@ package org.vimeoid.test;
 
 import junit.framework.Assert;
 
-import org.vimeoid.VimeoUnauthorizedProvider;
+import org.vimeoid.VimeoSimpleApiProvider;
 import org.vimeoid.connection.VimeoApiUtils;
 import org.vimeoid.connection.VimeoConfig;
 import org.vimeoid.connection.simple.ContentType;
@@ -36,7 +36,7 @@ public class VimeoApiUtilsTest extends AndroidTestCase {
     private static final String[] testChannels = {"test_channel", "channel", "channel601", "4320193"};
     private static final String[] testAlbums = {"18562", "1203", "3373626198829", "0100101"};
     
-    final Builder builder = new Uri.Builder().scheme("content").authority(VimeoUnauthorizedProvider.AUTHORITY);    
+    final Builder builder = new Uri.Builder().scheme("content").authority(VimeoSimpleApiProvider.AUTHORITY);    
     
     public void testSimpleApiUserMethods() throws Throwable {
         
@@ -222,9 +222,9 @@ public class VimeoApiUtilsTest extends AndroidTestCase {
     
     /**
      * Tests if <code>VimeoApiUtils</code> produces the correct Vimeo API Call URL 
-     * for passed <code>actualUri</code>. Also tests <code>VimeoUnauthorizedProvider</code> for 
+     * for passed <code>actualUri</code>. Also tests <code>VimeoSimpleApiProvider</code> for 
      * correctness on returned content type (<code>expectedResultType</code>) 
-     * to conform with API Call result and tests if <code>VimeoUnauthorizedProvider</code> says
+     * to conform with API Call result and tests if <code>VimeoSimpleApiProvider</code> says
      * true about how much elements returns the call
      * 
      * @param expectedVimeoApiUrl the expected dynamic segment of resulting Vimeo API Call URL that located <code>http://vimeo.com/api/v2/[::here::].json</code> 
@@ -241,8 +241,8 @@ public class VimeoApiUtilsTest extends AndroidTestCase {
                                    VimeoApiUtils.RESPONSE_FORMAT;
         
         Assert.assertEquals(expectedUrl, VimeoApiUtils.resolveUriForSimpleApi(actualUri).toString());
-        Assert.assertEquals(expectedResultType, VimeoUnauthorizedProvider.getReturnedContentType(actualUri));
-        Assert.assertEquals(multipleResultExpected, VimeoUnauthorizedProvider.getReturnsMultipleResults(actualUri));
+        Assert.assertEquals(expectedResultType, VimeoSimpleApiProvider.getReturnedContentType(actualUri));
+        Assert.assertEquals(multipleResultExpected, VimeoSimpleApiProvider.getReturnsMultipleResults(actualUri));
     }
     
     protected static void testFailsToParse(final Uri uri) {

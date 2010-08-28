@@ -37,7 +37,7 @@ public class ListForUnknownUser extends ListActivity {
         
         Cursor cursor = getContentResolver().query(
                 Uri.withAppendedPath(
-                        VimeoUnauthorizedProvider.BASE_URI, "/user/shamansir/videos"), 
+                        VimeoSimpleApiProvider.BASE_URI, "/user/shamansir/videos"), 
                 Video.SHORT_EXTRACT_PROJECTION, null, null, null);
         startManagingCursor(cursor);
         this.setListAdapter(new SimpleCursorAdapter(this,

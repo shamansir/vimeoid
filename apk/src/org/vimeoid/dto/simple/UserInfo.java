@@ -19,7 +19,7 @@ package org.vimeoid.dto.simple;
  */
 public class UserInfo {
     
-    /* public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoUnauthorizedProvider.AUTHORITY +
+    /* public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoSimpleApiProvider.AUTHORITY +
                                                                    "/users"); */
 
     public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.vimeo.user";

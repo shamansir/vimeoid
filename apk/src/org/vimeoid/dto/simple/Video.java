@@ -26,7 +26,7 @@ import android.content.ContentValues;
 //URLs are: http://vimeo.com/m/play_redirect?quality=mobile&clip_id=14294054
 public class Video implements Extractable {
     
-    /* public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoUnauthorizedProvider.AUTHORITY +
+    /* public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoSimpleApiProvider.AUTHORITY +
                                                                    "/videos"); */
 
     public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.vimeo.video";
