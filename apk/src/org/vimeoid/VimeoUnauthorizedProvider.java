@@ -19,7 +19,7 @@ import android.net.Uri;
  * <dt>Package:</dt> <dd>org.vimeoid.providers</dd>
  * </dl>
  *
- * <code>VimeoProvider</code>
+ * <code>VimeoUnauthorizedProvider</code>
  *
  * <p>Description</p>
  * 
@@ -29,9 +29,9 @@ import android.net.Uri;
  * @date Aug 20, 2010 5:29:21 PM 
  *
  */
-public class VimeoProvider extends ContentProvider {
+public class VimeoUnauthorizedProvider extends ContentProvider {
     
-    public static final String AUTHORITY = "org.vimeoid.provider";
+    public static final String AUTHORITY = "org.vimeoid.simple.provider";
     
     public static enum ContentType { USER, VIDEO, GROUP, CHANNEL, ALBUM, ACTIVITY;
     
@@ -100,7 +100,7 @@ public class VimeoProvider extends ContentProvider {
      */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        throw new UnsupportedOperationException("Deletion of something in not supported in VimeoProvider");
+        throw new UnsupportedOperationException("Deletion of something in not supported in VimeoUnauthorizedProvider");
     }
 
     /* (non-Javadoc)
@@ -166,7 +166,7 @@ public class VimeoProvider extends ContentProvider {
      */
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        throw new UnsupportedOperationException("Insertion of something in not supported in VimeoProvider");
+        throw new UnsupportedOperationException("Insertion of something in not supported in VimeoUnauthorizedProvider");
     }
 
     /* (non-Javadoc)
@@ -185,8 +185,8 @@ public class VimeoProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection,
             String[] selectionArgs, String sortOrder) {
         if ((selection != null) || (selectionArgs != null))
-            throw new UnsupportedOperationException("SQL Where-selections are not supported in VimeoProvider, please use URI to filter the selection query");
-        if (sortOrder != null) throw new UnsupportedOperationException("SQL-styled sorting is not supported in VimeoProvider, please use URI parameters to specify sorting order (if supported by the method)");
+            throw new UnsupportedOperationException("SQL Where-selections are not supported in VimeoUnauthorizedProvider, please use URI to filter the selection query");
+        if (sortOrder != null) throw new UnsupportedOperationException("SQL-styled sorting is not supported in VimeoUnauthorizedProvider, please use URI parameters to specify sorting order (if supported by the method)");
         
         return null;
     }
@@ -198,8 +198,8 @@ public class VimeoProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String selection,
             String[] selectionArgs) {
         /* if ((selection != null) || (selectionArgs != null))
-            throw new UnsupportedOperationException("SQL Where-selections are not supported in VimeoProvider, please use URI to filter the selection query"); */
-        throw new UnsupportedOperationException("Updation of something in not supported in VimeoProvider");
+            throw new UnsupportedOperationException("SQL Where-selections are not supported in VimeoUnauthorizedProvider, please use URI to filter the selection query"); */
+        throw new UnsupportedOperationException("Updation of something in not supported in VimeoUnauthorizedProvider");
     }
 
 }

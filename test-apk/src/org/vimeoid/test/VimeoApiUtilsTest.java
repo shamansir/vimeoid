@@ -5,9 +5,9 @@ package org.vimeoid.test;
 
 import junit.framework.Assert;
 
-import org.vimeoid.VimeoProvider;
-import org.vimeoid.VimeoUriParser;
-import org.vimeoid.VimeoProvider.ContentType;
+import org.vimeoid.VimeoUnauthorizedProvider;
+import org.vimeoid.VimeoUnauthorizedProvider.ContentType;
+import org.vimeoid.connection.VimeoApiUtils;
 
 import android.net.Uri;
 import android.net.Uri.Builder;
@@ -19,7 +19,7 @@ import android.test.AndroidTestCase;
  * <dt>Package:</dt> <dd>org.vimeoid.test</dd>
  * </dl>
  *
- * <code>VimeoUriParserTest</code>
+ * <code>VimeoApiUtilsTest</code>
  *
  * <p>Description</p>
  *
@@ -27,7 +27,7 @@ import android.test.AndroidTestCase;
  * @date Aug 25, 2010 11:20:52 PM 
  *
  */
-public class VimeoUriParserTest extends AndroidTestCase {
+public class VimeoApiUtilsTest extends AndroidTestCase {
     
     private static final String[] testUsers = {"foo_man", "barman", "user3801", "17318"};
     private static final String[] testVideos = {"236372", "371445", "38529913", "39203562" };
@@ -35,7 +35,7 @@ public class VimeoUriParserTest extends AndroidTestCase {
     private static final String[] testChannels = {"test_channel", "channel", "channel601", "4320193"};
     private static final String[] testAlbums = {"18562", "1203", "3373626198829", "0100101"};
     
-    final Builder builder = new Uri.Builder().scheme("content").authority(VimeoProvider.AUTHORITY);    
+    final Builder builder = new Uri.Builder().scheme("content").authority(VimeoUnauthorizedProvider.AUTHORITY);    
     
     public void testSimpleApiUserMethods() throws Throwable {
         
@@ -220,10 +220,10 @@ public class VimeoUriParserTest extends AndroidTestCase {
    
     
     /**
-     * Tests if <code>VimeoUriParser</code> produces the correct Vimeo API Call URL 
-     * for passed <code>actualUri</code>. Also tests <code>VimeoProvider</code> for 
+     * Tests if <code>VimeoApiUtils</code> produces the correct Vimeo API Call URL 
+     * for passed <code>actualUri</code>. Also tests <code>VimeoUnauthorizedProvider</code> for 
      * correctness on returned content type (<code>expectedResultType</code>) 
-     * to conform with API Call result and tests if <code>VimeoProvider</code> says
+     * to conform with API Call result and tests if <code>VimeoUnauthorizedProvider</code> says
      * true about how much elements returns the call
      * 
      * @param expectedVimeoApiUrl the expected dynamic segment of resulting Vimeo API Call URL that located <code>http://vimeo.com/api/v2/[::here::].json</code> 
@@ -235,18 +235,18 @@ public class VimeoUriParserTest extends AndroidTestCase {
                                                  final ContentType expectedResultType, 
                                                  final boolean multipleResultExpected,
                                                  final Uri actualUri) {
-        final String expectedUrl = VimeoUriParser.VIMEO_API_CALL_PREFIX + '/' +
+        final String expectedUrl = VimeoApiUtils.VIMEO_SIMPLE_API_CALL_PREFIX + '/' +
                                    expectedVimeoApiUrl + '.' + 
-                                   VimeoUriParser.DEFAULT_RESPONSE_FORMAT;
+                                   VimeoApiUtils.DEFAULT_RESPONSE_FORMAT;
         
-        Assert.assertEquals(expectedUrl, VimeoUriParser.getSimpleApiCallUrlForUri(actualUri));
-        Assert.assertEquals(expectedResultType, VimeoProvider.getReturnedContentType(actualUri));
-        Assert.assertEquals(multipleResultExpected, VimeoProvider.getReturnsMultipleResults(actualUri));
+        Assert.assertEquals(expectedUrl, VimeoApiUtils.getSimpleApiCallUrlForUri(actualUri));
+        Assert.assertEquals(expectedResultType, VimeoUnauthorizedProvider.getReturnedContentType(actualUri));
+        Assert.assertEquals(multipleResultExpected, VimeoUnauthorizedProvider.getReturnsMultipleResults(actualUri));
     }
     
     protected static void testFailsToParse(final Uri uri) {
         try {
-            VimeoUriParser.getSimpleApiCallUrlForUri(uri);
+            VimeoApiUtils.getSimpleApiCallUrlForUri(uri);
             Assert.fail("must throw exception for URI " + uri);
         } catch (IllegalArgumentException ieae) { /* pass */ }
     }

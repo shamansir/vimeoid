@@ -6,10 +6,8 @@ package org.vimeoid.dto;
 import java.util.Arrays;
 
 import org.vimeoid.Extractable;
-import org.vimeoid.VimeoProvider;
 
 import android.content.ContentValues;
-import android.net.Uri;
 
 /**
  * <dl>
@@ -27,8 +25,8 @@ import android.net.Uri;
  */
 public class Video implements Extractable {
     
-    public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoProvider.AUTHORITY +
-                                                                   "/videos");
+    /* public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoUnauthorizedProvider.AUTHORITY +
+                                                                   "/videos"); */
 
     public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.vimeo.video";
     public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.vimeo.video";    

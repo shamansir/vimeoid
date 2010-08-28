@@ -3,10 +3,6 @@
  */
 package org.vimeoid.dto;
 
-import org.vimeoid.VimeoProvider;
-
-import android.net.Uri;
-
 /**
  * <dl>
  * <dt>Project:</dt> <dd>vimeoid</dd>
@@ -23,8 +19,8 @@ import android.net.Uri;
  */
 public class GroupInfo {
     
-    public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoProvider.AUTHORITY +
-                                                                   "/groups");
+    /* public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoUnauthorizedProvider.AUTHORITY +
+                                                                   "/groups"); */
 
     public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.vimeo.group";
     public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.vimeo.group";    
