@@ -3,6 +3,8 @@
  */
 package org.vimeoid.connection;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import org.vimeoid.connection.simple.ContentType;
@@ -32,27 +34,48 @@ public class VimeoApiUtils {
     
     private VimeoApiUtils() { };
     
-    public static StringBuffer resolveUriForSimpleApi(Uri contentUri) {
-        return resolveUriForSimpleApi(contentUri, null);
+    /**
+     * <p>Returns Simple (unauthorized) Vimeo API URL using the passed Content URI
+     * (see <code>VimeoUnauthorizedProvider</code> for the supported URIs types)</p>
+     * 
+     * <p>For example, for URI <code>content://[unauthorized-provider-authority]/user/shamansir/videos</code>,
+     * URI <code>http://vimeo.com/api/v2/shamansir/videos.json</code> will be returned and for 
+     * URI <code>content://[unauthorized-provider-authority]/album/2239381/videos</code>,
+     * URI <code>http://vimeo.com/api/v2/album/2239381/info.json</code> will be returned and for 
+     * URI <code>content://[unauthorized-provider-authority]/video/125623</code>,
+     * URI <code>http://vimeo.com/api/v2/video/125623.json</code> will be returned...</p>
+     * 
+     * @param contentUri Content URI to resolve
+     * 
+     * @return URI, pointing to the Vimeo Simple API method corresponding to this contentUri
+     */    
+    public static URI resolveUriForSimpleApi(Uri contentUri) {
+        try {
+            return new URI(getUrlPartForSimpleApi(contentUri, 
+                           new StringBuffer(VimeoConfig.VIMEO_SIMPLE_API_CALL_PREFIX).append('/')).toString());
+        } catch (URISyntaxException use) {
+            Log.e(TAG, "URI settings exception when getting URI for " + contentUri);
+            use.printStackTrace();
+            return null;
+        }
     }
     
     /**
-     * Returns Simple (unauthorized) Vimeo API URL part using the passed Content URI
-     * which can be passed from VimeoUnauthorizedProvider
+     * <p>Returns Simple (unauthorized) Vimeo API URL part using the passed Content URI</p>
      * 
-     * For example, for URI <code>content://[unauthorized-provider-authority]/user/shamansir/videos</code>,
+     * <p>For example, for URI <code>content://[unauthorized-provider-authority]/user/shamansir/videos</code>,
      * URL part <code>shamansir/videos.json</code> will be returned and for 
      * URI <code>content://[unauthorized-provider-authority]/album/2239381/videos</code>,
      * URL part <code>album/2239381/info.json</code> will be returned and for 
      * URI <code>content://[unauthorized-provider-authority]/video/125623</code>,
-     * URL part <code>video/125623.json</code> will be returned...
+     * URL part <code>video/125623.json</code> will be returned...</p>
      * 
      * @param contentUri Content URI to resolve
      * @param appendTo if not null, appends the part to this buffer and returns it
      * 
      * @return buffer with the resulting URL part written inside
      */
-    public static StringBuffer resolveUriForSimpleApi(Uri contentUri, StringBuffer appendTo) {
+    public static StringBuffer getUrlPartForSimpleApi(Uri contentUri, StringBuffer appendTo) {
         final List<String> segments = contentUri.getPathSegments();
         final StringBuffer urlBuffer = (appendTo != null) ? appendTo : new StringBuffer();
         Log.d(TAG, "generating API Call URL for URI " + contentUri.toString());

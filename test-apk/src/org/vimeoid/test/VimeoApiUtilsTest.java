@@ -240,16 +240,14 @@ public class VimeoApiUtilsTest extends AndroidTestCase {
                                    expectedVimeoApiUrl + '.' + 
                                    VimeoApiUtils.RESPONSE_FORMAT;
         
-        Assert.assertEquals(expectedUrl, VimeoApiUtils.resolveUriForSimpleApi(actualUri,
-                            new StringBuffer().append(VimeoConfig.VIMEO_SIMPLE_API_CALL_PREFIX)
-                            .append('/')).toString());
+        Assert.assertEquals(expectedUrl, VimeoApiUtils.resolveUriForSimpleApi(actualUri).toString());
         Assert.assertEquals(expectedResultType, VimeoUnauthorizedProvider.getReturnedContentType(actualUri));
         Assert.assertEquals(multipleResultExpected, VimeoUnauthorizedProvider.getReturnsMultipleResults(actualUri));
     }
     
     protected static void testFailsToParse(final Uri uri) {
         try {
-            VimeoApiUtils.resolveUriForSimpleApi(uri, null);
+            VimeoApiUtils.resolveUriForSimpleApi(uri);
             Assert.fail("must throw exception for URI " + uri);
         } catch (IllegalArgumentException ieae) { /* pass */ }
     }

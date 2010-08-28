@@ -18,6 +18,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,14 +44,44 @@ public class JsonOverHttp {
     
     private static final String NL = System.getProperty("line.separator");
     
-    public static JSONObject execute(URI uri, Map<String, String> paramsMap) {
-        HttpClient client = new DefaultHttpClient(); // TODO: make static?
-        HttpGet request = new HttpGet(uri);
-        HttpParams params = new BasicHttpParams();
-        for (Map.Entry<String, String> param: paramsMap.entrySet()) {
-            params.setParameter(param.getKey(), param.getValue());
+    public static JSONArray askForArray(URI uri) {
+        return askForArray(uri, null);
+    }
+    
+    public static JSONArray askForArray(URI uri, Map<String, String> params) {
+        try {
+            return new JSONArray(execute(uri, params));
+        } catch (JSONException jsone) {
+            Log.e(TAG, "JSONException while calling " + uri.toString() + ": " + jsone.getLocalizedMessage());
+            jsone.printStackTrace();
+            return null;
         }
-        request.setParams(params);
+    } 
+    
+    public static JSONObject askForObject(URI uri) throws JSONException {
+        return askForObject(uri, null);
+    }
+    
+    public static JSONObject askForObject(URI uri, Map<String, String> params) {
+        try {
+            return new JSONObject(execute(uri, params));
+        } catch (JSONException jsone) {
+            Log.e(TAG, "JSONException while calling " + uri.toString() + ": " + jsone.getLocalizedMessage());
+            jsone.printStackTrace();
+            return null;
+        }
+    }    
+    
+    public static String execute(URI uri, Map<String, String> paramsMap) {
+        HttpClient client = new DefaultHttpClient();
+        HttpGet request = new HttpGet(uri);
+        if (paramsMap != null) {
+            HttpParams params = new BasicHttpParams();
+            for (Map.Entry<String, String> param: paramsMap.entrySet()) {
+                params.setParameter(param.getKey(), param.getValue());
+            }
+            request.setParams(params);            
+        }
         
         InputStream instream = null;        
         try {
@@ -62,7 +93,7 @@ public class JsonOverHttp {
                 instream = entity.getContent();
                 String result = convertStreamToString(instream);                
                 instream.close();       
-                return new JSONObject(result);
+                return result;
             }
         } catch (ClientProtocolException cpe) {
             Log.e(TAG, "Protocol while calling " + uri.toString() + ": " + cpe.getLocalizedMessage());
@@ -70,9 +101,6 @@ public class JsonOverHttp {
         } catch (IOException ioe) {
             Log.e(TAG, "IOException while calling " + uri.toString() + ": " + ioe.getLocalizedMessage());
             ioe.printStackTrace();
-        } catch (JSONException jsone) {
-            Log.e(TAG, "JSONException while calling " + uri.toString() + ": " + jsone.getLocalizedMessage());
-            jsone.printStackTrace();
         } finally {
             if (instream != null) {
                 try {

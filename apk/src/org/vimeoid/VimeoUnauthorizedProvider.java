@@ -1,5 +1,10 @@
 package org.vimeoid;
 
+import java.net.URI;
+
+import org.json.JSONObject;
+import org.vimeoid.connection.JsonOverHttp;
+import org.vimeoid.connection.VimeoApiUtils;
 import org.vimeoid.connection.simple.ContentType;
 import org.vimeoid.dto.simple.Action;
 import org.vimeoid.dto.simple.AlbumInfo;
@@ -24,15 +29,19 @@ import android.net.Uri;
  *
  * <p>Description</p>
  * 
- * URLs are: http://vimeo.com/m/play_redirect?quality=mobile&clip_id=14294054
+ * @deprecated Currently not implemented finally
  *
  * @author Ulric Wilfred <shaman.sir@gmail.com>
  * @date Aug 20, 2010 5:29:21 PM 
  *
  */
+// URLs are: http://vimeo.com/m/play_redirect?quality=mobile&clip_id=14294054
+@Deprecated
 public class VimeoUnauthorizedProvider extends ContentProvider {
     
     public static final String AUTHORITY = "org.vimeoid.simple.provider";
+    
+    public static final Uri BASE_URI = new Uri.Builder().scheme("content").authority(VimeoUnauthorizedProvider.AUTHORITY).build();
     
     private static final UriMatcher uriMatcher;
     
@@ -170,12 +179,13 @@ public class VimeoUnauthorizedProvider extends ContentProvider {
      * @see android.content.ContentProvider#query(android.net.Uri, java.lang.String[], java.lang.String, java.lang.String[], java.lang.String)
      */
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection,
+    public Cursor query(Uri contentUri, String[] projection, String selection,
             String[] selectionArgs, String sortOrder) {
         if ((selection != null) || (selectionArgs != null))
             throw new UnsupportedOperationException("SQL Where-selections are not supported in VimeoUnauthorizedProvider, please use URI to filter the selection query");
         if (sortOrder != null) throw new UnsupportedOperationException("SQL-styled sorting is not supported in VimeoUnauthorizedProvider, please use URI parameters to specify sorting order (if supported by the method)");
-        
+        // final URI vimeoApiUri = VimeoApiUtils.resolveUriForSimpleApi(contentUri);
+        //JSONObject object = JsonOverHttp.execute(vimeoApiUri);
         return null;
     }
 

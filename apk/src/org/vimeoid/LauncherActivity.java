@@ -1,16 +1,25 @@
 package org.vimeoid;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.vimeoid.connection.JsonOverHttp;
+import org.vimeoid.connection.VimeoApiUtils;
 import org.vimeoid.dto.simple.TagInfo;
 import org.vimeoid.dto.simple.Video;
 
 import android.app.ListActivity;
 import android.content.ContentValues;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,40 +30,19 @@ import android.widget.Button;
 import android.widget.SimpleAdapter;
 
 public class LauncherActivity extends ListActivity {
+    
+    private static final String TAG = "LauncherActivity";
+    
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
         setContentView(R.layout.popular_view);
         
         // this.registerForContextMenu();
         
-        /* Cursor c = getContentResolver().query(People.CONTENT_URI,
-null, null, null, null);
-        startManagingCursor(c);
-        String[] cols = new String[]{People.NAME};
-        int[] names = new int[]{R.id.row_tv};
-        adapter = new SimpleCursorAdapter(this,R.layout.video_item,c,cols,names);
-        this.setListAdapter(adapter);
-         */
-        
-        /* Button sampleButton = (Button) findViewById(R.id.stubButton);
-        sampleButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				Toast t = Toast.makeText(getApplicationContext(), "Vimeo Client Application", 10000);
-				t.show();
-			}
-		}); */
-        
-        /* Intent intent = getIntent();
-        String path = intent.getStringExtra("com.example.android.apis.Path");
-        
-        if (path == null) {
-            path = "";
-        } */
-        
-        setListAdapter(new SimpleAdapter(this, makeStubVideosList(),
+        setListAdapter(new SimpleAdapter(this, callStubVideosList(),
                 R.layout.video_item, 
                 new String[] { Video.FieldsKeys.TITLE, 
                                Video.FieldsKeys.AUTHOR, 
@@ -71,7 +59,7 @@ null, null, null, null);
             
             @Override
             public void onClick(View v) {
-                setListAdapter(new SimpleAdapter(LauncherActivity.this, makeStubTagsList(),
+                setListAdapter(new SimpleAdapter(LauncherActivity.this, callStubTagsList(),
                         R.layout.tag_item, 
                         new String[] { TagInfo.FieldsKeys.NAME, 
                                        TagInfo.FieldsKeys.USAGE_COUNT },
@@ -79,33 +67,70 @@ null, null, null, null);
                 onContentChanged();  
             }
         });
+        
+        /* Cursor c = getContentResolver().query(People.CONTENT_URI,
+        null, null, null, null);
+        startManagingCursor(c);
+        String[] cols = new String[]{People.NAME};
+        int[] names = new int[]{R.id.row_tv};
+        adapter = new SimpleCursorAdapter(this,R.layout.video_item,c,cols,names);
+        this.setListAdapter(adapter);
+        */
+                
+        /* Button sampleButton = (Button) findViewById(R.id.stubButton);
+        sampleButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                Toast t = Toast.makeText(getApplicationContext(), "Vimeo Client Application", 10000);
+                t.show();
+            }
+        }); */
+        
     }
     
     /**
      * @return stub list of videos
      */
-    private List<Map<String, Object>> makeStubVideosList() {
+    private List<Map<String, Object>> callStubVideosList() {
         final List<Map<String, Object>> values = new ArrayList<Map<String, Object>>(); 
         
-        for (int i = 0; i <= 20; i++) {
-            
-            final Video videoStub = new Video();
-            videoStub.id = i + 400;
-            videoStub.title = "Video " + i;
-            videoStub.description = "Video " + i + " description";
-            videoStub.tags = new String[] { ("aa" + i), ("bb" + i), ("cc" + i) };
-            videoStub.duration = 25777 + i;
-            
-            values.add(adaptContent(videoStub.extract()));
+        for (Video video: getVideosFor("shamansir")) {
+            values.add(adaptContent(video.extract()));
         }
         
         return values;
     }
     
+    private List<Video> getVideosFor(String user) {
+        final URI vimeoApiUri = VimeoApiUtils.resolveUriForSimpleApi(
+                Uri.withAppendedPath(VimeoUnauthorizedProvider.BASE_URI, "/user/" + user + "/videos"));
+        JSONArray videosArr = JsonOverHttp.askForArray(vimeoApiUri);
+        
+        try {
+            final List<Video> result = new LinkedList<Video>();
+            for (int i = 0; i < videosArr.length(); i++) {
+                 JSONObject videoObj = (JSONObject)videosArr.get(i);
+                 Video video = new Video();
+                 video.id = videoObj.getInt("id");
+                 video.title = videoObj.getString("title");
+                 video.description = videoObj.getString("description");
+                 video.duration = videoObj.getInt("duration");
+                 video.tags = videoObj.getString("tags").split(",");
+                 video.uploaderName = videoObj.getString("user_name");
+                 result.add(video);
+            }
+            return result;
+        } catch (JSONException jsone) {
+            Log.e(TAG, "JSON error while getting videos list: " + jsone.getLocalizedMessage());
+            jsone.printStackTrace();
+            return null;
+        }
+    }
+    
     /**
      * @return stub list of videos
      */
-    private List<Map<String, Object>> makeStubTagsList() {
+    private List<Map<String, Object>> callStubTagsList() {
         final List<Map<String, Object>> values = new ArrayList<Map<String, Object>>(); 
         
         for (int i = 0; i <= 20; i++) {
