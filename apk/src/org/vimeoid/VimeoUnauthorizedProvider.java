@@ -7,6 +7,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.vimeoid.connection.JsonObjectsCursor;
 import org.vimeoid.connection.JsonOverHttp;
 import org.vimeoid.connection.VimeoApiUtils;
 import org.vimeoid.connection.simple.ContentType;

@@ -32,14 +32,14 @@ import android.widget.Button;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
-public class AuthorizedActivity extends ListActivity {
+public class ListForKnownUser extends ListActivity {
     
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        setContentView(R.layout.popular_view);
+        setContentView(R.layout.known_user_list_view);
         
         // TODO: show loading bar, support API pages        
         
@@ -54,13 +54,13 @@ public class AuthorizedActivity extends ListActivity {
                 new int[] { R.id.videoItemTitle, R.id.videoItemAuthor,
                             R.id.videoItemDuration, R.id.videoItemTags }));
         
-        Button tagsButton = (Button) findViewById(R.id.popularTagsButton);
+        Button tagsButton = (Button) findViewById(R.id.myLikesButton);
         
         tagsButton.setOnClickListener(new OnClickListener() {
             
             @Override
             public void onClick(View v) {
-                setListAdapter(new SimpleAdapter(AuthorizedActivity.this, callStubTagsList(),
+                setListAdapter(new SimpleAdapter(ListForKnownUser.this, callStubTagsList(),
                         R.layout.tag_item, 
                         new String[] { TagInfo.FieldsKeys.NAME, 
                                        TagInfo.FieldsKeys.USAGE_COUNT },

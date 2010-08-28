@@ -13,14 +13,14 @@ import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.SimpleCursorAdapter;
 
-public class UnauthorizedActivity extends ListActivity {
+public class ListForUnknownUser extends ListActivity {
     
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        setContentView(R.layout.popular_view);
+        setContentView(R.layout.unknown_user_list_view);
         
         // this.registerForContextMenu();
         

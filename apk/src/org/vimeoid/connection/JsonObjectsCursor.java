@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vimeoid;
+package org.vimeoid.connection;
 
 import java.util.Arrays;
 
