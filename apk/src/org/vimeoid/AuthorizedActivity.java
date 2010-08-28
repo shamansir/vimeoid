@@ -32,7 +32,7 @@ import android.widget.Button;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
-public class LauncherActivity extends ListActivity {
+public class AuthorizedActivity extends ListActivity {
     
     /** Called when the activity is first created. */
     @Override
@@ -60,7 +60,7 @@ public class LauncherActivity extends ListActivity {
             
             @Override
             public void onClick(View v) {
-                setListAdapter(new SimpleAdapter(LauncherActivity.this, callStubTagsList(),
+                setListAdapter(new SimpleAdapter(AuthorizedActivity.this, callStubTagsList(),
                         R.layout.tag_item, 
                         new String[] { TagInfo.FieldsKeys.NAME, 
                                        TagInfo.FieldsKeys.USAGE_COUNT },
