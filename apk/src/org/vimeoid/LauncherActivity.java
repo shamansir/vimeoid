@@ -20,7 +20,6 @@ import org.vimeoid.dto.simple.Video;
 
 import android.app.ListActivity;
 import android.content.ContentValues;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -31,12 +30,9 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.SimpleAdapter;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 public class LauncherActivity extends ListActivity {
-    
-    private static final int TOAST_KEEPS_HOT = 10000;    
     
     /** Called when the activity is first created. */
     @Override
@@ -45,35 +41,18 @@ public class LauncherActivity extends ListActivity {
         
         setContentView(R.layout.popular_view);
         
+        // TODO: show loading bar, support API pages        
+        
         // this.registerForContextMenu();
         
-        /* setListAdapter(new SimpleAdapter(this, callStubVideosList(),
+        setListAdapter(new SimpleAdapter(this, callStubVideosList(),
                 R.layout.video_item, 
                 new String[] { Video.FieldsKeys.TITLE, 
                                Video.FieldsKeys.AUTHOR, 
                                Video.FieldsKeys.DURATION, 
                                Video.FieldsKeys.TAGS },
                 new int[] { R.id.videoItemTitle, R.id.videoItemAuthor,
-                            R.id.videoItemDuration, R.id.videoItemTags })); */
-        
-        Cursor cursor = getContentResolver().query(
-                Uri.withAppendedPath(
-                        VimeoUnauthorizedProvider.BASE_URI, "/user/shamansir/videos"), 
-                Video.SHORT_EXTRACT_PROJECTION, null, null, null);
-        startManagingCursor(cursor);
-        this.setListAdapter(new SimpleCursorAdapter(this,
-                                        R.layout.video_item, 
-                                        cursor,
-                                        new String[] { Video.FieldsKeys.TITLE, 
-                                                       Video.FieldsKeys.AUTHOR, 
-                                                       Video.FieldsKeys.DURATION, 
-                                                       Video.FieldsKeys.TAGS },
-                                        new int[] { R.id.videoItemTitle, 
-                                                    R.id.videoItemAuthor,
-                                                    R.id.videoItemDuration, 
-                                                    R.id.videoItemTags }));                
-        
-        //getListView().setTextFilterEnabled(true);
+                            R.id.videoItemDuration, R.id.videoItemTags }));
         
         Button tagsButton = (Button) findViewById(R.id.popularTagsButton);
         
@@ -90,15 +69,6 @@ public class LauncherActivity extends ListActivity {
             }
             
         });
-        
-        /* Button sampleButton = (Button) findViewById(R.id.stubButton);
-        sampleButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                Toast t = Toast.makeText(getApplicationContext(), "Vimeo Client Application", 10000);
-                t.show();
-            }
-        }); */
         
     }
     
@@ -179,7 +149,8 @@ public class LauncherActivity extends ListActivity {
     }
     
     private void makeExceptionToast(String description, Exception e) {
-        Toast t = Toast.makeText(getApplicationContext(), description + " " + e.getLocalizedMessage(), TOAST_KEEPS_HOT);
+        Toast t = Toast.makeText(getApplicationContext(), description + " " + e.getLocalizedMessage(), 
+                                                          ApplicationConfig.TOAST_KEEPS_HOT);
         t.show();        
     }
 
