@@ -100,8 +100,7 @@ public class VimeoProvider extends ContentProvider {
      */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        // TODO Auto-generated method stub
-        return 0;
+        throw new UnsupportedOperationException("Deletion of something in not supported in VimeoProvider");
     }
 
     /* (non-Javadoc)
@@ -167,8 +166,7 @@ public class VimeoProvider extends ContentProvider {
      */
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException("Insertion of something in not supported in VimeoProvider");
     }
 
     /* (non-Javadoc)
@@ -186,7 +184,10 @@ public class VimeoProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
             String[] selectionArgs, String sortOrder) {
-        // TODO Auto-generated method stub
+        if ((selection != null) || (selectionArgs != null))
+            throw new UnsupportedOperationException("SQL Where-selections are not supported in VimeoProvider, please use URI to filter the selection query");
+        if (sortOrder != null) throw new UnsupportedOperationException("SQL-styled sorting is not supported in VimeoProvider, please use URI parameters to specify sorting order (if supported by the method)");
+        
         return null;
     }
 
@@ -196,8 +197,9 @@ public class VimeoProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection,
             String[] selectionArgs) {
-        // TODO Auto-generated method stub
-        return 0;
+        /* if ((selection != null) || (selectionArgs != null))
+            throw new UnsupportedOperationException("SQL Where-selections are not supported in VimeoProvider, please use URI to filter the selection query"); */
+        throw new UnsupportedOperationException("Updation of something in not supported in VimeoProvider");
     }
 
 }

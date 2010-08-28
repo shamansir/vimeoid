@@ -37,7 +37,7 @@ public class VimeoUriParserTest extends AndroidTestCase {
     
     final Builder builder = new Uri.Builder().scheme("content").authority(VimeoProvider.AUTHORITY);    
     
-    public void testUserMethods() throws Throwable {
+    public void testSimpleApiUserMethods() throws Throwable {
         
         for (String userId: testUsers) {
             
@@ -98,7 +98,7 @@ public class VimeoUriParserTest extends AndroidTestCase {
         
     }
     
-    public void testVideosMethods() throws Throwable {
+    public void testSimpleApiVideosMethods() throws Throwable {
         
         for (String videoId: testVideos) {
             
@@ -114,7 +114,7 @@ public class VimeoUriParserTest extends AndroidTestCase {
         
     }
     
-    public void testActivitiesMethods() throws Throwable {
+    public void testSimpleApiActivitiesMethods() throws Throwable {
         
         for (String userId: testUsers) {
             
@@ -148,7 +148,7 @@ public class VimeoUriParserTest extends AndroidTestCase {
         
     }
     
-   public void testGroupsMethods() throws Throwable {
+   public void testSimpleApiGroupsMethods() throws Throwable {
         
         for (String groupId: testGroups) {
             
@@ -174,7 +174,7 @@ public class VimeoUriParserTest extends AndroidTestCase {
         
    }
    
-   public void testChannelsMethods() throws Throwable {
+   public void testSimpleApiChannelsMethods() throws Throwable {
        
        for (String channelId: testChannels) {
            
@@ -196,7 +196,7 @@ public class VimeoUriParserTest extends AndroidTestCase {
        
    }
    
-   public void testAlbumsMethods() throws Throwable {
+   public void testSimpleApiAlbumsMethods() throws Throwable {
        
        for (String albumId: testAlbums) {
            
@@ -239,14 +239,14 @@ public class VimeoUriParserTest extends AndroidTestCase {
                                    expectedVimeoApiUrl + '.' + 
                                    VimeoUriParser.DEFAULT_RESPONSE_FORMAT;
         
-        Assert.assertEquals(expectedUrl, VimeoUriParser.getApiCallUrlForUri(actualUri));
+        Assert.assertEquals(expectedUrl, VimeoUriParser.getSimpleApiCallUrlForUri(actualUri));
         Assert.assertEquals(expectedResultType, VimeoProvider.getReturnedContentType(actualUri));
         Assert.assertEquals(multipleResultExpected, VimeoProvider.getReturnsMultipleResults(actualUri));
     }
     
     protected static void testFailsToParse(final Uri uri) {
         try {
-            VimeoUriParser.getApiCallUrlForUri(uri);
+            VimeoUriParser.getSimpleApiCallUrlForUri(uri);
             Assert.fail("must throw exception for URI " + uri);
         } catch (IllegalArgumentException ieae) { /* pass */ }
     }

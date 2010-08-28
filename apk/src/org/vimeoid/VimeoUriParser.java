@@ -47,7 +47,7 @@ public class VimeoUriParser {
         
     } */
         
-    public static String getApiCallUrlForUri(Uri contentUri) {
+    public static String getSimpleApiCallUrlForUri(Uri contentUri) {
         final List<String> segments = contentUri.getPathSegments();
         final StringBuffer urlBuffer = new StringBuffer().append(VIMEO_API_CALL_PREFIX).append('/');
         Log.d(TAG, "generating API Call URL for URI " + contentUri.toString());
