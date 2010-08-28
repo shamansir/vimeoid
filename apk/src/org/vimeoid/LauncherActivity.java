@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.vimeoid.dto.TagInfo;
-import org.vimeoid.dto.Video;
+import org.vimeoid.dto.simple.TagInfo;
+import org.vimeoid.dto.simple.Video;
 
 import android.app.ListActivity;
 import android.content.ContentValues;

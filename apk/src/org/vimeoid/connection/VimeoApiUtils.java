@@ -5,7 +5,7 @@ package org.vimeoid.connection;
 
 import java.util.List;
 
-import org.vimeoid.VimeoUnauthorizedProvider.ContentType;
+import org.vimeoid.connection.simple.ContentType;
 
 import android.net.Uri;
 import android.util.Log;
@@ -26,36 +26,35 @@ import android.util.Log;
  */
 public class VimeoApiUtils {
     
+    public static final String RESPONSE_FORMAT = "json";
+    
     private final static String TAG = "VimeoApiUtils";
-    
-    public static final String VIMEO_SITE_URL = "http://vimeo.com";
-    public static final String VIMEO_API_URL = VIMEO_SITE_URL + "/api";
-    public static final String VIMEO_REST_API_URL = VIMEO_API_URL + "/rest";
-    public static final int VIMEO_API_VERSION = 2;
-    
-    public static final String VIMEO_SIMPLE_API_CALL_PREFIX = VIMEO_API_URL +
-                                                              "/v" + VIMEO_API_VERSION;
-    public static final String VIMEO_REST_API_CALL_PREFIX   = VIMEO_REST_API_URL +
-                                                              "/v" + VIMEO_API_VERSION;
-    public static final String VIMEO_AUTH_API_CALL_PREFIX   = VIMEO_SITE_URL +
-                                                              "services/auth";  
-    
-    public static final String DEFAULT_RESPONSE_FORMAT = "json";
     
     private VimeoApiUtils() { };
     
-    /* public static class ApiCallInfo {
-        
-        public static String callUrl;
-        public static ContentType subjectType;
-        public static ContentType resultType;
-        public static boolean singleResultExpected;
-        
-    } */
-        
-    public static String getSimpleApiCallUrlForUri(Uri contentUri) {
+    public static StringBuffer resolveUriForSimpleApi(Uri contentUri) {
+        return resolveUriForSimpleApi(contentUri, null);
+    }
+    
+    /**
+     * Returns Simple (unauthorized) Vimeo API URL part using the passed Content URI
+     * which can be passed from VimeoUnauthorizedProvider
+     * 
+     * For example, for URI <code>content://[unauthorized-provider-authority]/user/shamansir/videos</code>,
+     * URL part <code>shamansir/videos.json</code> will be returned and for 
+     * URI <code>content://[unauthorized-provider-authority]/album/2239381/videos</code>,
+     * URL part <code>album/2239381/info.json</code> will be returned and for 
+     * URI <code>content://[unauthorized-provider-authority]/video/125623</code>,
+     * URL part <code>video/125623.json</code> will be returned...
+     * 
+     * @param contentUri Content URI to resolve
+     * @param appendTo if not null, appends the part to this buffer and returns it
+     * 
+     * @return buffer with the resulting URL part written inside
+     */
+    public static StringBuffer resolveUriForSimpleApi(Uri contentUri, StringBuffer appendTo) {
         final List<String> segments = contentUri.getPathSegments();
-        final StringBuffer urlBuffer = new StringBuffer().append(VIMEO_SIMPLE_API_CALL_PREFIX).append('/');
+        final StringBuffer urlBuffer = (appendTo != null) ? appendTo : new StringBuffer();
         Log.d(TAG, "generating API Call URL for URI " + contentUri.toString());
         switch (ContentType.fromAlias(segments.get(0))) {
             case USER: urlBuffer.append(validateShortcutOrId(segments.get(1))).append('/')                                
@@ -76,9 +75,9 @@ public class VimeoApiUtils {
                                     .append(resolveSimpleActivityAction(segments.get(2))); break;
                                     
         }
-        urlBuffer.append('.').append(DEFAULT_RESPONSE_FORMAT);
+        urlBuffer.append('.').append(RESPONSE_FORMAT);
         Log.d(TAG, "generated result: " + urlBuffer.toString());
-        return urlBuffer.toString();
+        return urlBuffer;
     }
     
     protected static String validateShortcutOrId(final String shortcut) { 

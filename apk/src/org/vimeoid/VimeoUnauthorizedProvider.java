@@ -1,11 +1,12 @@
 package org.vimeoid;
 
-import org.vimeoid.dto.Action;
-import org.vimeoid.dto.AlbumInfo;
-import org.vimeoid.dto.ChannelInfo;
-import org.vimeoid.dto.GroupInfo;
-import org.vimeoid.dto.UserInfo;
-import org.vimeoid.dto.Video;
+import org.vimeoid.connection.simple.ContentType;
+import org.vimeoid.dto.simple.Action;
+import org.vimeoid.dto.simple.AlbumInfo;
+import org.vimeoid.dto.simple.ChannelInfo;
+import org.vimeoid.dto.simple.GroupInfo;
+import org.vimeoid.dto.simple.UserInfo;
+import org.vimeoid.dto.simple.Video;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -33,21 +34,8 @@ public class VimeoUnauthorizedProvider extends ContentProvider {
     
     public static final String AUTHORITY = "org.vimeoid.simple.provider";
     
-    public static enum ContentType { USER, VIDEO, GROUP, CHANNEL, ALBUM, ACTIVITY;
-    
-        public static ContentType fromAlias(String subjectType) {
-            if ("user".equals(subjectType)) return USER;
-            if ("video".equals(subjectType)) return VIDEO;
-            if ("group".equals(subjectType)) return GROUP;
-            if ("channel".equals(subjectType)) return CHANNEL;
-            if ("album".equals(subjectType)) return ALBUM;
-            if ("activity".equals(subjectType)) return ACTIVITY;
-            throw new IllegalArgumentException("Unknown subject type: " + subjectType);
-        }
-    
-    };    
-    
     private static final UriMatcher uriMatcher;
+    
     private static final int ACTIONS_LIST_URI_TYPE   = 1;
     private static final int ACTION_SINGLE_URI_TYPE  = 2;
     private static final int ALBUMS_LIST_URI_TYPE    = 3;
@@ -63,6 +51,7 @@ public class VimeoUnauthorizedProvider extends ContentProvider {
     
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+        
         uriMatcher.addURI(AUTHORITY, "user/*/info",     USER_SINGLE_URI_TYPE);
         uriMatcher.addURI(AUTHORITY, "user/*/videos",   VIDEOS_LIST_URI_TYPE);
         uriMatcher.addURI(AUTHORITY, "user/*/likes",    VIDEOS_LIST_URI_TYPE);
@@ -92,11 +81,10 @@ public class VimeoUnauthorizedProvider extends ContentProvider {
         uriMatcher.addURI(AUTHORITY, "activity/*/cdid",      ACTIONS_LIST_URI_TYPE); // contacts did
         uriMatcher.addURI(AUTHORITY, "activity/*/chappened", ACTIONS_LIST_URI_TYPE); // happened to contacts
         uriMatcher.addURI(AUTHORITY, "activity/*/edid",      ACTIONS_LIST_URI_TYPE); // everyone did
-        
     }
 
-    /* (non-Javadoc)
-     * @see android.content.ContentProvider#delete(android.net.Uri, java.lang.String, java.lang.String[])
+    /**
+     * This method is not supported in <code>VimeoUnauthorizedProvider</code>
      */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
@@ -161,8 +149,8 @@ public class VimeoUnauthorizedProvider extends ContentProvider {
         }        
     }    
     
-    /* (non-Javadoc)
-     * @see android.content.ContentProvider#insert(android.net.Uri, android.content.ContentValues)
+    /**
+     * This method is not supported in <code>VimeoUnauthorizedProvider</code>
      */
     @Override
     public Uri insert(Uri uri, ContentValues values) {
@@ -191,8 +179,8 @@ public class VimeoUnauthorizedProvider extends ContentProvider {
         return null;
     }
 
-    /* (non-Javadoc)
-     * @see android.content.ContentProvider#update(android.net.Uri, android.content.ContentValues, java.lang.String, java.lang.String[])
+    /**
+     * This method is not supported in <code>VimeoUnauthorizedProvider</code>
      */
     @Override
     public int update(Uri uri, ContentValues values, String selection,

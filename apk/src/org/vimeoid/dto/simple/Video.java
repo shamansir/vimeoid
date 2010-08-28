@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vimeoid.dto;
+package org.vimeoid.dto.simple;
 
 import java.util.Arrays;
 
@@ -12,7 +12,7 @@ import android.content.ContentValues;
 /**
  * <dl>
  * <dt>Project:</dt> <dd>vimeoid</dd>
- * <dt>Package:</dt> <dd>org.vimeoid.dto</dd>
+ * <dt>Package:</dt> <dd>org.vimeoid.dto.simple</dd>
  * </dl>
  *
  * <code>Video video information</code>

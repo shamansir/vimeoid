@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vimeoid.dto;
+package org.vimeoid.dto.simple;
 
 import org.vimeoid.Extractable;
 
@@ -10,7 +10,7 @@ import android.content.ContentValues;
 /**
  * <dl>
  * <dt>Project:</dt> <dd>vimeoid</dd>
- * <dt>Package:</dt> <dd>org.vimeoid.dto</dd>
+ * <dt>Package:</dt> <dd>org.vimeoid.dto.simple</dd>
  * </dl>
  *
  * <code>TagInfo</code>
