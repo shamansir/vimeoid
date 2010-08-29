@@ -8,10 +8,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 public class ListForUnknownUser extends ListActivity {
     
@@ -22,7 +24,7 @@ public class ListForUnknownUser extends ListActivity {
         
         setContentView(R.layout.unknown_user_list_view);
         
-        // this.registerForContextMenu();
+        this.registerForContextMenu(this.getListView());
         
         /* setListAdapter(new SimpleAdapter(this, callStubVideosList(),
                 R.layout.video_item, 
@@ -33,7 +35,7 @@ public class ListForUnknownUser extends ListActivity {
                 new int[] { R.id.videoItemTitle, R.id.videoItemAuthor,
                             R.id.videoItemDuration, R.id.videoItemTags })); */
         
-        // TODO: show loading bar, support API pages
+        // TODO: show loading view, support API pages
         
         Cursor cursor = getContentResolver().query(
                 Uri.withAppendedPath(
@@ -56,53 +58,54 @@ public class ListForUnknownUser extends ListActivity {
         
     }
     
-    
-    /* (non-Javadoc)
-     * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
-     */
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // TODO Auto-generated method stub
-        
-        /* MenuInflater inflater = getMenuInflater(); //from activity
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater(); //from activity
         inflater.inflate(R.menu.main_options_menu, menu); 
         
-        return true; */
-        
+        return true;
+    }
+    
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
         return super.onPrepareOptionsMenu(menu);
     }
     
-    /* (non-Javadoc)
-     * @see android.app.Activity#onCreateContextMenu(android.view.ContextMenu, android.view.View, android.view.ContextMenu.ContextMenuInfo)
-     */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
             ContextMenuInfo menuInfo) {
-        // TODO Auto-generated method stub
-        
-        /* MenuInflater inflater = getMenuInflater(); //from activity
-        inflater.inflate(R.menu.video_context_menu, menu); 
-        
-        return true; */
-        
-        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater(); //from activity
+        inflater.inflate(R.menu.video_context_menu, menu);
     }
     
-    /* (non-Javadoc)
-     * @see android.app.Activity#onContextItemSelected(android.view.MenuItem)
-     */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        // TODO Auto-generated method stub
-        return super.onContextItemSelected(item);
+        String itemDescription;
+        switch (item.getItemId()) {
+            case R.id.menu_Play: itemDescription = "Play "; break;
+            case R.id.menu_watchLater: itemDescription = "WatchLater "; break;
+            case R.id.menu_viewInfo: itemDescription = "View info "; break;
+            case R.id.menu_viewAuthorInfo: itemDescription = "View author info "; break;
+            default: itemDescription = "";
+        }
+        Toast t = Toast.makeText(getApplicationContext(), itemDescription, 
+                ApplicationConfig.TOAST_KEEPS_HOT);
+        t.show();          
+        return super.onOptionsItemSelected(item);
     }
     
-    /* (non-Javadoc)
-     * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
-     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // TODO Auto-generated method stub
+        String itemDescription;
+        switch (item.getItemId()) {
+            case R.id.menu_Login: itemDescription = "Login "; break;
+            case R.id.menu_Preferences: itemDescription = "Preferences "; break;
+            case R.id.menu_SwitchView: itemDescription = "Switch view "; break;
+            default: itemDescription = "";
+        }
+        Toast t = Toast.makeText(getApplicationContext(), itemDescription, 
+                ApplicationConfig.TOAST_KEEPS_HOT);
+        t.show();          
         return super.onOptionsItemSelected(item);
     }
 }
