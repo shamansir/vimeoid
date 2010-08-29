@@ -3,19 +3,24 @@ package org.vimeoid;
 import org.vimeoid.dto.simple.Video;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 public class ListForUnknownUser extends ListActivity {
+    
+    public static final String TAG = "ListForUnknownUser";
     
     /** Called when the activity is first created. */
     @Override
@@ -56,6 +61,23 @@ public class ListForUnknownUser extends ListActivity {
         
         //getListView().setTextFilterEnabled(true);
         
+    }
+    
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        Uri itemUri = Uri.withAppendedPath(
+                VimeoSimpleApiProvider.BASE_URI, "/video/" + id);
+        Log.d(TAG, "Video with id " + id + " selected");
+        
+        String action = getIntent().getAction();
+        if (Intent.ACTION_PICK.equals(action) ||
+                  Intent.ACTION_GET_CONTENT.equals(action))
+        {
+            setResult(RESULT_OK, new Intent().setData(itemUri));
+        } else {
+            startActivity(new Intent(Intent.ACTION_VIEW, itemUri));
+        }        
+        super.onListItemClick(l, v, position, id);
     }
     
     @Override
