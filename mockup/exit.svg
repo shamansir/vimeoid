@@ -14,7 +14,7 @@
    id="svg11392"
    version="1.1"
    inkscape:version="0.47pre4 r22446"
-   sodipodi:docname="enter.svg">
+   sodipodi:docname="exit.svg">
   <defs
      id="defs11394">
     <inkscape:perspective
@@ -40,16 +40,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.35"
-     inkscape:cx="375"
-     inkscape:cy="748.57143"
+     inkscape:cx="-49.285714"
+     inkscape:cy="405.71429"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="603"
-     inkscape:window-height="475"
-     inkscape:window-x="16"
-     inkscape:window-y="113"
-     inkscape:window-maximized="0" />
+     inkscape:window-width="1366"
+     inkscape:window-height="695"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1" />
   <metadata
      id="metadata11397">
     <rdf:RDF>
@@ -58,7 +58,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -67,13 +67,13 @@
      inkscape:groupmode="layer"
      id="layer1">
     <path
-       style="fill:none;stroke:#00be18;stroke-width:107.84322357;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       style="fill:none;stroke:#fbca54;stroke-width:107.84322357000000636;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m 550.95329,928.829 0,-807.59703 -335.71868,172.57477 0,449.06245 335.71868,185.95981 z"
        id="path11374"
        sodipodi:nodetypes="ccccc" />
     <path
-       style="fill:#1c37da;fill-opacity:1;stroke:none"
-       d="m 103.65867,445.33343 0,180.64671 180.64616,0 0,106.26278 196.58675,-207.21241 -196.58607,-180.6467 0,100.94962 -180.64684,0 z"
+       style="fill:#fbca54;fill-opacity:1;stroke:none"
+       d="m 103.65867,428.19057 0,180.64671 180.64616,0 0,106.26278 196.58675,-207.21241 -196.58607,-180.6467 0,100.94962 -180.64684,0 z"
        id="path11376"
        sodipodi:nodetypes="cccccccc" />
   </g>
