@@ -1,5 +1,6 @@
 ^apk/bin/*
 ^test-apk/bin/*
+^mockup/vimeoIMG/*
 
 \.settings
 .*\.apk
