@@ -8,3 +8,5 @@
 cook.sh
 .project
 .classpath
+
+^apk/src/org/vimeoid/connection/VimeoConfig.java
