@@ -23,13 +23,16 @@ public class VimeoConfig {
     public static final int VIMEO_API_VERSION = 2;
     
     private static final String VIMEO_API_URL = VIMEO_SITE_URL + "/api";
-    private static final String VIMEO_REST_API_URL = VIMEO_API_URL + "/rest";    
+    private static final String VIMEO_REST_API_URL = VIMEO_API_URL + "/rest";
     
     public static final String VIMEO_SIMPLE_API_CALL_PREFIX   = VIMEO_API_URL +
                                                                 "/v" + VIMEO_API_VERSION;
     public static final String VIMEO_ADVANCED_API_CALL_PREFIX = VIMEO_REST_API_URL +
                                                                 "/v" + VIMEO_API_VERSION;
     public static final String VIMEO_AUTH_API_CALL_PREFIX     = VIMEO_SITE_URL +
-                                                                "services/auth";     
+                                                                "services/auth";
+    
+    public static final String VIMEO_API_KEY = "<Vimeo API key>";
+    public static final String VIMEO_SHARED_SECRET = "<Vimeo shared secret>";
 
 }

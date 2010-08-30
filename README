@@ -1,0 +1,4 @@
+vimeoid by shaman.sir@gmail.com
+===============================
+
+To make Java source work and compile in your version, get a Vimeo API Key / Secret, put them into apk/src/org/vimeoid/connection/VimeoConfig.example.java and then rename it to VimeoConfig.java
