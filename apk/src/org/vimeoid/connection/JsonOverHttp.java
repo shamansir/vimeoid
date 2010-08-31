@@ -162,6 +162,7 @@ public class JsonOverHttp {
         }
         this.consumer = consumer;
         this.provider = provider;
+        Log.d(TAG, "Subscribed to OAuth");
     }
     
     public boolean isOAuthInitialized() {
@@ -171,6 +172,7 @@ public class JsonOverHttp {
     public Uri askForOAuthRequestToken(final Uri callbackUri) throws OAuthMessageSignerException, OAuthNotAuthorizedException, 
                                                                      OAuthExpectationFailedException, OAuthCommunicationException {
         if (consumer == null) throw new IllegalStateException("OAuth Consumer is not set, call initOuathConfiguration before");
+        Log.d(TAG, "Retrieving OAuth request token");
         return Uri.parse(provider.retrieveRequestToken(consumer, callbackUri.toString()));
     }
     
@@ -179,7 +181,9 @@ public class JsonOverHttp {
     	if (consumer == null) throw new IllegalStateException("OAuth Consumer is not set, call initOuathConfiguration before");
         if (provider == null) throw new IllegalStateException("OAuth provider is not ready, call initOuathConfiguration befor");
         
-        if (uri != null) {  
+        Log.d(TAG, "Started to extract OAuth token");
+        if (uri != null) {
+            Log.d(TAG, "Preparing to retreive token from OAuth provider");
         	String verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);  
         	provider.retrieveAccessToken(consumer, verifier);
         	        	
@@ -193,11 +197,13 @@ public class JsonOverHttp {
         if (consumer == null) throw new IllegalStateException("OAuth Consumer is not set, call initOuathConfiguration");
         if (provider == null) throw new IllegalStateException("OAuth provider is not ready, call initOuathConfiguration");
         
+        Log.d(TAG, "executing Uri" + uri + " with OAuth");
         HttpPost post = new HttpPost(uri);
         
         post.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
         post.getParams().setBooleanParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false);
         
+        Log.d(TAG, "Signing consumer");
         consumer.sign(post);
         return execute(post);          
     }

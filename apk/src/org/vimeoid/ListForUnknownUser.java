@@ -124,9 +124,13 @@ public class ListForUnknownUser extends ListActivity {
         String itemDescription;
         switch (item.getItemId()) {
             case R.id.menu_Login: { 
+                Log.d(TAG, "Starting OAuth login");
                 VimeoApiUtils.ensureOAuth();
+                Log.d(TAG, "Ensured OAuth is ready");
                 try {
+                    Log.d(TAG, "Requesting OAuth Uri");
                     Uri authUri = VimeoApiUtils.requestForOAuthUri();
+                    Log.d(TAG, "Got OAuth Uri, staring Browser activity");
                     getApplicationContext().startActivity(new Intent(Intent.ACTION_VIEW, authUri));
                 } catch (OAuthException oae) {
                     Log.e(TAG, oae.getLocalizedMessage());

@@ -35,7 +35,9 @@ public class ReceiveCredentials extends Activity {
         Uri uri = this.getIntent().getData(); // came here from browser with OAuth
         if (uri != null) {
             try {
+                Log.d(TAG, "Got credentials from browser, checking and saving");                
                 VimeoApiUtils.checkOAuthCallbackAndSaveToken(uri);
+                Log.d(TAG, "Checking finished");
             } catch (OAuthException oae) {
                 Log.e(TAG, oae.getLocalizedMessage());
                 oae.printStackTrace();

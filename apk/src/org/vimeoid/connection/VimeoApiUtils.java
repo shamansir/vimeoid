@@ -118,8 +118,8 @@ public class VimeoApiUtils {
                     new CommonsHttpOAuthConsumer(VimeoConfig.VIMEO_API_KEY, 
                                                  VimeoConfig.VIMEO_SHARED_SECRET), 
                     new DefaultOAuthProvider(VimeoConfig.VIMEO_OAUTH_API_ROOT + "/request_token", 
-                                             VimeoConfig.VIMEO_OAUTH_API_ROOT +  "/access_token", 
-                                             VimeoConfig.VIMEO_OAUTH_API_ROOT +  "/authorize"));
+                                             VimeoConfig.VIMEO_OAUTH_API_ROOT + "/access_token", 
+                                             VimeoConfig.VIMEO_OAUTH_API_ROOT + "/authorize"));
         }
     }
         
