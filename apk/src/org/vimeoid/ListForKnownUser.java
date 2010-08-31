@@ -17,7 +17,7 @@ import org.vimeoid.connection.JsonOverHttp;
 import org.vimeoid.connection.VimeoApiUtils;
 import org.vimeoid.dto.simple.TagInfo;
 import org.vimeoid.dto.simple.Video;
-import org.vimeoid.util.ApplicationContext;
+import org.vimeoid.util.Dialogs;
 
 import android.app.ListActivity;
 import android.content.ContentValues;
@@ -31,7 +31,6 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 public class ListForKnownUser extends ListActivity {
     
@@ -105,13 +104,13 @@ public class ListForKnownUser extends ListActivity {
             }
             return result;
         } catch (ClientProtocolException cpe) {
-            makeExceptionToast("Client protocol exception", cpe);
+            Dialogs.makeExceptionToast(getApplicationContext(), "Client protocol exception", cpe);
             cpe.printStackTrace();
         } catch (JSONException jsone) {
-            makeExceptionToast("JSON parsing exception", jsone);
+            Dialogs.makeExceptionToast(getApplicationContext(), "JSON parsing exception", jsone);
             jsone.printStackTrace();
         } catch (IOException ioe) {
-            makeExceptionToast("Connection/IO exception", ioe);
+            Dialogs.makeExceptionToast(getApplicationContext(), "Connection/IO exception", ioe);
             ioe.printStackTrace();
         }
         return Collections.emptyList();
@@ -145,14 +144,7 @@ public class ListForKnownUser extends ListActivity {
             result.put(entry.getKey(), entry.getValue());
         }
         
-        return result;
-        
-    }
-    
-    private void makeExceptionToast(String description, Exception e) {
-        Toast t = Toast.makeText(getApplicationContext(), description + " " + e.getLocalizedMessage(), 
-                                                          ApplicationContext.TOAST_KEEPS_HOT);
-        t.show();        
+        return result;        
     }
 
     /* (non-Javadoc)

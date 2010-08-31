@@ -7,10 +7,17 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import org.vimeoid.connection.simple.ContentType;
-
 import android.net.Uri;
 import android.util.Log;
+
+import oauth.signpost.basic.DefaultOAuthProvider;
+import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
+import oauth.signpost.exception.OAuthCommunicationException;
+import oauth.signpost.exception.OAuthExpectationFailedException;
+import oauth.signpost.exception.OAuthMessageSignerException;
+import oauth.signpost.exception.OAuthNotAuthorizedException;
+
+import org.vimeoid.connection.simple.ContentType;
 
 /**
  * <dl>
@@ -28,9 +35,11 @@ import android.util.Log;
  */
 public class VimeoApiUtils {
     
+    private final static String TAG = "VimeoApiUtils";
+    
     public static final String RESPONSE_FORMAT = "json";
     
-    private final static String TAG = "VimeoApiUtils";
+    public static final Uri OAUTH_CALLBACK_URL = Uri.parse("vimeoid://oauth.done");    
     
     private VimeoApiUtils() { };
     
@@ -103,6 +112,31 @@ public class VimeoApiUtils {
         return urlBuffer;
     }
     
+    public static void ensureOAuth() {
+        if (!JsonOverHttp.use().isOAuthInitialized()) {
+            JsonOverHttp.use().subscribeOAuth(
+                    new CommonsHttpOAuthConsumer(VimeoConfig.VIMEO_API_KEY, 
+                                                 VimeoConfig.VIMEO_SHARED_SECRET), 
+                    new DefaultOAuthProvider(VimeoConfig.VIMEO_OAUTH_API_ROOT + "/request_token", 
+                                             VimeoConfig.VIMEO_OAUTH_API_ROOT +  "/access_token", 
+                                             VimeoConfig.VIMEO_OAUTH_API_ROOT +  "/authorize"));
+        }
+    }
+        
+    public static Uri requestForOAuthUri() throws OAuthMessageSignerException, OAuthNotAuthorizedException, 
+                                           OAuthExpectationFailedException, OAuthCommunicationException {
+        return JsonOverHttp.use().askForOAuthRequestToken(OAUTH_CALLBACK_URL);
+    }
+    
+    public static boolean checkOAuthCallbackAndSaveToken(Uri callbackUri) throws OAuthMessageSignerException, OAuthNotAuthorizedException, 
+                                                                                 OAuthExpectationFailedException, OAuthCommunicationException {
+        if (callbackUri.toString().startsWith(OAUTH_CALLBACK_URL.toString())) {
+            final String authToken = JsonOverHttp.use().extractOAuthToken(callbackUri);
+            // TODO: save token
+            return true;
+        } else return false;
+    }
+    
     protected static String validateShortcutOrId(final String shortcut) { 
         if (!shortcut.matches("^[\\d\\w_]+$")) throw new IllegalArgumentException("Not correct schortcut or _ID: " + shortcut);
         return shortcut;
@@ -146,6 +180,6 @@ public class VimeoApiUtils {
     
     private static String resolveSimpleChannelAction(String action) {
         return validateActionName(action);
-    }    
-
+    }
+    
 }

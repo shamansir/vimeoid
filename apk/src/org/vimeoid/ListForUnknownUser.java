@@ -1,8 +1,5 @@
 package org.vimeoid;
 
-import org.vimeoid.dto.simple.Video;
-import org.vimeoid.util.ApplicationContext;
-
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,7 +14,12 @@ import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.Toast;
+
+import oauth.signpost.exception.OAuthException;
+
+import org.vimeoid.connection.VimeoApiUtils;
+import org.vimeoid.dto.simple.Video;
+import org.vimeoid.util.Dialogs;
 
 public class ListForUnknownUser extends ListActivity {
     
@@ -113,9 +115,7 @@ public class ListForUnknownUser extends ListActivity {
             case R.id.menu_viewAuthorInfo: itemDescription = "View author info "; break;
             default: itemDescription = "";
         }
-        Toast t = Toast.makeText(getApplicationContext(), itemDescription, 
-                ApplicationContext.TOAST_KEEPS_HOT);
-        t.show();          
+        Dialogs.makeToast(getApplicationContext(), itemDescription);
         return super.onOptionsItemSelected(item);
     }
     
@@ -123,14 +123,23 @@ public class ListForUnknownUser extends ListActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         String itemDescription;
         switch (item.getItemId()) {
-            case R.id.menu_Login: itemDescription = "Login "; break;
+            case R.id.menu_Login: { 
+                VimeoApiUtils.ensureOAuth();
+                try {
+                    Uri authUri = VimeoApiUtils.requestForOAuthUri();
+                    getApplicationContext().startActivity(new Intent(Intent.ACTION_VIEW, authUri));
+                } catch (OAuthException oae) {
+                    Log.e(TAG, oae.getLocalizedMessage());
+                    oae.printStackTrace();
+                    Dialogs.makeExceptionToast(getApplicationContext(), "OAuth Exception", oae);  
+                }
+                itemDescription = "Login";
+            }; break;
             case R.id.menu_Preferences: itemDescription = "Preferences "; break;
             case R.id.menu_SwitchView: itemDescription = "Switch view "; break;
             default: itemDescription = "";
         }
-        Toast t = Toast.makeText(getApplicationContext(), itemDescription, 
-                ApplicationContext.TOAST_KEEPS_HOT);
-        t.show();          
+        Dialogs.makeToast(getApplicationContext(), itemDescription);         
         return super.onOptionsItemSelected(item);
     }
 }

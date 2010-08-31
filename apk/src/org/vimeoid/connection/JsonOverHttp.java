@@ -59,7 +59,7 @@ public class JsonOverHttp {
     protected final HttpClient client = new DefaultHttpClient();
     
     protected OAuthConsumer consumer = null;
-    protected OAuthProvider provider = null;    
+    protected OAuthProvider provider = null;
     
     private JsonOverHttp() {
         
@@ -156,7 +156,7 @@ public class JsonOverHttp {
         return sb.toString();
     }
     
-    public void initOuathConfiguration(OAuthConsumer consumer, OAuthProvider provider) {
+    public void subscribeOAuth(OAuthConsumer consumer, OAuthProvider provider) {
         if ((this.consumer != null) || (this.provider != null)) {
             Log.w(TAG, "OAuth Consumer or Provider was already set");
         }
@@ -164,11 +164,17 @@ public class JsonOverHttp {
         this.provider = provider;
     }
     
-    public boolean isOauthInitialized() {
+    public boolean isOAuthInitialized() {
     	return (this.consumer != null) && (this.provider != null);
     }    
     
-    public String extractOauthTokenAndSave(final Uri uri) throws OAuthMessageSignerException, OAuthNotAuthorizedException, 
+    public Uri askForOAuthRequestToken(final Uri callbackUri) throws OAuthMessageSignerException, OAuthNotAuthorizedException, 
+                                                                     OAuthExpectationFailedException, OAuthCommunicationException {
+        if (consumer == null) throw new IllegalStateException("OAuth Consumer is not set, call initOuathConfiguration before");
+        return Uri.parse(provider.retrieveRequestToken(consumer, callbackUri.toString()));
+    }
+    
+    public String extractOAuthToken(final Uri uri) throws OAuthMessageSignerException, OAuthNotAuthorizedException, 
     																    OAuthExpectationFailedException, OAuthCommunicationException {
     	if (consumer == null) throw new IllegalStateException("OAuth Consumer is not set, call initOuathConfiguration before");
         if (provider == null) throw new IllegalStateException("OAuth provider is not ready, call initOuathConfiguration befor");
@@ -176,6 +182,7 @@ public class JsonOverHttp {
         if (uri != null) {  
         	String verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);  
         	provider.retrieveAccessToken(consumer, verifier);
+        	        	
         	return consumer.getToken();
         }  else return null;
     }
