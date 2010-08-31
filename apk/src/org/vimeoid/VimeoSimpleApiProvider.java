@@ -189,10 +189,10 @@ public class VimeoSimpleApiProvider extends ContentProvider {
         final URI vimeoApiUri = VimeoApiUtils.resolveUriForSimpleApi(contentUri);
         try {
             if (getReturnsMultipleResults(contentUri)) {
-                final JSONArray jsonArr = JsonOverHttp.askForArray(vimeoApiUri);
+                final JSONArray jsonArr = JsonOverHttp.use().askForArray(vimeoApiUri);
                 return new JsonObjectsCursor(jsonArr, projection);
             } else {
-                final JSONObject jsonObj = JsonOverHttp.askForObject(vimeoApiUri);
+                final JSONObject jsonObj = JsonOverHttp.use().askForObject(vimeoApiUri);
                 return new JsonObjectsCursor(jsonObj, projection);
             }
         } catch (ClientProtocolException cpe) {

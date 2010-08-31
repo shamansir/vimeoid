@@ -5,7 +5,7 @@ package org.vimeoid.dto.simple;
 
 import java.util.Arrays;
 
-import org.vimeoid.Extractable;
+import org.vimeoid.util.Extractable;
 
 import android.content.ContentValues;
 

@@ -56,37 +56,56 @@ import android.util.Log;
  */
 public class JsonOverHttp {
     
+    protected final HttpClient client = new DefaultHttpClient();
+    
+    protected OAuthConsumer consumer = null;
+    protected OAuthProvider provider = null;    
+    
+    private JsonOverHttp() {
+        
+    }
+    
+    /**
+     * SingletonHolder is loaded on the first execution of Singleton.getInstance() 
+     * or the first access to SingletonHolder.INSTANCE, not before.
+     * 
+     * See: http://android-developers.blogspot.com/2010/07/how-to-have-your-cupcake-and-eat-it-too.html
+     */
+    private static class SingletonHolder { 
+      private static final JsonOverHttp INSTANCE = new JsonOverHttp();
+    }
+
+    public static JsonOverHttp use() {
+      return SingletonHolder.INSTANCE;
+    }    
+    
     public static final String TAG = "JsonOverHttp";
     
     private static final String NL = System.getProperty("line.separator");
 
-    public static OAuthConsumer consumer = null;
-    public static OAuthProvider provider = null;    
-    
-    public static JSONArray askForArray(final URI uri) throws JSONException, ClientProtocolException, IOException {
+    public JSONArray askForArray(final URI uri) throws JSONException, ClientProtocolException, IOException {
         return askForArray(uri, null);
     }
     
-    public static JSONArray askForArray(final URI uri, final HttpParams params) throws JSONException, ClientProtocolException, IOException {
+    public JSONArray askForArray(final URI uri, final HttpParams params) throws JSONException, ClientProtocolException, IOException {
         return new JSONArray(execute(uri, params));
     } 
     
-    public static JSONObject askForObject(final URI uri) throws JSONException, ClientProtocolException, IOException {
+    public JSONObject askForObject(final URI uri) throws JSONException, ClientProtocolException, IOException {
         return askForObject(uri, null);
     }
     
-    public static JSONObject askForObject(final URI uri, final HttpParams params) throws JSONException, ClientProtocolException, IOException {
+    public JSONObject askForObject(final URI uri, final HttpParams params) throws JSONException, ClientProtocolException, IOException {
         return new JSONObject(execute(uri, params));
     }
     
-    protected static String execute(final URI uri, final HttpParams params) throws ClientProtocolException, IOException {
+    protected String execute(final URI uri, final HttpParams params) throws ClientProtocolException, IOException {
     	return execute(uri, params, false);
     }
     
-    protected static String execute(final HttpRequestBase request) throws ClientProtocolException, IOException {
+    protected String execute(final HttpRequestBase request) throws ClientProtocolException, IOException {
     	final String uri = request.getURI().toString();
     	
-        HttpClient client = new DefaultHttpClient();
         InputStream instream = null;        
         try {
             HttpResponse response = client.execute(request);
@@ -118,8 +137,8 @@ public class JsonOverHttp {
         return null;    	
     }
     
-    protected static String execute(final URI uri, HttpParams params, final boolean usePost) throws ClientProtocolException, IOException {
-        HttpRequestBase request = usePost ? new HttpPost(uri) : new HttpGet(uri);
+    protected String execute(final URI uri, HttpParams params, final boolean usePost) throws ClientProtocolException, IOException {
+        final HttpRequestBase request = usePost ? new HttpPost(uri) : new HttpGet(uri);
         
         if (params != null) request.setParams(params);
         
@@ -137,22 +156,22 @@ public class JsonOverHttp {
         return sb.toString();
     }
     
-    public static void initOuathConfiguration(OAuthConsumer consumer, OAuthProvider provider) {
-        if ((JsonOverHttp.consumer != null) || (JsonOverHttp.provider != null)) {
+    public void initOuathConfiguration(OAuthConsumer consumer, OAuthProvider provider) {
+        if ((this.consumer != null) || (this.provider != null)) {
             Log.w(TAG, "OAuth Consumer or Provider was already set");
         }
-        JsonOverHttp.consumer = consumer;
-        JsonOverHttp.provider = provider;
+        this.consumer = consumer;
+        this.provider = provider;
     }
     
-    public static boolean isOauthInitialized() {
-    	return (JsonOverHttp.consumer != null) && (JsonOverHttp.provider != null);
+    public boolean isOauthInitialized() {
+    	return (this.consumer != null) && (this.provider != null);
     }    
     
-    public static String extractOauthTokenAndSave(final Uri uri) throws OAuthMessageSignerException, OAuthNotAuthorizedException, 
+    public String extractOauthTokenAndSave(final Uri uri) throws OAuthMessageSignerException, OAuthNotAuthorizedException, 
     																    OAuthExpectationFailedException, OAuthCommunicationException {
-    	if (JsonOverHttp.consumer == null) throw new IllegalStateException("OAuth Consumer is not set, call initOuathConfiguration before");
-        if (JsonOverHttp.provider == null) throw new IllegalStateException("OAuth provider is not ready, call initOuathConfiguration befor");
+    	if (consumer == null) throw new IllegalStateException("OAuth Consumer is not set, call initOuathConfiguration before");
+        if (provider == null) throw new IllegalStateException("OAuth provider is not ready, call initOuathConfiguration befor");
         
         if (uri != null) {  
         	String verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);  
@@ -161,11 +180,11 @@ public class JsonOverHttp {
         }  else return null;
     }
     
-    protected static String executeWithOauth(final URI uri, List<NameValuePair> params) throws ClientProtocolException, IOException, NoSuchAlgorithmException, 
+    protected String executeWithOauth(final URI uri, List<NameValuePair> params) throws ClientProtocolException, IOException, NoSuchAlgorithmException, 
     																						   OAuthMessageSignerException, OAuthExpectationFailedException, 
     																						   OAuthCommunicationException {
-        if (JsonOverHttp.consumer == null) throw new IllegalStateException("OAuth Consumer is not set, call initOuathConfiguration");
-        if (JsonOverHttp.provider == null) throw new IllegalStateException("OAuth provider is not ready, call initOuathConfiguration");
+        if (consumer == null) throw new IllegalStateException("OAuth Consumer is not set, call initOuathConfiguration");
+        if (provider == null) throw new IllegalStateException("OAuth provider is not ready, call initOuathConfiguration");
         
         HttpPost post = new HttpPost(uri);
         

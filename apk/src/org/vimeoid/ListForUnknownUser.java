@@ -1,6 +1,7 @@
 package org.vimeoid;
 
 import org.vimeoid.dto.simple.Video;
+import org.vimeoid.util.ApplicationContext;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -96,6 +97,8 @@ public class ListForUnknownUser extends ListActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
             ContextMenuInfo menuInfo) {
+        menu.setHeaderTitle("Video " + getSelectedItemId());
+        
         MenuInflater inflater = getMenuInflater(); //from activity
         inflater.inflate(R.menu.video_context_menu, menu);
     }
@@ -111,7 +114,7 @@ public class ListForUnknownUser extends ListActivity {
             default: itemDescription = "";
         }
         Toast t = Toast.makeText(getApplicationContext(), itemDescription, 
-                ApplicationConfig.TOAST_KEEPS_HOT);
+                ApplicationContext.TOAST_KEEPS_HOT);
         t.show();          
         return super.onOptionsItemSelected(item);
     }
@@ -126,7 +129,7 @@ public class ListForUnknownUser extends ListActivity {
             default: itemDescription = "";
         }
         Toast t = Toast.makeText(getApplicationContext(), itemDescription, 
-                ApplicationConfig.TOAST_KEEPS_HOT);
+                ApplicationContext.TOAST_KEEPS_HOT);
         t.show();          
         return super.onOptionsItemSelected(item);
     }

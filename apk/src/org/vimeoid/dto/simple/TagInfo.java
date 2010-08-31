@@ -3,7 +3,7 @@
  */
 package org.vimeoid.dto.simple;
 
-import org.vimeoid.Extractable;
+import org.vimeoid.util.Extractable;
 
 import android.content.ContentValues;
 

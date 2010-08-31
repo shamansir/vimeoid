@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vimeoid;
+package org.vimeoid.util;
 
 import android.content.ContentValues;
 

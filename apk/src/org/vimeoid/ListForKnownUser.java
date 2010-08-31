@@ -17,6 +17,7 @@ import org.vimeoid.connection.JsonOverHttp;
 import org.vimeoid.connection.VimeoApiUtils;
 import org.vimeoid.dto.simple.TagInfo;
 import org.vimeoid.dto.simple.Video;
+import org.vimeoid.util.ApplicationContext;
 
 import android.app.ListActivity;
 import android.content.ContentValues;
@@ -89,7 +90,7 @@ public class ListForKnownUser extends ListActivity {
         final URI vimeoApiUri = VimeoApiUtils.resolveUriForSimpleApi(
                 Uri.withAppendedPath(VimeoSimpleApiProvider.BASE_URI, "/user/" + user + "/videos"));
         try {
-            JSONArray videosArr = JsonOverHttp.askForArray(vimeoApiUri);
+            JSONArray videosArr = JsonOverHttp.use().askForArray(vimeoApiUri);
             final List<Video> result = new LinkedList<Video>();
             for (int i = 0; i < videosArr.length(); i++) {
                  JSONObject videoObj = (JSONObject)videosArr.get(i);
@@ -150,7 +151,7 @@ public class ListForKnownUser extends ListActivity {
     
     private void makeExceptionToast(String description, Exception e) {
         Toast t = Toast.makeText(getApplicationContext(), description + " " + e.getLocalizedMessage(), 
-                                                          ApplicationConfig.TOAST_KEEPS_HOT);
+                                                          ApplicationContext.TOAST_KEEPS_HOT);
         t.show();        
     }
 
