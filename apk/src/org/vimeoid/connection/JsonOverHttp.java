@@ -145,6 +145,10 @@ public class JsonOverHttp {
         JsonOverHttp.provider = provider;
     }
     
+    public static boolean isOauthInitialized() {
+    	return (JsonOverHttp.consumer != null) && (JsonOverHttp.provider != null);
+    }    
+    
     public static String extractOauthTokenAndSave(final Uri uri) throws OAuthMessageSignerException, OAuthNotAuthorizedException, 
     																    OAuthExpectationFailedException, OAuthCommunicationException {
     	if (JsonOverHttp.consumer == null) throw new IllegalStateException("OAuth Consumer is not set, call initOuathConfiguration before");
