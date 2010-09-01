@@ -63,7 +63,7 @@ public class Video implements Extractable {
         
         public static final String _ID = "_id";
         public static final String TITLE = "title";
-        public static final String AUTHOR = "author";
+        public static final String AUTHOR = "user_name";
         public static final String DESCRIPTION = "description";
         public static final String TAGS = "tags";
         public static final String DURATION = "duration";

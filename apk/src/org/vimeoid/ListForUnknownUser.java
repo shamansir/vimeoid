@@ -121,29 +121,31 @@ public class ListForUnknownUser extends ListActivity {
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        String itemDescription;
         switch (item.getItemId()) {
             case R.id.menu_Login: { 
-                Log.d(TAG, "Starting OAuth login");
-                VimeoApiUtils.ensureOAuth();
-                Log.d(TAG, "Ensured OAuth is ready");
-                try {
-                    Log.d(TAG, "Requesting OAuth Uri");
-                    Uri authUri = VimeoApiUtils.requestForOAuthUri();
-                    Log.d(TAG, "Got OAuth Uri, staring Browser activity");
-                    getApplicationContext().startActivity(new Intent(Intent.ACTION_VIEW, authUri));
-                } catch (OAuthException oae) {
-                    Log.e(TAG, oae.getLocalizedMessage());
-                    oae.printStackTrace();
-                    Dialogs.makeExceptionToast(getApplicationContext(), "OAuth Exception", oae);  
-                }
-                itemDescription = "Login";
-            }; break;
-            case R.id.menu_Preferences: itemDescription = "Preferences "; break;
-            case R.id.menu_SwitchView: itemDescription = "Switch view "; break;
-            default: itemDescription = "";
-        }
-        Dialogs.makeToast(getApplicationContext(), itemDescription);         
+	                Log.d(TAG, "Starting OAuth login");
+	                VimeoApiUtils.ensureOAuth();
+	                Log.d(TAG, "Ensured OAuth is ready");
+	                try {
+	                    Log.d(TAG, "Requesting OAuth Uri");
+	                    Uri authUri = VimeoApiUtils.requestForOAuthUri();
+	                    Log.d(TAG, "Got OAuth Uri, staring Browser activity");
+	                    Dialogs.makeToast(getApplicationContext(), "Please wait while browser opens");
+	                    startActivity(new Intent(Intent.ACTION_VIEW, authUri));
+	                } catch (OAuthException oae) {
+	                    Log.e(TAG, oae.getLocalizedMessage());
+	                    oae.printStackTrace();
+	                    Dialogs.makeExceptionToast(getApplicationContext(), "OAuth Exception", oae);  
+	                }
+	            }; break;
+            case R.id.menu_Preferences: {
+                	Dialogs.makeToast(getApplicationContext(), "Preferences"); 
+	            } break;
+            case R.id.menu_SwitchView: {
+            		Dialogs.makeToast(getApplicationContext(), "Switch view"); 
+            	} break;
+            default: Dialogs.makeToast(getApplicationContext(), "Unknown menu element");
+        }         
         return super.onOptionsItemSelected(item);
     }
 }

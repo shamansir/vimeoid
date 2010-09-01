@@ -12,6 +12,7 @@ import android.util.Log;
 
 import oauth.signpost.basic.DefaultOAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
+import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
@@ -117,9 +118,9 @@ public class VimeoApiUtils {
             JsonOverHttp.use().subscribeOAuth(
                     new CommonsHttpOAuthConsumer(VimeoConfig.VIMEO_API_KEY, 
                                                  VimeoConfig.VIMEO_SHARED_SECRET), 
-                    new DefaultOAuthProvider(VimeoConfig.VIMEO_OAUTH_API_ROOT + "/request_token", 
-                                             VimeoConfig.VIMEO_OAUTH_API_ROOT + "/access_token", 
-                                             VimeoConfig.VIMEO_OAUTH_API_ROOT + "/authorize"));
+                    new CommonsHttpOAuthProvider(VimeoConfig.VIMEO_OAUTH_API_ROOT + "/request_token", 
+                                                 VimeoConfig.VIMEO_OAUTH_API_ROOT + "/access_token", 
+                                                 VimeoConfig.VIMEO_OAUTH_API_ROOT + "/authorize"));
         }
     }
         
@@ -132,6 +133,7 @@ public class VimeoApiUtils {
                                                                                  OAuthExpectationFailedException, OAuthCommunicationException {
         if (callbackUri.toString().startsWith(OAUTH_CALLBACK_URL.toString())) {
             final String authToken = JsonOverHttp.use().extractOAuthToken(callbackUri);
+            Log.d(TAG, "Got OAuth token: " + authToken);
             // TODO: save token
             return true;
         } else return false;
