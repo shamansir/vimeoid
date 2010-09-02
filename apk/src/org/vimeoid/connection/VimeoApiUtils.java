@@ -12,8 +12,8 @@ import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.util.Log;
 
-import oauth.signpost.basic.DefaultOAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
+import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
@@ -123,9 +123,9 @@ public class VimeoApiUtils {
             JsonOverHttp.use().subscribeOAuth(
                     new CommonsHttpOAuthConsumer(VimeoConfig.VIMEO_API_KEY, 
                                                  VimeoConfig.VIMEO_SHARED_SECRET), 
-                    new DefaultOAuthProvider(VimeoConfig.VIMEO_OAUTH_API_ROOT + "/request_token", 
-                                             VimeoConfig.VIMEO_OAUTH_API_ROOT + "/access_token", 
-                                             VimeoConfig.VIMEO_OAUTH_API_ROOT + "/authorize"));
+                    new CommonsHttpOAuthProvider(VimeoConfig.VIMEO_OAUTH_API_ROOT + "/request_token", 
+                                                 VimeoConfig.VIMEO_OAUTH_API_ROOT + "/access_token", 
+                                                 VimeoConfig.VIMEO_OAUTH_API_ROOT + "/authorize"));
         }
     }
         

@@ -43,7 +43,9 @@ public class ReceiveCredentials extends Activity {
     
     @Override
     protected void onResume() {
-        Uri uri = this.getIntent().getData(); // came here from browser with OAuth
+    	super.onResume(); 
+        Uri uri = getIntent().getData(); // came here from browser with OAuth    
+        Log.d(TAG, "Uri is " + uri);
         if (uri != null) {
             try {
                 Log.d(TAG, "Got credentials from browser, checking and saving");

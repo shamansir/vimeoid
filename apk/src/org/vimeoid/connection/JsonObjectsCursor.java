@@ -55,7 +55,7 @@ public class JsonObjectsCursor extends AbstractCursor {
     @Override
     public double getDouble(int column) {
         try {
-            return source.getJSONObject(mPos).getDouble(projection[column]);
+            return source.getJSONObject(mPos).getDouble(adaptColumnName(projection[column]));
         } catch (JSONException jsone) {
             notifyException(jsone);
             return 0;
@@ -70,7 +70,7 @@ public class JsonObjectsCursor extends AbstractCursor {
     @Override
     public int getInt(int column) {
         try {
-            return source.getJSONObject(mPos).getInt(projection[column]);
+            return source.getJSONObject(mPos).getInt(adaptColumnName(projection[column]));
         } catch (JSONException jsone) {
             notifyException(jsone);
             return 0;
@@ -80,7 +80,7 @@ public class JsonObjectsCursor extends AbstractCursor {
     @Override
     public long getLong(int column) {
         try {
-            return source.getJSONObject(mPos).getLong(projection[column]);
+            return source.getJSONObject(mPos).getLong(adaptColumnName(projection[column]));
         } catch (JSONException jsone) {
             notifyException(jsone);
             return 0;
@@ -95,7 +95,7 @@ public class JsonObjectsCursor extends AbstractCursor {
     @Override
     public String getString(int column) {
         try {
-            return source.getJSONObject(mPos).getString(projection[column]);
+            return source.getJSONObject(mPos).getString(adaptColumnName(projection[column]));
         } catch (JSONException jsone) {
             notifyException(jsone);
             return null;
@@ -105,11 +105,16 @@ public class JsonObjectsCursor extends AbstractCursor {
     @Override
     public boolean isNull(int column) {
         try {
-            return source.getJSONObject(mPos).isNull(projection[column]);
+            return source.getJSONObject(mPos).isNull(adaptColumnName(projection[column]));
         } catch (JSONException jsone) {
             notifyException(jsone);
             return false;
         }
+    }
+    
+    protected static final String adaptColumnName(String columnName) {
+    	if ("_id".equals(columnName)) return "id";
+    	return columnName;
     }
     
     private static void notifyException(JSONException jsone) {
