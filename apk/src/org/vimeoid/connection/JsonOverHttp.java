@@ -115,7 +115,7 @@ public class JsonOverHttp {
         InputStream instream = null;        
         try {
             HttpResponse response = client.execute(request);
-            Log.i(TAG, "Uri call executed: " + uri.toString() + '[' + response.getStatusLine().toString() + ']');
+            Log.i(TAG, "Uri call executed: " + uri.toString() + " [" + response.getStatusLine().toString() + ']');
             
             if (response.getStatusLine().getStatusCode() != 200) {
             	Log.e(TAG, "Response code for " + uri + " was not 200: " + response.getStatusLine().getReasonPhrase());

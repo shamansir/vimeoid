@@ -56,7 +56,8 @@ public class ReceiveCredentials extends Activity {
                 
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair("user_id", "shamansir"));
-                params.add(new BasicNameValuePair("method", "vimeo.activity.happenedToUser"));                
+                params.add(new BasicNameValuePair("method", "vimeo.activity.happenedToUser"));
+                params.add(new BasicNameValuePair("format", "json"));
                 JsonOverHttp.use().signedAskForObject(new URI(VimeoConfig.VIMEO_ADVANCED_API_ROOT), params);
             } catch (Exception e) {
                 Log.e(TAG, e.getLocalizedMessage());
