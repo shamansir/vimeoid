@@ -7,6 +7,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.util.Log;
 
@@ -39,7 +41,11 @@ public class VimeoApiUtils {
     
     public static final String RESPONSE_FORMAT = "json";
     
-    public static final Uri OAUTH_CALLBACK_URL = Uri.parse("vimeoid://oauth.done");    
+    public static final Uri OAUTH_CALLBACK_URL = Uri.parse("vimeoid://oauth.done");
+    public static final String OAUTH_API_PREFERENCES_ID = "org.vimeoid.vimeoauth";
+    
+    private static final String OAUTH_TOKEN_PARAM = "user_oauth_public";
+    private static final String OAUTH_TOKEN_SECRET_PARAM = "user_oauth_secret";
     
     private VimeoApiUtils() { };
     
@@ -125,16 +131,31 @@ public class VimeoApiUtils {
         
     public static Uri requestForOAuthUri() throws OAuthMessageSignerException, OAuthNotAuthorizedException, 
                                            OAuthExpectationFailedException, OAuthCommunicationException {
-        return JsonOverHttp.use().askForOAuthRequestToken(OAUTH_CALLBACK_URL);
+        return JsonOverHttp.use().retreiveOAuthRequestToken(OAUTH_CALLBACK_URL);
     }
     
-    public static boolean checkOAuthCallbackAndSaveToken(Uri callbackUri) throws OAuthMessageSignerException, OAuthNotAuthorizedException, 
-                                                                                 OAuthExpectationFailedException, OAuthCommunicationException {
+    @SuppressWarnings("serial")
+    public static class IllegalCallbackUriException extends Exception {
+
+        public IllegalCallbackUriException(String description) {
+            super(description);
+        }
+        
+    }
+    
+    public static void ensureOAuthCallbackAndSaveToken(Uri callbackUri, 
+                                                       SharedPreferences storage) throws 
+                                                       OAuthMessageSignerException, OAuthNotAuthorizedException, 
+                                                       OAuthExpectationFailedException, OAuthCommunicationException, 
+                                                       IllegalCallbackUriException {
         if (callbackUri.toString().startsWith(OAUTH_CALLBACK_URL.toString())) {
-            final String authToken = JsonOverHttp.use().extractOAuthToken(callbackUri);
-            // TODO: save token
-            return true;
-        } else return false;
+            final JsonOverHttp joh = JsonOverHttp.use(); 
+            joh.retreiveOAuthAccessToken(callbackUri);
+            Editor editor = storage.edit();  
+            editor.putString(OAUTH_TOKEN_PARAM, joh.getOAuthToken());
+            editor.putString(OAUTH_TOKEN_SECRET_PARAM, joh.getOAuthTokenSecret());
+            editor.commit();
+        } else throw new IllegalCallbackUriException("Illegal callback Uri passed");
     }
     
     protected static String validateShortcutOrId(final String shortcut) { 

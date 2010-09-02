@@ -99,6 +99,12 @@ public class JsonOverHttp {
         return new JSONObject(execute(uri, params));
     }
     
+    public JSONObject signedAskForObject(final URI uri, List<NameValuePair> params) throws ClientProtocolException, NoSuchAlgorithmException, 
+                                                                                           OAuthMessageSignerException, OAuthExpectationFailedException, 
+                                                                                           OAuthCommunicationException, JSONException, IOException {
+        return new JSONObject(executeWithOAuth(uri, params));
+    }
+    
     protected String execute(final URI uri, final HttpParams params) throws ClientProtocolException, IOException {
     	return execute(uri, params, false);
     }
@@ -156,7 +162,7 @@ public class JsonOverHttp {
         return sb.toString();
     }
     
-    public void subscribeOAuth(OAuthConsumer consumer, OAuthProvider provider) {
+    protected void subscribeOAuth(OAuthConsumer consumer, OAuthProvider provider) {
         if ((this.consumer != null) || (this.provider != null)) {
             Log.w(TAG, "OAuth Consumer or Provider was already set");
         }
@@ -165,19 +171,19 @@ public class JsonOverHttp {
         Log.d(TAG, "Subscribed to OAuth");
     }
     
-    public boolean isOAuthInitialized() {
+    protected boolean isOAuthInitialized() {
     	return (this.consumer != null) && (this.provider != null);
     }    
     
-    public Uri askForOAuthRequestToken(final Uri callbackUri) throws OAuthMessageSignerException, OAuthNotAuthorizedException, 
+    protected Uri retreiveOAuthRequestToken(final Uri callbackUri) throws OAuthMessageSignerException, OAuthNotAuthorizedException, 
                                                                      OAuthExpectationFailedException, OAuthCommunicationException {
         if (consumer == null) throw new IllegalStateException("OAuth Consumer is not set, call initOuathConfiguration before");
         Log.d(TAG, "Retrieving OAuth request token");
         return Uri.parse(provider.retrieveRequestToken(consumer, callbackUri.toString()));
     }
     
-    public String extractOAuthToken(final Uri uri) throws OAuthMessageSignerException, OAuthNotAuthorizedException, 
-    																    OAuthExpectationFailedException, OAuthCommunicationException {
+    protected void retreiveOAuthAccessToken(final Uri uri) throws OAuthMessageSignerException, OAuthNotAuthorizedException, 
+    											        OAuthExpectationFailedException, OAuthCommunicationException {
     	if (consumer == null) throw new IllegalStateException("OAuth Consumer is not set, call initOuathConfiguration before");
         if (provider == null) throw new IllegalStateException("OAuth provider is not ready, call initOuathConfiguration befor");
         
@@ -185,15 +191,21 @@ public class JsonOverHttp {
         if (uri != null) {
             Log.d(TAG, "Preparing to retreive token from OAuth provider");
         	String verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);  
-        	provider.retrieveAccessToken(consumer, verifier);
-        	        	
-        	return consumer.getToken();
-        }  else return null;
+        	provider.retrieveAccessToken(consumer, verifier);     	        
+        } else throw new IllegalArgumentException("Passed Uri is null");
     }
     
-    protected String executeWithOauth(final URI uri, List<NameValuePair> params) throws ClientProtocolException, IOException, NoSuchAlgorithmException, 
-    																						   OAuthMessageSignerException, OAuthExpectationFailedException, 
-    																						   OAuthCommunicationException {
+    protected String getOAuthToken() {
+        return consumer.getToken();
+    }
+    
+    protected String getOAuthTokenSecret() {
+        return consumer.getTokenSecret();
+    }    
+    
+    protected String executeWithOAuth(final URI uri, List<NameValuePair> params) throws ClientProtocolException, IOException, NoSuchAlgorithmException, 
+    																				    OAuthMessageSignerException, OAuthExpectationFailedException, 
+    																					OAuthCommunicationException {
         if (consumer == null) throw new IllegalStateException("OAuth Consumer is not set, call initOuathConfiguration");
         if (provider == null) throw new IllegalStateException("OAuth provider is not ready, call initOuathConfiguration");
         

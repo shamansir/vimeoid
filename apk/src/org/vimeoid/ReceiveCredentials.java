@@ -3,13 +3,24 @@
  */
 package org.vimeoid;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
-import oauth.signpost.exception.OAuthException;
-
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.vimeoid.connection.JsonOverHttp;
 import org.vimeoid.connection.VimeoApiUtils;
+import org.vimeoid.connection.VimeoConfig;
 import org.vimeoid.util.Dialogs;
 
 /**
@@ -29,19 +40,26 @@ import org.vimeoid.util.Dialogs;
 public class ReceiveCredentials extends Activity {
     
     public static final String TAG = "ReceiveCredentials";
-
+    
     @Override
     protected void onResume() {
         Uri uri = this.getIntent().getData(); // came here from browser with OAuth
         if (uri != null) {
             try {
-                Log.d(TAG, "Got credentials from browser, checking and saving");                
-                VimeoApiUtils.checkOAuthCallbackAndSaveToken(uri);
+                Log.d(TAG, "Got credentials from browser, checking and saving");
+                // TODO: use AbstractAccountAuthenticator (see SampleSyncAdapter) to store credentials 
+                VimeoApiUtils.ensureOAuthCallbackAndSaveToken(uri,
+                        getSharedPreferences(VimeoApiUtils.OAUTH_API_PREFERENCES_ID, Context.MODE_PRIVATE));
                 Log.d(TAG, "Checking finished");
-            } catch (OAuthException oae) {
-                Log.e(TAG, oae.getLocalizedMessage());
-                oae.printStackTrace();
-                Dialogs.makeExceptionToast(getApplicationContext(), "OAuth Exception", oae);                
+                
+                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                params.add(new BasicNameValuePair("user_id", "shamansir"));
+                params.add(new BasicNameValuePair("method", "vimeo.activity.happenedToUser"));                
+                JsonOverHttp.use().signedAskForObject(new URI(VimeoConfig.VIMEO_ADVANCED_API_ROOT), params);
+            } catch (Exception e) {
+                Log.e(TAG, e.getLocalizedMessage());
+                e.printStackTrace();
+                Dialogs.makeExceptionToast(getApplicationContext(), "Failure: ", e);                
             }
         } else {
             Dialogs.makeToast(getApplicationContext(), "Failed to get OAuth token");
