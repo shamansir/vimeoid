@@ -3,10 +3,13 @@
  */
 package org.vimeoid.connection;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.Uri;
@@ -19,6 +22,11 @@ import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
 import oauth.signpost.exception.OAuthNotAuthorizedException;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.vimeoid.connection.simple.ContentType;
 
 /**
@@ -27,7 +35,7 @@ import org.vimeoid.connection.simple.ContentType;
  * <dt>Package:</dt> <dd>org.vimeoid</dd>
  * </dl>
  *
- * <code>VimeoApiUtils</code>
+ * <code>VimeoApi</code>
  *
  * <p>Description</p>
  *
@@ -35,11 +43,12 @@ import org.vimeoid.connection.simple.ContentType;
  * @date Aug 25, 2010 9:30:14 PM 
  *
  */
-public class VimeoApiUtils {
+public class VimeoApi {
     
-    private final static String TAG = "VimeoApiUtils";
+    private final static String TAG = "VimeoApi";
     
     public static final String RESPONSE_FORMAT = "json";
+    private static final String ADV_API_NAMESPACE = "vimeo";
     
     public static final Uri OAUTH_CALLBACK_URL = Uri.parse("vimeoid://oauth.done");
     public static final String OAUTH_API_PREFERENCES_ID = "org.vimeoid.vimeoauth";
@@ -47,7 +56,7 @@ public class VimeoApiUtils {
     private static final String OAUTH_TOKEN_PARAM = "user_oauth_public";
     private static final String OAUTH_TOKEN_SECRET_PARAM = "user_oauth_secret";
     
-    private VimeoApiUtils() { };
+    private VimeoApi() { };
     
     /**
      * <p>Returns Simple (unauthorized) Vimeo API URL using the passed Content URI
@@ -134,29 +143,43 @@ public class VimeoApiUtils {
         return JsonOverHttp.use().retreiveOAuthRequestToken(OAUTH_CALLBACK_URL);
     }
     
-    @SuppressWarnings("serial")
-    public static class IllegalCallbackUriException extends Exception {
-
-        public IllegalCallbackUriException(String description) {
-            super(description);
-        }
-        
-    }
-    
-    public static void ensureOAuthCallbackAndSaveToken(Uri callbackUri, 
-                                                       SharedPreferences storage) throws 
+    public static void ensureOAuthCallbackAndSaveToken(Context context, Uri callbackUri) throws 
                                                        OAuthMessageSignerException, OAuthNotAuthorizedException, 
                                                        OAuthExpectationFailedException, OAuthCommunicationException, 
                                                        IllegalCallbackUriException {
         if (callbackUri.toString().startsWith(OAUTH_CALLBACK_URL.toString())) {
             final JsonOverHttp joh = JsonOverHttp.use(); 
             joh.retreiveOAuthAccessToken(callbackUri);
-            Editor editor = storage.edit();  
+            final SharedPreferences storage = context.getSharedPreferences(OAUTH_API_PREFERENCES_ID, Context.MODE_PRIVATE);           Editor editor = storage.edit();  
             editor.putString(OAUTH_TOKEN_PARAM, joh.getOAuthToken());
             editor.putString(OAUTH_TOKEN_SECRET_PARAM, joh.getOAuthTokenSecret());
             editor.commit();
         } else throw new IllegalCallbackUriException("Illegal callback Uri passed");
     }
+    
+    public static JSONObject executeAdvApiCall(final String method, List<NameValuePair> params) throws AdvancedApiCallException {
+        try {
+            params.add(new BasicNameValuePair("method", ADV_API_NAMESPACE + "." + method));
+            params.add(new BasicNameValuePair("format", RESPONSE_FORMAT));
+            return JsonOverHttp.use().signedAskForObject(new URI(VimeoConfig.VIMEO_ADVANCED_API_ROOT), params);
+        } catch (ClientProtocolException cpe) {
+            throw new AdvancedApiCallException(AdvancedApiCallException.Type.PROTOCOL, cpe);
+        } catch (NoSuchAlgorithmException nsae) {
+            throw new AdvancedApiCallException(AdvancedApiCallException.Type.PROTOCOL, nsae);
+        } catch (OAuthMessageSignerException omse) {
+            throw new AdvancedApiCallException(AdvancedApiCallException.Type.OAUTH, omse);
+        } catch (OAuthExpectationFailedException oafe) {
+            throw new AdvancedApiCallException(AdvancedApiCallException.Type.OAUTH, oafe);
+        } catch (OAuthCommunicationException oace) {
+            throw new AdvancedApiCallException(AdvancedApiCallException.Type.OAUTH, oace);
+        } catch (JSONException je) {
+            throw new AdvancedApiCallException(AdvancedApiCallException.Type.JSON, je);
+        } catch (IOException ioe) {
+            throw new AdvancedApiCallException(AdvancedApiCallException.Type.CONNECTION, ioe);
+        } catch (URISyntaxException use) {
+            throw new AdvancedApiCallException(AdvancedApiCallException.Type.URI_SYNTAX, use);
+        }
+    }    
     
     protected static String validateShortcutOrId(final String shortcut) { 
         if (!shortcut.matches("^[\\d\\w_]+$")) throw new IllegalArgumentException("Not correct schortcut or _ID: " + shortcut);
@@ -202,5 +225,32 @@ public class VimeoApiUtils {
     private static String resolveSimpleChannelAction(String action) {
         return validateActionName(action);
     }
+    
+    @SuppressWarnings("serial")
+    public static class IllegalCallbackUriException extends Exception {
+
+        public IllegalCallbackUriException(String description) {
+            super(description);
+        }
+        
+    }
+    
+    @SuppressWarnings("serial")
+    public static class AdvancedApiCallException extends Exception {
+        
+        public static enum Type { OAUTH, PROTOCOL, JSON, URI_SYNTAX, CONNECTION };
+        
+        private final Type type;
+
+        public AdvancedApiCallException(Type type, Exception parent) {
+            super(parent);
+            this.type = type;
+        }
+        
+        public Type getType() {
+            return type;
+        }
+        
+    }     
     
 }

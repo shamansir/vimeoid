@@ -14,7 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.connection.JsonOverHttp;
-import org.vimeoid.connection.VimeoApiUtils;
+import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.dto.simple.TagInfo;
 import org.vimeoid.dto.simple.Video;
 import org.vimeoid.util.Dialogs;
@@ -86,7 +86,7 @@ public class ListForKnownUser extends ListActivity {
     }
     
     private List<Video> getVideosFor(String user) {
-        final URI vimeoApiUri = VimeoApiUtils.resolveUriForSimpleApi(
+        final URI vimeoApiUri = VimeoApi.resolveUriForSimpleApi(
                 Uri.withAppendedPath(VimeoSimpleApiProvider.BASE_URI, "/user/" + user + "/videos"));
         try {
             JSONArray videosArr = JsonOverHttp.use().askForArray(vimeoApiUri);

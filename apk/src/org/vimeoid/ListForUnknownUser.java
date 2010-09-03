@@ -17,7 +17,7 @@ import android.widget.SimpleCursorAdapter;
 
 import oauth.signpost.exception.OAuthException;
 
-import org.vimeoid.connection.VimeoApiUtils;
+import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.dto.simple.Video;
 import org.vimeoid.util.Dialogs;
 
@@ -124,11 +124,11 @@ public class ListForUnknownUser extends ListActivity {
         switch (item.getItemId()) {
             case R.id.menu_Login: { 
 	                Log.d(TAG, "Starting OAuth login");
-	                VimeoApiUtils.ensureOAuth();
+	                VimeoApi.ensureOAuth();
 	                Log.d(TAG, "Ensured OAuth is ready");
 	                try {
 	                    Log.d(TAG, "Requesting OAuth Uri");
-	                    Uri authUri = VimeoApiUtils.requestForOAuthUri();
+	                    Uri authUri = VimeoApi.requestForOAuthUri();
 	                    Log.d(TAG, "Got OAuth Uri, staring Browser activity");
 	                    Dialogs.makeToast(getApplicationContext(), "Please wait while browser opens");
 	                    startActivity(new Intent(Intent.ACTION_VIEW, authUri));

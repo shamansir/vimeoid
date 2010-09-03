@@ -6,7 +6,7 @@ package org.vimeoid.test;
 import junit.framework.Assert;
 
 import org.vimeoid.VimeoSimpleApiProvider;
-import org.vimeoid.connection.VimeoApiUtils;
+import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.VimeoConfig;
 import org.vimeoid.connection.simple.ContentType;
 
@@ -221,7 +221,7 @@ public class VimeoApiUtilsTest extends AndroidTestCase {
    
     
     /**
-     * Tests if <code>VimeoApiUtils</code> produces the correct Vimeo API Call URL 
+     * Tests if <code>VimeoApi</code> produces the correct Vimeo API Call URL 
      * for passed <code>actualUri</code>. Also tests <code>VimeoSimpleApiProvider</code> for 
      * correctness on returned content type (<code>expectedResultType</code>) 
      * to conform with API Call result and tests if <code>VimeoSimpleApiProvider</code> says
@@ -238,16 +238,16 @@ public class VimeoApiUtilsTest extends AndroidTestCase {
                                                  final Uri actualUri) {
         final String expectedUrl = VimeoConfig.VIMEO_SIMPLE_API_CALL_PREFIX + '/' +
                                    expectedVimeoApiUrl + '.' + 
-                                   VimeoApiUtils.RESPONSE_FORMAT;
+                                   VimeoApi.RESPONSE_FORMAT;
         
-        Assert.assertEquals(expectedUrl, VimeoApiUtils.resolveUriForSimpleApi(actualUri).toString());
+        Assert.assertEquals(expectedUrl, VimeoApi.resolveUriForSimpleApi(actualUri).toString());
         Assert.assertEquals(expectedResultType, VimeoSimpleApiProvider.getReturnedContentType(actualUri));
         Assert.assertEquals(multipleResultExpected, VimeoSimpleApiProvider.getReturnsMultipleResults(actualUri));
     }
     
     protected static void testFailsToParse(final Uri uri) {
         try {
-            VimeoApiUtils.resolveUriForSimpleApi(uri);
+            VimeoApi.resolveUriForSimpleApi(uri);
             Assert.fail("must throw exception for URI " + uri);
         } catch (IllegalArgumentException ieae) { /* pass */ }
     }

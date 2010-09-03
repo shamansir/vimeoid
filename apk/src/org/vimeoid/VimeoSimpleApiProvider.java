@@ -9,7 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.connection.JsonObjectsCursor;
 import org.vimeoid.connection.JsonOverHttp;
-import org.vimeoid.connection.VimeoApiUtils;
+import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.simple.ContentType;
 import org.vimeoid.dto.simple.Action;
 import org.vimeoid.dto.simple.AlbumInfo;
@@ -186,7 +186,7 @@ public class VimeoSimpleApiProvider extends ContentProvider {
             throw new UnsupportedOperationException("SQL Where-selections are not supported in VimeoSimpleApiProvider, please use URI to filter the selection query");
         if (sortOrder != null) throw new UnsupportedOperationException("SQL-styled sorting is not supported in VimeoSimpleApiProvider, please use URI parameters to specify sorting order (if supported by the method)");
         if (projection == null) throw new IllegalArgumentException("Please specify projection, at least empty one");
-        final URI vimeoApiUri = VimeoApiUtils.resolveUriForSimpleApi(contentUri);
+        final URI vimeoApiUri = VimeoApi.resolveUriForSimpleApi(contentUri);
         try {
             if (getReturnsMultipleResults(contentUri)) {
                 final JSONArray jsonArr = JsonOverHttp.use().askForArray(vimeoApiUri);
