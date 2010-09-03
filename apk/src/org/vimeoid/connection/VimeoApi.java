@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -127,7 +128,7 @@ public class VimeoApi {
         return urlBuffer;
     }
     
-    public static void ensureOAuth() {
+    public static boolean ensureOAuth(Context context) {
         if (!JsonOverHttp.use().isOAuthInitialized()) {
             JsonOverHttp.use().subscribeOAuth(
                     new CommonsHttpOAuthConsumer(VimeoConfig.VIMEO_API_KEY, 
@@ -135,7 +136,15 @@ public class VimeoApi {
                     new CommonsHttpOAuthProvider(VimeoConfig.VIMEO_OAUTH_API_ROOT + "/request_token", 
                                                  VimeoConfig.VIMEO_OAUTH_API_ROOT + "/access_token", 
                                                  VimeoConfig.VIMEO_OAUTH_API_ROOT + "/authorize"));
-        }
+            // check if we already have token
+            final SharedPreferences storage = context.getSharedPreferences(OAUTH_API_PREFERENCES_ID, Context.MODE_PRIVATE);
+            final String oToken = storage.getString(OAUTH_TOKEN_PARAM, null);
+            final String oTokenSecret = storage.getString(OAUTH_TOKEN_SECRET_PARAM, null);
+            if ((oToken != null) && (oTokenSecret != null)) {
+                JsonOverHttp.use().iKnowTokens(oToken, oTokenSecret);
+                return true;
+            } else return false;
+        } return true;
     }
         
     public static Uri requestForOAuthUri() throws OAuthMessageSignerException, OAuthNotAuthorizedException, 
@@ -150,35 +159,36 @@ public class VimeoApi {
         if (callbackUri.toString().startsWith(OAUTH_CALLBACK_URL.toString())) {
             final JsonOverHttp joh = JsonOverHttp.use(); 
             joh.retreiveOAuthAccessToken(callbackUri);
-            final SharedPreferences storage = context.getSharedPreferences(OAUTH_API_PREFERENCES_ID, Context.MODE_PRIVATE);           Editor editor = storage.edit();  
+            final SharedPreferences storage = context.getSharedPreferences(OAUTH_API_PREFERENCES_ID, Context.MODE_PRIVATE);
+            Editor editor = storage.edit();  
             editor.putString(OAUTH_TOKEN_PARAM, joh.getOAuthToken());
             editor.putString(OAUTH_TOKEN_SECRET_PARAM, joh.getOAuthTokenSecret());
             editor.commit();
         } else throw new IllegalCallbackUriException("Illegal callback Uri passed");
     }
     
-    public static JSONObject executeAdvApiCall(final String method, List<NameValuePair> params) throws AdvancedApiCallException {
-        try {
-            params.add(new BasicNameValuePair("method", ADV_API_NAMESPACE + "." + method));
-            params.add(new BasicNameValuePair("format", RESPONSE_FORMAT));
-            return JsonOverHttp.use().signedAskForObject(new URI(VimeoConfig.VIMEO_ADVANCED_API_ROOT), params);
-        } catch (ClientProtocolException cpe) {
-            throw new AdvancedApiCallException(AdvancedApiCallException.Type.PROTOCOL, cpe);
-        } catch (NoSuchAlgorithmException nsae) {
-            throw new AdvancedApiCallException(AdvancedApiCallException.Type.PROTOCOL, nsae);
-        } catch (OAuthMessageSignerException omse) {
-            throw new AdvancedApiCallException(AdvancedApiCallException.Type.OAUTH, omse);
-        } catch (OAuthExpectationFailedException oafe) {
-            throw new AdvancedApiCallException(AdvancedApiCallException.Type.OAUTH, oafe);
-        } catch (OAuthCommunicationException oace) {
-            throw new AdvancedApiCallException(AdvancedApiCallException.Type.OAUTH, oace);
-        } catch (JSONException je) {
-            throw new AdvancedApiCallException(AdvancedApiCallException.Type.JSON, je);
-        } catch (IOException ioe) {
-            throw new AdvancedApiCallException(AdvancedApiCallException.Type.CONNECTION, ioe);
-        } catch (URISyntaxException use) {
-            throw new AdvancedApiCallException(AdvancedApiCallException.Type.URI_SYNTAX, use);
+    public static JSONObject advancedApi(final String method, final String object) 
+                                                        throws ClientProtocolException, NoSuchAlgorithmException, 
+                                                               OAuthMessageSignerException, OAuthExpectationFailedException, 
+                                                               OAuthCommunicationException, JSONException, IOException, 
+                                                               URISyntaxException, AdvancedApiCallError {
+        
+        return advancedApi(method, new ArrayList<NameValuePair>(), object);
+    }
+    
+    public static JSONObject advancedApi(final String method, List<NameValuePair> params, final String object) 
+                                                                    throws ClientProtocolException, NoSuchAlgorithmException, 
+                                                                           OAuthMessageSignerException, OAuthExpectationFailedException, 
+                                                                           OAuthCommunicationException, JSONException, IOException, 
+                                                                           URISyntaxException, AdvancedApiCallError {
+        params.add(new BasicNameValuePair("method", ADV_API_NAMESPACE + "." + method));
+        params.add(new BasicNameValuePair("format", RESPONSE_FORMAT));
+        JSONObject result = JsonOverHttp.use().signedAskForObject(new URI(VimeoConfig.VIMEO_ADVANCED_API_ROOT), params);
+        if (!"ok".equals(result.getString("stat"))) {
+            final JSONObject errObj = result.getJSONObject("err");
+            throw new AdvancedApiCallError(errObj.getInt("code"), errObj.getString("msg"));
         }
+        return result.getJSONObject(object);
     }    
     
     protected static String validateShortcutOrId(final String shortcut) { 
@@ -236,21 +246,18 @@ public class VimeoApi {
     }
     
     @SuppressWarnings("serial")
-    public static class AdvancedApiCallException extends Exception {
-        
-        public static enum Type { OAUTH, PROTOCOL, JSON, URI_SYNTAX, CONNECTION };
-        
-        private final Type type;
+    public static class AdvancedApiCallError extends Exception {
 
-        public AdvancedApiCallException(Type type, Exception parent) {
-            super(parent);
-            this.type = type;
+        public final int code;
+        public final String message;
+        
+        public AdvancedApiCallError(int code, String message) {
+            super(code + ": " + message);
+            
+            this.code = code;
+            this.message = message;
         }
         
-        public Type getType() {
-            return type;
-        }
-        
-    }     
+    }    
     
 }

@@ -104,13 +104,13 @@ public class ListForKnownUser extends ListActivity {
             }
             return result;
         } catch (ClientProtocolException cpe) {
-            Dialogs.makeExceptionToast(getApplicationContext(), "Client protocol exception", cpe);
+            Dialogs.makeExceptionToast(this, "Client protocol exception", cpe);
             cpe.printStackTrace();
         } catch (JSONException jsone) {
-            Dialogs.makeExceptionToast(getApplicationContext(), "JSON parsing exception", jsone);
+            Dialogs.makeExceptionToast(this, "JSON parsing exception", jsone);
             jsone.printStackTrace();
         } catch (IOException ioe) {
-            Dialogs.makeExceptionToast(getApplicationContext(), "Connection/IO exception", ioe);
+            Dialogs.makeExceptionToast(this, "Connection/IO exception", ioe);
             ioe.printStackTrace();
         }
         return Collections.emptyList();

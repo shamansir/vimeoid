@@ -38,19 +38,20 @@ public class ReceiveCredentials extends Activity {
         if (uri != null) {
             try {
                 Log.d(TAG, "Got credentials from browser, checking and saving");
-                // TODO: use AbstractAccountAuthenticator (see SampleSyncAdapter) to store credentials 
+                // TODO: use AbstractAccountAuthenticator (see SampleSyncAdapter) in 2.0> to store credentials
+                //       and sync with Vimeo
                 VimeoApi.ensureOAuthCallbackAndSaveToken(this, uri);
                 Log.d(TAG, "Checking finished");
                 
-                VimeoApi.executeAdvApiCall(Methods.activity.happedToUser, 
-                                                Utils.quickApiParams("user_id", "shamansir"));
+                VimeoApi.advancedApi(Methods.activity.happedToUser, 
+                                     Utils.quickApiParams("user_id", "shamansir"), "activity");
             } catch (Exception e) {
                 Log.e(TAG, e.getLocalizedMessage());
                 e.printStackTrace();
-                Dialogs.makeExceptionToast(getApplicationContext(), "Failure: ", e);                
+                Dialogs.makeExceptionToast(this, "Failure: ", e);                
             }
         } else {
-            Dialogs.makeToast(getApplicationContext(), "Failed to get OAuth token");
+            Dialogs.makeToast(this, "Failed to get OAuth token");
         }
     }
     

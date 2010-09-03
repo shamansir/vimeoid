@@ -219,5 +219,9 @@ public class JsonOverHttp {
         consumer.sign(post);
         return execute(post);          
     }
+
+    public void iKnowTokens(String oToken, String oTokenSecret) {
+        consumer.setTokenWithSecret(oToken, oTokenSecret);
+    }
        
 }

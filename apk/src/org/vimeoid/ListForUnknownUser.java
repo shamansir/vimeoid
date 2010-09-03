@@ -17,7 +17,9 @@ import android.widget.SimpleCursorAdapter;
 
 import oauth.signpost.exception.OAuthException;
 
+import org.json.JSONObject;
 import org.vimeoid.connection.VimeoApi;
+import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.dto.simple.Video;
 import org.vimeoid.util.Dialogs;
 
@@ -115,7 +117,7 @@ public class ListForUnknownUser extends ListActivity {
             case R.id.menu_viewAuthorInfo: itemDescription = "View author info "; break;
             default: itemDescription = "";
         }
-        Dialogs.makeToast(getApplicationContext(), itemDescription);
+        Dialogs.makeToast(this, itemDescription);
         return super.onOptionsItemSelected(item);
     }
     
@@ -124,27 +126,38 @@ public class ListForUnknownUser extends ListActivity {
         switch (item.getItemId()) {
             case R.id.menu_Login: { 
 	                Log.d(TAG, "Starting OAuth login");
-	                VimeoApi.ensureOAuth();
-	                Log.d(TAG, "Ensured OAuth is ready");
-	                try {
-	                    Log.d(TAG, "Requesting OAuth Uri");
-	                    Uri authUri = VimeoApi.requestForOAuthUri();
-	                    Log.d(TAG, "Got OAuth Uri, staring Browser activity");
-	                    Dialogs.makeToast(getApplicationContext(), "Please wait while browser opens");
-	                    startActivity(new Intent(Intent.ACTION_VIEW, authUri));
-	                } catch (OAuthException oae) {
-	                    Log.e(TAG, oae.getLocalizedMessage());
-	                    oae.printStackTrace();
-	                    Dialogs.makeExceptionToast(getApplicationContext(), "OAuth Exception", oae);  
+	                if (!VimeoApi.ensureOAuth(this)) {
+	                    try {
+	                        Log.d(TAG, "Requesting OAuth Uri");
+	                        Uri authUri = VimeoApi.requestForOAuthUri();
+	                        Log.d(TAG, "Got OAuth Uri, staring Browser activity");
+	                        Dialogs.makeToast(this, "Please wait while browser opens");
+	                        startActivity(new Intent(Intent.ACTION_VIEW, authUri));
+	                    } catch (OAuthException oae) {
+	                        Log.e(TAG, oae.getLocalizedMessage());
+	                        oae.printStackTrace();
+	                        Dialogs.makeExceptionToast(this, "OAuth Exception", oae);  
+	                    }	                    
+	                } else {
+	                    Log.d(TAG, "OAuth is ready, loading user name");
+	                    try {
+                            JSONObject user = VimeoApi.advancedApi(Methods.test.login, "user");
+                            Log.d(TAG, "user object: " + user);
+                            Log.d(TAG, "got user " + user.getString("id") + " / " + user.get("username"));
+                        } catch (Exception e) {
+                            Log.e(TAG, e.getLocalizedMessage());
+                            e.printStackTrace();
+                            Dialogs.makeExceptionToast(this, "Getting user exception", e); 
+                        }
 	                }
 	            }; break;
             case R.id.menu_Preferences: {
-                	Dialogs.makeToast(getApplicationContext(), "Preferences"); 
+                	Dialogs.makeToast(this, "Preferences"); 
 	            } break;
             case R.id.menu_SwitchView: {
-            		Dialogs.makeToast(getApplicationContext(), "Switch view"); 
+            		Dialogs.makeToast(this, "Switch view"); 
             	} break;
-            default: Dialogs.makeToast(getApplicationContext(), "Unknown menu element");
+            default: Dialogs.makeToast(this, "Unknown menu element");
         }         
         return super.onOptionsItemSelected(item);
     }
