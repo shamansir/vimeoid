@@ -23,6 +23,23 @@ import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.dto.simple.Video;
 import org.vimeoid.util.Dialogs;
 
+/**
+ * 
+ * <dl>
+ * <dt>Project:</dt> <dd>vimeoid</dd>
+ * <dt>Package:</dt> <dd>org.vimeoid</dd>
+ * </dl>
+ *
+ * <code>ListForUnknownUser</code>
+ *
+ * <p>Activity that shows a list of Vimeo Items (Videos, Users, Channels, Albums ...) to a user
+ * that has not logged in (came using {@link VimeoSimpleApiProvider} or started 
+ * application without attaching it to account</p>
+ *
+ * @author Ulric Wilfred <shaman.sir@gmail.com>
+ * @date Sep 3, 2010 11:58:57 PM 
+ *
+ */
 public class ListForUnknownUser extends ListActivity {
     
     public static final String TAG = "ListForUnknownUser";

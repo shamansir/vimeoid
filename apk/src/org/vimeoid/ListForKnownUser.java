@@ -32,6 +32,22 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.SimpleAdapter;
 
+/**
+ * 
+ * <dl>
+ * <dt>Project:</dt> <dd>vimeoid</dd>
+ * <dt>Package:</dt> <dd>org.vimeoid</dd>
+ * </dl>
+ *
+ * <code>ListForKnownUser</code>
+ *
+ * <p>Activity that shows a Vimeo Items list (Video, User, Channel, Album ...) to a user
+ * that has logged in</p>
+ *
+ * @author Ulric Wilfred <shaman.sir@gmail.com>
+ * @date Sep 3, 2010 11:55:11 PM 
+ *
+ */
 public class ListForKnownUser extends ListActivity {
     
     /** Called when the activity is first created. */

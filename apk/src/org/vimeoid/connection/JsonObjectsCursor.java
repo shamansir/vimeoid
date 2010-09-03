@@ -20,7 +20,8 @@ import android.util.Log;
  *
  * <code>JsonObjectsCursor</code>
  *
- * <p>Description</p>
+ * <p>A cursor over JSON objects, uses their <code>"id"<code> field as <code>"_id"<code> key
+ * and suppresses exceptions to the stack trace</p>
  * 
  * @author Ulric Wilfred <shaman.sir@gmail.com>
  * @date Aug 28, 2010 5:47:34 PM 

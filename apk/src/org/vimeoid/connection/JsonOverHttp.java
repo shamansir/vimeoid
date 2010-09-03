@@ -48,7 +48,8 @@ import android.util.Log;
  *
  * <code>JsonOverHttp</code>
  *
- * <p>Description</p>
+ * <p>Allows to perform calls for JSON objects over HTTP, even with OAuth support
+ * (uses <code>oauth-signpost</code> library)</p>
  *
  * @author Ulric Wilfred <shaman.sir@gmail.com>
  * @date Aug 28, 2010 1:53:19 PM 

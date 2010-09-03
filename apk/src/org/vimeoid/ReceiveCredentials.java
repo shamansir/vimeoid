@@ -20,7 +20,13 @@ import org.vimeoid.util.Utils;
  *
  * <code>ReceiveCredentials</code>
  *
- * <p>Description</p>
+ * <p>An activity that is called after asking user to authenticate vimeoid in Vimeo
+ * from the browser using OAuth, so the OAuth token comes here with the call,
+ * browser in its case is called from {@link ListForUnknownUser} menu "Log In" item.</p>
+ * 
+ * <p>The principle is the same that used here:
+ * http://dev.bostone.us/2009/07/16/android-oauth-twitter-updates/
+ * or in any another example of using <code>oauth-signpost</code> library for Android</p>
  *
  * @author Ulric Wilfred <shaman.sir@gmail.com>
  * @date Aug 31, 2010 9:04:48 PM 

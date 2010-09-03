@@ -33,7 +33,12 @@ import android.util.Log;
  *
  * <code>VimeoSimpleApiProvider</code>
  *
- * <p>Description</p>
+ * <p>This content provider can provide a cursors for another applications
+ * and supports only {@link VimeoSimpleApiProvider#query(Uri, String[], String, String[], String)}
+ * from {@link ContentProvider} abstract methods. It is not connected to the database, 
+ * it makes requests over <code>HTTP</code> to Vimeo and just simulates the cursor. 
+ * The <code>Uri</code> schemes are almost similar</p> to Vimeo Simple API calls,
+ * but differ in some cases, the actual list will be provided in future documentation.  
  * 
  * @author Ulric Wilfred <shaman.sir@gmail.com>
  * @date Aug 20, 2010 5:29:21 PM 
