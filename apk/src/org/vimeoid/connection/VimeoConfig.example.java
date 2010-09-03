@@ -24,7 +24,7 @@ public class VimeoConfig {
     
     public static final String VIMEO_SIMPLE_API_CALL_PREFIX   = VIMEO_API_URL +
                                                                 "/v" + VIMEO_API_VERSION;
-    public static final String VIMEO_ADVANCED_API_CALL_PREFIX = VIMEO_REST_API_URL +
+    public static final String VIMEO_ADVANCED_API_ROOT        = VIMEO_REST_API_URL +
                                                                 "/v" + VIMEO_API_VERSION;
     /* public static final String VIMEO_AUTH_API_CALL_PREFIX     = VIMEO_SITE_URL +
                                                                 "/services/auth"; */    
