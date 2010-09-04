@@ -3,10 +3,6 @@
  */
 package org.vimeoid.dto.simple;
 
-import org.vimeoid.util.Extractable;
-
-import android.content.ContentValues;
-
 /**
  * <dl>
  * <dt>Project:</dt> <dd>vimeoid</dd>
@@ -21,7 +17,7 @@ import android.content.ContentValues;
  * @date Aug 25, 2010 12:07:30 AM 
  *
  */
-public class TagInfo implements Extractable {
+public class TagInfo {
     
     public String name;
     public String url;
@@ -35,16 +31,13 @@ public class TagInfo implements Extractable {
         
     }
 
-    /* (non-Javadoc)
-     * @see org.vimeoid.Extractable#extract()
-     */
-    @Override
+    /* @Override
     public ContentValues extract() {
         final ContentValues result = new ContentValues();
         result.put(FieldsKeys.NAME, this.name);
         result.put(FieldsKeys.URL, this.url);
         result.put(FieldsKeys.USAGE_COUNT, this.usageCount);
         return result;
-    }    
+    } */    
 
 }

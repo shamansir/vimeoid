@@ -94,9 +94,9 @@ public class ListForKnownUser extends ListActivity {
     private List<Map<String, Object>> callStubVideosList() {
         final List<Map<String, Object>> values = new ArrayList<Map<String, Object>>(); 
         
-        for (Video video: getVideosFor("shamansir")) {
+        /* for (Video video: getVideosFor("shamansir")) {
             values.add(adaptContent(video.extract()));
-        }
+        } */
         
         return values;
     }
@@ -135,10 +135,10 @@ public class ListForKnownUser extends ListActivity {
     /**
      * @return stub list of videos
      */
-    private List<Map<String, Object>> callStubTagsList() {
+     private List<Map<String, Object>> callStubTagsList() {
         final List<Map<String, Object>> values = new ArrayList<Map<String, Object>>(); 
         
-        for (int i = 0; i <= 20; i++) {
+        /* for (int i = 0; i <= 20; i++) {
             
             final TagInfo tagStub = new TagInfo();
             tagStub.name = "Tag" + 300 + i;
@@ -146,7 +146,7 @@ public class ListForKnownUser extends ListActivity {
             tagStub.usageCount = 12 * i;
             
             values.add(adaptContent(tagStub.extract()));
-        }
+        } */
         
         return values;
     }    

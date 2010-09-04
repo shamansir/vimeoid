@@ -3,12 +3,6 @@
  */
 package org.vimeoid.dto.simple;
 
-import java.util.Arrays;
-
-import org.vimeoid.util.Extractable;
-
-import android.content.ContentValues;
-
 /**
  * <dl>
  * <dt>Project:</dt> <dd>vimeoid</dd>
@@ -24,7 +18,7 @@ import android.content.ContentValues;
  *
  */
 //URLs are: http://vimeo.com/m/play_redirect?quality=mobile&clip_id=14294054
-public class Video implements Extractable {
+public class Video {
     
     /* public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoSimpleApiProvider.AUTHORITY +
                                                                    "/videos"); */
@@ -33,8 +27,8 @@ public class Video implements Extractable {
     public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.vimeo.video";    
     
     public int id;
+    public String title;    
     public String url;
-    public String title;
     public String description;
     
     public int width;
@@ -62,20 +56,42 @@ public class Video implements Extractable {
     public final static class FieldsKeys {
         
         public static final String _ID = "_id";
+        
         public static final String TITLE = "title";
-        public static final String AUTHOR = "user_name";
-        public static final String DESCRIPTION = "description";
+        public static final String URL = "url";
+        public static final String DESCRIPTION = "description";        
+        public static final String UPLOAD_DATE = "upload_date";
         public static final String TAGS = "tags";
         public static final String DURATION = "duration";
         
+        public static final String AUTHOR = "user_name";
+        public static final String AUTHOR_URL = "user_url";        
+        
+        public static final String THUMB_SMALL = "thumbnail_small";
+        public static final String THUMB_MEDIUM = "thumbnail_medium";
+        public static final String THUMB_LARGE = "thumbnail_large";
+        
+        public static final String USER_IMG_SMALL = "user_portrait_small";
+        public static final String USER_IMG_MEDIUM = "user_portrait_medium";
+        public static final String USER_IMG_LARGE = "user_portrait_large";
+        
+        public static final String NUM_OF_LIKES = "stats_number_of_likes";
+        public static final String NUM_OF_VIEWS = "stats_number_of_views";
+        public static final String NUM_OF_COMMENTS = "stats_number_of_comments";
+        
+        public static final String WIDTH = "width";
+        public static final String HEIGHT = "height";        
+               
     }
     
     public final static String[] SHORT_EXTRACT_PROJECTION = {
         FieldsKeys._ID, FieldsKeys.TITLE, FieldsKeys.AUTHOR,
-        FieldsKeys.DESCRIPTION, FieldsKeys.DURATION, FieldsKeys.TAGS
+        FieldsKeys.DURATION, FieldsKeys.TAGS, 
+        FieldsKeys.THUMB_SMALL, FieldsKeys.USER_IMG_SMALL, 
+        FieldsKeys.NUM_OF_LIKES, FieldsKeys.NUM_OF_VIEWS, FieldsKeys.NUM_OF_COMMENTS
     };
     
-    @Override
+    /* @Override
     public ContentValues extract() {
         final ContentValues result = new ContentValues();
         result.put(FieldsKeys._ID, this.id);
@@ -85,6 +101,6 @@ public class Video implements Extractable {
         result.put(FieldsKeys.DURATION, this.duration);
         result.put(FieldsKeys.TAGS, Arrays.toString(this.tags));
         return result;
-    }
+    } */
 
 }

@@ -52,34 +52,33 @@ public class ListForUnknownUser extends ListActivity {
         setContentView(R.layout.unknown_user_list_view);
         
         this.registerForContextMenu(this.getListView());
-        
-        /* setListAdapter(new SimpleAdapter(this, callStubVideosList(),
-                R.layout.video_item, 
-                new String[] { Video.FieldsKeys.TITLE, 
-                               Video.FieldsKeys.AUTHOR, 
-                               Video.FieldsKeys.DURATION, 
-                               Video.FieldsKeys.TAGS },
-                new int[] { R.id.videoItemTitle, R.id.videoItemAuthor,
-                            R.id.videoItemDuration, R.id.videoItemTags })); */
-        
+                
         // TODO: show loading view, support API pages
         
         Cursor cursor = getContentResolver().query(
                 Uri.withAppendedPath(
-                        VimeoSimpleApiProvider.BASE_URI, "/user/shamansir/videos"), 
+                        VimeoSimpleApiProvider.BASE_URI, "/channel/stuffpicks/videos"), 
                 Video.SHORT_EXTRACT_PROJECTION, null, null, null);
         startManagingCursor(cursor);
         this.setListAdapter(new SimpleCursorAdapter(this,
                                         R.layout.video_item, 
                                         cursor,
-                                        new String[] { Video.FieldsKeys.TITLE, 
+                                        new String[] { Video.FieldsKeys.THUMB_SMALL,
+                                                       Video.FieldsKeys.TITLE, 
                                                        Video.FieldsKeys.AUTHOR, 
                                                        Video.FieldsKeys.DURATION, 
-                                                       Video.FieldsKeys.TAGS },
-                                        new int[] { R.id.videoItemTitle, 
+                                                       Video.FieldsKeys.TAGS,
+                                                       Video.FieldsKeys.NUM_OF_LIKES,
+                                                       Video.FieldsKeys.NUM_OF_VIEWS,
+                                                       Video.FieldsKeys.NUM_OF_COMMENTS },
+                                        new int[] { R.id.videoItemImage,
+                                                    R.id.videoItemTitle, 
                                                     R.id.videoItemAuthor,
                                                     R.id.videoItemDuration, 
-                                                    R.id.videoItemTags }));                
+                                                    R.id.videoItemTags,
+                                                    R.id.videoNumOfLikes,
+                                                    R.id.videoNumOfViews,
+                                                    R.id.videoNumOfComments }));                
         
         //getListView().setTextFilterEnabled(true);
         
