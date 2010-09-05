@@ -13,11 +13,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
 import oauth.signpost.exception.OAuthException;
 
 import org.json.JSONObject;
+import org.vimeoid.adapter.unknown.VideosListAdapter;
 import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.dto.simple.Video;
@@ -71,33 +71,17 @@ public class ListForUnknownUser extends ListActivity {
                             VimeoSimpleApiProvider.BASE_URI, "/channel/staffpicks/videos"), 
                     Video.SHORT_EXTRACT_PROJECTION, null, null, null);
             startManagingCursor(cursor);
-            this.setListAdapter(new SimpleCursorAdapter(this,
-                                            R.layout.video_item, 
-                                            cursor,
-                                            new String[] { Video.FieldsKeys.THUMB_SMALL,
-                                                           Video.FieldsKeys.TITLE, 
-                                                           Video.FieldsKeys.AUTHOR, 
-                                                           Video.FieldsKeys.DURATION, 
-                                                           Video.FieldsKeys.TAGS,
-                                                           Video.FieldsKeys.NUM_OF_LIKES,
-                                                           Video.FieldsKeys.NUM_OF_PLAYS,
-                                                           Video.FieldsKeys.NUM_OF_COMMENTS },
-                                            new int[] { R.id.videoItemImage,
-                                                        R.id.videoItemTitle, 
-                                                        R.id.videoItemAuthor,
-                                                        R.id.videoItemDuration, 
-                                                        R.id.videoItemTags,
-                                                        R.id.videoNumOfLikes,
-                                                        R.id.videoNumOfPlays,
-                                                        R.id.videoNumOfComments }));
+            this.setListAdapter(new VideosListAdapter(this, getLayoutInflater(), cursor));
             
             //getListView().setTextFilterEnabled(true);
             
         } else {
+            
             Log.d(TAG, "Connection test failed");            
             
             connected = false;
             Dialogs.makeToast(this, "No connection. Please enable Internet connection and hit Refresh"); // TODO: change to alert
+            
         }
         
     }
@@ -195,4 +179,11 @@ public class ListForUnknownUser extends ListActivity {
         }         
         return super.onOptionsItemSelected(item);
     }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        
+    }
+    
 }

@@ -8,6 +8,7 @@ import com.fedorvlasov.lazylist.ImageLoader;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 
@@ -17,7 +18,7 @@ import android.widget.SimpleCursorAdapter;
  * <dt>Package:</dt> <dd>org.vimeoid.adapter</dd>
  * </dl>
  *
- * <code>ExternalImagesSupportCursorAdapter</code>
+ * <code>ExternalImagesSupportAdapter</code>
  *
  * <p>Description</p>
  *
@@ -25,13 +26,11 @@ import android.widget.SimpleCursorAdapter;
  * @date Sep 5, 2010 7:46:08 PM 
  *
  */
-public abstract class ExternalImagesSupportCursorAdapter extends SimpleCursorAdapter {
+public abstract class ExternalImagesSupportAdapter extends BaseAdapter {
     
     private final ImageLoader imagesLoader;
     
-    public ExternalImagesSupportCursorAdapter(Context context, int layout, Cursor cursor, String[] from, int[] to,
-                                              int defaultDrawable) {
-        super(context, layout, cursor, from, to);        
+    public ExternalImagesSupportAdapter(Context context, int defaultDrawable) {
         imagesLoader = new ImageLoader(context, defaultDrawable);
     }
     

@@ -29,6 +29,8 @@ public final class R {
     }
     public static final class drawable {
         public static final int icon=0x7f020000;
+        public static final int video_unknown_item=0x7f020001;
+        public static final int video_unknown_single=0x7f020002;
     }
     public static final class id {
         public static final int channelsOfVideoButton=0x7f070013;
@@ -56,11 +58,11 @@ public final class R {
         public static final int videoItemAuthor=0x7f07000b;
         public static final int videoItemDuration=0x7f07000c;
         public static final int videoItemImage=0x7f070009;
+        public static final int videoItemNumOfComments=0x7f070010;
+        public static final int videoItemNumOfLikes=0x7f07000e;
+        public static final int videoItemNumOfPlays=0x7f07000f;
         public static final int videoItemTags=0x7f07000d;
         public static final int videoItemTitle=0x7f07000a;
-        public static final int videoNumOfComments=0x7f070010;
-        public static final int videoNumOfLikes=0x7f07000e;
-        public static final int videoNumOfPlays=0x7f07000f;
     }
     public static final class layout {
         public static final int known_user_list_view=0x7f030000;

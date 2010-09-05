@@ -26,18 +26,18 @@ public class Video {
     public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.vimeo.video";
     public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.vimeo.video";    
     
-    public int id;
+    public long id;
     public String title;    
     public String url;
     public String description;
     
     public int width;
     public int height;
-    public int duration; /* in seconds */
+    public long duration; /* in seconds */
     
-    public int likesCount;
-    public int playsCount;
-    public int commentsCount;
+    public long likesCount;
+    public long playsCount;
+    public long commentsCount;
     
     public String[] tags;    
 
