@@ -1,27 +1,15 @@
 package org.vimeoid;
 
-import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.vimeoid.connection.JsonOverHttp;
-import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.dto.simple.TagInfo;
 import org.vimeoid.dto.simple.Video;
-import org.vimeoid.util.Dialogs;
 
 import android.app.ListActivity;
 import android.content.ContentValues;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -101,7 +89,7 @@ public class ListForKnownUser extends ListActivity {
         return values;
     }
     
-    private List<Video> getVideosFor(String user) {
+    /* private List<Video> getVideosFor(String user) {
         final URI vimeoApiUri = VimeoApi.resolveUriForSimpleApi(
                 Uri.withAppendedPath(VimeoSimpleApiProvider.BASE_URI, "/user/" + user + "/videos"));
         try {
@@ -130,7 +118,7 @@ public class ListForKnownUser extends ListActivity {
             ioe.printStackTrace();
         }
         return Collections.emptyList();
-    }
+    } */
     
     /**
      * @return stub list of videos
