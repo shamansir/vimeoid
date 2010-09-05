@@ -25,8 +25,8 @@ import android.widget.BaseAdapter;
  */
 public abstract class EasyCursorAdapter<ItemType> extends BaseAdapter {
     
-    private Cursor cursor;
-    private String idColumnName;
+    private final Cursor cursor;
+    private final String idColumnName;
     
     private final Map<Integer, ItemType> cache = new HashMap<Integer, ItemType>();
     
@@ -54,7 +54,7 @@ public abstract class EasyCursorAdapter<ItemType> extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return cursor.getLong(cursor.getColumnIndex(idColumnName));
+        return cursor.getLong(cursor.getColumnIndexOrThrow(idColumnName));
     }
     
     public void clearCache() {

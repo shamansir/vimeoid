@@ -33,14 +33,12 @@ import android.widget.TextView;
  */
 public class VideosListAdapter extends EasyCursorAdapter<Video> {
     
-    private final Cursor cursor;
     private final LayoutInflater layoutInflater;
     private final ImageLoader imagesLoader;    
 
     public VideosListAdapter(Context context, LayoutInflater inflater, Cursor cursor) {
         super(cursor);
 
-        this.cursor = cursor;
         this.layoutInflater = inflater;        
         
         this.imagesLoader = new ImageLoader(context, R.drawable.video_unknown_item);
@@ -50,7 +48,7 @@ public class VideosListAdapter extends EasyCursorAdapter<Video> {
     public View getView(int position, View convertView, ViewGroup parent) {
         VideoItemViewHolder itemHolder = null;
         
-        final Video video = extractItem(cursor, position); 
+        final Video video = (Video)getItem(position); 
         
         if (convertView == null) {
             
