@@ -59,8 +59,8 @@
                     android:text="Channels" />
         </LinearLayout>                                                         
     </LinearLayout>
-    <ImageView android:layout_width="@dimen/single_thumb_size"
-               android:layout_height="fill_parent"
+    <ImageView android:layout_width="@dimen/single_thumb_width"
+               android:layout_height="@dimen/single_thumb_height"
                android:layout_gravity="right"
                android:background="#f00" />    
 </LinearLayout>

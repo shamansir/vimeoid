@@ -68,7 +68,7 @@ public class ListForUnknownUser extends ListActivity {
             
             Cursor cursor = getContentResolver().query(
                     Uri.withAppendedPath(
-                            VimeoSimpleApiProvider.BASE_URI, "/channel/stuffpicks/videos"), 
+                            VimeoSimpleApiProvider.BASE_URI, "/channel/staffpicks/videos"), 
                     Video.SHORT_EXTRACT_PROJECTION, null, null, null);
             startManagingCursor(cursor);
             this.setListAdapter(new SimpleCursorAdapter(this,
@@ -80,7 +80,7 @@ public class ListForUnknownUser extends ListActivity {
                                                            Video.FieldsKeys.DURATION, 
                                                            Video.FieldsKeys.TAGS,
                                                            Video.FieldsKeys.NUM_OF_LIKES,
-                                                           Video.FieldsKeys.NUM_OF_VIEWS,
+                                                           Video.FieldsKeys.NUM_OF_PLAYS,
                                                            Video.FieldsKeys.NUM_OF_COMMENTS },
                                             new int[] { R.id.videoItemImage,
                                                         R.id.videoItemTitle, 
@@ -88,7 +88,7 @@ public class ListForUnknownUser extends ListActivity {
                                                         R.id.videoItemDuration, 
                                                         R.id.videoItemTags,
                                                         R.id.videoNumOfLikes,
-                                                        R.id.videoNumOfViews,
+                                                        R.id.videoNumOfPlays,
                                                         R.id.videoNumOfComments }));
             
             //getListView().setTextFilterEnabled(true);

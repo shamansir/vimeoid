@@ -64,16 +64,19 @@ public class VimeoApi {
     public static boolean connectedToWeb(Context context) {
         Log.d(TAG, "Testing connection to web");
         ConnectivityManager connection =  (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        // FIXME: fails
-        /* return (connection.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED ||  
-                connection.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTING); */
-        return true;
+        return (connection.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED ||  
+                connection.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTING);
     }
     
     public static boolean vimeoSiteReachable() {
         Log.d(TAG, "Testing connection to Vimeo site");
         return true;
     }
+    
+    public static boolean userLoggedIn() {
+        // FIXME: implement
+        return true;
+    }    
     
     /**
      * <p>Returns Simple (unauthorized) Vimeo API URL using the passed Content URI

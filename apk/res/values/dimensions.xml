@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
 	<dimen name="tabbar_height">53dip</dimen>
-	<dimen name="item_thumb_size">86dip</dimen>
-	<dimen name="single_thumb_size">155dip</dimen>
+    <dimen name="item_thumb_width">100dip</dimen>	
+	<dimen name="item_thumb_height">75dip</dimen>
+    <dimen name="single_thumb_width">200dip</dimen>    
+    <dimen name="single_thumb_height">150dip</dimen>
+    <!--
+    <dimen name="single_thumb_width">640dip</dimen>    
+    <dimen name="single_thumb_height">360dip</dimen>
+    -->    
 	<!-- fonts -->
-    <dimen name="title_font_size">28sp</dimen>
-    <dimen name="subtitle_font_size">18sp</dimen>
-    <dimen name="param_font_size">16sp</dimen>
-    <dimen name="info_font_size">14sp</dimen>
+    <dimen name="title_font_size">24sp</dimen>
+    <dimen name="subtitle_font_size">16sp</dimen>
+    <dimen name="param_font_size">14sp</dimen>
+    <dimen name="info_font_size">12sp</dimen>
 </resources>

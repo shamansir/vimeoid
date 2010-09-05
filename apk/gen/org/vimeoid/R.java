@@ -11,15 +11,21 @@ public final class R {
     public static final class attr {
     }
     public static final class dimen {
-        public static final int info_font_size=0x7f040006;
-        public static final int item_thumb_size=0x7f040001;
-        public static final int param_font_size=0x7f040005;
-        public static final int single_thumb_size=0x7f040002;
-        public static final int subtitle_font_size=0x7f040004;
+        public static final int info_font_size=0x7f040008;
+        public static final int item_thumb_height=0x7f040002;
+        public static final int item_thumb_width=0x7f040001;
+        public static final int param_font_size=0x7f040007;
+        public static final int single_thumb_height=0x7f040004;
+        public static final int single_thumb_width=0x7f040003;
+        public static final int subtitle_font_size=0x7f040006;
         public static final int tabbar_height=0x7f040000;
-        /**  fonts 
+        /** 
+    <dimen name="single_thumb_width">640dip</dimen>    
+    <dimen name="single_thumb_height">360dip</dimen>
+    
+ fonts 
          */
-        public static final int title_font_size=0x7f040003;
+        public static final int title_font_size=0x7f040005;
     }
     public static final class drawable {
         public static final int icon=0x7f020000;
@@ -54,7 +60,7 @@ public final class R {
         public static final int videoItemTitle=0x7f07000a;
         public static final int videoNumOfComments=0x7f070010;
         public static final int videoNumOfLikes=0x7f07000e;
-        public static final int videoNumOfViews=0x7f07000f;
+        public static final int videoNumOfPlays=0x7f07000f;
     }
     public static final class layout {
         public static final int known_user_list_view=0x7f030000;

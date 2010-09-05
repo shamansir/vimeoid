@@ -59,13 +59,14 @@ public class Video {
         
         public static final String TITLE = "title";
         public static final String URL = "url";
+        public static final String MOBILE_URL = "mobile_url";
         public static final String DESCRIPTION = "description";        
         public static final String UPLOAD_DATE = "upload_date";
         public static final String TAGS = "tags";
         public static final String DURATION = "duration";
         
         public static final String AUTHOR = "user_name";
-        public static final String AUTHOR_URL = "user_url";        
+        public static final String AUTHOR_URL = "user_url";    
         
         public static final String THUMB_SMALL = "thumbnail_small";
         public static final String THUMB_MEDIUM = "thumbnail_medium";
@@ -76,7 +77,7 @@ public class Video {
         public static final String USER_IMG_LARGE = "user_portrait_large";
         
         public static final String NUM_OF_LIKES = "stats_number_of_likes";
-        public static final String NUM_OF_VIEWS = "stats_number_of_views";
+        public static final String NUM_OF_PLAYS = "stats_number_of_plays";
         public static final String NUM_OF_COMMENTS = "stats_number_of_comments";
         
         public static final String WIDTH = "width";
@@ -88,7 +89,7 @@ public class Video {
         FieldsKeys._ID, FieldsKeys.TITLE, FieldsKeys.AUTHOR,
         FieldsKeys.DURATION, FieldsKeys.TAGS, 
         FieldsKeys.THUMB_SMALL, FieldsKeys.USER_IMG_SMALL, 
-        FieldsKeys.NUM_OF_LIKES, FieldsKeys.NUM_OF_VIEWS, FieldsKeys.NUM_OF_COMMENTS
+        FieldsKeys.NUM_OF_LIKES, FieldsKeys.NUM_OF_PLAYS, FieldsKeys.NUM_OF_COMMENTS
     };
     
     /* @Override

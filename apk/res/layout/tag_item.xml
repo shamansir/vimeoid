@@ -4,7 +4,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
     <ImageView android:id="@+id/tagItemImage"
-               android:layout_width="@dimen/item_thumb_size"
+               android:layout_width="@dimen/item_thumb_width"
                android:layout_height="fill_parent"
                android:layout_gravity="left"
                android:background="#f00" />
