@@ -44,43 +44,61 @@ public class ListForUnknownUser extends ListActivity {
     
     public static final String TAG = "ListForUnknownUser";
     
+    private boolean connected = false;
+    
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        setContentView(R.layout.unknown_user_list_view);
-        
-        this.registerForContextMenu(this.getListView());
                 
-        // TODO: show loading view, support API pages
+        Log.d(TAG, "Testing is Vimeo site accessible");
         
-        Cursor cursor = getContentResolver().query(
-                Uri.withAppendedPath(
-                        VimeoSimpleApiProvider.BASE_URI, "/channel/stuffpicks/videos"), 
-                Video.SHORT_EXTRACT_PROJECTION, null, null, null);
-        startManagingCursor(cursor);
-        this.setListAdapter(new SimpleCursorAdapter(this,
-                                        R.layout.video_item, 
-                                        cursor,
-                                        new String[] { Video.FieldsKeys.THUMB_SMALL,
-                                                       Video.FieldsKeys.TITLE, 
-                                                       Video.FieldsKeys.AUTHOR, 
-                                                       Video.FieldsKeys.DURATION, 
-                                                       Video.FieldsKeys.TAGS,
-                                                       Video.FieldsKeys.NUM_OF_LIKES,
-                                                       Video.FieldsKeys.NUM_OF_VIEWS,
-                                                       Video.FieldsKeys.NUM_OF_COMMENTS },
-                                        new int[] { R.id.videoItemImage,
-                                                    R.id.videoItemTitle, 
-                                                    R.id.videoItemAuthor,
-                                                    R.id.videoItemDuration, 
-                                                    R.id.videoItemTags,
-                                                    R.id.videoNumOfLikes,
-                                                    R.id.videoNumOfViews,
-                                                    R.id.videoNumOfComments }));                
-        
-        //getListView().setTextFilterEnabled(true);
+        if (VimeoApi.connectedToWeb(this) && VimeoApi.vimeoSiteReachable()) {
+
+            Log.d(TAG, "Connection test is passed OK");            
+            
+            connected = true;
+            
+            setContentView(R.layout.unknown_user_list_view);
+            
+            this.registerForContextMenu(this.getListView());
+                
+                    
+            // TODO: show loading view, support API pages
+            
+            Cursor cursor = getContentResolver().query(
+                    Uri.withAppendedPath(
+                            VimeoSimpleApiProvider.BASE_URI, "/channel/stuffpicks/videos"), 
+                    Video.SHORT_EXTRACT_PROJECTION, null, null, null);
+            startManagingCursor(cursor);
+            this.setListAdapter(new SimpleCursorAdapter(this,
+                                            R.layout.video_item, 
+                                            cursor,
+                                            new String[] { Video.FieldsKeys.THUMB_SMALL,
+                                                           Video.FieldsKeys.TITLE, 
+                                                           Video.FieldsKeys.AUTHOR, 
+                                                           Video.FieldsKeys.DURATION, 
+                                                           Video.FieldsKeys.TAGS,
+                                                           Video.FieldsKeys.NUM_OF_LIKES,
+                                                           Video.FieldsKeys.NUM_OF_VIEWS,
+                                                           Video.FieldsKeys.NUM_OF_COMMENTS },
+                                            new int[] { R.id.videoItemImage,
+                                                        R.id.videoItemTitle, 
+                                                        R.id.videoItemAuthor,
+                                                        R.id.videoItemDuration, 
+                                                        R.id.videoItemTags,
+                                                        R.id.videoNumOfLikes,
+                                                        R.id.videoNumOfViews,
+                                                        R.id.videoNumOfComments }));
+            
+            //getListView().setTextFilterEnabled(true);
+            
+        } else {
+            Log.d(TAG, "Connection test failed");            
+            
+            connected = false;
+            Dialogs.makeToast(this, "No connection. Please enable Internet connection and hit Refresh"); // TODO: change to alert
+        }
         
     }
     

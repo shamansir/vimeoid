@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:id="@+id/menuGroup_Main">
-        <item android:id="@+id/menu_Login"
+        <item android:id="@+id/menu_Refresh"        
              android:orderInCategory="1"
-             android:alphabeticShortcut="l"
-             android:numericShortcut="1"
-             android:title="Log in" 
-             android:checkable="true" 
-             android:checked="false"/>
+             android:alphabeticShortcut="r"
+             android:numericShortcut="1"             
+             android:title="Refresh" />             
         <item android:id="@+id/menu_Preferences"        
              android:orderInCategory="2"
              android:alphabeticShortcut="p"
@@ -19,5 +17,12 @@
              android:numericShortcut="3"             
              android:title="Switch view (to Gallery)" 
              android:titleCondensed="Switch view"/>
+        <item android:id="@+id/menu_Login"
+             android:orderInCategory="4"
+             android:alphabeticShortcut="l"
+             android:numericShortcut="4"
+             android:title="Log in" 
+             android:checkable="true" 
+             android:checked="false"/>             
     </group>
 </menu>

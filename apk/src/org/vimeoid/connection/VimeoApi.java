@@ -13,6 +13,8 @@ import java.util.List;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.util.Log;
 
@@ -58,6 +60,20 @@ public class VimeoApi {
     private static final String OAUTH_TOKEN_SECRET_PARAM = "user_oauth_secret";
     
     private VimeoApi() { };
+    
+    public static boolean connectedToWeb(Context context) {
+        Log.d(TAG, "Testing connection to web");
+        ConnectivityManager connection =  (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        // FIXME: fails
+        /* return (connection.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED ||  
+                connection.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTING); */
+        return true;
+    }
+    
+    public static boolean vimeoSiteReachable() {
+        Log.d(TAG, "Testing connection to Vimeo site");
+        return true;
+    }
     
     /**
      * <p>Returns Simple (unauthorized) Vimeo API URL using the passed Content URI
