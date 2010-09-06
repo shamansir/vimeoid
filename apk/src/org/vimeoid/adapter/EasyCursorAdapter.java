@@ -30,9 +30,11 @@ public abstract class EasyCursorAdapter<ItemType> extends BaseAdapter {
     
     private final Map<Integer, ItemType> cache = new HashMap<Integer, ItemType>();
     
-    public EasyCursorAdapter(Cursor cursor, String idColumnName) {
+    public EasyCursorAdapter(Cursor cursor, String idColumnName) {    	
         this.cursor = cursor;
         this.idColumnName = idColumnName;
+        
+        this.cursor.moveToFirst();
     }
     
     public EasyCursorAdapter(Cursor cursor) {
@@ -48,6 +50,7 @@ public abstract class EasyCursorAdapter<ItemType> extends BaseAdapter {
 
     @Override
     public final Object getItem(int position) {
+    	cursor.moveToPosition(position);
         if (cache.containsKey(position)) return cache.get(position);
         else return extractItem(cursor, position);
     }
@@ -57,7 +60,8 @@ public abstract class EasyCursorAdapter<ItemType> extends BaseAdapter {
         return cursor.getLong(cursor.getColumnIndexOrThrow(idColumnName));
     }
     
-    public void clearCache() {
+    public void destroy() {
+    	cursor.close();
         cache.clear();
     }
 

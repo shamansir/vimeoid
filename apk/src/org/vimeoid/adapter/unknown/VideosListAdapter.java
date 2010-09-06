@@ -73,6 +73,7 @@ public class VideosListAdapter extends EasyCursorAdapter<Video> {
             
         }
         
+        itemHolder.ivThumb.setTag(video.smallThumbnailUrl);
         imagesLoader.displayImage(video.smallThumbnailUrl, itemHolder.ivThumb);
         
         itemHolder.tvTitle.setText(video.title);
@@ -88,8 +89,8 @@ public class VideosListAdapter extends EasyCursorAdapter<Video> {
     }
     
     @Override
-    public void clearCache() {
-        super.clearCache();
+    public void destroy() {
+        super.destroy();
         imagesLoader.clearCache();
     }
     

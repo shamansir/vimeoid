@@ -184,6 +184,7 @@ public class ListForUnknownUser extends ListActivity {
     protected void onDestroy() {
         super.onDestroy();
         
+        ((VideosListAdapter)getListAdapter()).destroy();
     }
     
 }

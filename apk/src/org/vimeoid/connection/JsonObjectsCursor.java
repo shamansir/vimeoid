@@ -56,6 +56,7 @@ public class JsonObjectsCursor extends AbstractCursor {
     @Override
     public double getDouble(int column) {
         try {
+        	if (mPos < 0) throw new IllegalStateException("Cursor is not positioned");        	
             return source.getJSONObject(mPos).getDouble(adaptColumnName(projection[column]));
         } catch (JSONException jsone) {
             notifyException(jsone);
@@ -71,6 +72,7 @@ public class JsonObjectsCursor extends AbstractCursor {
     @Override
     public int getInt(int column) {
         try {
+        	if (mPos < 0) throw new IllegalStateException("Cursor is not positioned");        	
             return source.getJSONObject(mPos).getInt(adaptColumnName(projection[column]));
         } catch (JSONException jsone) {
             notifyException(jsone);
@@ -81,6 +83,7 @@ public class JsonObjectsCursor extends AbstractCursor {
     @Override
     public long getLong(int column) {
         try {
+        	if (mPos < 0) throw new IllegalStateException("Cursor is not positioned");
             return source.getJSONObject(mPos).getLong(adaptColumnName(projection[column]));
         } catch (JSONException jsone) {
             notifyException(jsone);
@@ -96,6 +99,7 @@ public class JsonObjectsCursor extends AbstractCursor {
     @Override
     public String getString(int column) {
         try {
+        	if (mPos < 0) throw new IllegalStateException("Cursor is not positioned");        	
             return source.getJSONObject(mPos).getString(adaptColumnName(projection[column]));
         } catch (JSONException jsone) {
             notifyException(jsone);
@@ -106,6 +110,7 @@ public class JsonObjectsCursor extends AbstractCursor {
     @Override
     public boolean isNull(int column) {
         try {
+        	if (mPos < 0) throw new IllegalStateException("Cursor is not positioned");        	
             return source.getJSONObject(mPos).isNull(adaptColumnName(projection[column]));
         } catch (JSONException jsone) {
             notifyException(jsone);

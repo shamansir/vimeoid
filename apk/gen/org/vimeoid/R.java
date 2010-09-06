@@ -20,8 +20,8 @@ public final class R {
         public static final int subtitle_font_size=0x7f040006;
         public static final int tabbar_height=0x7f040000;
         /** 
-    <dimen name="single_thumb_width">640dip</dimen>    
-    <dimen name="single_thumb_height">360dip</dimen>
+    <dimen name="single_thumb_width">640dp</dimen>    
+    <dimen name="single_thumb_height">360dp</dimen>
     
  fonts 
          */

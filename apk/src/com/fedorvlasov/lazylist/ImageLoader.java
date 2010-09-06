@@ -17,6 +17,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.widget.ImageView;
 
 /**
@@ -36,6 +37,8 @@ import android.widget.ImageView;
  *
  */
 public class ImageLoader {
+	
+	public static final String TAG = "ImageLoader"; 
     
     //the simplest in-memory cache implementation. This should be replaced with something like SoftReference or BitmapOptions.inPurgeable(since 1.6)
     private HashMap<String, Bitmap> cache=new HashMap<String, Bitmap>();
@@ -55,20 +58,27 @@ public class ImageLoader {
         this.defaultDrawable = defaultDrawable;
         
         //Find the dir to save cached images
-        if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
-            cacheDir=new File(android.os.Environment.getExternalStorageDirectory(),"imgldcache" + UUID.randomUUID().toString());
-        else
+        if (android.os.Environment.MEDIA_MOUNTED.equals(android.os.Environment.getExternalStorageState())) {
+            cacheDir=new File(android.os.Environment.getExternalStorageDirectory(),"__imgldcache"/* + UUID.randomUUID().toString()*/);
+            Log.d(TAG, "Cache dir initialized at SD card " + cacheDir.getAbsolutePath());
+        } else {
             cacheDir=context.getCacheDir();
-        if(!cacheDir.exists())
-            cacheDir.mkdirs();
+            Log.d(TAG, "Cache dir initialized at phone storage " + cacheDir.getAbsolutePath());
+        }
+        if(!cacheDir.exists()) {
+        	Log.d(TAG, "Cache dir not existed, creating");
+        	cacheDir.mkdirs();
+        }
+            
     }
     
     public void displayImage(String url, ImageView imageView)
     {
-        if(cache.containsKey(url))
+        if(cache.containsKey(url)) {
+        	Log.d(TAG, "Image " + url + " exists in cache, loading it from there");
             imageView.setImageBitmap(cache.get(url));
-        else
-        {
+        } else {
+        	Log.d(TAG, "Image " + url + " not exists in cache, putting it in queue, seeting view to default view");
             queuePhoto(url, imageView);
             imageView.setImageResource(defaultDrawable);
         }    
@@ -77,7 +87,7 @@ public class ImageLoader {
     private void queuePhoto(String url, ImageView imageView)
     {
         //This ImageView may be used for other images before. So there may be some old tasks in the queue. We need to discard them. 
-        photosQueue.Clean(imageView);
+        photosQueue.clean(imageView);
         PhotoToLoad p=new PhotoToLoad(url, imageView);
         synchronized(photosQueue.photosToLoad){
             photosQueue.photosToLoad.push(p);
@@ -167,7 +177,7 @@ public class ImageLoader {
         private Stack<PhotoToLoad> photosToLoad=new Stack<PhotoToLoad>();
         
         //removes all instances of this ImageView
-        public void Clean(ImageView image)
+        public void clean(ImageView image)
         {
             for(int j=0 ;j<photosToLoad.size();){
                 if(photosToLoad.get(j).imageView==image)
@@ -201,6 +211,7 @@ public class ImageLoader {
                             Activity a=(Activity)photoToLoad.imageView.getContext();
                             a.runOnUiThread(bd);
                         }
+                        Log.d(TAG, "Image " + photoToLoad.url + " received from queue, displaying it ");                        
                     }
                     if(Thread.interrupted())
                         break;
