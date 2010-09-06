@@ -5,11 +5,6 @@
 	<dimen name="item_thumb_height">75dp</dimen>
     <dimen name="single_thumb_width">200dp</dimen>    
     <dimen name="single_thumb_height">150dp</dimen>
-    <!--
-    <dimen name="single_thumb_width">640dp</dimen>    
-    <dimen name="single_thumb_height">360dp</dimen>
-    -->    
-	<!-- fonts -->
     <dimen name="title_font_size">20sp</dimen>
     <dimen name="subtitle_font_size">14sp</dimen>
     <dimen name="param_font_size">12sp</dimen>

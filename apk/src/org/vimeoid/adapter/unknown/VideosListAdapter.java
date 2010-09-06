@@ -52,7 +52,7 @@ public class VideosListAdapter extends EasyCursorAdapter<Video> {
         
         if (convertView == null) {
             
-            convertView = layoutInflater.inflate(R.layout.video_item, parent, false);
+            convertView = layoutInflater.inflate(R.layout.item_video, parent, false);
             itemHolder = new VideoItemViewHolder();
                 
             itemHolder.ivThumb = (ImageView) convertView.findViewById(R.id.videoItemImage);

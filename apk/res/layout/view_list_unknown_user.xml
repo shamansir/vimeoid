@@ -5,9 +5,11 @@
     	android:layout_height="fill_parent">
 	<ListView android:id="@android:id/list"
 	          android:layout_width="fill_parent"
-	          android:layout_height="0dip"
+	          android:layout_height="0dp"
 	          android:layout_weight="1"
 	          android:stackFromBottom="true"
-	          android:transcriptMode="normal" 
+	          android:transcriptMode="normal"
+	          android:divider="#333"
+	          android:dividerHeight="1dp" 
 	/>
 </LinearLayout>

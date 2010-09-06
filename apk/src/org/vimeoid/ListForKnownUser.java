@@ -43,14 +43,14 @@ public class ListForKnownUser extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        setContentView(R.layout.known_user_list_view);
+        setContentView(R.layout.view_list_known_user);
         
         // TODO: show loading bar, support API pages        
         
         // this.registerForContextMenu();
         
         setListAdapter(new SimpleAdapter(this, callStubVideosList(),
-                R.layout.video_item, 
+                R.layout.item_video, 
                 new String[] { Video.FieldsKeys.TITLE, 
                                Video.FieldsKeys.AUTHOR, 
                                Video.FieldsKeys.DURATION, 
@@ -65,7 +65,7 @@ public class ListForKnownUser extends ListActivity {
             @Override
             public void onClick(View v) {
                 setListAdapter(new SimpleAdapter(ListForKnownUser.this, callStubTagsList(),
-                        R.layout.tag_item, 
+                        R.layout.item_tag, 
                         new String[] { TagInfo.FieldsKeys.NAME, 
                                        TagInfo.FieldsKeys.USAGE_COUNT },
                         new int[] { R.id.tagItemName, R.id.tagItemUsageCount }));

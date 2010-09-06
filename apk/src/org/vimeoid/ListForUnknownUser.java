@@ -53,27 +53,34 @@ public class ListForUnknownUser extends ListActivity {
                 
         Log.d(TAG, "Testing is Vimeo site accessible");
         
+        // setEmptyView
+        
         if (VimeoApi.connectedToWeb(this) && VimeoApi.vimeoSiteReachable()) {
 
             Log.d(TAG, "Connection test is passed OK");            
             
             connected = true;
             
-            setContentView(R.layout.unknown_user_list_view);
+            setContentView(R.layout.view_list_unknown_user);
             
-            this.registerForContextMenu(this.getListView());
-                
+            final ListView listView = getListView();            
+            registerForContextMenu(listView);
+            listView.setItemsCanFocus(true);            
+            listView.addFooterView(getLayoutInflater().inflate(R.layout.item_footer_load_more, null));
+            //getListView().setTextFilterEnabled(true);            
                     
-            // TODO: show loading view, support API pages
+            // TODO: show loading view, show title, support API pages
+            
+            // TODO: check if already attached to vimeo, so just start KnownListView
             
             Cursor cursor = getContentResolver().query(
                     Uri.withAppendedPath(
                             VimeoSimpleApiProvider.BASE_URI, "/channel/staffpicks/videos"), 
                     Video.SHORT_EXTRACT_PROJECTION, null, null, null);
             startManagingCursor(cursor);
-            this.setListAdapter(new VideosListAdapter(this, getLayoutInflater(), cursor));
+            setListAdapter(new VideosListAdapter(this, getLayoutInflater(), cursor));
             
-            //getListView().setTextFilterEnabled(true);
+            // setWindowTitle
             
         } else {
             
@@ -88,6 +95,11 @@ public class ListForUnknownUser extends ListActivity {
     
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
+        // getListView()>getItemAtPosition
+        //if (v.getId())
+        
+        Log.d(TAG, "item at position " + position + " with id " + id + ", view id " + v.getId() + " is clicked");
+        
         Uri itemUri = Uri.withAppendedPath(
                 VimeoSimpleApiProvider.BASE_URI, "/video/" + id);
         Log.d(TAG, "Video with id " + id + " selected");
