@@ -60,8 +60,14 @@ public abstract class EasyCursorAdapter<ItemType> extends BaseAdapter {
         return cursor.getLong(cursor.getColumnIndexOrThrow(idColumnName));
     }
     
-    public void destroy() {
+    public void appendData(Cursor cursor) {
+        // FIXME: implement
+        
+    }    
+        
+    public void finalize() {
     	cursor.close();
+    	cursor.deactivate();
         cache.clear();
     }
 

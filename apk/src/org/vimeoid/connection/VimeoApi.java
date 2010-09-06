@@ -143,6 +143,9 @@ public class VimeoApi {
                                     
         }
         urlBuffer.append('.').append(RESPONSE_FORMAT);
+        if (contentUri.getQueryParameter("page") != null) {
+            urlBuffer.append("?page=").append(contentUri.getQueryParameter("page"));
+        }
         Log.d(TAG, "generated result: " + urlBuffer.toString());
         return urlBuffer;
     }

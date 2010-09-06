@@ -89,8 +89,8 @@ public class VideosListAdapter extends EasyCursorAdapter<Video> {
     }
     
     @Override
-    public void destroy() {
-        super.destroy();
+    public void finalize() {
+        super.finalize();
         imagesLoader.clearCache();
     }
     

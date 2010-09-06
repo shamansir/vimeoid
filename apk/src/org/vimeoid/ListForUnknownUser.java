@@ -46,6 +46,8 @@ public class ListForUnknownUser extends ListActivity {
     
     private boolean connected = false;
     
+    private VideosListAdapter adapter = null;
+    
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +71,9 @@ public class ListForUnknownUser extends ListActivity {
             listView.addFooterView(getLayoutInflater().inflate(R.layout.item_footer_load_more, null));
             //getListView().setTextFilterEnabled(true);            
                     
-            // TODO: show loading view, show title, support API pages
+            // TODO: show progress bar, show title, support API pages
+            
+            // TODO: Load Uri from passed intent, not hardcode
             
             // TODO: check if already attached to vimeo, so just start KnownListView
             
@@ -78,7 +82,9 @@ public class ListForUnknownUser extends ListActivity {
                             VimeoSimpleApiProvider.BASE_URI, "/channel/staffpicks/videos"), 
                     Video.SHORT_EXTRACT_PROJECTION, null, null, null);
             startManagingCursor(cursor);
-            setListAdapter(new VideosListAdapter(this, getLayoutInflater(), cursor));
+            
+            adapter = new VideosListAdapter(this, getLayoutInflater(), cursor);
+            setListAdapter(adapter);
             
             // setWindowTitle
             
@@ -96,22 +102,39 @@ public class ListForUnknownUser extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         // getListView()>getItemAtPosition
-        //if (v.getId())
+        //if (v.getId())    
         
-        Log.d(TAG, "item at position " + position + " with id " + id + ", view id " + v.getId() + " is clicked");
+        if (position != (getListView().getCount() - 1)) {
         
-        Uri itemUri = Uri.withAppendedPath(
-                VimeoSimpleApiProvider.BASE_URI, "/video/" + id);
-        Log.d(TAG, "Video with id " + id + " selected");
-        
-        String action = getIntent().getAction();
-        if (Intent.ACTION_PICK.equals(action) ||
-                  Intent.ACTION_GET_CONTENT.equals(action))
-        {
-            setResult(RESULT_OK, new Intent().setData(itemUri));
+            Log.d(TAG, "item at position " + position + " (" + getListView().getCount() + ") with id " + id + ", view id " + v.getId() + " is clicked");
+            
+            Uri itemUri = Uri.withAppendedPath(
+                    VimeoSimpleApiProvider.BASE_URI, "/video/" + id);
+            Log.d(TAG, "Video with id " + id + " selected");
+            
+            String action = getIntent().getAction();
+            if (Intent.ACTION_PICK.equals(action) ||
+                      Intent.ACTION_GET_CONTENT.equals(action))
+            {
+                setResult(RESULT_OK, new Intent().setData(itemUri));
+            } else {
+                startActivity(new Intent(Intent.ACTION_VIEW, itemUri));
+            }
         } else {
-            startActivity(new Intent(Intent.ACTION_VIEW, itemUri));
-        }        
+            // Load more videos
+            
+            Log.d(TAG, "Loading next page...");
+            
+            final Uri nextPageUri = Uri.parse(
+                    VimeoSimpleApiProvider.BASE_URI + "/channel/staffpicks/videos" + "?page=2");
+            
+            Cursor cursor = getContentResolver().query(nextPageUri, 
+                    Video.SHORT_EXTRACT_PROJECTION, null, null, null);
+            startManagingCursor(cursor);
+            
+            adapter.appendData(cursor);
+            onContentChanged();
+        }
         super.onListItemClick(l, v, position, id);
     }
     
@@ -196,7 +219,7 @@ public class ListForUnknownUser extends ListActivity {
     protected void onDestroy() {
         super.onDestroy();
         
-        ((VideosListAdapter)getListAdapter()).destroy();
+        adapter.finalize();
     }
     
 }
