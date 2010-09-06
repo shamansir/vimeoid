@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Stack;
-import java.util.UUID;
 
 import org.vimeoid.util.Utils;
 
@@ -59,7 +58,7 @@ public class ImageLoader {
         
         //Find the dir to save cached images
         if (android.os.Environment.MEDIA_MOUNTED.equals(android.os.Environment.getExternalStorageState())) {
-            cacheDir=new File(android.os.Environment.getExternalStorageDirectory(),"__imgldcache"/* + UUID.randomUUID().toString()*/);
+            cacheDir=context.getDir("__imgldcache" /* + UUID.randomUUID().toString()*/, Context.MODE_PRIVATE);
             Log.d(TAG, "Cache dir initialized at SD card " + cacheDir.getAbsolutePath());
         } else {
             cacheDir=context.getCacheDir();
@@ -78,7 +77,7 @@ public class ImageLoader {
         	Log.d(TAG, "Image " + url + " exists in cache, loading it from there");
             imageView.setImageBitmap(cache.get(url));
         } else {
-        	Log.d(TAG, "Image " + url + " not exists in cache, putting it in queue, seeting view to default view");
+        	Log.d(TAG, "Image " + url + " not exists in cache, putting it in queue, setting view to default view");
             queuePhoto(url, imageView);
             imageView.setImageResource(defaultDrawable);
         }    

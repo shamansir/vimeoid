@@ -4,11 +4,10 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
     <ImageView android:id="@+id/videoItemImage"
-               android:layout_width="100px"
-               android:layout_height="75px"
-               android:layout_weight="1"
+               android:layout_width="@dimen/item_thumb_width"
+               android:layout_height="@dimen/item_thumb_height"
                android:layout_gravity="left"
-               android:background="#f00" />
+               android:background="#ddd" />
     <LinearLayout android:orientation="vertical"
                   android:layout_width="fill_parent"
                   android:layout_height="@dimen/item_thumb_height"

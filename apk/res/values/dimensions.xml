@@ -10,8 +10,8 @@
     <dimen name="single_thumb_height">360dp</dimen>
     -->    
 	<!-- fonts -->
-    <dimen name="title_font_size">24sp</dimen>
-    <dimen name="subtitle_font_size">16sp</dimen>
-    <dimen name="param_font_size">14sp</dimen>
-    <dimen name="info_font_size">12sp</dimen>
+    <dimen name="title_font_size">20sp</dimen>
+    <dimen name="subtitle_font_size">14sp</dimen>
+    <dimen name="param_font_size">12sp</dimen>
+    <dimen name="info_font_size">10sp</dimen>
 </resources>
