@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -64,7 +65,10 @@ public class ListForUnknownUser extends ListActivity {
         listView.setEmptyView(getLayoutInflater().inflate(R.layout.item_list_empty, null));        
 
         listView.addFooterView(getLayoutInflater().inflate(R.layout.item_footer_load_more, null));
-        //listView.setTextFilterEnabled(true);        
+        //listView.setTextFilterEnabled(true);  
+        
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);           
         
         // TODO: Load Uri from passed intent, not hardcode
         
@@ -142,7 +146,7 @@ public class ListForUnknownUser extends ListActivity {
         String itemDescription;
         switch (item.getItemId()) {
             case R.id.menu_Play: itemDescription = "Play "; break;
-            case R.id.menu_watchLater: itemDescription = "WatchLater "; break;
+            case R.id.menu_watchLater: itemDescription = "INVISIBLEWatchLater "; break;
             case R.id.menu_viewInfo: itemDescription = "View info "; break;
             case R.id.menu_viewAuthorInfo: itemDescription = "View author info "; break;
             default: itemDescription = "";
@@ -194,24 +198,13 @@ public class ListForUnknownUser extends ListActivity {
     
     protected void queryItems(Uri uri, EasyCursorAdapter<?> adapter, String[] projection) {
     	
-        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.VISIBLE);
-        
         if (VimeoApi.connectedToWeb(this) && VimeoApi.vimeoSiteReachable()) {
 
             Log.d(TAG, "Connection test is passed OK");
             
+            new LoadItemsTask(adapter, projection).execute(uri);
+            
             // TODO: show title, support API pages
-            
-            // TODO: run in thread
-            
-            Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
-            progressBar.setVisibility(View.GONE);            
-            startManagingCursor(cursor);
-
-            adapter.addSource(cursor);
-            setListAdapter(adapter); // TODO: Call once?
-            onContentChanged();
             
             // setWindowTitle
             
@@ -230,6 +223,50 @@ public class ListForUnknownUser extends ListActivity {
         super.onDestroy();
         
         adapter.finalize();
+    }
+    
+    protected class LoadItemsTask extends AsyncTask<Uri, Void, Cursor> {
+
+        // TODO: show progress as a dialog
+        
+        private final String[] projection;
+        private final ProgressBar progressBar;
+        private final EasyCursorAdapter<?> adapter;
+        
+        protected LoadItemsTask(EasyCursorAdapter<?> adapter, String[] projection) {
+            if (adapter == null) throw new IllegalArgumentException("Adapter must not be null");
+            this.adapter = adapter;
+            this.projection = projection;
+            this.progressBar = (ProgressBar) findViewById(R.id.progressBar);            
+        }
+        
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Cursor doInBackground(Uri... uris) {
+            if (uris.length <= 0) return null;
+            if (uris.length > 1) throw new UnsupportedOperationException("This task do not supports several params");
+            return getContentResolver().query(uris[0], projection, null, null, null);
+        }
+        
+        @Override
+        protected void onPostExecute(Cursor cursor) {
+            if (cursor == null) return;
+            
+            progressBar.setVisibility(View.GONE);
+            startManagingCursor(cursor);
+
+            adapter.addSource(cursor);
+            setListAdapter(adapter); // FIXME: Call once?
+            onContentChanged();
+            
+            cursor.close();
+        }
+        
     }
     
 }

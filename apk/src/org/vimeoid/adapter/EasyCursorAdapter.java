@@ -67,7 +67,6 @@ public abstract class EasyCursorAdapter<ItemType> extends BaseAdapter {
         
     public void finalize() {
     	cursor.close();
-    	cursor.deactivate();
         cache.clear();
     }
 
