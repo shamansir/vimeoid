@@ -84,6 +84,8 @@ public class ListForUnknownUser extends ListActivity {
         
             Log.d(TAG, "item at position " + position + " (" + getListView().getCount() + ") with id " + id + ", view id " + v.getId() + " is clicked");
             
+            // Opening item information
+            
             // getListView()>getItemAtPosition            
             
             Uri itemUri = Uri.withAppendedPath(
@@ -200,6 +202,8 @@ public class ListForUnknownUser extends ListActivity {
             Log.d(TAG, "Connection test is passed OK");
             
             // TODO: show title, support API pages
+            
+            // TODO: run in thread
             
             Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
             progressBar.setVisibility(View.GONE);            

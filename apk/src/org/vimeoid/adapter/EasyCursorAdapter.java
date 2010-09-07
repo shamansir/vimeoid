@@ -25,12 +25,12 @@ import android.widget.BaseAdapter;
  */
 public abstract class EasyCursorAdapter<ItemType> extends BaseAdapter {
     
-    private /*final */Cursor cursor;
+    private /*final */Cursor cursor; // TODO: manage several cursors
     private final String idColumnName;
     
     private final Map<Integer, ItemType> cache = new HashMap<Integer, ItemType>();
     
-    public EasyCursorAdapter(Cursor cursor, String idColumnName) {    	
+    public EasyCursorAdapter(Cursor cursor, String idColumnName) {
         this.cursor = cursor;
         this.idColumnName = idColumnName;
     }
