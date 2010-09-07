@@ -25,7 +25,7 @@ import android.widget.BaseAdapter;
  */
 public abstract class EasyCursorAdapter<ItemType> extends BaseAdapter {
     
-    private final Cursor cursor;
+    private /*final */Cursor cursor;
     private final String idColumnName;
     
     private final Map<Integer, ItemType> cache = new HashMap<Integer, ItemType>();
@@ -33,8 +33,6 @@ public abstract class EasyCursorAdapter<ItemType> extends BaseAdapter {
     public EasyCursorAdapter(Cursor cursor, String idColumnName) {    	
         this.cursor = cursor;
         this.idColumnName = idColumnName;
-        
-        this.cursor.moveToFirst();
     }
     
     public EasyCursorAdapter(Cursor cursor) {
@@ -43,13 +41,14 @@ public abstract class EasyCursorAdapter<ItemType> extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return cursor.getCount();
+        return (cursor != null) ? cursor.getCount() : 0;
     }
     
     public abstract ItemType extractItem(Cursor cursor, int position);
 
     @Override
     public final Object getItem(int position) {
+    	if (cursor == null) return null; 
     	cursor.moveToPosition(position);
         if (cache.containsKey(position)) return cache.get(position);
         else return extractItem(cursor, position);
@@ -57,12 +56,13 @@ public abstract class EasyCursorAdapter<ItemType> extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
+    	if (cursor == null) return -1;    	
         return cursor.getLong(cursor.getColumnIndexOrThrow(idColumnName));
     }
     
-    public void appendData(Cursor cursor) {
-        // FIXME: implement
-        
+    public void addSource(Cursor cursor) {
+        this.cursor = cursor;
+        this.cursor.moveToFirst();        
     }    
         
     public void finalize() {

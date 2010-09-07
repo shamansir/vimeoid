@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import oauth.signpost.exception.OAuthException;
 
 import org.json.JSONObject;
+import org.vimeoid.adapter.EasyCursorAdapter;
 import org.vimeoid.adapter.unknown.VideosListAdapter;
 import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.advanced.Methods;
@@ -45,9 +46,7 @@ public class ListForUnknownUser extends ListActivity {
     
     public static final String TAG = "ListForUnknownUser";
     
-    private boolean connected = false;
-    
-    private VideosListAdapter adapter = null;
+    private EasyCursorAdapter<?> adapter = null;
     
     /** Called when the activity is first created. */
     @Override
@@ -59,60 +58,33 @@ public class ListForUnknownUser extends ListActivity {
         setContentView(R.layout.view_list_unknown_user);
 
         final ListView listView = getListView();
-        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        //listView.setVisibility(View.INVISIBLE);
         
-        // setEmptyView        
-        
-        if (VimeoApi.connectedToWeb(this) && VimeoApi.vimeoSiteReachable()) {
+        registerForContextMenu(listView);
+        listView.setItemsCanFocus(true);                    
+        listView.setEmptyView(getLayoutInflater().inflate(R.layout.item_list_empty, null));        
 
-            Log.d(TAG, "Connection test is passed OK");            
-            
-            connected = true;
-            
-            registerForContextMenu(listView);
-            listView.setItemsCanFocus(true);            
-            listView.addFooterView(getLayoutInflater().inflate(R.layout.item_footer_load_more, null));
-            //getListView().setTextFilterEnabled(true);            
-                    
-            // TODO: show progress bar, show title, support API pages
-            
-            // TODO: Load Uri from passed intent, not hardcode
-            
-            // TODO: check if already attached to vimeo, so just start KnownListView
-            
-            Cursor cursor = getContentResolver().query(
-                    Uri.withAppendedPath(
-                            VimeoSimpleApiProvider.BASE_URI, "/channel/staffpicks/videos"), 
-                    Video.SHORT_EXTRACT_PROJECTION, null, null, null);
-            progressBar.setVisibility(View.GONE);
-            //listView.setVisibility(View.VISIBLE);            
-            startManagingCursor(cursor);
-            
-            adapter = new VideosListAdapter(this, getLayoutInflater(), cursor);
-            setListAdapter(adapter);
-            
-            // setWindowTitle
-            
-        } else {
-            
-            Log.d(TAG, "Connection test failed");            
-            
-            connected = false;
-            Dialogs.makeToast(this, "No connection. Please enable Internet connection and hit Refresh"); // TODO: change to alert
-            
-        }
+        listView.addFooterView(getLayoutInflater().inflate(R.layout.item_footer_load_more, null));
+        //listView.setTextFilterEnabled(true);        
+        
+        // TODO: Load Uri from passed intent, not hardcode
+        
+        // TODO: check if already attached to vimeo, so just start KnownListView
+        
+        this.adapter = new VideosListAdapter(this, getLayoutInflater());
+        
+        queryItems(Uri.withAppendedPath(VimeoSimpleApiProvider.BASE_URI, "/channel/staffpicks/videos"), 
+        		   adapter, Video.SHORT_EXTRACT_PROJECTION);
         
     }
     
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        // getListView()>getItemAtPosition
-        //if (v.getId())    
-        
-        if (position != (getListView().getCount() - 1)) {
+
+    	if (position != (getListView().getCount() - 1)) {
         
             Log.d(TAG, "item at position " + position + " (" + getListView().getCount() + ") with id " + id + ", view id " + v.getId() + " is clicked");
+            
+            // getListView()>getItemAtPosition            
             
             Uri itemUri = Uri.withAppendedPath(
                     VimeoSimpleApiProvider.BASE_URI, "/video/" + id);
@@ -126,6 +98,7 @@ public class ListForUnknownUser extends ListActivity {
             } else {
                 startActivity(new Intent(Intent.ACTION_VIEW, itemUri));
             }
+            
         } else {
             // Load more videos
             
@@ -134,12 +107,8 @@ public class ListForUnknownUser extends ListActivity {
             final Uri nextPageUri = Uri.parse(
                     VimeoSimpleApiProvider.BASE_URI + "/channel/staffpicks/videos" + "?page=2");
             
-            Cursor cursor = getContentResolver().query(nextPageUri, 
-                    Video.SHORT_EXTRACT_PROJECTION, null, null, null);
-            startManagingCursor(cursor);
+            queryItems(nextPageUri, adapter, Video.SHORT_EXTRACT_PROJECTION);
             
-            adapter.appendData(cursor);
-            onContentChanged();
         }
         super.onListItemClick(l, v, position, id);
     }
@@ -219,6 +188,37 @@ public class ListForUnknownUser extends ListActivity {
             default: Dialogs.makeToast(this, "Unknown menu element");
         }         
         return super.onOptionsItemSelected(item);
+    }
+    
+    protected void queryItems(Uri uri, EasyCursorAdapter<?> adapter, String[] projection) {
+    	
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+        
+        if (VimeoApi.connectedToWeb(this) && VimeoApi.vimeoSiteReachable()) {
+
+            Log.d(TAG, "Connection test is passed OK");
+            
+            // TODO: show title, support API pages
+            
+            Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+            progressBar.setVisibility(View.GONE);            
+            startManagingCursor(cursor);
+
+            adapter.addSource(cursor);
+            setListAdapter(adapter); // TODO: Call once?
+            onContentChanged();
+            
+            // setWindowTitle
+            
+        } else {
+            
+            Log.d(TAG, "Connection test failed");            
+           
+            Dialogs.makeToast(this, "No connection. Please enable Internet connection and hit Refresh"); // TODO: change to alert
+            
+        }    	
+    	
     }
     
     @Override

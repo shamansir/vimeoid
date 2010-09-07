@@ -36,8 +36,8 @@ public class VideosListAdapter extends EasyCursorAdapter<Video> {
     private final LayoutInflater layoutInflater;
     private final ImageLoader imagesLoader;    
 
-    public VideosListAdapter(Context context, LayoutInflater inflater, Cursor cursor) {
-        super(cursor);
+    public VideosListAdapter(Context context, LayoutInflater inflater) {
+        super(null);
 
         this.layoutInflater = inflater;        
         
