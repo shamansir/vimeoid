@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+    <TextView android:id="@+id/itemsEmptyListView"
+              android:layout_width="fill_parent" 
+              android:layout_height="wrap_content" 
+              android:text="No items in list"
+              android:textSize="@dimen/title_font_size" />
+</RelativeLayout>
