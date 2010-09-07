@@ -43,17 +43,19 @@ public class ImageLoader {
     private HashMap<String, Bitmap> cache=new HashMap<String, Bitmap>();
     
     private File cacheDir;
+    private final int progressDrawable;    
     private final int defaultDrawable;
     
     @SuppressWarnings("unused")
     private final Context context;
     
-    public ImageLoader(Context context, int defaultDrawable){
+    public ImageLoader(Context context, int progressDrawable, int defaultDrawable){
         //Make the background thread low priority. This way it will not affect the UI performance
         photoLoaderThread.setPriority(Thread.NORM_PRIORITY-1);
         
         this.context = context;
         
+        this.progressDrawable = progressDrawable;
         this.defaultDrawable = defaultDrawable;
         
         //Find the dir to save cached images
@@ -79,7 +81,7 @@ public class ImageLoader {
         } else {
         	Log.d(TAG, "Image " + url + " not exists in cache, putting it in queue, setting view to default view");
             queuePhoto(url, imageView);
-            imageView.setImageResource(defaultDrawable);
+            imageView.setImageResource(progressDrawable);
         }    
     }
 

@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import oauth.signpost.exception.OAuthException;
 
@@ -55,7 +56,13 @@ public class ListForUnknownUser extends ListActivity {
                 
         Log.d(TAG, "Testing is Vimeo site accessible");
         
-        // setEmptyView
+        setContentView(R.layout.view_list_unknown_user);
+
+        final ListView listView = getListView();
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        //listView.setVisibility(View.INVISIBLE);
+        
+        // setEmptyView        
         
         if (VimeoApi.connectedToWeb(this) && VimeoApi.vimeoSiteReachable()) {
 
@@ -63,9 +70,6 @@ public class ListForUnknownUser extends ListActivity {
             
             connected = true;
             
-            setContentView(R.layout.view_list_unknown_user);
-            
-            final ListView listView = getListView();            
             registerForContextMenu(listView);
             listView.setItemsCanFocus(true);            
             listView.addFooterView(getLayoutInflater().inflate(R.layout.item_footer_load_more, null));
@@ -81,6 +85,8 @@ public class ListForUnknownUser extends ListActivity {
                     Uri.withAppendedPath(
                             VimeoSimpleApiProvider.BASE_URI, "/channel/staffpicks/videos"), 
                     Video.SHORT_EXTRACT_PROJECTION, null, null, null);
+            progressBar.setVisibility(View.GONE);
+            //listView.setVisibility(View.VISIBLE);            
             startManagingCursor(cursor);
             
             adapter = new VideosListAdapter(this, getLayoutInflater(), cursor);

@@ -41,7 +41,7 @@ public class VideosListAdapter extends EasyCursorAdapter<Video> {
 
         this.layoutInflater = inflater;        
         
-        this.imagesLoader = new ImageLoader(context, R.drawable.video_unknown_item);
+        this.imagesLoader = new ImageLoader(context, R.drawable.thumb_loading_small, R.drawable.video_unknown_item);
     }
     
     @Override

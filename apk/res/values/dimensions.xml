@@ -9,4 +9,5 @@
     <dimen name="subtitle_font_size">14sp</dimen>
     <dimen name="param_font_size">12sp</dimen>
     <dimen name="info_font_size">10sp</dimen>
+    <dimen name="small_progress_side">32sp</dimen>
 </resources>

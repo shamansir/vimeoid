@@ -3,6 +3,10 @@
     	android:orientation="vertical"
     	android:layout_width="fill_parent"
     	android:layout_height="fill_parent">
+    <ProgressBar android:id="@+id/progressBar" 
+                 android:layout_width="@dimen/small_progress_side"
+                 android:layout_height="@dimen/small_progress_side"
+                 android:layout_gravity="center" />        	
 	<ListView android:id="@android:id/list"
 	          android:layout_width="fill_parent"
 	          android:layout_height="0dp"
@@ -10,6 +14,5 @@
 	          android:stackFromBottom="true"
 	          android:transcriptMode="normal"
 	          android:divider="#333"
-	          android:dividerHeight="1dp" 
-	/>
+	          android:dividerHeight="1dp" />
 </LinearLayout>
