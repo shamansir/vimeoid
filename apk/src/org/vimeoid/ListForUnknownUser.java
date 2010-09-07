@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -104,7 +105,7 @@ public class ListForUnknownUser extends ListActivity {
             
             // Opening item information
             
-            // getListView()>getItemAtPosition            
+            // getListView().getItemAtPosition()            
             
             Uri itemUri = Uri.withAppendedPath(
                     VimeoSimpleApiProvider.BASE_URI, "/video/" + id);
@@ -156,18 +157,47 @@ public class ListForUnknownUser extends ListActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         
-        // TODO: filter (load more...) button 
+        // if (v.getId() != R.id.list) return;
         
-        // getListView()>getItemAtPosition    
+        AdapterView.AdapterContextMenuInfo info;
+        try {
+            info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        } catch (ClassCastException cce) {
+            Log.e(TAG, "incorrect menu info", cce);
+            return;
+        }
+        
+        final int position = info.position;
+        
+        Log.d(TAG, "Opening context menu for item at " + position);
+        
+        // getListView().getItemAtPosition()            
+        
+        if (position == (getListView().getCount() - 1)) return; 
         
         menu.setHeaderTitle("Video " + getSelectedItemId());
-        
+            
         MenuInflater inflater = getMenuInflater(); //from activity
         inflater.inflate(R.menu.video_context_menu, menu);
     }
     
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+        
+        AdapterView.AdapterContextMenuInfo info;
+        try {
+            info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        } catch (ClassCastException cce) {
+            Log.e(TAG, "incorrect menu info", cce);
+            return false;
+        }
+        
+        final int position = info.position;
+        
+        Log.d(TAG, "Selected context menu item for item at " + position);
+        
+        // getListView().getItemAtPosition()         
+        
         String itemDescription;
         switch (item.getItemId()) {
             case R.id.menu_Play: itemDescription = "Play "; break;
@@ -305,7 +335,9 @@ public class ListForUnknownUser extends ListActivity {
             /* footerView.setPressed(false);            
             footerView.setEnabled(true);
             footerView.setClickable(true); */
-            //footerText.setTextColor(R.color.load_more_default_text);            
+            //footerText.setTextColor(R.color.load_more_default_text);   
+            
+            // TODO: scroll to the first received item
             
             if (pageNum == MAX_NUMBER_OF_PAGES) {
                 footerView.setVisibility(View.GONE);
