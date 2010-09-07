@@ -4,7 +4,7 @@
 package org.vimeoid.adapter.unknown;
 
 import org.vimeoid.R;
-import org.vimeoid.adapter.EasyCursorAdapter;
+import org.vimeoid.adapter.EasyCursorsAdapter;
 import org.vimeoid.dto.simple.Video;
 
 import com.fedorvlasov.lazylist.ImageLoader;
@@ -31,13 +31,13 @@ import android.widget.TextView;
  * @date Sep 5, 2010 8:35:01 PM 
  *
  */
-public class VideosListAdapter extends EasyCursorAdapter<Video> {
+public class VideosListAdapter extends EasyCursorsAdapter<Video> {
     
     private final LayoutInflater layoutInflater;
     private final ImageLoader imagesLoader;    
 
     public VideosListAdapter(Context context, LayoutInflater inflater) {
-        super(null);
+        super(Video.FieldsKeys._ID);
 
         this.layoutInflater = inflater;        
         

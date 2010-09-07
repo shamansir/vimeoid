@@ -15,11 +15,12 @@ import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import oauth.signpost.exception.OAuthException;
 
 import org.json.JSONObject;
-import org.vimeoid.adapter.EasyCursorAdapter;
+import org.vimeoid.adapter.EasyCursorsAdapter;
 import org.vimeoid.adapter.unknown.VideosListAdapter;
 import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.advanced.Methods;
@@ -47,7 +48,13 @@ public class ListForUnknownUser extends ListActivity {
     
     public static final String TAG = "ListForUnknownUser";
     
-    private EasyCursorAdapter<?> adapter = null;
+    public static final int MAX_NUMBER_OF_PAGES = 3; 
+    
+    private EasyCursorsAdapter<?> adapter = null;
+    private View footerView;
+    private int pageNum = 1;
+    
+    private boolean queryRunning = false;
     
     /** Called when the activity is first created. */
     @Override
@@ -64,8 +71,14 @@ public class ListForUnknownUser extends ListActivity {
         listView.setItemsCanFocus(true);                    
         listView.setEmptyView(getLayoutInflater().inflate(R.layout.item_list_empty, null));        
 
-        listView.addFooterView(getLayoutInflater().inflate(R.layout.item_footer_load_more, null));
-        //listView.setTextFilterEnabled(true);  
+        footerView = getLayoutInflater().inflate(R.layout.item_footer_load_more, null);
+        listView.addFooterView(footerView);
+        
+        // FIXME: this two lines has no effect
+        footerView.setLongClickable(false);
+        footerView.findViewById(R.id.itemsListFooterText).setLongClickable(false);        
+        
+        listView.setTextFilterEnabled(true);  
         
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);           
@@ -75,9 +88,10 @@ public class ListForUnknownUser extends ListActivity {
         // TODO: check if already attached to vimeo, so just start KnownListView
         
         this.adapter = new VideosListAdapter(this, getLayoutInflater());
+        setListAdapter(adapter);        
         
-        queryItems(Uri.withAppendedPath(VimeoSimpleApiProvider.BASE_URI, "/channel/staffpicks/videos"), 
-        		   adapter, Video.SHORT_EXTRACT_PROJECTION);
+        queryMoreItems(Uri.withAppendedPath(VimeoSimpleApiProvider.BASE_URI, "/channel/staffpicks/videos"), 
+        		       adapter, Video.SHORT_EXTRACT_PROJECTION);
         
     }
     
@@ -108,14 +122,21 @@ public class ListForUnknownUser extends ListActivity {
         } else {
             // Load more videos
             
-            Log.d(TAG, "Loading next page...");
-            
-            final Uri nextPageUri = Uri.parse(
-                    VimeoSimpleApiProvider.BASE_URI + "/channel/staffpicks/videos" + "?page=2");
-            
-            queryItems(nextPageUri, adapter, Video.SHORT_EXTRACT_PROJECTION);
+            if (!queryRunning) {
+                if (pageNum <= MAX_NUMBER_OF_PAGES) { 
+                
+                    Log.d(TAG, "Loading next page...");
+                    
+                    final Uri nextPageUri = Uri.parse(
+                            VimeoSimpleApiProvider.BASE_URI + "/channel/staffpicks/videos" + "?page=" + (++pageNum));
+                    
+                    queryMoreItems(nextPageUri, adapter, Video.SHORT_EXTRACT_PROJECTION);
+                    
+                } else Dialogs.makeToast(this, "Maximum number of pages is reached");
+            } else Dialogs.makeToast(this, "Don't mess with me!");
             
         }
+    	
         super.onListItemClick(l, v, position, id);
     }
     
@@ -133,8 +154,12 @@ public class ListForUnknownUser extends ListActivity {
     }
     
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-            ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+        
+        // TODO: filter (load more...) button 
+        
+        // getListView()>getItemAtPosition    
+        
         menu.setHeaderTitle("Video " + getSelectedItemId());
         
         MenuInflater inflater = getMenuInflater(); //from activity
@@ -152,7 +177,7 @@ public class ListForUnknownUser extends ListActivity {
             default: itemDescription = "";
         }
         Dialogs.makeToast(this, itemDescription);
-        return super.onOptionsItemSelected(item);
+        return super.onContextItemSelected(item);
     }
     
     @Override
@@ -196,7 +221,7 @@ public class ListForUnknownUser extends ListActivity {
         return super.onOptionsItemSelected(item);
     }
     
-    protected void queryItems(Uri uri, EasyCursorAdapter<?> adapter, String[] projection) {
+    protected void queryMoreItems(Uri uri, EasyCursorsAdapter<?> adapter, String[] projection) {
     	
         if (VimeoApi.connectedToWeb(this) && VimeoApi.vimeoSiteReachable()) {
 
@@ -204,7 +229,7 @@ public class ListForUnknownUser extends ListActivity {
             
             new LoadItemsTask(adapter, projection).execute(uri);
             
-            // TODO: show title, support API pages
+            // TODO: show title
             
             // setWindowTitle
             
@@ -231,19 +256,29 @@ public class ListForUnknownUser extends ListActivity {
         
         private final String[] projection;
         private final ProgressBar progressBar;
-        private final EasyCursorAdapter<?> adapter;
+        @SuppressWarnings("unused") private final TextView footerText;
+        private final EasyCursorsAdapter<?> adapter;
         
-        protected LoadItemsTask(EasyCursorAdapter<?> adapter, String[] projection) {
+        protected LoadItemsTask(EasyCursorsAdapter<?> adapter, String[] projection) {
             if (adapter == null) throw new IllegalArgumentException("Adapter must not be null");
             this.adapter = adapter;
             this.projection = projection;
-            this.progressBar = (ProgressBar) findViewById(R.id.progressBar);            
+            this.progressBar = (ProgressBar) findViewById(R.id.progressBar);   
+            this.footerText = (TextView) footerView.findViewById(R.id.itemsListFooterText);
         }
         
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            
+            queryRunning = true;
+            
             progressBar.setVisibility(View.VISIBLE);
+            // FIXME: this lines has no effect            
+            /* footerText.setTextColor(R.color.load_more_disabled_text);
+            footerView.setPressed(true);
+            footerView.setEnabled(false);
+            footerView.setClickable(false); */            
         }
 
         @Override
@@ -255,16 +290,28 @@ public class ListForUnknownUser extends ListActivity {
         
         @Override
         protected void onPostExecute(Cursor cursor) {
-            if (cursor == null) return;
+            if (cursor != null) {
+                startManagingCursor(cursor);
+    
+                adapter.addSource(cursor);
+                onContentChanged();
+                
+                cursor.close();
+            }
             
             progressBar.setVisibility(View.GONE);
-            startManagingCursor(cursor);
-
-            adapter.addSource(cursor);
-            setListAdapter(adapter); // FIXME: Call once?
-            onContentChanged();
             
-            cursor.close();
+            // FIXME: this lines has no effect            
+            /* footerView.setPressed(false);            
+            footerView.setEnabled(true);
+            footerView.setClickable(true); */
+            //footerText.setTextColor(R.color.load_more_default_text);            
+            
+            if (pageNum == MAX_NUMBER_OF_PAGES) {
+                footerView.setVisibility(View.GONE);
+            }
+            
+            queryRunning = false;            
         }
         
     }

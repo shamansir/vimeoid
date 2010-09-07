@@ -7,11 +7,12 @@
                android:layout_width="@dimen/item_thumb_width"
                android:layout_height="@dimen/item_thumb_height"
                android:layout_gravity="left"
-               android:background="#333" />
+               android:background="@color/item_thumb_bg" />
     <LinearLayout android:orientation="vertical"
                   android:layout_width="fill_parent"
                   android:layout_height="@dimen/item_thumb_height"
-                  android:layout_gravity="left">
+                  android:layout_gravity="left"
+                  android:layout_margin="2px">
 	    <TextView android:id="@+id/videoItemTitle"
                   android:layout_width="fill_parent" 
 	              android:layout_height="wrap_content" 

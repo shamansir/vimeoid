@@ -3,9 +3,11 @@
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-    <TextView android:id="@+id/itemsListFooterView"
+    <TextView android:id="@+id/itemsListFooterText"    
               android:layout_width="fill_parent" 
               android:layout_height="wrap_content" 
+              android:layout_margin="2px"              
               android:text="Load more..."
-              android:textSize="@dimen/title_font_size" />
+              android:textSize="@dimen/title_font_size"
+              android:textColor="@color/load_more_default_text" />
 </RelativeLayout>
