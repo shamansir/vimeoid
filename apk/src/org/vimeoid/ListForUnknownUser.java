@@ -72,12 +72,13 @@ public class ListForUnknownUser extends ListActivity {
         listView.setItemsCanFocus(true);                    
         listView.setEmptyView(getLayoutInflater().inflate(R.layout.item_list_empty, null));        
 
+        // TODO: use onScrollListener instead of footerView
         footerView = getLayoutInflater().inflate(R.layout.item_footer_load_more, null);
         listView.addFooterView(footerView);
         
         // FIXME: this two lines has no effect
-        footerView.setLongClickable(false);
-        footerView.findViewById(R.id.itemsListFooterText).setLongClickable(false);        
+        /* footerView.setLongClickable(false);
+        footerView.findViewById(R.id.itemsListFooterText).setLongClickable(false); */        
         
         listView.setTextFilterEnabled(true);  
         
@@ -121,6 +122,7 @@ public class ListForUnknownUser extends ListActivity {
             }
             
         } else {
+        	
             // Load more videos
             
             if (!queryRunning) {
@@ -286,7 +288,7 @@ public class ListForUnknownUser extends ListActivity {
         
         private final String[] projection;
         private final ProgressBar progressBar;
-        @SuppressWarnings("unused") private final TextView footerText;
+        private final TextView footerText;
         private final EasyCursorsAdapter<?> adapter;
         
         protected LoadItemsTask(EasyCursorsAdapter<?> adapter, String[] projection) {
@@ -304,11 +306,11 @@ public class ListForUnknownUser extends ListActivity {
             queryRunning = true;
             
             progressBar.setVisibility(View.VISIBLE);
-            // FIXME: this lines has no effect            
-            /* footerText.setTextColor(R.color.load_more_disabled_text);
-            footerView.setPressed(true);
-            footerView.setEnabled(false);
-            footerView.setClickable(false); */            
+            
+            footerView.setEnabled(false);            
+            footerText.setTextColor(getResources().getColor(R.color.load_more_disabled_text));
+            footerText.setBackgroundResource(R.color.load_more_disabled_bg);
+            
         }
 
         @Override
@@ -330,14 +332,20 @@ public class ListForUnknownUser extends ListActivity {
             }
             
             progressBar.setVisibility(View.GONE);
-            
-            // FIXME: this lines has no effect            
-            /* footerView.setPressed(false);            
+                        
             footerView.setEnabled(true);
-            footerView.setClickable(true); */
-            //footerText.setTextColor(R.color.load_more_default_text);   
+            footerText.setTextColor(getResources().getColor(R.color.load_more_default_text));
+            footerText.setBackgroundResource(R.color.load_more_default_bg);            
             
-            // TODO: scroll to the first received item
+            // TODO: scroll to the first received item (smoothScrollToPosition in API 8)
+            /* final ListView listView = getListView();
+            final int itemApproxHeight = listView.getHeight() / (listView.getCount() - 1);
+            final int yChange = (itemApproxHeight * (listView.getCount() - 1 - cursor.getCount()));
+            listView.scrollTo(0, listView.getHeight() - yChange); */
+            // Log.d(TAG, "item height: " + itemApproxHeight + " yChange: " + yChange + " diff: " + (listView.getHeight() - yChange));            
+
+            final int newPos = getListView().getCount() - cursor.getCount() - 2; // - 'load more' and one position before            
+            if (newPos >= 0) setSelection(newPos);
             
             if (pageNum == MAX_NUMBER_OF_PAGES) {
                 footerView.setVisibility(View.GONE);

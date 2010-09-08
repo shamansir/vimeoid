@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
         <color name="item_thumb_bg">#ff333333</color>     
-        <color name="load_more_default_text">#ffcccccc</color> 
+        <color name="load_more_default_text">#ff999999</color> 
         <color name="load_more_disabled_text">#ff666666</color>
+        <color name="load_more_default_bg">#00333333</color>
+        <color name="load_more_disabled_bg">#00666666</color>
 </resources>

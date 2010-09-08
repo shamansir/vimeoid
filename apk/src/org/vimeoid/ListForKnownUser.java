@@ -36,6 +36,8 @@ import android.widget.SimpleAdapter;
  * @date Sep 3, 2010 11:55:11 PM 
  *
  */
+
+// TODO: for sync use SyncAdapter on API Level 7
 public class ListForKnownUser extends ListActivity {
     
     /** Called when the activity is first created. */
