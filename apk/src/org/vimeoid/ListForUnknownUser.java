@@ -203,9 +203,9 @@ public class ListForUnknownUser extends ListActivity {
         String itemDescription;
         switch (item.getItemId()) {
             case R.id.menu_Play: itemDescription = "Play "; break;
-            case R.id.menu_watchLater: itemDescription = "INVISIBLEWatchLater "; break;
+            case R.id.menu_watchLater: itemDescription = "WatchLater "; break;
             case R.id.menu_viewInfo: itemDescription = "View info "; break;
-            case R.id.menu_viewAuthorInfo: itemDescription = "View author info "; break;
+            case R.id.menu_viewAuthorInfo: itemDescription = "View author info"; break;
             default: itemDescription = "";
         }
         Dialogs.makeToast(this, itemDescription);

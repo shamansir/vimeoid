@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vimeoid.connection.simple;
+package org.vimeoid.connection;
 
 public enum ContentType { USER, VIDEO, GROUP, CHANNEL, ALBUM, ACTIVITY;
 

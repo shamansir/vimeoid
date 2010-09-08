@@ -12,6 +12,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.UriMatcher;
 import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -30,7 +31,12 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.vimeoid.connection.simple.ContentType;
+import org.vimeoid.dto.simple.Action;
+import org.vimeoid.dto.simple.AlbumInfo;
+import org.vimeoid.dto.simple.ChannelInfo;
+import org.vimeoid.dto.simple.GroupInfo;
+import org.vimeoid.dto.simple.UserInfo;
+import org.vimeoid.dto.simple.Video;
 
 /**
  * <dl>
@@ -60,6 +66,8 @@ public class VimeoApi {
     private static final String OAUTH_TOKEN_SECRET_PARAM = "user_oauth_secret";
     
     private VimeoApi() { };
+
+    /* ====================== General methods =============================== */
     
     public static boolean connectedToWeb(Context context) {
         Log.d(TAG, "Testing connection to web");
@@ -73,82 +81,12 @@ public class VimeoApi {
         return true;
     }
     
+    /* ====================== OAuth Helpers ================================= */
+    
     public static boolean userLoggedIn() {
         // FIXME: implement
         return true;
     }    
-    
-    /**
-     * <p>Returns Simple (unauthorized) Vimeo API URL using the passed Content URI
-     * (see <code>VimeoSimpleApiProvider</code> for the supported URIs types)</p>
-     * 
-     * <p>For example, for URI <code>content://[unauthorized-provider-authority]/user/shamansir/videos</code>,
-     * URI <code>http://vimeo.com/api/v2/shamansir/videos.json</code> will be returned and for 
-     * URI <code>content://[unauthorized-provider-authority]/album/2239381/videos</code>,
-     * URI <code>http://vimeo.com/api/v2/album/2239381/info.json</code> will be returned and for 
-     * URI <code>content://[unauthorized-provider-authority]/video/125623</code>,
-     * URI <code>http://vimeo.com/api/v2/video/125623.json</code> will be returned...</p>
-     * 
-     * @param contentUri Content URI to resolve
-     * 
-     * @return URI, pointing to the Vimeo Simple API method corresponding to this contentUri
-     */    
-    public static URI resolveUriForSimpleApi(Uri contentUri) {
-        try {
-            return new URI(getUrlPartForSimpleApi(contentUri, 
-                           new StringBuffer(VimeoConfig.VIMEO_SIMPLE_API_CALL_PREFIX).append('/')).toString());
-        } catch (URISyntaxException use) {
-            Log.e(TAG, "URI settings exception when getting URI for " + contentUri);
-            use.printStackTrace();
-            return null;
-        }
-    }
-    
-    /**
-     * <p>Returns Simple (unauthorized) Vimeo API URL part using the passed Content URI</p>
-     * 
-     * <p>For example, for URI <code>content://[unauthorized-provider-authority]/user/shamansir/videos</code>,
-     * URL part <code>shamansir/videos.json</code> will be returned and for 
-     * URI <code>content://[unauthorized-provider-authority]/album/2239381/videos</code>,
-     * URL part <code>album/2239381/info.json</code> will be returned and for 
-     * URI <code>content://[unauthorized-provider-authority]/video/125623</code>,
-     * URL part <code>video/125623.json</code> will be returned...</p>
-     * 
-     * @param contentUri Content URI to resolve
-     * @param appendTo if not null, appends the part to this buffer and returns it
-     * 
-     * @return buffer with the resulting URL part written inside
-     */
-    public static StringBuffer getUrlPartForSimpleApi(Uri contentUri, StringBuffer appendTo) {
-        final List<String> segments = contentUri.getPathSegments();
-        final StringBuffer urlBuffer = (appendTo != null) ? appendTo : new StringBuffer();
-        Log.d(TAG, "generating API Call URL for URI " + contentUri.toString());
-        switch (ContentType.fromAlias(segments.get(0))) {
-            case USER: urlBuffer.append(validateShortcutOrId(segments.get(1))).append('/')                                
-                                .append(resolveSimpleUserAction(segments.get(2))); break;
-            case VIDEO: urlBuffer.append("video/")
-                                 .append(validateId(segments.get(1))); break;
-            case GROUP: urlBuffer.append("group/")
-                                 .append(validateShortcutOrId(segments.get(1))).append('/')
-                                 .append(resolveSimpleGroupAction(segments.get(2))); break;
-            case CHANNEL: urlBuffer.append("channel/")
-                                   .append(validateShortcutOrId(segments.get(1))).append('/')
-                                   .append(resolveSimpleChannelAction(segments.get(2))); break;
-            case ALBUM: urlBuffer.append("album/")
-                                 .append(validateId(segments.get(1))).append('/')
-                                 .append(resolveSimpleAlbumAction(segments.get(2))); break;            
-            case ACTIVITY: urlBuffer.append("activity/")
-                                    .append(validateShortcutOrId(segments.get(1))).append('/')
-                                    .append(resolveSimpleActivityAction(segments.get(2))); break;
-                                    
-        }
-        urlBuffer.append('.').append(RESPONSE_FORMAT);
-        if (contentUri.getQueryParameter("page") != null) {
-            urlBuffer.append("?page=").append(contentUri.getQueryParameter("page"));
-        }
-        Log.d(TAG, "generated result: " + urlBuffer.toString());
-        return urlBuffer;
-    }
     
     public static boolean ensureOAuth(Context context) {
         if (!JsonOverHttp.use().isOAuthInitialized()) {
@@ -189,6 +127,8 @@ public class VimeoApi {
         } else throw new IllegalCallbackUriException("Illegal callback Uri passed");
     }
     
+    /* ====================== Advanced API: Calls =========================== */
+    
     public static JSONObject advancedApi(final String method, final String object) 
                                                         throws ClientProtocolException, NoSuchAlgorithmException, 
                                                                OAuthMessageSignerException, OAuthExpectationFailedException, 
@@ -211,6 +151,111 @@ public class VimeoApi {
             throw new AdvancedApiCallError(errObj.getInt("code"), errObj.getString("msg"));
         }
         return result.getJSONObject(object);
+    }    
+    
+    /* ====================== Simple API: Resolving URIs ==================== */
+    
+    public static class ApiUrlInfo {
+        public URI apiFullUrl;
+        public StringBuffer apiUrlPart;
+        public String subject;
+        public String action;
+        public ContentType subjectType;
+        public ContentType resultType;
+        public boolean multipleResult;
+    }
+    
+    /**
+     * <p>Returns Simple (unauthorized) Vimeo API URL using the passed Content URI
+     * (see <code>VimeoSimpleApiProvider</code> for the supported URIs types)</p>
+     * 
+     * <p>For example, for URI <code>content://[unauthorized-provider-authority]/user/shamansir/videos</code>,
+     * URI <code>http://vimeo.com/api/v2/shamansir/videos.json</code> will be returned and for 
+     * URI <code>content://[unauthorized-provider-authority]/album/2239381/videos</code>,
+     * URI <code>http://vimeo.com/api/v2/album/2239381/info.json</code> will be returned and for 
+     * URI <code>content://[unauthorized-provider-authority]/video/125623</code>,
+     * URI <code>http://vimeo.com/api/v2/video/125623.json</code> will be returned...</p>
+     * 
+     * @param contentUri Content URI to resolve
+     * 
+     * @return API URL info, containing <code>apiFullUrl</code>, pointing to the Vimeo Simple API method corresponding to this contentUri
+     */    
+    public static ApiUrlInfo resolveUriForSimpleApi(Uri contentUri) {
+        try {
+            final ApiUrlInfo result = getUrlInfoForSimpleApi(contentUri);
+            result.apiFullUrl = new URI(VimeoConfig.VIMEO_SIMPLE_API_CALL_PREFIX + '/' + result.apiUrlPart.toString());
+            return result;
+        } catch (URISyntaxException use) {
+            Log.e(TAG, "URI settings exception when getting URI for " + contentUri);
+            use.printStackTrace();
+            return null;
+        }
+    }
+    
+    /**
+     * <p>Returns Simple (unauthorized) Vimeo API URL part using the passed Content URI</p>
+     * 
+     * <p>For example, for URI <code>content://[unauthorized-provider-authority]/user/shamansir/videos</code>,
+     * URL part <code>shamansir/videos.json</code> will be returned and for 
+     * URI <code>content://[unauthorized-provider-authority]/album/2239381/videos</code>,
+     * URL part <code>album/2239381/info.json</code> will be returned and for 
+     * URI <code>content://[unauthorized-provider-authority]/video/125623</code>,
+     * URL part <code>video/125623.json</code> will be returned...</p>
+     * 
+     * @param contentUri Content URI to resolve
+     * 
+     * @return API URL info, containing <code>apiUrlPart</code> buffer with the resulting URL part written inside
+     */
+    protected static ApiUrlInfo getUrlInfoForSimpleApi(Uri contentUri) {
+        final List<String> segments = contentUri.getPathSegments();
+        final StringBuffer urlBuffer = new StringBuffer();
+        Log.d(TAG, "generating API Call URL for URI " + contentUri.toString());
+        
+        final ApiUrlInfo urlInfo = new ApiUrlInfo();
+        urlInfo.subjectType = ContentType.fromAlias(segments.get(0));
+        switch (urlInfo.subjectType) {
+            case USER: {
+                    urlInfo.subject = validateShortcutOrId(segments.get(1));
+                    urlInfo.action = resolveSimpleUserAction(segments.get(2));
+                    urlBuffer.append(urlInfo.subject).append('/').append(urlInfo.action);
+                } break;
+            case VIDEO: {
+                    urlInfo.subject = validateId(segments.get(1));
+                    urlInfo.action = null;
+                    urlBuffer.append("video/").append(urlInfo.subject);
+                } break;
+            case GROUP: {
+                    urlInfo.subject = validateShortcutOrId(segments.get(1));
+                    urlInfo.action = resolveSimpleGroupAction(segments.get(2));
+                    urlBuffer.append("group/").append(urlInfo.subject).append('/').append(urlInfo.action);
+                } break;
+            case CHANNEL: {
+                    urlInfo.subject = validateShortcutOrId(segments.get(1));
+                    urlInfo.action = resolveSimpleChannelAction(segments.get(2));
+                    urlBuffer.append("channel/").append(urlInfo.subject).append('/').append(urlInfo.action);
+                } break;
+            case ALBUM: {
+                    urlInfo.subject = validateId(segments.get(1));
+                    urlInfo.action = resolveSimpleAlbumAction(segments.get(2));
+                    urlBuffer.append("album/").append(urlInfo.subject).append('/').append(urlInfo.action);
+                } break;          
+            case ACTIVITY: {
+                    urlInfo.subject = validateShortcutOrId(segments.get(1));
+                    urlInfo.action = resolveSimpleActivityAction(segments.get(2));
+                    urlBuffer.append("activity/").append(urlInfo.subject).append('/').append(urlInfo.action);
+                } break;
+        }
+        
+        urlBuffer.append('.').append(RESPONSE_FORMAT);
+        if (contentUri.getQueryParameter("page") != null) {
+            urlBuffer.append("?page=").append(contentUri.getQueryParameter("page"));
+        }
+        
+        Log.d(TAG, "generated result: " + urlBuffer.toString());
+        urlInfo.apiUrlPart = urlBuffer;
+        urlInfo.multipleResult = getReturnsMultipleResults(contentUri);
+        urlInfo.resultType = getReturnedContentType(contentUri);
+        return urlInfo;
     }    
     
     protected static String validateShortcutOrId(final String shortcut) { 
@@ -280,6 +325,113 @@ public class VimeoApi {
             this.message = message;
         }
         
+    }    
+    
+    /* ====================== Simple API: UriMatcher ======================== */
+    
+    public static final String SIMPLE_API_AUTHORITY = "org.vimeoid.simple.provider";
+    
+    private static final UriMatcher simpleApiUriMatcher;
+    
+    private static final int ACTIONS_LIST_URI_TYPE   = 1;
+    private static final int ACTION_SINGLE_URI_TYPE  = 2;
+    private static final int ALBUMS_LIST_URI_TYPE    = 3;
+    private static final int ALBUM_SINGLE_URI_TYPE   = 4;
+    private static final int CHANNELS_LIST_URI_TYPE  = 5;
+    private static final int CHANNEL_SINGLE_URI_TYPE = 6;
+    private static final int GROUPS_LIST_URI_TYPE    = 7;
+    private static final int GROUP_SINGLE_URI_TYPE   = 8;
+    private static final int USERS_LIST_URI_TYPE     = 9;
+    private static final int USER_SINGLE_URI_TYPE    = 10;
+    private static final int VIDEOS_LIST_URI_TYPE    = 11;
+    private static final int VIDEO_SINGLE_URI_TYPE   = 12;    
+    
+    static {
+        simpleApiUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+        
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "user/*/info",     USER_SINGLE_URI_TYPE);
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "user/*/videos",   VIDEOS_LIST_URI_TYPE);
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "user/*/likes",    VIDEOS_LIST_URI_TYPE);
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "user/*/appears",  VIDEOS_LIST_URI_TYPE); // videos where user appears
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "user/*/all",      VIDEOS_LIST_URI_TYPE);
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "user/*/subscr",   VIDEOS_LIST_URI_TYPE);
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "user/*/albums",   ALBUMS_LIST_URI_TYPE);
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "user/*/channels", CHANNELS_LIST_URI_TYPE);
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "user/*/groups",   GROUPS_LIST_URI_TYPE);
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "user/*/ccreated", VIDEOS_LIST_URI_TYPE); // videos that user's contacts created
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "user/*/clikes",   VIDEOS_LIST_URI_TYPE); // videos that user's contacts liked
+        
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "video/#", VIDEO_SINGLE_URI_TYPE);
+        
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "group/*/info",   GROUP_SINGLE_URI_TYPE);
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "group/*/videos", VIDEOS_LIST_URI_TYPE);
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "group/*/users",  USERS_LIST_URI_TYPE);
+        
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "channel/*/info",   CHANNEL_SINGLE_URI_TYPE);
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "channel/*/videos", VIDEOS_LIST_URI_TYPE);
+        
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "album/#/info",   ALBUM_SINGLE_URI_TYPE);
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "album/#/videos", VIDEOS_LIST_URI_TYPE);
+        
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "activity/*/did",       ACTIONS_LIST_URI_TYPE);
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "activity/*/happened",  ACTIONS_LIST_URI_TYPE);
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "activity/*/cdid",      ACTIONS_LIST_URI_TYPE); // contacts did
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "activity/*/chappened", ACTIONS_LIST_URI_TYPE); // happened to contacts
+        simpleApiUriMatcher.addURI(SIMPLE_API_AUTHORITY, "activity/*/edid",      ACTIONS_LIST_URI_TYPE); // everyone did
+    }
+    
+    public static String getSimpleApiReturnType(Uri uri) {
+        switch (simpleApiUriMatcher.match(uri)) {
+            case ACTIONS_LIST_URI_TYPE:   return Action.CONTENT_TYPE;
+            case ACTION_SINGLE_URI_TYPE:  return Action.CONTENT_ITEM_TYPE;
+            case ALBUMS_LIST_URI_TYPE:    return AlbumInfo.CONTENT_TYPE;
+            case ALBUM_SINGLE_URI_TYPE:   return AlbumInfo.CONTENT_ITEM_TYPE;
+            case CHANNELS_LIST_URI_TYPE:  return ChannelInfo.CONTENT_TYPE;
+            case CHANNEL_SINGLE_URI_TYPE: return ChannelInfo.CONTENT_ITEM_TYPE;
+            case GROUPS_LIST_URI_TYPE:    return GroupInfo.CONTENT_TYPE;
+            case GROUP_SINGLE_URI_TYPE:   return GroupInfo.CONTENT_ITEM_TYPE;
+            case USERS_LIST_URI_TYPE:     return UserInfo.CONTENT_TYPE;
+            case USER_SINGLE_URI_TYPE:    return UserInfo.CONTENT_ITEM_TYPE;
+            case VIDEOS_LIST_URI_TYPE:    return Video.CONTENT_TYPE;
+            case VIDEO_SINGLE_URI_TYPE:   return Video.CONTENT_ITEM_TYPE;
+            default: throw new IllegalArgumentException("Unknown URI type: " + uri);
+        }
+    }
+
+    public static ContentType getReturnedContentType(Uri uri) {
+        switch (simpleApiUriMatcher.match(uri)) {
+            case ACTIONS_LIST_URI_TYPE:
+            case ACTION_SINGLE_URI_TYPE:  return ContentType.ACTIVITY;
+            case ALBUMS_LIST_URI_TYPE:
+            case ALBUM_SINGLE_URI_TYPE:   return ContentType.ALBUM;
+            case CHANNELS_LIST_URI_TYPE:
+            case CHANNEL_SINGLE_URI_TYPE: return ContentType.CHANNEL;
+            case GROUPS_LIST_URI_TYPE:
+            case GROUP_SINGLE_URI_TYPE:   return ContentType.GROUP;
+            case USERS_LIST_URI_TYPE:
+            case USER_SINGLE_URI_TYPE:    return ContentType.USER;
+            case VIDEOS_LIST_URI_TYPE:
+            case VIDEO_SINGLE_URI_TYPE:   return ContentType.VIDEO;
+            default: throw new IllegalArgumentException("Unknown URI type: " + uri);
+        }        
+    }
+    
+    public static boolean getReturnsMultipleResults(Uri uri) {
+        switch (simpleApiUriMatcher.match(uri)) {
+            case ACTIONS_LIST_URI_TYPE:
+            case ALBUMS_LIST_URI_TYPE:
+            case CHANNELS_LIST_URI_TYPE:
+            case GROUPS_LIST_URI_TYPE:
+            case USERS_LIST_URI_TYPE:
+            case VIDEOS_LIST_URI_TYPE:    return true;            
+            case ACTION_SINGLE_URI_TYPE:  
+            case ALBUM_SINGLE_URI_TYPE:
+            case CHANNEL_SINGLE_URI_TYPE:
+            case GROUP_SINGLE_URI_TYPE:
+            case USER_SINGLE_URI_TYPE:
+            case VIDEO_SINGLE_URI_TYPE:   return false;
+            default: throw new IllegalArgumentException("Unknown URI type: " + uri);
+        }        
     }    
     
 }
