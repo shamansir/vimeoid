@@ -112,7 +112,7 @@ public class ListForUnknownUser extends ListActivity {
             
             String action = getIntent().getAction();
             if (Intent.ACTION_PICK.equals(action) ||
-                      Intent.ACTION_GET_CONTENT.equals(action))
+                Intent.ACTION_GET_CONTENT.equals(action))
             {
                 setResult(RESULT_OK, new Intent().setData(itemUri));
             } else {
@@ -259,10 +259,6 @@ public class ListForUnknownUser extends ListActivity {
             
             new LoadItemsTask(adapter, projection).execute(uri);
             
-            // TODO: show title
-            
-            // setWindowTitle
-            
         } else {
             
             Log.d(TAG, "Connection test failed");            
@@ -346,6 +342,7 @@ public class ListForUnknownUser extends ListActivity {
                 footerView.setVisibility(View.GONE);
             }
             
+            // TODO: change window title
             /* final ApiCallInfo callInfo = ((StatsCollectingCursor)cursor).getCallStats();
             setTitle(VimeoApi.getSimpleApiCallDescription(callInfo)); */
             

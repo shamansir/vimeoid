@@ -7,9 +7,9 @@
     <dimen name="single_thumb_height">150dp</dimen>
     <dimen name="small_progress_side">32dp</dimen>
     <dimen name="load_more_height">50dp</dimen>
-    <dimen name="title_font_size">18sp</dimen>
+    <dimen name="title_font_size">16sp</dimen>
     <dimen name="subtitle_font_size">14sp</dimen>
     <dimen name="param_font_size">12sp</dimen>
-    <dimen name="info_font_size">10sp</dimen>
+    <dimen name="info_font_size">12sp</dimen>
     <dimen name="text_padding_in_list">2px</dimen>    
 </resources>

@@ -78,4 +78,8 @@ public class Utils {
         catch(Exception ex){}
     }    
     
+    public static String adaptDuration(long duration) {
+        return (duration - (duration % 60)) + ":" + (duration % 60); 
+    }
+    
 }

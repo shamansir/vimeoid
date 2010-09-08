@@ -29,11 +29,6 @@
                   android:lines="1"
                   android:ellipsize="marquee"
                   android:scrollHorizontally="true" />
-        <TextView android:id="@+id/videoItemDuration"
-                  android:layout_width="fill_parent" 
-                  android:layout_height="wrap_content" 
-                  android:text="duration"
-                  android:textSize="@dimen/param_font_size" />
         <TextView android:id="@+id/videoItemTags"
                   android:layout_width="fill_parent" 
                   android:layout_height="wrap_content" 
@@ -45,21 +40,33 @@
         <LinearLayout android:orientation="horizontal"
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent">
-             <TextView android:id="@+id/videoItemNumOfLikes"
-                       android:layout_width="wrap_content" 
-                       android:layout_height="fill_parent" 
-                       android:text="likes"
-                       android:textSize="@dimen/info_font_size" />
-             <TextView android:id="@+id/videoItemNumOfPlays"
-                       android:layout_width="wrap_content" 
-                       android:layout_height="fill_parent" 
-                       android:text="plays"
-                       android:textSize="@dimen/info_font_size" />
-             <TextView android:id="@+id/videoItemNumOfComments"
-                       android:layout_width="wrap_content" 
-                       android:layout_height="fill_parent" 
-                       android:text="comments"
-                       android:textSize="@dimen/info_font_size" />
+             <LinearLayout android:orientation="horizontal"
+                           android:layout_width="wrap_content"
+                           android:layout_height="fill_parent">
+	             <TextView android:id="@+id/videoItemNumOfLikes"
+	                       android:layout_width="wrap_content" 
+	                       android:layout_height="fill_parent" 
+	                       android:text="likes"
+	                       android:textSize="@dimen/info_font_size" />
+	             <TextView android:id="@+id/videoItemNumOfPlays"
+	                       android:layout_width="wrap_content" 
+	                       android:layout_height="fill_parent" 
+	                       android:text="plays"
+	                       android:textSize="@dimen/info_font_size" />
+	             <TextView android:id="@+id/videoItemNumOfComments"
+	                       android:layout_width="wrap_content" 
+	                       android:layout_height="fill_parent" 
+	                       android:text="comments"
+	                       android:textSize="@dimen/info_font_size" />
+             </LinearLayout>
+		     <TextView android:id="@+id/videoItemDuration"
+		               android:layout_width="fill_parent" 
+		               android:layout_height="wrap_content" 
+                       android:layout_weight="1"
+                       android:paddingRight="2px"
+                       android:gravity="right"		               
+		               android:text="duration"
+		               android:textSize="@dimen/param_font_size" />             
         </LinearLayout>                         	              
     </LinearLayout>
 </LinearLayout>

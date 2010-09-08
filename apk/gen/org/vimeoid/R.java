@@ -67,12 +67,12 @@ public final class R {
         public static final int tagItemUsageCount=0x7f080005;
         public static final int tagsOfVideoButton=0x7f080015;
         public static final int videoItemAuthor=0x7f080007;
-        public static final int videoItemDuration=0x7f080008;
+        public static final int videoItemDuration=0x7f08000c;
         public static final int videoItemImage=0x7f080000;
-        public static final int videoItemNumOfComments=0x7f08000c;
-        public static final int videoItemNumOfLikes=0x7f08000a;
-        public static final int videoItemNumOfPlays=0x7f08000b;
-        public static final int videoItemTags=0x7f080009;
+        public static final int videoItemNumOfComments=0x7f08000b;
+        public static final int videoItemNumOfLikes=0x7f080009;
+        public static final int videoItemNumOfPlays=0x7f08000a;
+        public static final int videoItemTags=0x7f080008;
         public static final int videoItemTitle=0x7f080006;
     }
     public static final class layout {

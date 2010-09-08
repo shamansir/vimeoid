@@ -6,6 +6,7 @@ package org.vimeoid.adapter.unknown;
 import org.vimeoid.R;
 import org.vimeoid.adapter.EasyCursorsAdapter;
 import org.vimeoid.dto.simple.Video;
+import org.vimeoid.util.Utils;
 
 import com.fedorvlasov.lazylist.ImageLoader;
 
@@ -78,7 +79,7 @@ public class VideosListAdapter extends EasyCursorsAdapter<Video> {
         
         itemHolder.tvTitle.setText(video.title);
         itemHolder.tvAuthor.setText(video.uploaderName);
-        itemHolder.tvDuration.setText(String.valueOf(video.duration));
+        itemHolder.tvDuration.setText(Utils.adaptDuration(video.duration));
         //itemHolder.tvTags.setText(video.tags);
         
         itemHolder.tvLikes.setText(String.valueOf(video.likesCount));
