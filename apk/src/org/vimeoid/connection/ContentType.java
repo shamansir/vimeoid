@@ -14,5 +14,9 @@ public enum ContentType { USER, VIDEO, GROUP, CHANNEL, ALBUM, ACTIVITY;
         if ("activity".equals(subjectType)) return ACTIVITY;
         throw new IllegalArgumentException("Unknown subject type: " + subjectType);
     }
+    
+    public String getAlias() {
+        return name().toLowerCase();
+    }
 
 }

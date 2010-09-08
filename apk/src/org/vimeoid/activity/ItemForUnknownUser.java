@@ -1,7 +1,9 @@
 /**
  * 
  */
-package org.vimeoid;
+package org.vimeoid.activity;
+
+import org.vimeoid.connection.VimeoSimpleApiProvider;
 
 import android.app.Activity;
 

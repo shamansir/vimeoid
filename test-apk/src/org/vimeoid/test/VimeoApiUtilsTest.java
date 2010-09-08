@@ -5,10 +5,10 @@ package org.vimeoid.test;
 
 import junit.framework.Assert;
 
-import org.vimeoid.VimeoSimpleApiProvider;
+import org.vimeoid.VimeoConfig;
 import org.vimeoid.connection.ContentType;
 import org.vimeoid.connection.VimeoApi;
-import org.vimeoid.connection.VimeoConfig;
+import org.vimeoid.connection.VimeoSimpleApiProvider;
 
 import android.net.Uri;
 import android.net.Uri.Builder;
@@ -240,7 +240,7 @@ public class VimeoApiUtilsTest extends AndroidTestCase {
                                    expectedVimeoApiUrl + '.' + 
                                    VimeoApi.RESPONSE_FORMAT;
         
-        Assert.assertEquals(expectedUrl, VimeoApi.resolveUriForSimpleApi(actualUri).apiFullUrl.toString());
+        Assert.assertEquals(expectedUrl, VimeoApi.resolveUriForSimpleApi(actualUri).fullCallUrl.toString());
         Assert.assertEquals(expectedResultType, VimeoApi.getReturnedContentType(actualUri));
         Assert.assertEquals(multipleResultExpected, VimeoApi.getReturnsMultipleResults(actualUri));
     }

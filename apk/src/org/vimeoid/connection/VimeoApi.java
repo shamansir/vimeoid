@@ -17,6 +17,7 @@ import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
@@ -31,6 +32,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.vimeoid.VimeoConfig;
 import org.vimeoid.dto.simple.Action;
 import org.vimeoid.dto.simple.AlbumInfo;
 import org.vimeoid.dto.simple.ChannelInfo;
@@ -79,6 +81,10 @@ public class VimeoApi {
     public static boolean vimeoSiteReachable() {
         Log.d(TAG, "Testing connection to Vimeo site");
         return true;
+    }
+    
+    public static void forgetCredentials() {
+        // FIXME: implement
     }
     
     /* ====================== OAuth Helpers ================================= */
@@ -155,14 +161,53 @@ public class VimeoApi {
     
     /* ====================== Simple API: Resolving URIs ==================== */
     
-    public static class ApiUrlInfo {
-        public URI apiFullUrl;
+    public static class ApiCallInfo {
+        
+        public URI fullCallUrl;
         public StringBuffer apiUrlPart;
         public String subject;
         public String action;
         public ContentType subjectType;
         public ContentType resultType;
         public boolean multipleResult;
+        
+        public static class ExtrasKeys {
+            public static final String FULL_CALL_URL = "aci_fullCallUrl";
+            public static final String API_URL_PART = "aci_apiUrlPart";
+            public static final String SUBJECT = "aci_subject";
+            public static final String ACTION = "aci_action";
+            public static final String SUBJECT_TYPE = "aci_subjectType";
+            public static final String RESULT_TYPE = "aci_resultType";
+            public static final String MULTIPLE_RESULT = "aci_multipleResult";
+        }
+        
+        public void writeToExtras(Bundle bundle) {
+            bundle.putString(ExtrasKeys.FULL_CALL_URL, fullCallUrl.toString());
+            bundle.putString(ExtrasKeys.API_URL_PART, apiUrlPart.toString());
+            bundle.putString(ExtrasKeys.SUBJECT, subject);
+            bundle.putString(ExtrasKeys.ACTION, action);
+            bundle.putString(ExtrasKeys.SUBJECT_TYPE, subjectType.getAlias());
+            bundle.putString(ExtrasKeys.RESULT_TYPE, resultType.getAlias());
+            bundle.putBoolean(ExtrasKeys.MULTIPLE_RESULT, multipleResult);
+        }
+        
+        public static ApiCallInfo extractFromExtras(Bundle bundle) {
+            final ApiCallInfo result = new ApiCallInfo();
+            try {
+                result.fullCallUrl = new URI(bundle.getString(ExtrasKeys.FULL_CALL_URL));
+            } catch (URISyntaxException use) {
+                Log.e(TAG, "Failed to extract URI from bundle " + bundle.getString(ExtrasKeys.FULL_CALL_URL));
+                use.printStackTrace();
+            }
+            result.apiUrlPart = new StringBuffer(bundle.getString(ExtrasKeys.API_URL_PART));
+            result.subject = bundle.getString(ExtrasKeys.SUBJECT);
+            result.action = bundle.getString(ExtrasKeys.ACTION);
+            result.subjectType = ContentType.fromAlias(bundle.getString(ExtrasKeys.SUBJECT_TYPE));
+            result.resultType = ContentType.fromAlias(bundle.getString(ExtrasKeys.RESULT_TYPE));
+            result.multipleResult = bundle.getBoolean(ExtrasKeys.MULTIPLE_RESULT);
+            return result;
+        }
+
     }
     
     /**
@@ -178,12 +223,12 @@ public class VimeoApi {
      * 
      * @param contentUri Content URI to resolve
      * 
-     * @return API URL info, containing <code>apiFullUrl</code>, pointing to the Vimeo Simple API method corresponding to this contentUri
+     * @return API URL info, containing <code>fullCallUrl</code>, pointing to the Vimeo Simple API method corresponding to this contentUri
      */    
-    public static ApiUrlInfo resolveUriForSimpleApi(Uri contentUri) {
+    public static ApiCallInfo resolveUriForSimpleApi(Uri contentUri) {
         try {
-            final ApiUrlInfo result = getUrlInfoForSimpleApi(contentUri);
-            result.apiFullUrl = new URI(VimeoConfig.VIMEO_SIMPLE_API_CALL_PREFIX + '/' + result.apiUrlPart.toString());
+            final ApiCallInfo result = getUrlInfoForSimpleApi(contentUri);
+            result.fullCallUrl = new URI(VimeoConfig.VIMEO_SIMPLE_API_CALL_PREFIX + '/' + result.apiUrlPart.toString());
             return result;
         } catch (URISyntaxException use) {
             Log.e(TAG, "URI settings exception when getting URI for " + contentUri);
@@ -206,12 +251,12 @@ public class VimeoApi {
      * 
      * @return API URL info, containing <code>apiUrlPart</code> buffer with the resulting URL part written inside
      */
-    protected static ApiUrlInfo getUrlInfoForSimpleApi(Uri contentUri) {
+    protected static ApiCallInfo getUrlInfoForSimpleApi(Uri contentUri) {
         final List<String> segments = contentUri.getPathSegments();
         final StringBuffer urlBuffer = new StringBuffer();
         Log.d(TAG, "generating API Call URL for URI " + contentUri.toString());
         
-        final ApiUrlInfo urlInfo = new ApiUrlInfo();
+        final ApiCallInfo urlInfo = new ApiCallInfo();
         urlInfo.subjectType = ContentType.fromAlias(segments.get(0));
         switch (urlInfo.subjectType) {
             case USER: {
@@ -256,7 +301,11 @@ public class VimeoApi {
         urlInfo.multipleResult = getReturnsMultipleResults(contentUri);
         urlInfo.resultType = getReturnedContentType(contentUri);
         return urlInfo;
-    }    
+    }
+    
+    public static String getSimpleApiCallDescription(ApiCallInfo callInfo) {
+        return callInfo.resultType.getAlias() + ": " + callInfo.subject + ' ' + callInfo.subjectType.getAlias();
+    }
     
     protected static String validateShortcutOrId(final String shortcut) { 
         if (!shortcut.matches("^[\\d\\w_]+$")) throw new IllegalArgumentException("Not correct schortcut or _ID: " + shortcut);

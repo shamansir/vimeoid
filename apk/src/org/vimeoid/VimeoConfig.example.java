@@ -1,4 +1,4 @@
-package org.vimeoid.connection;
+package org.vimeoid;
 
 /**
  * <dl>

@@ -2,8 +2,8 @@ vimeoid by shaman.sir@gmail.com
 ===============================
 
 To make Java source compile in your local version, get a Vimeo API Key / Secret,
-copy apk/src/org/vimeoid/connection/VimeoConfig.example.java to : 
-apk/src/org/vimeoid/connection/VimeoConfig.java and then put the values you got 
+copy apk/src/org/vimeoid/VimeoConfig.example.java to : 
+apk/src/org/vimeoid/VimeoConfig.java and then put the values you got 
 into the corresponding placeholders. Then, set VimeoConfig.example.java to be 
 ignored in your java source code (in Eclipse there is an option in Project -> 
 Properties -> Java Build Path -> Source -> /src -> Excluded -> Edit...)

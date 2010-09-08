@@ -1,10 +1,11 @@
-package org.vimeoid;
+package org.vimeoid.activity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.vimeoid.R;
 import org.vimeoid.dto.simple.TagInfo;
 import org.vimeoid.dto.simple.Video;
 

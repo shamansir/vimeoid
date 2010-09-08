@@ -8,8 +8,8 @@ import java.util.Arrays;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.vimeoid.connection.VimeoApi.ApiCallInfo;
 
-import android.database.AbstractCursor;
 import android.util.Log;
 
 /**
@@ -27,20 +27,21 @@ import android.util.Log;
  * @date Aug 28, 2010 5:47:34 PM 
  *
  */
-public class JsonObjectsCursor extends AbstractCursor {
+public class JsonObjectsCursor extends StatsCollectingCursor {
     
     private static final String TAG = "JsonObjectsCursor";
     
     private final JSONArray source;
     private final String[] projection;
     
-    public JsonObjectsCursor(JSONArray source, String[] projection) {
+    public JsonObjectsCursor(JSONArray source, String[] projection, ApiCallInfo callStats) {
+        super(callStats);
         this.source = source;
         this.projection = projection;
     }
     
-    public JsonObjectsCursor(JSONObject source, String[] projection) {
-        this(new JSONArray(Arrays.asList(source)), projection);
+    public JsonObjectsCursor(JSONObject source, String[] projection, ApiCallInfo callStats) {
+        this(new JSONArray(Arrays.asList(source)), projection, callStats);
     }
         
     @Override
@@ -127,5 +128,5 @@ public class JsonObjectsCursor extends AbstractCursor {
         Log.e(TAG, "JSON Parsing exception when getting property : " + jsone.getLocalizedMessage());
         jsone.printStackTrace();
     }
-
+    
 }

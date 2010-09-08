@@ -1,4 +1,4 @@
-package org.vimeoid;
+package org.vimeoid.activity;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -21,9 +21,11 @@ import android.widget.TextView;
 import oauth.signpost.exception.OAuthException;
 
 import org.json.JSONObject;
+import org.vimeoid.R;
 import org.vimeoid.adapter.EasyCursorsAdapter;
 import org.vimeoid.adapter.unknown.VideosListAdapter;
 import org.vimeoid.connection.VimeoApi;
+import org.vimeoid.connection.VimeoSimpleApiProvider;
 import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.dto.simple.Video;
 import org.vimeoid.util.Dialogs;
@@ -75,10 +77,6 @@ public class ListForUnknownUser extends ListActivity {
         // TODO: use onScrollListener instead of footerView
         footerView = getLayoutInflater().inflate(R.layout.item_footer_load_more, null);
         listView.addFooterView(footerView);
-        
-        // FIXME: this two lines has no effect
-        /* footerView.setLongClickable(false);
-        footerView.findViewById(R.id.itemsListFooterText).setLongClickable(false); */        
         
         listView.setTextFilterEnabled(true);  
         
@@ -322,6 +320,7 @@ public class ListForUnknownUser extends ListActivity {
         
         @Override
         protected void onPostExecute(Cursor cursor) {
+            
             if (cursor != null) {
                 startManagingCursor(cursor);
     
@@ -338,20 +337,20 @@ public class ListForUnknownUser extends ListActivity {
             footerText.setBackgroundResource(R.color.load_more_default_bg);            
             
             // TODO: scroll to the first received item (smoothScrollToPosition in API 8)
-            /* final ListView listView = getListView();
-            final int itemApproxHeight = listView.getHeight() / (listView.getCount() - 1);
-            final int yChange = (itemApproxHeight * (listView.getCount() - 1 - cursor.getCount()));
-            listView.scrollTo(0, listView.getHeight() - yChange); */
-            // Log.d(TAG, "item height: " + itemApproxHeight + " yChange: " + yChange + " diff: " + (listView.getHeight() - yChange));            
 
             final int newPos = getListView().getCount() - cursor.getCount() - 2; // - 'load more' and one position before            
             if (newPos >= 0) setSelection(newPos);
+            else setSelection(0);
             
             if (pageNum == MAX_NUMBER_OF_PAGES) {
                 footerView.setVisibility(View.GONE);
             }
             
-            queryRunning = false;            
+            /* final ApiCallInfo callInfo = ((StatsCollectingCursor)cursor).getCallStats();
+            setTitle(VimeoApi.getSimpleApiCallDescription(callInfo)); */
+            
+            queryRunning = false;
+            
         }
         
     }

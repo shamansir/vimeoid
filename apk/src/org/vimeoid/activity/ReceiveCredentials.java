@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vimeoid;
+package org.vimeoid.activity;
 
 import android.app.Activity;
 import android.net.Uri;

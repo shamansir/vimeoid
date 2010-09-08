@@ -1,4 +1,4 @@
-package org.vimeoid;
+package org.vimeoid.connection;
 
 import java.io.IOException;
 
@@ -6,10 +6,8 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.vimeoid.connection.JsonObjectsCursor;
-import org.vimeoid.connection.JsonOverHttp;
-import org.vimeoid.connection.VimeoApi;
-import org.vimeoid.connection.VimeoApi.ApiUrlInfo;
+
+import org.vimeoid.connection.VimeoApi.ApiCallInfo;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -86,15 +84,15 @@ public class VimeoSimpleApiProvider extends ContentProvider {
             throw new UnsupportedOperationException("SQL Where-selections are not supported in VimeoSimpleApiProvider, please use URI to filter the selection query");
         if (sortOrder != null) throw new UnsupportedOperationException("SQL-styled sorting is not supported in VimeoSimpleApiProvider, please use URI parameters to specify sorting order (if supported by the method)");
         if (projection == null) throw new IllegalArgumentException("Please specify projection, at least empty one"); 
-        final ApiUrlInfo apiUrlInfo = VimeoApi.resolveUriForSimpleApi(contentUri); 
+        final ApiCallInfo apiCallInfo = VimeoApi.resolveUriForSimpleApi(contentUri); 
         try {
-            if (apiUrlInfo.multipleResult) {
-                final JSONArray jsonArr = JsonOverHttp.use().askForArray(apiUrlInfo.apiFullUrl);
-                return new JsonObjectsCursor(jsonArr, projection);
+            if (apiCallInfo.multipleResult) {
+                final JSONArray jsonArr = JsonOverHttp.use().askForArray(apiCallInfo.fullCallUrl);
+                return new JsonObjectsCursor(jsonArr, projection, apiCallInfo);
             } else {
-                final JSONObject jsonObj = JsonOverHttp.use().askForObject(apiUrlInfo.apiFullUrl);
-                return new JsonObjectsCursor(jsonObj, projection);
-            }
+                final JSONObject jsonObj = JsonOverHttp.use().askForObject(apiCallInfo.fullCallUrl);
+                return new JsonObjectsCursor(jsonObj, projection, apiCallInfo);
+            }            
         } catch (ClientProtocolException cpe) {
             Log.e(TAG, "Client protocol exception" + cpe.getLocalizedMessage());
             cpe.printStackTrace();
