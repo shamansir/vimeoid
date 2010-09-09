@@ -71,7 +71,6 @@ public class Videos extends ListActivity {
         listView.setItemsCanFocus(true);                    
         listView.setEmptyView(getLayoutInflater().inflate(R.layout.item_list_empty, null));        
 
-        // TODO: use onScrollListener instead of footerView
         footerView = getLayoutInflater().inflate(R.layout.item_footer_load_more, null);
         listView.addFooterView(footerView);
         
@@ -81,9 +80,12 @@ public class Videos extends ListActivity {
         progressBar.setVisibility(View.GONE);           
                 
         this.adapter = new VideosListAdapter(this, getLayoutInflater());
-        setListAdapter(adapter);        
+        setListAdapter(adapter);
         
-        queryMoreItems(getIntent().getData(), adapter, Video.SHORT_EXTRACT_PROJECTION);
+        final Uri contentUri = getIntent().getData();
+        setTitle(VimeoProvider.getCallDescription(VimeoProvider.collectCallInfo(contentUri)));
+        
+        queryMoreItems(contentUri, adapter, Video.SHORT_EXTRACT_PROJECTION);
         
     }
     

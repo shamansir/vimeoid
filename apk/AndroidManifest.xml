@@ -9,13 +9,32 @@
         <!-- <activity android:label="@string/app_name" android:name="LauncherActivity"
                        android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">  -->
         <activity android:label="@string/app_name" 
-                  android:name=".activity.Welcome">
+                  android:name=".activity.Welcome"
+                  android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:label="@string/app_name" 
+                  android:name=".activity.ReceiveCredentials">
+            <intent-filter>  
+                <action android:name="android.intent.action.VIEW"></action>  
+                <category android:name="android.intent.category.DEFAULT"></category>  
+                <category android:name="android.intent.category.BROWSABLE"></category>  
+                <data android:scheme="vimeoid" android:host="oauth.done"></data>  
+            </intent-filter>             
+        </activity>        
+        <activity android:label="Video"
+                  android:name=".activity.guest.item.Video">
+            <intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="org.vimeoid.action.EDIT_NOTE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.vimeo.video" />
+            </intent-filter>
+        </activity>
+        <activity android:label="Videos"
                   android:name=".activity.guest.list.Videos">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -28,25 +47,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="vnd.android.cursor.item/vnd.vimeo.video" />
             </intent-filter>
-        </activity>
-        <activity android:label="@string/app_name" 
-                  android:name=".activity.ReceiveCredentials">
-            <intent-filter>  
-                <action android:name="android.intent.action.VIEW"></action>  
-                <category android:name="android.intent.category.DEFAULT"></category>  
-                <category android:name="android.intent.category.BROWSABLE"></category>  
-                <data android:scheme="vimeoid" android:host="oauth.done"></data>  
-            </intent-filter>             
         </activity>        
-        <activity android:name=".activity.guest.item.Video" 
-                  android:label="@string/app_name">
-            <intent-filter android:label="@string/app_name">
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="org.vimeoid.action.EDIT_NOTE" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="vnd.android.cursor.item/vnd.vimeo.video" />
-            </intent-filter>
-        </activity>
     </application>    
     <uses-sdk android:minSdkVersion="4" />
     <uses-permission android:name="android.permission.INTERNET" />

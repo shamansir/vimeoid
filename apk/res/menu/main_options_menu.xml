@@ -6,7 +6,7 @@
              android:alphabeticShortcut="r"
              android:numericShortcut="1"             
              android:title="Refresh" />             
-        <item android:id="@+id/menu_Preferences"        
+        <item android:id="@+id/menu_Preferences"       
              android:orderInCategory="2"
              android:alphabeticShortcut="p"
              android:numericShortcut="2"             

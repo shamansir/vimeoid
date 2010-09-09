@@ -24,11 +24,11 @@
     <linearGradient
        id="linearGradient3662">
       <stop
-         style="stop-color:#5099d0;stop-opacity:1;"
+         style="stop-color:#50add9;stop-opacity:1;"
          offset="0"
          id="stop3664" />
       <stop
-         style="stop-color:#0086c9;stop-opacity:0.34782609;"
+         style="stop-color:#003e7a;stop-opacity:1;"
          offset="1"
          id="stop3666" />
     </linearGradient>
@@ -93,8 +93,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.96053213"
-     inkscape:cx="407.23685"
-     inkscape:cy="318.55921"
+     inkscape:cx="252.63505"
+     inkscape:cy="568.42071"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -127,7 +127,10 @@
        width="480"
        height="800"
        x="0"
-       y="252.36217" />
+       y="252.36217"
+       inkscape:export-filename="/home/shamansir/Workspace/vimeoid/apk/res/drawable-hdpi/welcome.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
     <path
        sodipodi:type="arc"
        style="fill:#ffdc44;fill-opacity:1;fill-rule:nonzero;stroke:none"

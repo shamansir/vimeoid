@@ -24,11 +24,11 @@
     <linearGradient
        id="linearGradient3662">
       <stop
-         style="stop-color:#5099d0;stop-opacity:1;"
+         style="stop-color:#003e7a;stop-opacity:1;"
          offset="0"
          id="stop3664" />
       <stop
-         style="stop-color:#0086c9;stop-opacity:0.34782609;"
+         style="stop-color:#50add9;stop-opacity:1;"
          offset="1"
          id="stop3666" />
     </linearGradient>
@@ -65,8 +65,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.95"
-     inkscape:cx="3.6842105"
-     inkscape:cy="155.78947"
+     inkscape:cx="123.25976"
+     inkscape:cy="157.52632"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -116,7 +116,7 @@
        style="fill:#ffffff;fill-opacity:0.93641621" />
     <text
        xml:space="preserve"
-       style="font-size:26.39880370999999926px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#00004d;fill-opacity:0.53179193;stroke:none;font-family:Droid Sans;-inkscape-font-specification:Droid Sans"
+       style="font-size:26.39880370999999926px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#00384b;fill-opacity:1;stroke:none;font-family:Droid Sans;-inkscape-font-specification:Droid Sans"
        x="152.7644"
        y="762.02844"
        id="text3911"><tspan
@@ -152,8 +152,8 @@
        sodipodi:cy="277.89474"
        sodipodi:rx="30.526316"
        sodipodi:ry="30.526316"
-       d="m 127.36842,277.89474 c 0,16.85922 -13.6671,30.52632 -30.526318,30.52632 -16.859219,0 -30.526316,-13.6671 -30.526316,-30.52632 0,-16.85921 13.667097,-30.52631 30.526316,-30.52631 16.859218,0 30.526318,13.6671 30.526318,30.52631 z"
-       transform="translate(0,572.36218)" />
+       d="m 127.36842,277.89474 a 30.526316,30.526316 0 1 1 -61.052634,0 30.526316,30.526316 0 1 1 61.052634,0 z"
+       transform="translate(-7.3684211,578.67797)" />
     <path
        sodipodi:type="arc"
        style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
