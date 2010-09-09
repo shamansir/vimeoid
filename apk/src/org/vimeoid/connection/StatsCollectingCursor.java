@@ -3,8 +3,6 @@
  */
 package org.vimeoid.connection;
 
-import org.vimeoid.connection.VimeoApi.ApiCallInfo;
-
 import android.database.AbstractCursor;
 
 /**

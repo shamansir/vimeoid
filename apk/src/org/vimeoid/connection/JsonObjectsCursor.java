@@ -8,7 +8,6 @@ import java.util.Arrays;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.vimeoid.connection.VimeoApi.ApiCallInfo;
 
 import android.util.Log;
 

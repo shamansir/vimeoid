@@ -19,7 +19,7 @@ package org.vimeoid.dto.simple;
  */
 public class Action {
     
-    /* public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoSimpleApiProvider.AUTHORITY +
+    /* public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoProvider.AUTHORITY +
                                                                    "/actions"); */
     
     public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.vimeo.action";

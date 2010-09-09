@@ -25,8 +25,8 @@ import org.vimeoid.R;
 import org.vimeoid.adapter.EasyCursorsAdapter;
 import org.vimeoid.adapter.unknown.VideosListAdapter;
 import org.vimeoid.connection.VimeoApi;
-import org.vimeoid.connection.VimeoSimpleApiProvider;
 import org.vimeoid.connection.advanced.Methods;
+import org.vimeoid.connection.simple.VimeoProvider;
 import org.vimeoid.dto.simple.Video;
 import org.vimeoid.util.Dialogs;
 
@@ -40,7 +40,7 @@ import org.vimeoid.util.Dialogs;
  * <code>ListForUnknownUser</code>
  *
  * <p>Activity that shows a list of Vimeo Items (Videos, Users, Channels, Albums ...) to a user
- * that has not logged in (came using {@link VimeoSimpleApiProvider} or started 
+ * that has not logged in (came using {@link VimeoProvider} or started 
  * application without attaching it to account</p>
  *
  * @author Ulric Wilfred <shaman.sir@gmail.com>
@@ -90,7 +90,7 @@ public class ListForUnknownUser extends ListActivity {
         this.adapter = new VideosListAdapter(this, getLayoutInflater());
         setListAdapter(adapter);        
         
-        queryMoreItems(Uri.withAppendedPath(VimeoSimpleApiProvider.BASE_URI, "/channel/staffpicks/videos"), 
+        queryMoreItems(Uri.withAppendedPath(VimeoProvider.BASE_URI, "/channel/staffpicks/videos"), 
         		       adapter, Video.SHORT_EXTRACT_PROJECTION);
         
     }
@@ -107,7 +107,7 @@ public class ListForUnknownUser extends ListActivity {
             // getListView().getItemAtPosition()            
             
             Uri itemUri = Uri.withAppendedPath(
-                    VimeoSimpleApiProvider.BASE_URI, "/video/" + id);
+                    VimeoProvider.BASE_URI, "/video/" + id);
             Log.d(TAG, "Video with id " + id + " selected");
             
             String action = getIntent().getAction();
@@ -129,7 +129,7 @@ public class ListForUnknownUser extends ListActivity {
                     Log.d(TAG, "Loading next page...");
                     
                     final Uri nextPageUri = Uri.parse(
-                            VimeoSimpleApiProvider.BASE_URI + "/channel/staffpicks/videos" + "?page=" + (++pageNum));
+                            VimeoProvider.BASE_URI + "/channel/staffpicks/videos" + "?page=" + (++pageNum));
                     
                     queryMoreItems(nextPageUri, adapter, Video.SHORT_EXTRACT_PROJECTION);
                     

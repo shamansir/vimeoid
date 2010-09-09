@@ -19,7 +19,7 @@ package org.vimeoid.dto.simple;
  */
 public class ChannelInfo {
     
-    /* public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoSimpleApiProvider.AUTHORITY +
+    /* public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoProvider.AUTHORITY +
                                                                    "/channels"); */
 
     public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.vimeo.channel";

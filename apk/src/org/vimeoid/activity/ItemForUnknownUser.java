@@ -3,7 +3,7 @@
  */
 package org.vimeoid.activity;
 
-import org.vimeoid.connection.VimeoSimpleApiProvider;
+import org.vimeoid.connection.simple.VimeoProvider;
 
 import android.app.Activity;
 
@@ -16,7 +16,7 @@ import android.app.Activity;
  * <code>ItemForUnknownUser</code>
  *
  * <p>Activity that shows a Vimeo Item (Video, User, Channel, Album ...) to a user
- * that has not logged in (came using {@link VimeoSimpleApiProvider} or started 
+ * that has not logged in (came using {@link VimeoProvider} or started 
  * application without attaching it to account</p>
  *
  * @author Ulric Wilfred <shaman.sir@gmail.com>

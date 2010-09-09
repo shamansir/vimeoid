@@ -83,4 +83,19 @@ public class Utils {
         return ((duration - remainder) / 60) + ":" + ((remainder < 10) ? ("0" + remainder) : remainder); 
     }
     
+    public static String validateShortcutOrId(final String shortcut) { 
+        if (!shortcut.matches("^[\\d\\w_]+$")) throw new IllegalArgumentException("Not correct schortcut or _ID: " + shortcut);
+        return shortcut;
+    }
+    
+    public static String validateId(final String id) { 
+        if (!id.matches("^\\d+$")) throw new IllegalArgumentException("Not correct _ID: " + id);
+        return id;
+    }
+    
+    public static String validateActionName(String action) {
+        if (!action.matches("^[\\w_]+$")) throw new IllegalArgumentException("Not correct action name: " + action);
+        return action;
+    }    
+    
 }

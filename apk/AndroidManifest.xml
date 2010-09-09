@@ -4,7 +4,7 @@
                         android:versionCode="1"
                         android:versionName="1.0">
     <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <provider android:name=".connection.VimeoSimpleApiProvider"
+        <provider android:name=".connection.simple.VimeoProvider"
                   android:authorities="org.vimeoid.simple.provider" />
         <!-- <activity android:label="@string/app_name" android:name="LauncherActivity"
                   android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">  -->

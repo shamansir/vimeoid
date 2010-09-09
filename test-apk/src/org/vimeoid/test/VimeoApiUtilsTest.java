@@ -6,9 +6,9 @@ package org.vimeoid.test;
 import junit.framework.Assert;
 
 import org.vimeoid.VimeoConfig;
+import org.vimeoid.connection.ApiCallInfo;
 import org.vimeoid.connection.ContentType;
-import org.vimeoid.connection.VimeoApi;
-import org.vimeoid.connection.VimeoSimpleApiProvider;
+import org.vimeoid.connection.simple.VimeoProvider;
 
 import android.net.Uri;
 import android.net.Uri.Builder;
@@ -36,7 +36,7 @@ public class VimeoApiUtilsTest extends AndroidTestCase {
     private static final String[] testChannels = {"test_channel", "channel", "channel601", "4320193"};
     private static final String[] testAlbums = {"18562", "1203", "3373626198829", "0100101"};
     
-    final Builder builder = new Uri.Builder().scheme("content").authority(VimeoSimpleApiProvider.AUTHORITY);    
+    final Builder builder = new Uri.Builder().scheme("content").authority(VimeoProvider.AUTHORITY);    
     
     public void testSimpleApiUserMethods() throws Throwable {
         
@@ -222,9 +222,9 @@ public class VimeoApiUtilsTest extends AndroidTestCase {
     
     /**
      * Tests if <code>VimeoApi</code> produces the correct Vimeo API Call URL 
-     * for passed <code>actualUri</code>. Also tests <code>VimeoSimpleApiProvider</code> for 
+     * for passed <code>actualUri</code>. Also tests <code>VimeoProvider</code> for 
      * correctness on returned content type (<code>expectedResultType</code>) 
-     * to conform with API Call result and tests if <code>VimeoSimpleApiProvider</code> says
+     * to conform with API Call result and tests if <code>VimeoProvider</code> says
      * true about how much elements returns the call
      * 
      * @param expectedVimeoApiUrl the expected dynamic segment of resulting Vimeo API Call URL that located <code>http://vimeo.com/api/v2/[::here::].json</code> 
@@ -238,16 +238,18 @@ public class VimeoApiUtilsTest extends AndroidTestCase {
                                                  final Uri actualUri) {
         final String expectedUrl = VimeoConfig.VIMEO_SIMPLE_API_CALL_PREFIX + '/' +
                                    expectedVimeoApiUrl + '.' + 
-                                   VimeoApi.RESPONSE_FORMAT;
+                                   VimeoProvider.RESPONSE_FORMAT;
         
-        Assert.assertEquals(expectedUrl, VimeoApi.resolveUriForSimpleApi(actualUri).fullCallUrl.toString());
-        Assert.assertEquals(expectedResultType, VimeoApi.getReturnedContentType(actualUri));
-        Assert.assertEquals(multipleResultExpected, VimeoApi.getReturnsMultipleResults(actualUri));
+        final ApiCallInfo callInfo = VimeoProvider.collectCallInfo(actualUri);
+        
+        Assert.assertEquals(expectedUrl, VimeoProvider.getFullApiUrl(callInfo.apiUrlPart).toString());
+        Assert.assertEquals(expectedResultType, VimeoProvider.getReturnedContentType(actualUri));
+        Assert.assertEquals(multipleResultExpected, VimeoProvider.getReturnsMultipleResults(actualUri));
     }
     
     protected static void testFailsToParse(final Uri uri) {
         try {
-            VimeoApi.resolveUriForSimpleApi(uri);
+            VimeoProvider.collectCallInfo(uri);
             Assert.fail("must throw exception for URI " + uri);
         } catch (IllegalArgumentException ieae) { /* pass */ }
     }
