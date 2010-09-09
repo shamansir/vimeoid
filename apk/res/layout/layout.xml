@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent"
+             android:background="@drawable/welcome">
+     <Button android:id="@+id/loginButton"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_margin="50px"
+             android:text="Login" />
+     <Button android:id="@+id/guestButton"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:padding="3px"     
+             android:text="Guest" />             
+</FrameLayout>
