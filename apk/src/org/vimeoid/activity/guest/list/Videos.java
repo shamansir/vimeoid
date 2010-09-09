@@ -61,7 +61,7 @@ public class Videos extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
                 
-        Log.d(TAG, "Testing is Vimeo site accessible");
+        Log.d(TAG, "Starting videos view");
         
         setContentView(R.layout.view_list_unknown_user);
 
@@ -79,16 +79,11 @@ public class Videos extends ListActivity {
         
         final View progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);           
-        
-        // TODO: Load Uri from passed intent, not hardcode
-        
-        // TODO: check if already attached to vimeo, so just start KnownListView
-        
+                
         this.adapter = new VideosListAdapter(this, getLayoutInflater());
         setListAdapter(adapter);        
         
-        queryMoreItems(Uri.withAppendedPath(VimeoProvider.BASE_URI, "/channel/staffpicks/videos"), 
-        		       adapter, Video.SHORT_EXTRACT_PROJECTION);
+        queryMoreItems(getIntent().getData(), adapter, Video.SHORT_EXTRACT_PROJECTION);
         
     }
     

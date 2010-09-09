@@ -3,14 +3,16 @@
              android:layout_width="fill_parent"
              android:layout_height="fill_parent"
              android:background="@drawable/welcome">
-     <Button android:id="@+id/loginButton"
+     <Button android:id="@+id/enterButton"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
-             android:layout_margin="50px"
-             android:text="Login" />
+             android:layout_gravity="bottom|left"
+             android:layout_margin="5px"           
+             android:text="Enter" />
      <Button android:id="@+id/guestButton"
-             android:layout_width="wrap_content"
+             android:layout_width="wrap_content"             
              android:layout_height="wrap_content"
-             android:padding="3px"     
+             android:layout_gravity="bottom|right"
+             android:layout_margin="5px"
              android:text="Guest" />             
 </FrameLayout>
