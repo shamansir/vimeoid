@@ -79,7 +79,8 @@ public class Utils {
     }    
     
     public static String adaptDuration(long duration) {
-        return (duration - (duration % 60)) + ":" + (duration % 60); 
+    	final long remainder = duration % 60; 
+        return ((duration - remainder) / 60) + ":" + ((remainder < 10) ? ("0" + remainder) : remainder); 
     }
     
 }

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-        <color name="item_thumb_bg">#ff333333</color>     
+        <color name="item_thumb_bg">#ff333333</color>
+        <color name="item_title">#ffdddddd</color>
+        <color name="item_subtitle">#ff999999</color>
+        <color name="item_param">#ffdddddd</color>
+        <color name="item_info">#ffaaaaaa</color>
+        <color name="item_tags">#ff663333</color>
+        <color name="duration_bg">#33666666</color>
         <color name="load_more_default_text">#ff999999</color> 
         <color name="load_more_disabled_text">#ff666666</color>
         <color name="load_more_default_bg">#00333333</color>

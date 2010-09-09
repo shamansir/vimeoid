@@ -11,25 +11,31 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
+        public static final int duration_bg=0x7f040006;
+        public static final int item_info=0x7f040004;
+        public static final int item_param=0x7f040003;
+        public static final int item_subtitle=0x7f040002;
+        public static final int item_tags=0x7f040005;
         public static final int item_thumb_bg=0x7f040000;
-        public static final int load_more_default_bg=0x7f040003;
-        public static final int load_more_default_text=0x7f040001;
-        public static final int load_more_disabled_bg=0x7f040004;
-        public static final int load_more_disabled_text=0x7f040002;
+        public static final int item_title=0x7f040001;
+        public static final int load_more_default_bg=0x7f040009;
+        public static final int load_more_default_text=0x7f040007;
+        public static final int load_more_disabled_bg=0x7f04000a;
+        public static final int load_more_disabled_text=0x7f040008;
     }
     public static final class dimen {
-        public static final int info_font_size=0x7f05000a;
+        public static final int item_info_font_size=0x7f05000a;
+        public static final int item_param_font_size=0x7f050009;
+        public static final int item_subtitle_font_size=0x7f050008;
+        public static final int item_text_padding=0x7f05000b;
         public static final int item_thumb_height=0x7f050002;
         public static final int item_thumb_width=0x7f050001;
+        public static final int item_title_font_size=0x7f050007;
         public static final int load_more_height=0x7f050006;
-        public static final int param_font_size=0x7f050009;
         public static final int single_thumb_height=0x7f050004;
         public static final int single_thumb_width=0x7f050003;
         public static final int small_progress_side=0x7f050005;
-        public static final int subtitle_font_size=0x7f050008;
         public static final int tabbar_height=0x7f050000;
-        public static final int text_padding_in_list=0x7f05000b;
-        public static final int title_font_size=0x7f050007;
     }
     public static final class drawable {
         public static final int ajax_loader_bar_progress=0x7f020000;

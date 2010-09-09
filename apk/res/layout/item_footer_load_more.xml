@@ -12,9 +12,9 @@
     <TextView android:id="@+id/itemsListFooterText"    
               android:layout_width="fill_parent" 
               android:layout_height="fill_parent" 
-              android:padding="@dimen/text_padding_in_list"
+              android:padding="@dimen/item_text_padding"
               android:text="Load more..."
-              android:textSize="@dimen/title_font_size"              
+              android:textSize="@dimen/item_title_font_size"              
               android:textColor="@color/load_more_default_text"
               android:gravity="center_vertical" />
 </LinearLayout>
