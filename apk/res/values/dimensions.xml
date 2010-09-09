@@ -6,10 +6,11 @@
     <dimen name="single_thumb_width">200dp</dimen>    
     <dimen name="single_thumb_height">150dp</dimen>
     <dimen name="small_progress_side">32dp</dimen>
+    <dimen name="small_progressbar_height">36dp</dimen>    
     <dimen name="load_more_height">50dp</dimen>
     <dimen name="item_title_font_size">18sp</dimen>
     <dimen name="item_subtitle_font_size">14sp</dimen>
     <dimen name="item_param_font_size">10sp</dimen>
-    <dimen name="item_info_font_size">12sp</dimen>
+    <dimen name="item_info_font_size">11sp</dimen>
     <dimen name="item_text_padding">2px</dimen>    
 </resources>

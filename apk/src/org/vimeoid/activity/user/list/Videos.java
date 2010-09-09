@@ -1,4 +1,4 @@
-package org.vimeoid.activity;
+package org.vimeoid.activity.user.list;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +28,7 @@ import android.widget.SimpleAdapter;
  * <dt>Package:</dt> <dd>org.vimeoid</dd>
  * </dl>
  *
- * <code>ListForKnownUser</code>
+ * <code>Videos</code>
  *
  * <p>Activity that shows a Vimeo Items list (Video, User, Channel, Album ...) to a user
  * that has logged in</p>
@@ -39,7 +39,7 @@ import android.widget.SimpleAdapter;
  */
 
 // TODO: for sync use SyncAdapter on API Level 7
-public class ListForKnownUser extends ListActivity {
+public class Videos extends ListActivity {
     
     /** Called when the activity is first created. */
     @Override
@@ -67,7 +67,7 @@ public class ListForKnownUser extends ListActivity {
             
             @Override
             public void onClick(View v) {
-                setListAdapter(new SimpleAdapter(ListForKnownUser.this, callStubTagsList(),
+                setListAdapter(new SimpleAdapter(Videos.this, callStubTagsList(),
                         R.layout.item_tag, 
                         new String[] { TagInfo.FieldsKeys.NAME, 
                                        TagInfo.FieldsKeys.USAGE_COUNT },

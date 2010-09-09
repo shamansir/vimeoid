@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import oauth.signpost.exception.OAuthException;
@@ -23,7 +22,7 @@ import oauth.signpost.exception.OAuthException;
 import org.json.JSONObject;
 import org.vimeoid.R;
 import org.vimeoid.adapter.EasyCursorsAdapter;
-import org.vimeoid.adapter.unknown.VideosListAdapter;
+import org.vimeoid.adapter.guest.VideosListAdapter;
 import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.connection.simple.VimeoProvider;
@@ -37,7 +36,7 @@ import org.vimeoid.util.Dialogs;
  * <dt>Package:</dt> <dd>org.vimeoid</dd>
  * </dl>
  *
- * <code>ListForUnknownUser</code>
+ * <code>Videos</code>
  *
  * <p>Activity that shows a list of Vimeo Items (Videos, Users, Channels, Albums ...) to a user
  * that has not logged in (came using {@link VimeoProvider} or started 
@@ -47,9 +46,9 @@ import org.vimeoid.util.Dialogs;
  * @date Sep 3, 2010 11:58:57 PM 
  *
  */
-public class ListForUnknownUser extends ListActivity {
+public class Welcome extends ListActivity {
     
-    public static final String TAG = "ListForUnknownUser";
+    public static final String TAG = "Videos";
     
     public static final int MAX_NUMBER_OF_PAGES = 3; 
     
@@ -80,7 +79,7 @@ public class ListForUnknownUser extends ListActivity {
         
         listView.setTextFilterEnabled(true);  
         
-        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        final View progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);           
         
         // TODO: Load Uri from passed intent, not hardcode
@@ -281,7 +280,7 @@ public class ListForUnknownUser extends ListActivity {
         // TODO: show progress as a dialog
         
         private final String[] projection;
-        private final ProgressBar progressBar;
+        private final View progressBar;
         private final TextView footerText;
         private final EasyCursorsAdapter<?> adapter;
         
@@ -289,7 +288,7 @@ public class ListForUnknownUser extends ListActivity {
             if (adapter == null) throw new IllegalArgumentException("Adapter must not be null");
             this.adapter = adapter;
             this.projection = projection;
-            this.progressBar = (ProgressBar) findViewById(R.id.progressBar);   
+            this.progressBar = findViewById(R.id.progressBar);   
             this.footerText = (TextView) footerView.findViewById(R.id.itemsListFooterText);
         }
         

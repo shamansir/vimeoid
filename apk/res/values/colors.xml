@@ -7,6 +7,7 @@
         <color name="item_info">#ffaaaaaa</color>
         <color name="item_tags">#ff663333</color>
         <color name="duration_bg">#33666666</color>
+        <color name="progress_bg">#99333333</color>        
         <color name="load_more_default_text">#ff999999</color> 
         <color name="load_more_disabled_text">#ff666666</color>
         <color name="load_more_default_bg">#00333333</color>

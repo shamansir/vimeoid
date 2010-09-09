@@ -20,7 +20,7 @@ import android.test.AndroidTestCase;
  * <dt>Package:</dt> <dd>org.vimeoid.test</dd>
  * </dl>
  *
- * <code>VimeoApiUtilsTest</code>
+ * <code>VimeoProviderTest</code>
  *
  * <p>Description</p>
  *
@@ -28,7 +28,7 @@ import android.test.AndroidTestCase;
  * @date Aug 25, 2010 11:20:52 PM 
  *
  */
-public class VimeoApiUtilsTest extends AndroidTestCase {
+public class VimeoProviderTest extends AndroidTestCase {
     
     private static final String[] testUsers = {"foo_man", "barman", "user3801", "17318"};
     private static final String[] testVideos = {"236372", "371445", "38529913", "39203562" };

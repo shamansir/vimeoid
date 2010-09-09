@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.vimeoid.adapter.unknown;
+package org.vimeoid.adapter.guest;
 
 import org.vimeoid.R;
 import org.vimeoid.adapter.EasyCursorsAdapter;
@@ -21,7 +21,7 @@ import android.widget.TextView;
 /**
  * <dl>
  * <dt>Project:</dt> <dd>vimeoid</dd>
- * <dt>Package:</dt> <dd>org.vimeoid.adapter.unknown</dd>
+ * <dt>Package:</dt> <dd>org.vimeoid.adapter.guest</dd>
  * </dl>
  *
  * <code>VideosListAdapter</code>

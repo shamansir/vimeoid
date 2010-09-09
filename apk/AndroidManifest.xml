@@ -9,7 +9,7 @@
         <!-- <activity android:label="@string/app_name" android:name="LauncherActivity"
                   android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">  -->
         <activity android:label="@string/app_name" 
-                  android:name=".activity.ListForUnknownUser">
+                  android:name=".activity.Welcome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -31,16 +31,16 @@
                 <data android:scheme="vimeo" />            
             </intent-filter> -->            
         </activity>
+        <!-- 
         <activity android:name=".activity.ItemForUnknownUser" 
                   android:label="@string/app_name">
-            <!--  android:configChanges="keyboardHidden|orientation"> -->
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="org.vimeoid.action.EDIT_NOTE" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="vnd.android.cursor.item/vnd.vimeo.video" />
             </intent-filter>
-        </activity>
+        </activity>  -->
         <activity android:label="@string/app_name" 
                   android:name=".activity.ReceiveCredentials">
             <intent-filter>  

@@ -12,7 +12,10 @@
                   android:layout_width="fill_parent"
                   android:layout_height="@dimen/item_thumb_height"
                   android:layout_gravity="left"
-                  android:padding="@dimen/item_text_padding">
+                  android:paddingRight="@dimen/item_text_padding"
+                  android:paddingTop="@dimen/item_text_padding"
+                  android:paddingBottom="@dimen/item_text_padding"
+                  android:paddingLeft="5px">
 	    <TextView android:id="@+id/videoItemTitle"
                   android:layout_width="fill_parent" 
 	              android:layout_height="wrap_content" 

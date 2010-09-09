@@ -3,11 +3,14 @@
     	android:orientation="vertical"
     	android:layout_width="fill_parent"
     	android:layout_height="fill_parent">
-    <ProgressBar android:id="@+id/progressBar" 
-                 android:layout_width="@dimen/small_progress_side"
-                 android:layout_height="@dimen/small_progress_side"
-                 android:layout_gravity="center"
-                 android:layout_margin="3dp" />
+    <LinearLayout android:id="@+id/progressBar" 
+                  android:layout_width="fill_parent"
+                  android:layout_height="@dimen/small_progressbar_height"
+                  android:padding="2px"
+                  android:background="@color/progress_bg">
+	    <ProgressBar android:layout_width="@dimen/small_progress_side"
+	                 android:layout_height="@dimen/small_progress_side" />
+    </LinearLayout>
 	<ListView android:id="@android:id/list"
 	          android:layout_width="fill_parent"
 	          android:layout_height="0dp"
