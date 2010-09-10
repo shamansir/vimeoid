@@ -46,7 +46,7 @@ public class Videos extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        setContentView(R.layout.view_list_known_user);
+        setContentView(R.layout.generic_list);
         
         // TODO: show loading bar, support API pages        
         
@@ -61,7 +61,7 @@ public class Videos extends ListActivity {
                 new int[] { R.id.videoItemTitle, R.id.videoItemAuthor,
                             R.id.videoItemDuration, R.id.videoItemTags }));
         
-        Button tagsButton = (Button) findViewById(R.id.myLikesButton);
+        /* Button tagsButton = (Button) findViewById(R.id.myLikesButton);
         
         tagsButton.setOnClickListener(new OnClickListener() {
             
@@ -75,7 +75,7 @@ public class Videos extends ListActivity {
                 onContentChanged();  
             }
             
-        });
+        }); */
         
     }
     

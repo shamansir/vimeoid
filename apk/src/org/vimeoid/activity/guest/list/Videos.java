@@ -62,7 +62,7 @@ public class Videos extends ListActivity {
                 
         Log.d(TAG, "Starting videos view");
         
-        setContentView(R.layout.view_list_unknown_user);
+        setContentView(R.layout.generic_list);
 
         final ListView listView = getListView();
         
