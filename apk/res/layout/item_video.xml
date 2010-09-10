@@ -60,7 +60,7 @@
 		             <TextView android:id="@+id/videoItemNumOfLikes"
 		                       android:layout_width="wrap_content" 
 		                       android:layout_height="fill_parent" 
-		                       android:layout_marginLeft="2px"
+		                       android:layout_marginLeft="3px"
 		                       android:text="likes"
 		                       android:textStyle="bold"	                       
 		                       android:textSize="@dimen/item_info_font_size"
@@ -68,7 +68,8 @@
 	             </LinearLayout>
                  <LinearLayout android:orientation="horizontal"
                                android:layout_width="wrap_content"
-                               android:layout_height="fill_parent">
+                               android:layout_height="fill_parent"
+                               android:layout_marginLeft="3px">
                      <ImageView android:layout_width="wrap_content" 
                                 android:layout_height="fill_parent"
                                 android:src="@drawable/play_small"
@@ -77,7 +78,7 @@
                      <TextView android:id="@+id/videoItemNumOfPlays"
                                android:layout_width="wrap_content" 
                                android:layout_height="fill_parent" 
-                               android:layout_marginLeft="2px"
+                               android:layout_marginLeft="3px"
                                android:text="plays"
                                android:textStyle="bold"                        
                                android:textSize="@dimen/item_info_font_size"
@@ -85,7 +86,8 @@
                  </LinearLayout>
                  <LinearLayout android:orientation="horizontal"
                                android:layout_width="wrap_content"
-                               android:layout_height="fill_parent">
+                               android:layout_height="fill_parent"
+                               android:layout_marginLeft="3px">
                      <ImageView android:layout_width="wrap_content" 
                                 android:layout_height="fill_parent"
                                 android:src="@drawable/comment_small"
@@ -94,7 +96,7 @@
                      <TextView android:id="@+id/videoItemNumOfComments"
                                android:layout_width="wrap_content" 
                                android:layout_height="fill_parent" 
-                               android:layout_marginLeft="2px"
+                               android:layout_marginLeft="3px"
                                android:text="comments"
                                android:textStyle="bold"                        
                                android:textSize="@dimen/item_info_font_size"
