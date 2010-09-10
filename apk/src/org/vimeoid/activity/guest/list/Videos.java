@@ -14,12 +14,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import org.vimeoid.R;
 import org.vimeoid.adapter.EasyCursorsAdapter;
 import org.vimeoid.adapter.guest.VideosListAdapter;
+import org.vimeoid.connection.ApiCallInfo;
 import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.simple.VimeoProvider;
 import org.vimeoid.dto.simple.Video;
@@ -80,9 +82,11 @@ public class Videos extends ListActivity {
         setListAdapter(adapter);
         
         final Uri contentUri = getIntent().getData();
-        setTitle(VimeoProvider.getCallDescription(VimeoProvider.collectCallInfo(contentUri)));
+        final ApiCallInfo callInfo = VimeoProvider.collectCallInfo(contentUri);
         
-        // TODO: Use TextView to set title, disable titlebar in application
+        ((ImageView)findViewById(R.id.subjectIcon)).setImageResource(Utils.drawableByContent(callInfo.subjectType));
+        ((TextView)findViewById(R.id.subjectTitle)).setText(callInfo.subject);        
+        ((ImageView)findViewById(R.id.resultIcon)).setImageResource(Utils.drawableByContent(callInfo.resultType));
         
         queryMoreItems(contentUri, adapter, Video.SHORT_EXTRACT_PROJECTION);
         

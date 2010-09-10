@@ -6,6 +6,7 @@
         <color name="item_param">#ffdddddd</color>
         <color name="item_info">#ffaaaaaa</color>
         <color name="item_tags">#ff663333</color>
+        <color name="titlebar_bg">#99333333</color>
         <color name="duration_bg">#33666666</color>
         <color name="progress_bg">#99333333</color>        
         <color name="load_more_default_text">#ff999999</color> 

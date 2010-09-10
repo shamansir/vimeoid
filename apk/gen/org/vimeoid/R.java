@@ -11,18 +11,19 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
-        public static final int duration_bg=0x7f040006;
+        public static final int duration_bg=0x7f040007;
         public static final int item_info=0x7f040004;
         public static final int item_param=0x7f040003;
         public static final int item_subtitle=0x7f040002;
         public static final int item_tags=0x7f040005;
         public static final int item_thumb_bg=0x7f040000;
         public static final int item_title=0x7f040001;
-        public static final int load_more_default_bg=0x7f04000a;
-        public static final int load_more_default_text=0x7f040008;
-        public static final int load_more_disabled_bg=0x7f04000b;
-        public static final int load_more_disabled_text=0x7f040009;
-        public static final int progress_bg=0x7f040007;
+        public static final int load_more_default_bg=0x7f04000b;
+        public static final int load_more_default_text=0x7f040009;
+        public static final int load_more_disabled_bg=0x7f04000c;
+        public static final int load_more_disabled_text=0x7f04000a;
+        public static final int progress_bg=0x7f040008;
+        public static final int titlebar_bg=0x7f040006;
     }
     public static final class dimen {
         public static final int item_info_font_size=0x7f05000c;
@@ -37,7 +38,7 @@ public final class R {
         public static final int single_thumb_width=0x7f050003;
         public static final int small_progress_side=0x7f050006;
         public static final int small_progressbar_height=0x7f050007;
-        public static final int tabbar_height=0x7f050000;
+        public static final int titlebar_height=0x7f050000;
         public static final int video_player_height=0x7f050005;
     }
     public static final class drawable {
@@ -54,25 +55,28 @@ public final class R {
         public static final int welcome=0x7f02000a;
     }
     public static final class id {
-        public static final int enterButton=0x7f080015;
-        public static final int guestButton=0x7f080016;
+        public static final int enterButton=0x7f080018;
+        public static final int guestButton=0x7f080019;
         public static final int itemsEmptyListView=0x7f080002;
         public static final int itemsListFooterText=0x7f080001;
-        public static final int menuGroup_Main=0x7f080017;
-        public static final int menuGroup_VideoContext=0x7f08001b;
-        public static final int menu_Preferences=0x7f080019;
-        public static final int menu_Refresh=0x7f080018;
-        public static final int menu_SwitchView=0x7f08001a;
-        public static final int menu_viewAuthorInfo=0x7f08001e;
-        public static final int menu_viewInfo=0x7f08001d;
-        public static final int menu_watchLater=0x7f08001c;
+        public static final int menuGroup_Main=0x7f08001a;
+        public static final int menuGroup_VideoContext=0x7f08001e;
+        public static final int menu_Preferences=0x7f08001c;
+        public static final int menu_Refresh=0x7f08001b;
+        public static final int menu_SwitchView=0x7f08001d;
+        public static final int menu_viewAuthorInfo=0x7f080021;
+        public static final int menu_viewInfo=0x7f080020;
+        public static final int menu_watchLater=0x7f08001f;
         public static final int myAlbumsButton=0x7f08000e;
         public static final int myChannelsButton=0x7f08000f;
         public static final int myGroupsButton=0x7f080011;
         public static final int myLikesButton=0x7f080010;
         public static final int mySearchButton=0x7f080012;
         public static final int myVideosButton=0x7f08000d;
-        public static final int progressBar=0x7f080013;
+        public static final int progressBar=0x7f080016;
+        public static final int resultIcon=0x7f080015;
+        public static final int subjectIcon=0x7f080013;
+        public static final int subjectTitle=0x7f080014;
         public static final int tagItemImage=0x7f080003;
         public static final int tagItemName=0x7f080004;
         public static final int tagItemUsageCount=0x7f080005;
@@ -84,7 +88,7 @@ public final class R {
         public static final int videoItemNumOfPlays=0x7f08000a;
         public static final int videoItemTags=0x7f080008;
         public static final int videoItemTitle=0x7f080006;
-        public static final int videoPlayer=0x7f080014;
+        public static final int videoPlayer=0x7f080017;
     }
     public static final class layout {
         public static final int item_footer_load_more=0x7f030000;

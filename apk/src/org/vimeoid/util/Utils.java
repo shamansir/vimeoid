@@ -12,6 +12,8 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.vimeoid.R;
+import org.vimeoid.connection.ContentType;
 
 /**
  * <dl>
@@ -119,6 +121,10 @@ public class Utils {
     
     public static String crop(String value, int howMuch) {
         return (value.length() <= howMuch) ? value : (value.substring(0, howMuch - 3) + "...");  
+    }
+    
+    public static int drawableByContent(ContentType contentType) {
+        return R.drawable.icon;
     }
     
 }

@@ -36,7 +36,8 @@
             </intent-filter>
         </activity>
         <activity android:label="Videos"
-                  android:name=".activity.guest.list.Videos">
+                  android:name=".activity.guest.list.Videos"
+                  android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.PICK" />

@@ -3,6 +3,27 @@
     	android:orientation="vertical"
     	android:layout_width="fill_parent"
     	android:layout_height="fill_parent">
+    <LinearLayout android:orientation="horizontal"
+                  android:layout_width="fill_parent"
+                  android:layout_height="@dimen/titlebar_height"
+                  android:padding="3px"
+                  android:background="@color/titlebar_bg">
+        <ImageView android:id="@+id/subjectIcon"
+                   android:layout_width="@dimen/titlebar_height"
+                   android:layout_height="@dimen/titlebar_height" />
+        <TextView android:id="@+id/subjectTitle"
+                  android:layout_height="fill_parent"
+                  android:layout_width="wrap_content"
+                  android:layout_weight="1"
+                  android:paddingLeft="5px"                               
+                  android:gravity="center_vertical"
+                  android:textSize="@dimen/item_title_font_size"
+                  android:textColor="@color/item_title" />
+        <ImageView android:id="@+id/resultIcon"
+                   android:layout_width="@dimen/titlebar_height"
+                   android:layout_height="@dimen/titlebar_height"
+                   android:layout_gravity="right" />
+    </LinearLayout>
     <LinearLayout android:id="@+id/progressBar" 
                   android:layout_width="fill_parent"
                   android:layout_height="@dimen/small_progressbar_height"
