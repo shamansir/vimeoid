@@ -17,7 +17,6 @@ package org.vimeoid.dto.simple;
  * @date Aug 19, 2010 8:55:56 PM 
  *
  */
-//URLs are: http://vimeo.com/m/play_redirect?quality=mobile&clip_id=14294054
 public class Video {
     
     /* public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoProvider.AUTHORITY +

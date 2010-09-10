@@ -23,7 +23,7 @@ public class Methods {
         
         private static final String PREFIX = "activity."; 
         
-        public static final String happedToUser = PREFIX + "happenedToUser";
+        public static final String happenedToUser = PREFIX + "happenedToUser";
         public static final String userDid = PREFIX + "userDid";
         
     }

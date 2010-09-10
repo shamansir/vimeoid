@@ -190,11 +190,14 @@ public class Videos extends ListActivity {
         
         Log.d(TAG, "Selected context menu item for item at " + position);
         
-        // getListView().getItemAtPosition()         
+        Video video = (Video)getListView().getItemAtPosition(position);         
         
         String itemDescription;
         switch (item.getItemId()) {
-            case R.id.menu_Play: itemDescription = "Play "; break;
+            case R.id.menu_Play: {
+            	startActivity(new Intent(Intent.ACTION_VIEW).setData(VimeoApi.getPlayUri(video)));
+            	return true;
+            }
             case R.id.menu_watchLater: itemDescription = "WatchLater "; break;
             case R.id.menu_viewInfo: itemDescription = "View info "; break;
             case R.id.menu_viewAuthorInfo: itemDescription = "View author info"; break;

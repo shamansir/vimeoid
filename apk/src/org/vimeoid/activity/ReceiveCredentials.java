@@ -47,7 +47,7 @@ public class ReceiveCredentials extends Activity {
                 VimeoApi.ensureOAuthCallbackAndSaveToken(this, uri);
                 Log.d(TAG, "Checking finished");
                 
-                VimeoApi.advancedApi(Methods.activity.happedToUser, 
+                VimeoApi.advancedApi(Methods.activity.happenedToUser, 
                                      Utils.quickApiParams("user_id", "shamansir"), "activity");
             } catch (Exception e) {
                 Log.e(TAG, e.getLocalizedMessage());

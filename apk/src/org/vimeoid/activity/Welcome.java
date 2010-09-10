@@ -85,7 +85,7 @@ public class Welcome extends Activity {
     
     protected void enterAsGuest() {
         final Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.withAppendedPath(VimeoProvider.BASE_URI, "/channel/staffpicks/videos"));
+        intent.setData(Uri.withAppendedPath(VimeoProvider.BASE_URI, "channel/staffpicks/videos"));
         startActivity(intent);        
     }
        

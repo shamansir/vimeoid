@@ -31,6 +31,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.VimeoConfig;
+import org.vimeoid.connection.VimeoVideoRunner.VideoLinkRequestException;
+import org.vimeoid.dto.simple.Video;
 
 /**
  * <dl>
@@ -176,6 +178,20 @@ public class VimeoApi {
             this.message = message;
         }
         
-    }    
+    }
+
+	public static Uri getPlayUri(Video video) {
+		//URLs are: http://vimeo.com/m/play_redirect?quality=mobile&clip_id=14294054
+		//Log.d(TAG, "Uri for video " + video.title + ": " + VIDEO_STREAM_URL_PREFIX + "?quality=mobile&clip_id=" + video.id);
+		// http://api.vimeo.com/moogaloop_api.swf?oauth_key=key&clip_id=13214161&width=480&height=270&fullscreen=0&autoplay=1
+		// return Uri.parse(VIDEO_STREAM_URL_PREFIX + "?quality=mobile&clip_id=" + video.id + "&oauth_key=" + VimeoConfig.VIMEO_API_KEY);
+		
+		try {
+			return VimeoVideoRunner.askForVideoUri(video);
+		} catch (VideoLinkRequestException e) {			
+			e.printStackTrace();
+			return null;
+		}
+	}    
     
 }
