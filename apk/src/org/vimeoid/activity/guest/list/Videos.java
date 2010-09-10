@@ -195,7 +195,7 @@ public class Videos extends ListActivity {
         String itemDescription;
         switch (item.getItemId()) {
             case R.id.menu_Play: {
-            	startActivity(new Intent(Intent.ACTION_VIEW).setData(VimeoApi.getPlayUri(video)));
+            	startActivity(new Intent(Intent.ACTION_VIEW).setData(VimeoApi.getPlayUri(this, video)));
             	return true;
             }
             case R.id.menu_watchLater: itemDescription = "WatchLater "; break;
@@ -250,7 +250,7 @@ public class Videos extends ListActivity {
     
     protected void queryMoreItems(Uri uri, EasyCursorsAdapter<?> adapter, String[] projection) {
     	
-        if (VimeoApi.connectedToWeb(this) && VimeoApi.vimeoSiteReachable()) {
+        if (VimeoApi.connectedToWeb(this) && VimeoApi.vimeoSiteReachable(this)) {
 
             Log.d(TAG, "Connection test is passed OK");
             

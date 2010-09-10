@@ -14,7 +14,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.util.Log;
 
@@ -69,13 +68,25 @@ public class VimeoApi {
     public static boolean connectedToWeb(Context context) {
         Log.d(TAG, "Testing connection to web");
         ConnectivityManager connection =  (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        return (connection.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED ||  
-                connection.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTING);
+        
+        /* return (connection.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||  
+                   connection.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED); */
+        
+        return connection.getActiveNetworkInfo().isConnectedOrConnecting();
     }
     
-    public static boolean vimeoSiteReachable() {
+    public static boolean vimeoSiteReachable(Context context) {
         Log.d(TAG, "Testing connection to Vimeo site");
+        
+        /* FIXME: Requires android.permission.CHANGE_NETWORK_STATE
+        ConnectivityManager connection =  (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        final int vimeoHost = Utils.lookupHost("vimeo.com");
+        return connection.requestRouteToHost(ConnectivityManager.TYPE_WIFI, vimeoHost) ||
+        	   connection.requestRouteToHost(ConnectivityManager.TYPE_MOBILE, vimeoHost) ||
+        	   connection.requestRouteToHost(ConnectivityManager.TYPE_WIMAX, vimeoHost)*/
+        	   
         return true;
+        	   
     }
     
     public static void forgetCredentials() {
@@ -180,14 +191,14 @@ public class VimeoApi {
         
     }
 
-	public static Uri getPlayUri(Video video) {
+	public static Uri getPlayUri(Context context, Video video) {
 		//URLs are: http://vimeo.com/m/play_redirect?quality=mobile&clip_id=14294054
 		//Log.d(TAG, "Uri for video " + video.title + ": " + VIDEO_STREAM_URL_PREFIX + "?quality=mobile&clip_id=" + video.id);
 		// http://api.vimeo.com/moogaloop_api.swf?oauth_key=key&clip_id=13214161&width=480&height=270&fullscreen=0&autoplay=1
 		// return Uri.parse(VIDEO_STREAM_URL_PREFIX + "?quality=mobile&clip_id=" + video.id + "&oauth_key=" + VimeoConfig.VIMEO_API_KEY);
 		
 		try {
-			return VimeoVideoRunner.askForVideoUri(video);
+			return VimeoVideoRunner.askForVideoUri(context, video);
 		} catch (VideoLinkRequestException e) {			
 			e.printStackTrace();
 			return null;

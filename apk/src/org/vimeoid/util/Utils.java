@@ -5,6 +5,8 @@ package org.vimeoid.util;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,6 +84,23 @@ public class Utils {
     	final long remainder = duration % 60; 
         return ((duration - remainder) / 60) + ":" + ((remainder < 10) ? ("0" + remainder) : remainder); 
     }
+    
+    public static int lookupHost(String hostname) {
+        InetAddress inetAddress;
+        try {
+            inetAddress = InetAddress.getByName(hostname);
+        } catch (UnknownHostException e) {
+            return -1;
+        }
+        byte[] addrBytes;
+        int addr;
+        addrBytes = inetAddress.getAddress();
+        addr = ((addrBytes[3] & 0xff) << 24)
+                | ((addrBytes[2] & 0xff) << 16)
+                | ((addrBytes[1] & 0xff) << 8)
+                |  (addrBytes[0] & 0xff);
+        return addr;
+    }    
     
     public static String validateShortcutOrId(final String shortcut) { 
         if (!shortcut.matches("^[\\d\\w_]+$")) throw new IllegalArgumentException("Not correct schortcut or _ID: " + shortcut);

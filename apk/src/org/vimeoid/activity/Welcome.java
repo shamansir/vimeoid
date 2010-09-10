@@ -69,7 +69,7 @@ public class Welcome extends Activity {
             return;
         }
         
-        if (!VimeoApi.vimeoSiteReachable()) {
+        if (!VimeoApi.vimeoSiteReachable(this)) {
             Dialogs.makeToast(this, "Connection exists, but Vimeo site is not reachable... Please fix the problem");
             return;
         }
