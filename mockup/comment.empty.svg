@@ -14,7 +14,10 @@
    id="svg4732"
    version="1.1"
    inkscape:version="0.47pre4 r22446"
-   sodipodi:docname="comment.svg">
+   sodipodi:docname="comment.empty.svg"
+   inkscape:export-filename="/home/shamansir/Workspace/vimeoid/apk/res/drawable/comment_small.png"
+   inkscape:export-xdpi="2.7"
+   inkscape:export-ydpi="2.7">
   <defs
      id="defs4734">
     <inkscape:perspective
@@ -41,7 +44,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
      inkscape:cx="304.9711"
-     inkscape:cy="313.51633"
+     inkscape:cy="151.89192"
      inkscape:document-units="px"
      inkscape:current-layer="g4759"
      showgrid="false"

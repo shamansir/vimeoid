@@ -42,12 +42,15 @@ public final class R {
     public static final class drawable {
         public static final int ajax_loader_bar_progress=0x7f020000;
         public static final int ajax_loader_flower_progress=0x7f020001;
-        public static final int icon=0x7f020002;
-        public static final int load_more_small=0x7f020003;
-        public static final int thumb_loading_small=0x7f020004;
-        public static final int video_unknown_item=0x7f020005;
-        public static final int video_unknown_single=0x7f020006;
-        public static final int welcome=0x7f020007;
+        public static final int comment_small=0x7f020002;
+        public static final int icon=0x7f020003;
+        public static final int like_small=0x7f020004;
+        public static final int load_more_small=0x7f020005;
+        public static final int play_small=0x7f020006;
+        public static final int thumb_loading_small=0x7f020007;
+        public static final int video_unknown_item=0x7f020008;
+        public static final int video_unknown_single=0x7f020009;
+        public static final int welcome=0x7f02000a;
     }
     public static final class id {
         public static final int channelsOfVideoButton=0x7f080016;
