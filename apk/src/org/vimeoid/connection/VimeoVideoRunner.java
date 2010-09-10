@@ -14,12 +14,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpParams;
 import org.vimeoid.dto.simple.Video;
-import org.vimeoid.util.Dialogs;
 
-import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
@@ -32,11 +28,10 @@ public class VimeoVideoRunner {
 	
 	private static final String QUALITY = "mobile";
 	
-	// FIXME: implement and do not pass context
-	public static Uri askForVideoUri(Context context, Video video) throws VideoLinkRequestException {
+	public static Uri askForVideoUri(Video video) throws VideoLinkRequestException {
 
 		try {
-			URL url = new URL(VIDEO_STREAM_URL_PREFIX + "?quality=mobile&clip_id=14654242");
+			URL url = new URL(VIDEO_STREAM_URL_PREFIX + "?quality=" + QUALITY + "&clip_id=" + video.id);
 
 			HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
 			urlc.setRequestProperty("Host", "vimeo.com");
@@ -45,21 +40,18 @@ public class VimeoVideoRunner {
 			urlc.setConnectTimeout(1000 * 30); // mTimeout is in seconds
             urlc.connect();
             
-            Dialogs.makeToast(context, "RespCode: " + urlc.getResponseCode());
+            Log.d(TAG, "RespCode: " + urlc.getResponseCode());
             
-            Dialogs.makeToast(context, "Location: " + urlc.getHeaderField("Location"));
+            Log.d(TAG, "Location: " + urlc.getHeaderField("Location"));
             
             if (urlc.getResponseCode() == 320) {
-            	Log.d(TAG, "getResponseCode == 320");
-            	Dialogs.makeToast(context, "Success!!");
+            	Log.d(TAG, "Success!!");
                 return null;
             }
-        } catch (MalformedURLException e1) {
-                // TODO Auto-generated catch block
-            e1.printStackTrace();
-        } catch (IOException e) {
-                // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (MalformedURLException mue) {
+            mue.printStackTrace();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         }
 		
 		try {			
@@ -67,7 +59,7 @@ public class VimeoVideoRunner {
 			
 			Log.d(TAG, "Creating Uri for video " + video.id);			
 			
-			final URI uri = new URI(VIDEO_STREAM_URL_PREFIX + "?quality=mobile&clip_id=14654242");			
+			final URI uri = new URI(VIDEO_STREAM_URL_PREFIX + "?quality=" + QUALITY + "&clip_id=" + video.id);			
 			// final URI uri = new URI(VIDEO_STREAM_URL_PREFIX);			
 			final HttpUriRequest request = new HttpGet(uri);
 			
@@ -84,10 +76,9 @@ public class VimeoVideoRunner {
 			
 			HttpResponse response = client.execute(request);
 	        Log.d(TAG, "Uri call executed: " + uri.toString() + " [" + response.getStatusLine().getStatusCode() + "; " + response.getStatusLine().toString() + ']');
-	        
-	        Dialogs.makeToast(context, "Uri call executed: " + uri.toString() + " [" + response.getStatusLine().getStatusCode() + "; " + response.getStatusLine().toString() + ']');
 			
-	        // check if 302
+	        if (response.getStatusLine().getStatusCode() == 302) Log.d(TAG, "Success!!");
+	        
 	        Header[] location = response.getHeaders("Location");
 	        
 	        for (Header locHeader: location) {

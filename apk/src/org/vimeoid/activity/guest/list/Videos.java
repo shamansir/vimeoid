@@ -17,17 +17,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import oauth.signpost.exception.OAuthException;
-
-import org.json.JSONObject;
 import org.vimeoid.R;
 import org.vimeoid.adapter.EasyCursorsAdapter;
 import org.vimeoid.adapter.guest.VideosListAdapter;
 import org.vimeoid.connection.VimeoApi;
-import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.connection.simple.VimeoProvider;
 import org.vimeoid.dto.simple.Video;
 import org.vimeoid.util.Dialogs;
+import org.vimeoid.util.Utils;
 
 /**
  * 
@@ -84,6 +81,8 @@ public class Videos extends ListActivity {
         
         final Uri contentUri = getIntent().getData();
         setTitle(VimeoProvider.getCallDescription(VimeoProvider.collectCallInfo(contentUri)));
+        
+        // TODO: Use TextView to set title, disable titlebar in application
         
         queryMoreItems(contentUri, adapter, Video.SHORT_EXTRACT_PROJECTION);
         
@@ -165,11 +164,10 @@ public class Videos extends ListActivity {
         
         Log.d(TAG, "Opening context menu for item at " + position);
         
-        // getListView().getItemAtPosition()            
-        
         if (position == (getListView().getCount() - 1)) return; 
         
-        menu.setHeaderTitle("Video " + getSelectedItemId());
+        Video video = (Video)getListView().getItemAtPosition(position);
+        menu.setHeaderTitle("Video " + Utils.crop(video.title, 20));
             
         MenuInflater inflater = getMenuInflater(); //from activity
         inflater.inflate(R.menu.video_context_menu, menu);
@@ -194,23 +192,32 @@ public class Videos extends ListActivity {
         
         String itemDescription;
         switch (item.getItemId()) {
-            case R.id.menu_Play: {
-            	startActivity(new Intent(Intent.ACTION_VIEW).setData(VimeoApi.getPlayUri(this, video)));
-            	return true;
-            }
-            case R.id.menu_watchLater: itemDescription = "WatchLater "; break;
+            /* case R.id.menu_Play: {
+                    try {
+                        final Uri playUri = VimeoApi.getPlayUri(video);
+                        startActivity(new Intent(Intent.ACTION_VIEW).setData(playUri));
+                        return true;                            
+                    } catch (VideoLinkRequestException vlre) {  
+                        Dialogs.makeExceptionToast(this, "Getting Video URL exception", vlre);
+                        vlre.printStackTrace();
+                        return false;
+                    }
+            } */
+            case R.id.menu_watchLater: itemDescription = "WatchLater "; break;        
             case R.id.menu_viewInfo: itemDescription = "View info "; break;
             case R.id.menu_viewAuthorInfo: itemDescription = "View author info"; break;
             default: itemDescription = "";
         }
         Dialogs.makeToast(this, itemDescription);
         return super.onContextItemSelected(item);
+        
     }
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        
         switch (item.getItemId()) {
-            case R.id.menu_Login: { 
+            /* case R.id.menu_Login: { 
 	                Log.d(TAG, "Starting OAuth login");
 	                if (!VimeoApi.ensureOAuth(this)) {
 	                    try {
@@ -236,7 +243,10 @@ public class Videos extends ListActivity {
                             Dialogs.makeExceptionToast(this, "Getting user exception", e); 
                         }
 	                }
-	            }; break;
+	            }; break; */
+            case R.id.menu_Refresh: {
+                    Dialogs.makeToast(this, "Refresh"); 
+                } break;
             case R.id.menu_Preferences: {
                 	Dialogs.makeToast(this, "Preferences"); 
 	            } break;
@@ -246,6 +256,7 @@ public class Videos extends ListActivity {
             default: Dialogs.makeToast(this, "Unknown menu element");
         }         
         return super.onOptionsItemSelected(item);
+        
     }
     
     protected void queryMoreItems(Uri uri, EasyCursorsAdapter<?> adapter, String[] projection) {

@@ -117,4 +117,8 @@ public class Utils {
         return action;
     }    
     
+    public static String crop(String value, int howMuch) {
+        return (value.length() <= howMuch) ? value : (value.substring(0, howMuch - 3) + "...");  
+    }
+    
 }

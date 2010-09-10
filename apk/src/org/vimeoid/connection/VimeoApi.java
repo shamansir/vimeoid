@@ -13,7 +13,6 @@ import java.util.List;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.util.Log;
 
@@ -61,24 +60,26 @@ public class VimeoApi {
     private static final String OAUTH_TOKEN_PARAM = "user_oauth_public";
     private static final String OAUTH_TOKEN_SECRET_PARAM = "user_oauth_secret";
     
+    private static final String PLAYER_URL = "http://player.vimeo.com/video/";
+    
     private VimeoApi() { };
 
     /* ====================== General methods =============================== */
     
     public static boolean connectedToWeb(Context context) {
         Log.d(TAG, "Testing connection to web");
-        ConnectivityManager connection =  (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        //ConnectivityManager connection =  (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         
         /* return (connection.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||  
                    connection.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED); */
         
-        return connection.getActiveNetworkInfo().isConnectedOrConnecting();
+        return true; /* connection.getActiveNetworkInfo().isConnectedOrConnecting(); */
     }
     
     public static boolean vimeoSiteReachable(Context context) {
         Log.d(TAG, "Testing connection to Vimeo site");
         
-        /* FIXME: Requires android.permission.CHANGE_NETWORK_STATE
+        /* TODO: Requires android.permission.CHANGE_NETWORK_STATE
         ConnectivityManager connection =  (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         final int vimeoHost = Utils.lookupHost("vimeo.com");
         return connection.requestRouteToHost(ConnectivityManager.TYPE_WIFI, vimeoHost) ||
@@ -191,18 +192,18 @@ public class VimeoApi {
         
     }
 
-	public static Uri getPlayUri(Context context, Video video) {
+	public static Uri getPlayUri(Video video) throws VideoLinkRequestException {
 		//URLs are: http://vimeo.com/m/play_redirect?quality=mobile&clip_id=14294054
 		//Log.d(TAG, "Uri for video " + video.title + ": " + VIDEO_STREAM_URL_PREFIX + "?quality=mobile&clip_id=" + video.id);
 		// http://api.vimeo.com/moogaloop_api.swf?oauth_key=key&clip_id=13214161&width=480&height=270&fullscreen=0&autoplay=1
 		// return Uri.parse(VIDEO_STREAM_URL_PREFIX + "?quality=mobile&clip_id=" + video.id + "&oauth_key=" + VimeoConfig.VIMEO_API_KEY);
 		
-		try {
-			return VimeoVideoRunner.askForVideoUri(context, video);
-		} catch (VideoLinkRequestException e) {			
-			e.printStackTrace();
-			return null;
-		}
-	}    
+	    return VimeoVideoRunner.askForVideoUri(video);
+	}
+	
+	public static String getPlayerUrl(long videoId, int height) {
+	    Log.d(TAG, "Construction player URL for video " + videoId);
+	    return PLAYER_URL + videoId + "?title=0&byline=0&portrait=0&js_api=1&fp_version=10&height=" + height;
+	}
     
 }
