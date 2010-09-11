@@ -124,6 +124,18 @@ public class Utils {
     }
     
     public static int drawableByContent(ContentType contentType) {
+        switch (contentType) {
+            case ACTIVITY: return R.drawable.activity;
+            case ALBUM:    return R.drawable.album;
+            case CHANNEL:  return R.drawable.channel;
+            case COMMENT:  return R.drawable.comment;
+            case GROUP:    return R.drawable.group;
+            case LIKE:     return R.drawable.like;
+            case MESSAGE:  return R.drawable.message;
+            case TAG:      return R.drawable.tag;
+            case USER:     return R.drawable.contact;
+            case VIDEO:    return R.drawable.video;
+        }
         return R.drawable.icon;
     }
     

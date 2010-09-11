@@ -10,16 +10,19 @@
              android:orderInCategory="2"
              android:alphabeticShortcut="w"
              android:numericShortcut="2"             
-             android:title="Watch Later" />
+             android:title="Watch Later"
+             android:icon="@drawable/watchlater" />
         <item android:id="@+id/menu_viewInfo"
              android:orderInCategory="3"
              android:alphabeticShortcut="i"
              android:numericShortcut="3"             
-             android:title="View Info" />
+             android:title="View Info"
+             android:icon="@drawable/info" />
         <item android:id="@+id/menu_viewAuthorInfo"
              android:orderInCategory="4"
              android:alphabeticShortcut="a"
              android:numericShortcut="4"
-             android:title="View Author Info" />             
+             android:title="View Author Info"
+             android:icon="@drawable/contact" />             
     </group>
 </menu>

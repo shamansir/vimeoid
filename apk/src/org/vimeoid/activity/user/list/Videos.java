@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.vimeoid.R;
-import org.vimeoid.dto.simple.TagInfo;
 import org.vimeoid.dto.simple.Video;
 
 import android.app.ListActivity;
@@ -17,8 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.SimpleAdapter;
 
 /**
@@ -52,14 +49,14 @@ public class Videos extends ListActivity {
         
         // this.registerForContextMenu();
         
-        setListAdapter(new SimpleAdapter(this, callStubVideosList(),
+        /* setListAdapter(new SimpleAdapter(this, callStubVideosList(),
                 R.layout.item_video, 
                 new String[] { Video.FieldsKeys.TITLE, 
                                Video.FieldsKeys.AUTHOR, 
                                Video.FieldsKeys.DURATION, 
                                Video.FieldsKeys.TAGS },
                 new int[] { R.id.videoItemTitle, R.id.videoItemAuthor,
-                            R.id.videoItemDuration, R.id.videoItemTags }));
+                            R.id.videoItemDuration, R.id.videoItemTags })); */
         
         /* Button tagsButton = (Button) findViewById(R.id.myLikesButton);
         
@@ -78,20 +75,7 @@ public class Videos extends ListActivity {
         }); */
         
     }
-    
-    /**
-     * @return stub list of videos
-     */
-    private List<Map<String, Object>> callStubVideosList() {
-        final List<Map<String, Object>> values = new ArrayList<Map<String, Object>>(); 
         
-        /* for (Video video: getVideosFor("shamansir")) {
-            values.add(adaptContent(video.extract()));
-        } */
-        
-        return values;
-    }
-    
     /* private List<Video> getVideosFor(String user) {
         final URI vimeoApiUri = VimeoApi.resolveUriForSimpleApi(
                 Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + user + "/videos"));
@@ -122,25 +106,6 @@ public class Videos extends ListActivity {
         }
         return Collections.emptyList();
     } */
-    
-    /**
-     * @return stub list of videos
-     */
-     private List<Map<String, Object>> callStubTagsList() {
-        final List<Map<String, Object>> values = new ArrayList<Map<String, Object>>(); 
-        
-        /* for (int i = 0; i <= 20; i++) {
-            
-            final TagInfo tagStub = new TagInfo();
-            tagStub.name = "Tag" + 300 + i;
-            tagStub.url = "tag/" + i;
-            tagStub.usageCount = 12 * i;
-            
-            values.add(adaptContent(tagStub.extract()));
-        } */
-        
-        return values;
-    }    
     
     protected static Map<String, Object> adaptContent(ContentValues values) {
         if (values == null) return new HashMap<String, Object>();
