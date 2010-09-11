@@ -7,13 +7,17 @@ import org.vimeoid.R;
 import org.vimeoid.connection.ApiCallInfo;
 import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.simple.VimeoProvider;
+import org.vimeoid.util.Utils;
 
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 
 /**
@@ -41,32 +45,28 @@ public class Video extends Activity {
         setContentView(R.layout.view_single_video);
         
         final Uri contentUri = getIntent().getData();
-        ApiCallInfo callInfo = VimeoProvider.collectCallInfo(contentUri);
-        setTitle(VimeoProvider.getCallDescription(callInfo));
+        ApiCallInfo callInfo = VimeoProvider.collectCallInfo(contentUri);        
         
-        final long videoId = Long.valueOf(callInfo.subject);
-        final int playerHeight = getResources().getDimensionPixelSize((R.dimen.video_player_height));
+        ((ImageView)findViewById(R.id.subjectIcon)).setImageResource(Utils.drawableByContent(callInfo.subjectType));
+        ((TextView)findViewById(R.id.subjectTitle)).setText(callInfo.subject); // FIXME: set to Title
+        ((ImageView)findViewById(R.id.resultIcon)).setImageResource(R.drawable.info);
+        
+        final View progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
+        
         WebView playerView = (WebView)findViewById(R.id.videoPlayer);
         playerView.getSettings().setJavaScriptEnabled(true);
         playerView.getSettings().setLoadsImagesAutomatically(true);
         
-        //playerView.setHttpAuthUsernamePassword(host, realm, username, password)
-        //playerView.addJavascriptInterface(obj, interfaceName)
+        final long videoId = Long.valueOf(callInfo.subject);
+        final int playerHeight = getResources().getDimensionPixelSize((R.dimen.video_player_height));
         
         playerView.setWebChromeClient(new WebChromeClient() {           
             @Override public void onProgressChanged(WebView view, int newProgress) {
-                // TODO: show progress bar
+                progressBar.setVisibility(((newProgress == 0) || (newProgress == 100)) ? View.GONE : View.VISIBLE);
                 super.onProgressChanged(view, newProgress);
-            }            
-        });
-        
-        /* playerView.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-                return true;
             }
-        }); */ 
+        });        
         
         Log.d(TAG, "Loading player: " + VimeoApi.getPlayerUrl(videoId, playerHeight));
         playerView.loadUrl(VimeoApi.getPlayerUrl(videoId, playerHeight));

@@ -174,7 +174,7 @@ public class Videos extends ListActivity {
         menu.setHeaderTitle("Video " + Utils.crop(video.title, 20));
             
         MenuInflater inflater = getMenuInflater(); //from activity
-        inflater.inflate(R.menu.video_context_menu, menu);
+        inflater.inflate(R.menu.video_context_guest_menu, menu);
     }
     
     @Override
@@ -207,7 +207,7 @@ public class Videos extends ListActivity {
                         return false;
                     }
             } */
-            case R.id.menu_watchLater: itemDescription = "WatchLater "; break;        
+            //case R.id.menu_watchLater: itemDescription = "WatchLater "; break;        
             case R.id.menu_viewInfo: itemDescription = "View info "; break;
             case R.id.menu_viewAuthorInfo: itemDescription = "View author info"; break;
             default: itemDescription = "";

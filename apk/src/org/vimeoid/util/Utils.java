@@ -124,6 +124,7 @@ public class Utils {
     }
     
     public static int drawableByContent(ContentType contentType) {
+        if (contentType == null) return R.drawable.info;
         switch (contentType) {
             case ACTIVITY: return R.drawable.activity;
             case ALBUM:    return R.drawable.album;
@@ -135,8 +136,10 @@ public class Utils {
             case TAG:      return R.drawable.tag;
             case USER:     return R.drawable.contact;
             case VIDEO:    return R.drawable.video;
+            default: return R.drawable.icon;
         }
-        return R.drawable.icon;
     }
+    
+    
     
 }

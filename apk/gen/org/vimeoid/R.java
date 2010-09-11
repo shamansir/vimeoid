@@ -103,9 +103,9 @@ public final class R {
         public static final int menu_Preferences=0x7f080016;
         public static final int menu_Refresh=0x7f080015;
         public static final int menu_SwitchView=0x7f080017;
-        public static final int menu_viewAuthorInfo=0x7f08001b;
-        public static final int menu_viewInfo=0x7f08001a;
-        public static final int menu_watchLater=0x7f080019;
+        public static final int menu_viewAuthorInfo=0x7f08001a;
+        public static final int menu_viewInfo=0x7f080019;
+        public static final int menu_watchLater=0x7f08001b;
         public static final int progressBar=0x7f080003;
         public static final int resultIcon=0x7f080002;
         public static final int subjectIcon=0x7f080000;
@@ -134,7 +134,8 @@ public final class R {
     }
     public static final class menu {
         public static final int main_options_menu=0x7f070000;
-        public static final int video_context_menu=0x7f070001;
+        public static final int video_context_guest_menu=0x7f070001;
+        public static final int video_context_user_menu=0x7f070002;
     }
     public static final class string {
         public static final int app_name=0x7f060000;

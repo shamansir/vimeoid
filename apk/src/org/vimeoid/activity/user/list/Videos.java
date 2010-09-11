@@ -1,12 +1,9 @@
 package org.vimeoid.activity.user.list;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.vimeoid.R;
-import org.vimeoid.dto.simple.Video;
 
 import android.app.ListActivity;
 import android.content.ContentValues;
@@ -16,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.widget.SimpleAdapter;
 
 /**
  * 

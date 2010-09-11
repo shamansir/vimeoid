@@ -3,6 +3,34 @@
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
+    <LinearLayout android:orientation="horizontal"
+                  android:layout_width="fill_parent"
+                  android:layout_height="@dimen/titlebar_height"
+                  android:padding="2px"
+                  android:background="@color/titlebar_bg">
+        <ImageView android:id="@+id/subjectIcon"
+                   android:layout_width="@dimen/titlebar_icons_side"
+                   android:layout_height="@dimen/titlebar_icons_side" />
+        <TextView android:id="@+id/subjectTitle"
+                  android:layout_height="fill_parent"
+                  android:layout_width="wrap_content"
+                  android:layout_weight="1"
+                  android:paddingLeft="5px"                               
+                  android:gravity="center_vertical|center_horizontal"
+                  android:textSize="@dimen/item_title_font_size"
+                  android:textColor="@color/item_title" />
+        <ImageView android:id="@+id/resultIcon"
+                   android:layout_width="@dimen/titlebar_icons_side"
+                   android:layout_height="@dimen/titlebar_icons_side" />
+    </LinearLayout>        
+    <LinearLayout android:id="@+id/progressBar" 
+                  android:layout_width="fill_parent"
+                  android:layout_height="@dimen/small_progressbar_height"
+                  android:padding="2px"
+                  android:background="@color/progress_bg">
+        <ProgressBar android:layout_width="@dimen/small_progress_side"
+                     android:layout_height="@dimen/small_progress_side" />
+    </LinearLayout>      
     <WebView android:id="@+id/videoPlayer"
              android:layout_width="fill_parent"
              android:layout_height="@dimen/video_player_height"
