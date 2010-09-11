@@ -9,12 +9,15 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="400"
+   width="300"
    height="400"
    id="svg4732"
    version="1.1"
    inkscape:version="0.47pre4 r22446"
-   sodipodi:docname="fwd.svg">
+   sodipodi:docname="fwd.svg"
+   inkscape:export-filename="/home/shamansir/Workspace/vimeoid/apk/res/drawable/forward.png"
+   inkscape:export-xdpi="10.8"
+   inkscape:export-ydpi="10.8">
   <defs
      id="defs4734">
     <inkscape:perspective
@@ -48,7 +51,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
      inkscape:cx="154.96345"
-     inkscape:cy="192.29802"
+     inkscape:cy="313.51633"
      inkscape:document-units="px"
      inkscape:current-layer="g4759"
      showgrid="false"
@@ -76,26 +79,30 @@
      transform="translate(0,-652.36218)">
     <g
        id="g4759">
-      <rect
-         style="fill:#0068ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
-         id="rect9802"
-         width="277.67712"
-         height="99.963768"
-         x="-831.44495"
-         y="370.93802"
-         transform="matrix(-0.70710678,-0.70710678,-0.70710678,0.70710678,0,0)"
-         rx="26.389088"
-         ry="26.389088" />
-      <rect
-         style="fill:#0068ff;fill-opacity:1;fill-rule:nonzero;stroke:none"
-         id="rect9802-0"
-         width="277.67712"
-         height="99.963768"
-         x="379.46939"
-         y="-832.12262"
-         transform="matrix(-0.70710678,0.70710678,-0.70710678,-0.70710678,0,0)"
-         rx="26.389088"
-         ry="26.389088" />
+      <g
+         id="g3765"
+         transform="translate(-31.314729,-2.0203051)">
+        <rect
+           ry="26.389088"
+           rx="26.389088"
+           transform="matrix(-0.70710678,-0.70710678,-0.70710678,0.70710678,0,0)"
+           y="370.93802"
+           x="-831.44495"
+           height="99.963768"
+           width="277.67712"
+           id="rect9802"
+           style="fill:#0068ff;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+        <rect
+           ry="26.389088"
+           rx="26.389088"
+           transform="matrix(-0.70710678,0.70710678,-0.70710678,-0.70710678,0,0)"
+           y="-832.12262"
+           x="379.46939"
+           height="99.963768"
+           width="277.67712"
+           id="rect9802-0"
+           style="fill:#0068ff;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+      </g>
     </g>
   </g>
 </svg>

@@ -14,7 +14,10 @@
    id="svg5949"
    version="1.1"
    inkscape:version="0.47pre4 r22446"
-   sodipodi:docname="subscribe.svg">
+   sodipodi:docname="subscribe.svg"
+   inkscape:export-filename="/home/shamansir/Workspace/vimeoid/apk/res/drawable/subscribe.png"
+   inkscape:export-xdpi="10.8"
+   inkscape:export-ydpi="10.8">
   <defs
      id="defs5951">
     <inkscape:perspective
@@ -69,7 +72,7 @@
      transform="translate(0,-652.36218)">
     <path
        style="fill:#388fc5;fill-opacity:1;stroke:none"
-       d="m 33.849732,773.97734 0,150.4175 L 156.63958,1039.5103 385.33554,821.55844 382.26583,668.07113 159.70929,896.76719 33.849732,773.97734 z"
+       d="m 25.278303,773.97734 0,150.4175 L 148.06815,1039.5103 376.76411,821.55844 373.6944,668.07113 151.13786,896.76719 25.278303,773.97734 z"
        id="path5424" />
   </g>
 </svg>

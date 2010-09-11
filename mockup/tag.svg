@@ -14,7 +14,10 @@
    id="svg3768"
    version="1.1"
    inkscape:version="0.47pre4 r22446"
-   sodipodi:docname="New document 13">
+   sodipodi:docname="tag.svg"
+   inkscape:export-filename="/home/shamansir/Workspace/vimeoid/apk/res/drawable/tag.png"
+   inkscape:export-xdpi="10.8"
+   inkscape:export-ydpi="10.8">
   <defs
      id="defs3770">
     <inkscape:perspective
@@ -86,7 +89,7 @@
        sodipodi:cy="10.788382"
        sodipodi:rx="2.6556017"
        sodipodi:ry="2.4896266"
-       d="m 13.609959,10.788382 a 2.6556017,2.4896266 0 1 1 -5.3112036,0 2.6556017,2.4896266 0 1 1 5.3112036,0 z"
+       d="m 13.609959,10.788382 c 0,1.374982 -1.188954,2.489626 -2.655602,2.489626 -1.4666482,0 -2.6556016,-1.114644 -2.6556016,-2.489626 0,-1.3749833 1.1889534,-2.4896271 2.6556016,-2.4896271 1.466648,0 2.655602,1.1146438 2.655602,2.4896271 z"
        transform="matrix(12.099448,0,0,12.099448,1.1110137,645.24175)" />
   </g>
 </svg>

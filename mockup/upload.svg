@@ -14,7 +14,10 @@
    id="svg5039"
    version="1.1"
    inkscape:version="0.47pre4 r22446"
-   sodipodi:docname="upload.svg">
+   sodipodi:docname="upload.svg"
+   inkscape:export-filename="/home/shamansir/Workspace/vimeoid/apk/res/drawable/upload.png"
+   inkscape:export-xdpi="10.8"
+   inkscape:export-ydpi="10.8">
   <defs
      id="defs5041">
     <inkscape:perspective
@@ -58,7 +61,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
