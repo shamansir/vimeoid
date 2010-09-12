@@ -47,9 +47,10 @@ public class Video extends Activity {
         final Uri contentUri = getIntent().getData();
         ApiCallInfo callInfo = VimeoProvider.collectCallInfo(contentUri);        
         
-        ((ImageView)findViewById(R.id.subjectIcon)).setImageResource(Utils.drawableByContent(callInfo.subjectType));
-        ((TextView)findViewById(R.id.subjectTitle)).setText(callInfo.subject); // FIXME: set to Title
-        ((ImageView)findViewById(R.id.resultIcon)).setImageResource(R.drawable.info);
+        View titleBar = findViewById(R.id.titleBar);
+        ((ImageView)titleBar.findViewById(R.id.subjectIcon)).setImageResource(Utils.drawableByContent(callInfo.subjectType));
+        ((TextView)titleBar.findViewById(R.id.subjectTitle)).setText(callInfo.subject); // FIXME: set to Title
+        ((ImageView)titleBar.findViewById(R.id.resultIcon)).setImageResource(R.drawable.info);
         
         final View progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
@@ -70,6 +71,7 @@ public class Video extends Activity {
         
         Log.d(TAG, "Loading player: " + VimeoApi.getPlayerUrl(videoId, playerHeight));
         playerView.loadUrl(VimeoApi.getPlayerUrl(videoId, playerHeight));
+        
     }
     
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/titleBar" 
+              android:orientation="horizontal"
+              android:layout_width="fill_parent"
+              android:layout_height="@dimen/titlebar_height"
+              android:padding="2px"
+              android:background="@drawable/titlebar_gradient"
+              android:fadingEdge="horizontal">
+      <ImageView android:id="@+id/subjectIcon"
+                 android:layout_width="@dimen/titlebar_icons_side"
+                 android:layout_height="@dimen/titlebar_icons_side" />
+      <TextView android:id="@+id/subjectTitle"
+                android:layout_height="fill_parent"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="5px"                               
+                android:gravity="center_vertical|center_horizontal"
+                android:textSize="@dimen/item_title_font_size"
+                android:textColor="@color/item_title" />
+      <ImageView android:id="@+id/resultIcon"
+                 android:layout_width="@dimen/titlebar_icons_side"
+                 android:layout_height="@dimen/titlebar_icons_side" />
+</LinearLayout>
