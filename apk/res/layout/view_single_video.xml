@@ -3,9 +3,8 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-    <!-- use include, possibly -->
-    <include android:id="@+id/titleBar"
-             layout="@layout/item_subject_titlebar"/>
+	<include android:id="@+id/titleBar"
+	         layout="@layout/item_subject_titlebar" />
     <include android:id="@+id/progressBar"
              layout="@layout/progress_bar_line" />
     <LinearLayout android:orientation="horizontal"
