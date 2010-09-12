@@ -56,7 +56,7 @@ public class Video extends Activity {
         
         WebView playerView = (WebView)findViewById(R.id.videoPlayer);
         playerView.getSettings().setJavaScriptEnabled(true);
-        playerView.getSettings().setLoadsImagesAutomatically(true);
+        //playerView.getSettings().setLoadsImagesAutomatically(true);
         
         final long videoId = Long.valueOf(callInfo.subject);
         final int playerHeight = getResources().getDimensionPixelSize((R.dimen.video_player_height));

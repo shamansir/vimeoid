@@ -11,36 +11,42 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
-        public static final int duration_bg=0x7f040007;
-        public static final int item_info=0x7f040004;
-        public static final int item_param=0x7f040003;
-        public static final int item_subtitle=0x7f040002;
-        public static final int item_tags=0x7f040005;
+        /**  use gradient 
+         */
+        public static final int duration_bg=0x7f040008;
+        public static final int item_action=0x7f040001;
+        public static final int item_info=0x7f040005;
+        public static final int item_param=0x7f040004;
+        public static final int item_subtitle=0x7f040003;
+        public static final int item_tags=0x7f040006;
         public static final int item_thumb_bg=0x7f040000;
-        public static final int item_title=0x7f040001;
-        public static final int load_more_default_bg=0x7f04000b;
-        public static final int load_more_default_text=0x7f040009;
-        public static final int load_more_disabled_bg=0x7f04000c;
-        public static final int load_more_disabled_text=0x7f04000a;
-        public static final int progress_bg=0x7f040008;
-        public static final int titlebar_bg=0x7f040006;
+        public static final int item_title=0x7f040002;
+        public static final int load_more_default_bg=0x7f04000c;
+        public static final int load_more_default_text=0x7f04000a;
+        public static final int load_more_disabled_bg=0x7f04000d;
+        public static final int load_more_disabled_text=0x7f04000b;
+        public static final int progress_bg=0x7f040009;
+        public static final int titlebar_bg=0x7f040007;
     }
     public static final class dimen {
-        public static final int item_info_font_size=0x7f05000d;
-        public static final int item_param_font_size=0x7f05000c;
-        public static final int item_subtitle_font_size=0x7f05000b;
-        public static final int item_text_padding=0x7f05000e;
-        public static final int item_thumb_height=0x7f050003;
-        public static final int item_thumb_width=0x7f050002;
-        public static final int item_title_font_size=0x7f05000a;
-        public static final int load_more_height=0x7f050009;
-        public static final int single_thumb_height=0x7f050005;
-        public static final int single_thumb_width=0x7f050004;
-        public static final int small_progress_side=0x7f050007;
-        public static final int small_progressbar_height=0x7f050008;
+        public static final int action_height=0x7f050002;
+        public static final int action_icons_side=0x7f050003;
+        public static final int item_action_font_size=0x7f05000c;
+        public static final int item_info_font_size=0x7f050010;
+        public static final int item_param_font_size=0x7f05000f;
+        public static final int item_subtitle_font_size=0x7f05000e;
+        public static final int item_text_padding=0x7f050011;
+        public static final int item_thumb_height=0x7f050005;
+        public static final int item_thumb_width=0x7f050004;
+        public static final int item_title_font_size=0x7f05000d;
+        public static final int load_more_height=0x7f05000b;
+        public static final int single_thumb_height=0x7f050007;
+        public static final int single_thumb_width=0x7f050006;
+        public static final int small_progress_side=0x7f050009;
+        public static final int small_progressbar_height=0x7f05000a;
         public static final int titlebar_height=0x7f050000;
         public static final int titlebar_icons_side=0x7f050001;
-        public static final int video_player_height=0x7f050006;
+        public static final int video_player_height=0x7f050008;
     }
     public static final class drawable {
         public static final int activity=0x7f020000;
@@ -94,18 +100,19 @@ public final class R {
         public static final int welcome=0x7f020030;
     }
     public static final class id {
-        public static final int enterButton=0x7f080012;
-        public static final int guestButton=0x7f080013;
+        public static final int actions=0x7f080012;
+        public static final int enterButton=0x7f080013;
+        public static final int guestButton=0x7f080014;
         public static final int itemsEmptyListView=0x7f080006;
         public static final int itemsListFooterText=0x7f080005;
-        public static final int menuGroup_Main=0x7f080014;
-        public static final int menuGroup_VideoContext=0x7f080018;
-        public static final int menu_Preferences=0x7f080016;
-        public static final int menu_Refresh=0x7f080015;
-        public static final int menu_SwitchView=0x7f080017;
-        public static final int menu_viewAuthorInfo=0x7f08001a;
-        public static final int menu_viewInfo=0x7f080019;
-        public static final int menu_watchLater=0x7f08001b;
+        public static final int menuGroup_Main=0x7f080015;
+        public static final int menuGroup_VideoContext=0x7f080019;
+        public static final int menu_Preferences=0x7f080017;
+        public static final int menu_Refresh=0x7f080016;
+        public static final int menu_SwitchView=0x7f080018;
+        public static final int menu_viewAuthorInfo=0x7f08001b;
+        public static final int menu_viewInfo=0x7f08001a;
+        public static final int menu_watchLater=0x7f08001c;
         public static final int progressBar=0x7f080003;
         public static final int resultIcon=0x7f080002;
         public static final int subjectIcon=0x7f080000;

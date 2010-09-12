@@ -104,7 +104,7 @@ public class Videos extends ListActivity {
             // getListView().getItemAtPosition()            
             
             Uri itemUri = Uri.withAppendedPath(
-                    VimeoProvider.BASE_URI, "/video/" + id);
+                    VimeoProvider.BASE_URI, "video/" + id);
             Log.d(TAG, "Video with id " + id + " selected");
             
             String action = getIntent().getAction();
@@ -126,7 +126,7 @@ public class Videos extends ListActivity {
                     Log.d(TAG, "Loading next page...");
                     
                     final Uri nextPageUri = Uri.parse(
-                            VimeoProvider.BASE_URI + "/channel/staffpicks/videos" + "?page=" + (++pageNum));
+                            VimeoProvider.BASE_URI + "channel/staffpicks/videos" + "?page=" + (++pageNum));
                     
                     queryMoreItems(nextPageUri, adapter, Video.SHORT_EXTRACT_PROJECTION);
                     

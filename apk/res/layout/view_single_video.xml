@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
+    <!-- use include, possibly -->
     <LinearLayout android:orientation="horizontal"
                   android:layout_width="fill_parent"
                   android:layout_height="@dimen/titlebar_height"
                   android:padding="2px"
-                  android:background="@color/titlebar_bg">
+                  android:background="@color/titlebar_bg"
+                  android:fadingEdge="horizontal">
         <ImageView android:id="@+id/subjectIcon"
                    android:layout_width="@dimen/titlebar_icons_side"
                    android:layout_height="@dimen/titlebar_icons_side" />
@@ -22,19 +24,31 @@
         <ImageView android:id="@+id/resultIcon"
                    android:layout_width="@dimen/titlebar_icons_side"
                    android:layout_height="@dimen/titlebar_icons_side" />
-    </LinearLayout>        
-    <LinearLayout android:id="@+id/progressBar" 
+    </LinearLayout>                  
+    <LinearLayout android:id="@+id/progressBar"
+                  android:orientation="vertical"
                   android:layout_width="fill_parent"
                   android:layout_height="@dimen/small_progressbar_height"
-                  android:padding="2px"
                   android:background="@color/progress_bg">
-        <ProgressBar android:layout_width="@dimen/small_progress_side"
-                     android:layout_height="@dimen/small_progress_side" />
-    </LinearLayout>      
-    <WebView android:id="@+id/videoPlayer"
-             android:layout_width="fill_parent"
-             android:layout_height="@dimen/video_player_height"
-             android:background="#ffffffff"
-             android:layout_gravity="center_horizontal"
-             android:layout_marginLeft="4px" />
+       <ProgressBar android:layout_width="@dimen/small_progress_side"
+                    android:layout_height="@dimen/small_progress_side" />
+    </LinearLayout>
+    <LinearLayout android:orientation="horizontal"
+                  android:layout_width="fill_parent"
+                  android:layout_height="@dimen/video_player_height">
+	    <WebView android:id="@+id/videoPlayer"         
+	             android:background="#ffff"
+	             android:layout_gravity="center_horizontal"
+	             android:layout_width="fill_parent"
+	             android:layout_height="fill_parent"
+	             android:layout_marginLeft="4px" />
+    </LinearLayout> 
+    <ListView android:id="@+id/actions"
+              android:layout_width="fill_parent"
+              android:layout_height="20dp"
+              android:layout_weight="1"
+              android:stackFromBottom="true"
+              android:transcriptMode="normal"
+              android:divider="#333"
+              android:dividerHeight="1dp" />    
 </LinearLayout>
