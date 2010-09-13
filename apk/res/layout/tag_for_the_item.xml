@@ -2,13 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 			  android:orientation="horizontal"
 	          android:layout_width="wrap_content"
-	          android:layout_height="wrap_content">
+	          android:layout_height="wrap_content"
+	          android:layout_gravity="left">
 	<TextView android:id="@+id/tagItem"
-		      android:layout_width="wrap_content"
+		      android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-              android:textSize="@dimen/item_param_font_size"
+              android:layout_marginRight="3dp"
+              android:paddingRight="2dp"
+              android:paddingLeft="2dp"
+              android:textSize="@dimen/item_tags_font_size"
               android:textColor="@color/item_tags"
               android:lines="1"
-              android:text="\?" />
+              android:singleLine="true"
+              android:text="\?"
+              android:background="@drawable/small_tag_shape" />
 </LinearLayout>          
           

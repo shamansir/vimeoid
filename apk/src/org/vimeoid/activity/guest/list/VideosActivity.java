@@ -106,7 +106,7 @@ public class VideosActivity extends ListActivity {
             Video video = (Video)getListView().getItemAtPosition(position);        
             
             Uri itemUri = Uri.withAppendedPath(
-                    VimeoProvider.BASE_URI, "video/" + id);
+                    VimeoProvider.BASE_URI, "/video/" + id);
             Log.d(TAG, "Video with id " + id + " selected");
             
             String action = getIntent().getAction();
@@ -128,7 +128,7 @@ public class VideosActivity extends ListActivity {
                     Log.d(TAG, "Loading next page...");
                     
                     final Uri nextPageUri = Uri.parse(
-                            VimeoProvider.BASE_URI + "channel/staffpicks/videos" + "?page=" + (++pageNum));
+                            VimeoProvider.BASE_URI + "/channel/staffpicks/videos" + "?page=" + (++pageNum));
                     
                     queryMoreItems(nextPageUri, adapter, Video.SHORT_EXTRACT_PROJECTION);
                     
@@ -330,6 +330,11 @@ public class VideosActivity extends ListActivity {
         
         @Override
         protected void onPostExecute(Cursor cursor) {
+        	
+        	if (cursor == null) {
+        		Log.e(TAG, "Failed to receive next page");
+        		pageNum--;
+        	}
             
             if (cursor != null) {
                 startManagingCursor(cursor);
@@ -348,9 +353,12 @@ public class VideosActivity extends ListActivity {
             
             // TODO: scroll to the first received item (smoothScrollToPosition in API 8)
 
-            final int newPos = getListView().getCount() - cursor.getCount() - 2; // - 'load more' and one position before            
-            if (newPos >= 0) setSelection(newPos);
-            else setSelection(0);
+            Log.d(TAG, "List count: " + getListView().getCount() + "; cursor: " + cursor);
+            if (cursor != null) {
+            	final int newPos = getListView().getCount() - cursor.getCount() - 2; // - 'load more' and one position before
+                if (newPos >= 0) setSelection(newPos);
+                else setSelection(0);            	
+            }
             
             if (pageNum == MAX_NUMBER_OF_PAGES) {
                 footerView.setVisibility(View.GONE);

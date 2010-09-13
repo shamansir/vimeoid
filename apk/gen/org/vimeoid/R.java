@@ -11,22 +11,20 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
-        /**  use gradient 
-         */
-        public static final int duration_bg=0x7f040008;
+        public static final int duration_bg=0x7f040007;
         public static final int item_action=0x7f040001;
-        public static final int item_info=0x7f040005;
+        public static final int item_info=0x7f040006;
         public static final int item_param=0x7f040004;
         public static final int item_subtitle=0x7f040003;
-        public static final int item_tags=0x7f040006;
+        public static final int item_tag_bg=0x7f040009;
+        public static final int item_tags=0x7f040005;
         public static final int item_thumb_bg=0x7f040000;
         public static final int item_title=0x7f040002;
         public static final int load_more_default_bg=0x7f04000c;
         public static final int load_more_default_text=0x7f04000a;
         public static final int load_more_disabled_bg=0x7f04000d;
         public static final int load_more_disabled_text=0x7f04000b;
-        public static final int progress_bg=0x7f040009;
-        public static final int titlebar_bg=0x7f040007;
+        public static final int progress_bg=0x7f040008;
     }
     public static final class dimen {
         public static final int action_height=0x7f050002;
@@ -35,7 +33,8 @@ public final class R {
         public static final int item_info_font_size=0x7f050010;
         public static final int item_param_font_size=0x7f05000f;
         public static final int item_subtitle_font_size=0x7f05000e;
-        public static final int item_text_padding=0x7f050011;
+        public static final int item_tags_font_size=0x7f050011;
+        public static final int item_text_padding=0x7f050012;
         public static final int item_thumb_height=0x7f050005;
         public static final int item_thumb_width=0x7f050004;
         public static final int item_title_font_size=0x7f05000d;
@@ -88,18 +87,19 @@ public final class R {
         public static final int settings=0x7f020024;
         public static final int settings_menu=0x7f020025;
         public static final int share=0x7f020026;
-        public static final int staff=0x7f020027;
-        public static final int staff_small=0x7f020028;
-        public static final int subscribe=0x7f020029;
-        public static final int tag=0x7f02002a;
-        public static final int thumb_loading_small=0x7f02002b;
-        public static final int titlebar_gradient=0x7f02002c;
-        public static final int upload=0x7f02002d;
-        public static final int video=0x7f02002e;
-        public static final int video_unknown_item=0x7f02002f;
-        public static final int video_unknown_single=0x7f020030;
-        public static final int watchlater=0x7f020031;
-        public static final int welcome=0x7f020032;
+        public static final int small_tag_shape=0x7f020027;
+        public static final int staff=0x7f020028;
+        public static final int staff_small=0x7f020029;
+        public static final int subscribe=0x7f02002a;
+        public static final int tag=0x7f02002b;
+        public static final int thumb_loading_small=0x7f02002c;
+        public static final int titlebar_gradient=0x7f02002d;
+        public static final int upload=0x7f02002e;
+        public static final int video=0x7f02002f;
+        public static final int video_unknown_item=0x7f020030;
+        public static final int video_unknown_single=0x7f020031;
+        public static final int watchlater=0x7f020032;
+        public static final int welcome=0x7f020033;
     }
     public static final class id {
         public static final int actions=0x7f080011;

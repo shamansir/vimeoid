@@ -5,11 +5,11 @@
         <color name="item_title">#ffdddddd</color>
         <color name="item_subtitle">#ff999999</color>
         <color name="item_param">#ffdddddd</color>
+        <color name="item_tags">#ffeeeeee</color>
         <color name="item_info">#ffaaaaaa</color>
-        <color name="item_tags">#ff663333</color>
-        <color name="titlebar_bg">#cc333333</color> <!-- use gradient -->
         <color name="duration_bg">#33666666</color>
         <color name="progress_bg">#cc333333</color>
+        <color name="item_tag_bg">#66663333</color>
         <color name="load_more_default_text">#ff999999</color> 
         <color name="load_more_disabled_text">#ff666666</color>
         <color name="load_more_default_bg">#00333333</color>

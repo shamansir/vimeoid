@@ -17,5 +17,6 @@
     <dimen name="item_subtitle_font_size">14sp</dimen>
     <dimen name="item_param_font_size">10sp</dimen>
     <dimen name="item_info_font_size">11sp</dimen>
+    <dimen name="item_tags_font_size">9sp</dimen>
     <dimen name="item_text_padding">2px</dimen>    
 </resources>

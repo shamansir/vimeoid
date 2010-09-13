@@ -81,7 +81,7 @@ public class VideosListAdapter extends EasyCursorsAdapter<Video> {
         itemHolder.tvTitle.setText(video.title);
         itemHolder.tvAuthor.setText(video.uploaderName);
         itemHolder.tvDuration.setText(Utils.adaptDuration(video.duration));
-        injectTags(video.tags, itemHolder.llTags);
+        injectTags(video.tags, itemHolder.llTags, position);
         
         itemHolder.tvLikes.setText(String.valueOf(video.likesCount));
         itemHolder.tvPlays.setText(String.valueOf(video.playsCount));
@@ -90,10 +90,15 @@ public class VideosListAdapter extends EasyCursorsAdapter<Video> {
         return convertView;
     }
     
-    protected void injectTags(String[] tags, ViewGroup group) {
+    protected void injectTags(String[] tags, ViewGroup group, int curPosition) {
+    	if (tags.length == 0) {
+    		return;
+    	}
     	for (String tag: tags) {
+    		if (tag.trim().length() == 0) continue;
     		final LinearLayout tagStruct = (LinearLayout)layoutInflater.inflate(R.layout.tag_for_the_item, null);
-    		((TextView)tagStruct.findViewById(R.id.tagItem)).setText(tag);
+    		// FIXME: redraws another videos' tags 
+    		((TextView)tagStruct.findViewById(R.id.tagItem)).setText(tag.trim());
     		group.addView(tagStruct);
     	}
     }

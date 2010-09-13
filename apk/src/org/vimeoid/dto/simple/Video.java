@@ -4,6 +4,7 @@
 package org.vimeoid.dto.simple;
 
 import android.database.Cursor;
+import android.util.Log;
 
 /**
  * <dl>
@@ -111,7 +112,9 @@ public class Video {
         video.duration = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.DURATION));
         
         final String tags = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.TAGS));
+        Log.d("Video extraction", tags);
         video.tags = (tags != null) ? tags.split(",") : new String[0];
+        for (String tag: video.tags) Log.d("Video " + video.title, tag); 
         
         video.likesCount = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.NUM_OF_LIKES));
         video.playsCount = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.NUM_OF_PLAYS));
@@ -134,7 +137,9 @@ public class Video {
         video.duration = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.DURATION));
         
         final String tags = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.TAGS));
+        Log.d("Video extraction", tags);
         video.tags = (tags != null) ? tags.split(",") : new String[0];
+        for (String tag: video.tags) Log.d("Video " + video.title, tag);
         
         video.likesCount = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.NUM_OF_LIKES));
         video.playsCount = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.NUM_OF_PLAYS));
