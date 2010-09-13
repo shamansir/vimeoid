@@ -3,6 +3,8 @@
  */
 package org.vimeoid.dto.simple;
 
+import android.database.Cursor;
+
 /**
  * <dl>
  * <dt>Project:</dt> <dd>vimeoid</dd>
@@ -90,6 +92,59 @@ public class Video {
         FieldsKeys.THUMB_SMALL, FieldsKeys.USER_IMG_SMALL, 
         FieldsKeys.NUM_OF_LIKES, FieldsKeys.NUM_OF_PLAYS, FieldsKeys.NUM_OF_COMMENTS
     };
+    
+    public final static String[] FULL_EXTRACT_PROJECTION = {
+        FieldsKeys._ID, FieldsKeys.TITLE, FieldsKeys.AUTHOR,
+        FieldsKeys.DURATION, FieldsKeys.TAGS, 
+        FieldsKeys.THUMB_SMALL, FieldsKeys.USER_IMG_SMALL, 
+        FieldsKeys.NUM_OF_LIKES, FieldsKeys.NUM_OF_PLAYS, FieldsKeys.NUM_OF_COMMENTS
+    };    
+    
+    public static Video shortFromCursor(Cursor cursor, int position) {
+    	if (cursor.getPosition() != position) throw new IllegalStateException("Please set position the cursor before passing it");
+    	
+        final Video video = new Video();
+        
+        video.id = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys._ID));
+        video.title = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.TITLE));
+        video.uploaderName = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.AUTHOR));
+        video.duration = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.DURATION));
+        
+        final String tags = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.TAGS));
+        video.tags = (tags != null) ? tags.split(",") : new String[0];
+        
+        video.likesCount = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.NUM_OF_LIKES));
+        video.playsCount = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.NUM_OF_PLAYS));
+        video.commentsCount = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.NUM_OF_COMMENTS));
+        
+        video.smallThumbnailUrl = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.THUMB_SMALL));
+        video.smallUploaderPortraitUrl = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.USER_IMG_SMALL));
+        
+        return video;
+    }
+    
+    public static Video fullFromCursor(Cursor cursor, int position) {
+    	if (cursor.getPosition() != position) throw new IllegalStateException("Please set position the cursor before passing it");
+    	
+        final Video video = new Video();
+        
+        video.id = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys._ID));
+        video.title = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.TITLE));
+        video.uploaderName = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.AUTHOR));
+        video.duration = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.DURATION));
+        
+        final String tags = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.TAGS));
+        video.tags = (tags != null) ? tags.split(",") : new String[0];
+        
+        video.likesCount = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.NUM_OF_LIKES));
+        video.playsCount = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.NUM_OF_PLAYS));
+        video.commentsCount = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.NUM_OF_COMMENTS));
+        
+        video.smallThumbnailUrl = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.THUMB_SMALL));
+        video.smallUploaderPortraitUrl = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.USER_IMG_SMALL));
+        
+        return video;
+    }    
     
     /* @Override
     public ContentValues extract() {

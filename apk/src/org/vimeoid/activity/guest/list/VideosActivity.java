@@ -43,9 +43,11 @@ import org.vimeoid.util.Utils;
  * @date Sep 3, 2010 11:58:57 PM 
  *
  */
-public class Videos extends ListActivity {
+public class VideosActivity extends ListActivity {
     
     public static final String TAG = "Videos";
+    
+    public static final String VIDEO_TITLE_EXTRA = "v_title";
     
     public static final int MAX_NUMBER_OF_PAGES = 3; 
     
@@ -101,7 +103,7 @@ public class Videos extends ListActivity {
             
             // Opening item information
             
-            // getListView().getItemAtPosition()            
+            Video video = (Video)getListView().getItemAtPosition(position);        
             
             Uri itemUri = Uri.withAppendedPath(
                     VimeoProvider.BASE_URI, "video/" + id);
@@ -111,9 +113,9 @@ public class Videos extends ListActivity {
             if (Intent.ACTION_PICK.equals(action) ||
                 Intent.ACTION_GET_CONTENT.equals(action))
             {
-                setResult(RESULT_OK, new Intent().setData(itemUri));
+                setResult(RESULT_OK, new Intent().setData(itemUri).putExtra(VIDEO_TITLE_EXTRA, video.title));
             } else {
-                startActivity(new Intent(Intent.ACTION_VIEW, itemUri));
+                startActivity(new Intent(Intent.ACTION_VIEW, itemUri).putExtra(VIDEO_TITLE_EXTRA, video.title));
             }
             
         } else {

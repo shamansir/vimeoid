@@ -32,7 +32,7 @@ import android.view.ContextMenu.ContextMenuInfo;
  */
 
 // TODO: for sync use SyncAdapter on API Level 7
-public class Videos extends ListActivity {
+public class VideosActivity extends ListActivity {
     
     /** Called when the activity is first created. */
     @Override

@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -60,7 +61,7 @@ public class VideosListAdapter extends EasyCursorsAdapter<Video> {
             itemHolder.tvTitle = (TextView) convertView.findViewById(R.id.videoItemTitle);
             itemHolder.tvAuthor = (TextView) convertView.findViewById(R.id.videoItemAuthor);
             itemHolder.tvDuration = (TextView) convertView.findViewById(R.id.videoItemDuration);
-            itemHolder.tvTags = (TextView) convertView.findViewById(R.id.videoItemTags);
+            itemHolder.llTags = (LinearLayout) convertView.findViewById(R.id.videoItemTags);
             
             itemHolder.tvLikes = (TextView) convertView.findViewById(R.id.videoItemNumOfLikes);
             itemHolder.tvPlays = (TextView) convertView.findViewById(R.id.videoItemNumOfPlays);
@@ -80,13 +81,21 @@ public class VideosListAdapter extends EasyCursorsAdapter<Video> {
         itemHolder.tvTitle.setText(video.title);
         itemHolder.tvAuthor.setText(video.uploaderName);
         itemHolder.tvDuration.setText(Utils.adaptDuration(video.duration));
-        //itemHolder.tvTags.setText(video.tags);
+        injectTags(video.tags, itemHolder.llTags);
         
         itemHolder.tvLikes.setText(String.valueOf(video.likesCount));
         itemHolder.tvPlays.setText(String.valueOf(video.playsCount));
         itemHolder.tvComments.setText(String.valueOf(video.commentsCount));
         
         return convertView;
+    }
+    
+    protected void injectTags(String[] tags, ViewGroup group) {
+    	for (String tag: tags) {
+    		final LinearLayout tagStruct = (LinearLayout)layoutInflater.inflate(R.layout.tag_for_the_item, null);
+    		((TextView)tagStruct.findViewById(R.id.tagItem)).setText(tag);
+    		group.addView(tagStruct);
+    	}
     }
     
     @Override
@@ -102,33 +111,16 @@ public class VideosListAdapter extends EasyCursorsAdapter<Video> {
         TextView tvTitle;
         TextView tvAuthor;
         TextView tvDuration;
-        TextView tvTags;
+        LinearLayout llTags;
         
         TextView tvLikes;
         TextView tvPlays;
         TextView tvComments;
     }
 
-    @Override
-    public Video extractItem(Cursor cursor, int position) {
-        final Video result = new Video();
-        
-        result.id = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys._ID));
-        result.title = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.TITLE));
-        result.uploaderName = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.AUTHOR));
-        result.duration = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.DURATION));
-        
-        final String tags = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.TAGS));
-        result.tags = (tags != null) ? tags.split(",") : new String[0];
-        
-        result.likesCount = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.NUM_OF_LIKES));
-        result.playsCount = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.NUM_OF_PLAYS));
-        result.commentsCount = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.NUM_OF_COMMENTS));
-        
-        result.smallThumbnailUrl = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.THUMB_SMALL));
-        result.smallUploaderPortraitUrl = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.USER_IMG_SMALL));
-        
-        return result;
-    }
+	@Override
+	public Video extractItem(Cursor cursor, int position) {
+		return Video.shortFromCursor(cursor, position);
+	}
 
 }

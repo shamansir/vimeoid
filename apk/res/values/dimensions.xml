@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-	<dimen name="titlebar_height">52dp</dimen>
-	<dimen name="titlebar_icons_side">48dp</dimen>
+	<dimen name="titlebar_height">36dp</dimen>
+	<dimen name="titlebar_icons_side">32dp</dimen>
     <dimen name="action_height">52dp</dimen>
     <dimen name="action_icons_side">48dp</dimen>
     <dimen name="item_thumb_width">100dp</dimen>	

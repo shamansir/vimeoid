@@ -115,13 +115,13 @@ public class VimeoProvider extends ContentProvider {
         final ApiCallInfo apiCallInfo = collectCallInfo(contentUri); 
         final URI fullCallUrl = getFullApiUrl(apiCallInfo.apiUrlPart);
         try {
-            if (apiCallInfo.multipleResult) {
+            // if (apiCallInfo.multipleResult) {
                 final JSONArray jsonArr = JsonOverHttp.use().askForArray(fullCallUrl);
                 return new JsonObjectsCursor(jsonArr, projection, apiCallInfo);
-            } else {
+            /* } else {
                 final JSONObject jsonObj = JsonOverHttp.use().askForObject(fullCallUrl);
                 return new JsonObjectsCursor(jsonObj, projection, apiCallInfo);
-            }            
+            } */          
         } catch (ClientProtocolException cpe) {
             Log.e(TAG, "Client protocol exception" + cpe.getLocalizedMessage());
             cpe.printStackTrace();

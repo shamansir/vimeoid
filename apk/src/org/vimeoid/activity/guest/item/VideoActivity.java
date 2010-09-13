@@ -4,13 +4,17 @@
 package org.vimeoid.activity.guest.item;
 
 import org.vimeoid.R;
+import org.vimeoid.activity.guest.list.VideosActivity;
 import org.vimeoid.connection.ApiCallInfo;
 import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.simple.VimeoProvider;
+import org.vimeoid.dto.simple.Video;
 import org.vimeoid.util.Utils;
 
 import android.app.Activity;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,9 +38,11 @@ import android.widget.TextView;
  * @date Sep 10, 2010 12:15:38 AM 
  *
  */
-public class Video extends Activity {
+public class VideoActivity extends Activity {
     
     public static final String TAG = "Video";
+    
+    private View titleBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +53,14 @@ public class Video extends Activity {
         final Uri contentUri = getIntent().getData();
         ApiCallInfo callInfo = VimeoProvider.collectCallInfo(contentUri);        
         
-        View titleBar = findViewById(R.id.titleBar);
+        String subjectName = callInfo.subject;
+        if (getIntent().hasExtra(VideosActivity.VIDEO_TITLE_EXTRA)) {
+        	subjectName = getIntent().getStringExtra(VideosActivity.VIDEO_TITLE_EXTRA);
+        }
+        
+        titleBar = findViewById(R.id.titleBar);
         ((ImageView)titleBar.findViewById(R.id.subjectIcon)).setImageResource(Utils.drawableByContent(callInfo.subjectType));
-        ((TextView)titleBar.findViewById(R.id.subjectTitle)).setText(callInfo.subject); // FIXME: set to Title
+        ((TextView)titleBar.findViewById(R.id.subjectTitle)).setText(subjectName);
         ((ImageView)titleBar.findViewById(R.id.resultIcon)).setImageResource(R.drawable.info);
         
         final View progressBar = findViewById(R.id.progressBar);
@@ -67,11 +78,61 @@ public class Video extends Activity {
                 progressBar.setVisibility(((newProgress == 0) || (newProgress == 100)) ? View.GONE : View.VISIBLE);
                 super.onProgressChanged(view, newProgress);
             }
-        });        
+        });
         
         Log.d(TAG, "Loading player: " + VimeoApi.getPlayerUrl(videoId, playerHeight));
         playerView.loadUrl(VimeoApi.getPlayerUrl(videoId, playerHeight));
         
+        new LoadItemTask(Video.FULL_EXTRACT_PROJECTION).execute(contentUri);
+        
+    }
+    
+    protected void onVideoDataReceived(Video video) {
+    	Log.d(TAG, "video " + video.id + " data received, uploader: " + video.uploaderName);
+    	((TextView)titleBar.findViewById(R.id.subjectTitle)).setText(video.title);
+    }
+    
+    protected class LoadItemTask extends AsyncTask<Uri, Void, Cursor> {
+
+        // TODO: show progress as a dialog
+        
+        private final String[] projection;
+        private final View progressBar;
+        
+        protected LoadItemTask(String[] projection) {
+            this.projection = projection;
+            this.progressBar = findViewById(R.id.progressBar);   
+        }
+        
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            
+            progressBar.setVisibility(View.VISIBLE);            
+        }
+
+        @Override
+        protected Cursor doInBackground(Uri... uris) {
+            if (uris.length <= 0) return null;
+            if (uris.length > 1) throw new UnsupportedOperationException("This task do not supports several params");
+            return getContentResolver().query(uris[0], projection, null, null, null);
+        }
+        
+        @Override
+        protected void onPostExecute(Cursor cursor) {
+            
+            if (cursor != null) {
+            	
+            	if (cursor.getCount() > 1) throw new IllegalStateException("There must be the only one item returned");
+            	
+            	cursor.moveToFirst();
+            	onVideoDataReceived(Video.fullFromCursor(cursor, 0));
+                cursor.close();
+            }
+            
+            progressBar.setVisibility(View.GONE);            
+        }
+
     }
     
 }
