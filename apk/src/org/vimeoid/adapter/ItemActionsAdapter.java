@@ -3,17 +3,19 @@
  */
 package org.vimeoid.adapter;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.vimeoid.R;
 import org.vimeoid.adapter.ItemAction.ActionSelectedCallback;
 import org.vimeoid.adapter.ItemAction.ItemActionsGroup;
 
-import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * <dl>
@@ -31,16 +33,17 @@ import android.widget.BaseAdapter;
  */
 public class ItemActionsAdapter extends BaseAdapter {
     
-    private final Context context;
-    private final int layout;
+    private final LayoutInflater inflater;
+    private final int groupLayout;
+    private final int actionLayout;
     
     private final List<ItemActionsGroup> groups = new LinkedList<ItemActionsGroup>();
-    
     private int itemsCount = 0;
     
-    public ItemActionsAdapter(Context context, int layout) {
-        this.context = context;
-        this.layout = layout;
+    public ItemActionsAdapter(final LayoutInflater inflater) {
+        this.inflater = inflater;
+        this.groupLayout = R.layout.action_group_title;
+        this.actionLayout = R.layout.action_item;
     }
 
     @Override
@@ -79,9 +82,11 @@ public class ItemActionsAdapter extends BaseAdapter {
         final Object testObj = getItem(position);
         if (testObj == null) throw new IllegalStateException("Failed to get object at position " + position);
         if (testObj instanceof ItemActionsGroup) {
-            
+            final ItemActionsGroup group = (ItemActionsGroup)testObj;
+            final GroupHeaderHolder itemHolder = null;
         } else if (testObj instanceof ItemAction) {
-            
+            final ItemAction item = (ItemAction)testObj;
+            final ItemActionHolder itemHolder = null;
         }
         return null;
     }
@@ -105,6 +110,15 @@ public class ItemActionsAdapter extends BaseAdapter {
     public void clear() {
         itemsCount = 0;
         groups.clear();
+    }
+    
+    private class GroupHeaderHolder {
+        TextView tvTitle;
+    }
+    
+    private class ItemActionHolder {
+        ImageView ivIcon;
+        TextView tvTitle;
     }
 
 }

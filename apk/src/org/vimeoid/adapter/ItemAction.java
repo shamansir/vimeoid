@@ -52,8 +52,8 @@ public class ItemAction {
     }
     
     public final ItemActionsGroup group;
-    public final int icon;
-    public final int title;
+    public int icon = -1;
+    public int title = -1;
     public final ActionSelectedCallback callback;
     
     ItemAction(ItemActionsGroup group, int icon, int title, ActionSelectedCallback callback) {

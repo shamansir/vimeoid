@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="@dimen/actions_group_title_height"
+              android:background="@color/actions_group_title_bg">
+      <TextView android:id="@+id/actionsGroupTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_vertical|left"
+                android:textSize="@dimen/actions_group_title_font_size"
+                android:textColor="@color/actions_group_title_text"
+                android:textStyle="bold" />
+</LinearLayout>
