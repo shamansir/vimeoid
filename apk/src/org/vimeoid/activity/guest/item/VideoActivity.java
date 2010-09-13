@@ -73,7 +73,7 @@ public class VideoActivity extends Activity {
         final long videoId = Long.valueOf(callInfo.subject);
         final int playerHeight = getResources().getDimensionPixelSize((R.dimen.video_player_height));
         
-        playerView.setWebChromeClient(new WebChromeClient() {           
+        playerView.setWebChromeClient(new WebChromeClient() {
             @Override public void onProgressChanged(WebView view, int newProgress) {
                 progressBar.setVisibility(((newProgress == 0) || (newProgress == 100)) ? View.GONE : View.VISIBLE);
                 super.onProgressChanged(view, newProgress);
