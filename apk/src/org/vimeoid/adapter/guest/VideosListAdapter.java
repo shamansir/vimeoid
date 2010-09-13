@@ -90,11 +90,12 @@ public class VideosListAdapter extends EasyCursorsAdapter<Video> {
         return convertView;
     }
     
-    protected void injectTags(String[] tags, ViewGroup group, int curPosition) {
+    protected void injectTags(final String[] tags, final ViewGroup group, final int curPosition) {
+    	group.removeAllViews();
     	if (tags.length == 0) {
     		return;
     	}
-    	for (String tag: tags) {
+    	for (final String tag: tags) {
     		if (tag.trim().length() == 0) continue;
     		final LinearLayout tagStruct = (LinearLayout)layoutInflater.inflate(R.layout.tag_for_the_item, null);
     		// FIXME: redraws another videos' tags 
