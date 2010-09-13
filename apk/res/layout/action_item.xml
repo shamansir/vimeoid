@@ -13,7 +13,7 @@
               android:layout_gravity="center_vertical|left"
               android:textSize="@dimen/item_action_font_size"
               android:textColor="@color/action_item_text"
-              android:paddingLeft="2px"
+              android:paddingLeft="2dp"
               android:lines="1"
               android:ellipsize="marquee"                 
               android:scrollHorizontally="true" />
