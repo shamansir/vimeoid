@@ -28,7 +28,7 @@ import android.test.AndroidTestCase;
  */
 public class ItemActionsAdapterTest extends AndroidTestCase {
     
-    final SectionedActionsAdapter adapter = new SectionedActionsAdapter(null, null);
+    final SectionedActionsAdapter adapter = new SectionedActionsAdapter(null);
     
     public void testAddingGroupsAndItems() {
         adapter.clear();

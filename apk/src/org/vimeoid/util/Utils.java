@@ -66,6 +66,15 @@ public class Utils {
         return params;
     }
     
+    public static String format(String source, String... params) {
+        String result = source;
+        int pos = 0;
+        while (pos < params.length) {
+            result = result.replaceAll("\\{" + params[pos++] + "\\}", params[pos++]);
+        }
+        return result;
+    }
+    
     public static void copyStream(InputStream is, OutputStream os) {
         final int buffer_size=1024;
         try

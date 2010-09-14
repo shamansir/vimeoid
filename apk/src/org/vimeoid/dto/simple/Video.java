@@ -62,7 +62,7 @@ public class Video {
         public static final String URL = "url";
         public static final String MOBILE_URL = "mobile_url";
         public static final String DESCRIPTION = "description";        
-        public static final String UPLOAD_DATE = "upload_date";
+        public static final String UPLOADED_ON = "upload_date";
         public static final String TAGS = "tags";
         public static final String DURATION = "duration";
         
@@ -97,7 +97,9 @@ public class Video {
         FieldsKeys._ID, FieldsKeys.TITLE, FieldsKeys.AUTHOR,
         FieldsKeys.DURATION, FieldsKeys.TAGS, 
         FieldsKeys.THUMB_SMALL, FieldsKeys.USER_IMG_SMALL, 
-        FieldsKeys.NUM_OF_LIKES, FieldsKeys.NUM_OF_PLAYS, FieldsKeys.NUM_OF_COMMENTS
+        FieldsKeys.NUM_OF_LIKES, FieldsKeys.NUM_OF_PLAYS, FieldsKeys.NUM_OF_COMMENTS,
+        FieldsKeys.DESCRIPTION, FieldsKeys.UPLOADED_ON, 
+        FieldsKeys.WIDTH, FieldsKeys.HEIGHT
     };    
     
     public static Video shortFromCursor(Cursor cursor, int position) {
@@ -124,24 +126,13 @@ public class Video {
     }
     
     public static Video fullFromCursor(Cursor cursor, int position) {
-    	if (cursor.getPosition() != position) throw new IllegalStateException("Please set position the cursor before passing it");
-    	
-        final Video video = new Video();
+    	final Video video = shortFromCursor(cursor, position);
         
-        video.id = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys._ID));
-        video.title = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.TITLE));
-        video.uploaderName = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.AUTHOR));
-        video.duration = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.DURATION));
+        video.description = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.DESCRIPTION));
+        video.uploadedOn = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.UPLOADED_ON));
         
-        final String tags = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.TAGS));
-        video.tags = (tags != null) ? tags.split(",") : new String[0];
-        
-        video.likesCount = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.NUM_OF_LIKES));
-        video.playsCount = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.NUM_OF_PLAYS));
-        video.commentsCount = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.NUM_OF_COMMENTS));
-        
-        video.smallThumbnailUrl = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.THUMB_SMALL));
-        video.smallUploaderPortraitUrl = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.USER_IMG_SMALL));
+        video.width = cursor.getInt(cursor.getColumnIndex(Video.FieldsKeys.WIDTH));
+        video.height = cursor.getInt(cursor.getColumnIndex(Video.FieldsKeys.HEIGHT));
         
         return video;
     }    

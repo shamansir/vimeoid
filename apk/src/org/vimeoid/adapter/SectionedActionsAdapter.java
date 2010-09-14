@@ -50,16 +50,25 @@ public class SectionedActionsAdapter extends BaseAdapter {
     private final List<ActionsSection> sections = new LinkedList<ActionsSection>();
     private int itemsCount = 0;
     
-    public SectionedActionsAdapter(Context context, final LayoutInflater inflater) {
+    public SectionedActionsAdapter(Context context, final LayoutInflater inflater, ImageLoader imagesLoader) {
         this.context = context;
         this.inflater = inflater;
         this.sectionLayout = R.layout.actions_section_title;
         this.actionLayout = R.layout.item_action;
-        this.imagesLoader = (context != null) ? new ImageLoader(context, 
-                                                               R.drawable.item_loading_small, 
-                                                               R.drawable.item_failed_small)
-                                              : null;
+        this.imagesLoader = (imagesLoader != null) ? imagesLoader : 
+                                ((context != null) ? new ImageLoader(context, 
+                                                         R.drawable.item_loading_small, 
+                                                         R.drawable.item_failed_small)
+                                                   : null);
     }
+    
+    public SectionedActionsAdapter(Context context, final LayoutInflater inflater) {
+        this(context, inflater, null);
+    }
+    
+    public SectionedActionsAdapter(final LayoutInflater inflater) {
+        this(null, inflater, null);
+    }    
 
     @Override
     public int getCount() {

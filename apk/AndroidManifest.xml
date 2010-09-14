@@ -4,10 +4,12 @@
                         android:versionCode="1"
                         android:versionName="0.0.8">
     <application android:icon="@drawable/icon" android:label="@string/app_name">
+        <!-- PROVIDER -->
         <provider android:name=".connection.simple.VimeoProvider"
                   android:authorities="org.vimeoid.simple.provider" />
         <!-- <activity android:label="@string/app_name" android:name="LauncherActivity"
                        android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">  -->
+        <!-- WELCOME -->       
         <activity android:label="@string/app_name" 
                   android:name=".activity.Welcome"
                   android:theme="@android:style/Theme.NoTitleBar">
@@ -16,6 +18,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- CREDENTIALS -->
         <activity android:label="@string/app_name" 
                   android:name=".activity.ReceiveCredentials">
             <intent-filter>  
@@ -24,7 +27,8 @@
                 <category android:name="android.intent.category.BROWSABLE"></category>  
                 <data android:scheme="vimeoid" android:host="oauth.done"></data>  
             </intent-filter>
-        </activity>        
+        </activity>
+        <!-- VIDEO -->        
         <activity android:label="Video"
                   android:name=".activity.guest.item.VideoActivity"
                   android:theme="@android:style/Theme.Light.NoTitleBar">
@@ -35,6 +39,7 @@
                 <data android:mimeType="vnd.android.cursor.item/vnd.vimeo.video" />
             </intent-filter>
         </activity>
+        <!-- VIDEOS -->
         <activity android:label="Videos"
                   android:name=".activity.guest.list.VideosActivity"
                   android:theme="@android:style/Theme.NoTitleBar">

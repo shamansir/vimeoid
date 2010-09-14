@@ -164,5 +164,8 @@ public final class R {
         public static final int app_name=0x7f060000;
         public static final int information=0x7f060001;
         public static final int statistics=0x7f060002;
+        public static final int videoActualSize=0x7f060004;
+        public static final int videoDescription=0x7f060003;
+        public static final int videoUploader=0x7f060005;
     }
 }
