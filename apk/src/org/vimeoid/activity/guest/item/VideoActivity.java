@@ -95,13 +95,14 @@ public class VideoActivity extends Activity {
     	((TextView)titleBar.findViewById(R.id.subjectTitle)).setText(video.title);
     	
     	final ItemActionsAdapter actionsAdapter = new ItemActionsAdapter(getLayoutInflater());
+    	
     	int infoGroup = actionsAdapter.addGroup(R.string.information);
     	actionsAdapter.addAction(infoGroup, R.drawable.contact, R.string.information, null);
     	actionsAdapter.addAction(infoGroup, R.drawable.contact, R.string.information, null);
     	
     	int statsGroup = actionsAdapter.addGroup(R.string.statistics);
     	actionsAdapter.addAction(statsGroup, R.drawable.like, R.string.statistics, null);
-    	actionsAdapter.addAction(statsGroup, R.drawable.like, R.string.statistics, null);    	
+    	actionsAdapter.addAction(statsGroup, R.drawable.like, R.string.statistics, null);
     	
     	final ListView actionsList = (ListView)findViewById(R.id.actionsList);
     	actionsList.setAdapter(actionsAdapter);

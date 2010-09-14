@@ -10,6 +10,7 @@ import org.vimeoid.R;
 import org.vimeoid.adapter.ItemAction.ActionSelectedCallback;
 import org.vimeoid.adapter.ItemAction.ItemActionsGroup;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +33,13 @@ import android.widget.TextView;
  *
  */
 public class ItemActionsAdapter extends BaseAdapter {
+	
+	public static final String TAG = "ItemActionsAdapter";
     
-    private final LayoutInflater inflater;
+    public static final int ITEM_VIEW_TYPE = 0;
+    public static final int GROUP_VIEW_TYPE = 1;
+    
+	private final LayoutInflater inflater;
     private final int groupLayout;
     private final int actionLayout;
     
@@ -76,16 +82,39 @@ public class ItemActionsAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+    
+    @Override
+    public int getItemViewType(int position) {
+    	int itemsLeft = position;
+    	for (ItemActionsGroup group: groups) {
+    		
+    		if (itemsLeft == 0) return GROUP_VIEW_TYPE;
+    		itemsLeft--;
+    		
+    		if (itemsLeft < group.size()) return ITEM_VIEW_TYPE;
+    		itemsLeft -= group.size();
+    		
+    	}
+    	return -1;
+    }
+    
+    @Override
+    public boolean isEnabled(int position) {
+    	return getItemViewType(position) != GROUP_VIEW_TYPE;
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         
-    	final Object testObj = getItem(position);
-        if (testObj == null) throw new IllegalStateException("Failed to get object at position " + position);
+    	final int viewType = getItemViewType(position);
+    	
+        if (viewType == -1) throw new IllegalStateException("Failed to get object at position " + position);
         
-        if (testObj instanceof ItemActionsGroup) {
+        Log.d(TAG, "generating view for item " + position);
+        
+        if (viewType == GROUP_VIEW_TYPE) {
         	
-            final ItemActionsGroup group = (ItemActionsGroup)testObj;
+            final ItemActionsGroup group = (ItemActionsGroup) getItem(position);
             GroupHeaderHolder itemHolder = null;
             
             if (convertView == null) {
@@ -99,9 +128,9 @@ public class ItemActionsAdapter extends BaseAdapter {
             
             itemHolder.tvTitle.setText(group.title);
             
-        } else if (testObj instanceof ItemAction) {
+        } else if (viewType == ITEM_VIEW_TYPE) {
             
-        	final ItemAction item = (ItemAction)testObj;
+        	final ItemAction item = (ItemAction) getItem(position);
             ItemActionHolder itemHolder = null;
             
             if (convertView == null) {
@@ -125,7 +154,7 @@ public class ItemActionsAdapter extends BaseAdapter {
     public int addGroup(int title) {
         final ItemActionsGroup newGroup = new ItemActionsGroup(groups.size(), title); 
         groups.add(newGroup);
-        itemsCount++;        
+        itemsCount++;
         return newGroup.id;
     }
     
