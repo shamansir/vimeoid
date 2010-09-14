@@ -79,16 +79,47 @@ public class ItemActionsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final Object testObj = getItem(position);
+        
+    	final Object testObj = getItem(position);
         if (testObj == null) throw new IllegalStateException("Failed to get object at position " + position);
+        
         if (testObj instanceof ItemActionsGroup) {
+        	
             final ItemActionsGroup group = (ItemActionsGroup)testObj;
-            final GroupHeaderHolder itemHolder = null;
+            GroupHeaderHolder itemHolder = null;
+            
+            if (convertView == null) {
+            	convertView = inflater.inflate(groupLayout, parent, false);
+                itemHolder = new GroupHeaderHolder();
+                itemHolder.tvTitle = (TextView) convertView.findViewById(R.id.actionsGroupTitle); 
+                convertView.setTag(itemHolder);
+            } else {
+            	itemHolder = (GroupHeaderHolder)convertView.getTag();
+            }
+            
+            itemHolder.tvTitle.setText(group.title);
+            
         } else if (testObj instanceof ItemAction) {
-            final ItemAction item = (ItemAction)testObj;
-            final ItemActionHolder itemHolder = null;
+            
+        	final ItemAction item = (ItemAction)testObj;
+            ItemActionHolder itemHolder = null;
+            
+            if (convertView == null) {
+           	    convertView = inflater.inflate(actionLayout, parent, false);
+                itemHolder = new ItemActionHolder();
+                itemHolder.tvTitle = (TextView) convertView.findViewById(R.id.actionName);
+                itemHolder.ivIcon = (ImageView) convertView.findViewById(R.id.actionIcon); 
+                convertView.setTag(itemHolder);
+           } else {
+           	    itemHolder = (ItemActionHolder)convertView.getTag();
+           }
+           
+           itemHolder.tvTitle.setText(item.title);
+           itemHolder.ivIcon.setImageResource(item.icon);
+            
         }
-        return null;
+        
+        return convertView;
     }
 
     public int addGroup(int title) {

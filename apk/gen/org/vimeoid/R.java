@@ -109,8 +109,8 @@ public final class R {
     public static final class id {
         public static final int actionIcon=0x7f080001;
         public static final int actionName=0x7f080002;
-        public static final int actions=0x7f080014;
         public static final int actionsGroupTitle=0x7f080000;
+        public static final int actionsList=0x7f080014;
         public static final int enterButton=0x7f080015;
         public static final int guestButton=0x7f080016;
         public static final int itemsEmptyListView=0x7f080007;
@@ -160,5 +160,7 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f060000;
+        public static final int information=0x7f060001;
+        public static final int statistics=0x7f060002;
     }
 }

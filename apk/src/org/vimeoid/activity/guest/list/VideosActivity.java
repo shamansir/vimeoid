@@ -105,17 +105,13 @@ public class VideosActivity extends ListActivity {
             
             Video video = (Video)getListView().getItemAtPosition(position);        
             
-            Uri itemUri = Uri.withAppendedPath(
-                    VimeoProvider.BASE_URI, "/video/" + id);
-            Log.d(TAG, "Video with id " + id + " selected");
-            
             String action = getIntent().getAction();
             if (Intent.ACTION_PICK.equals(action) ||
                 Intent.ACTION_GET_CONTENT.equals(action))
-            {
-                setResult(RESULT_OK, new Intent().setData(itemUri).putExtra(VIDEO_TITLE_EXTRA, video.title));
+            { 
+            	invokePick(video);
             } else {
-                startActivity(new Intent(Intent.ACTION_VIEW, itemUri).putExtra(VIDEO_TITLE_EXTRA, video.title));
+            	invokeSelect(video);
             }
             
         } else {
@@ -139,6 +135,21 @@ public class VideosActivity extends ListActivity {
     	
         super.onListItemClick(l, v, position, id);
     }
+    
+    protected Uri getVideoPageUri(Video video) {
+    	return Uri.withAppendedPath(
+                VimeoProvider.BASE_URI, "/video/" + video.id);
+    }
+    
+    protected void invokePick(Video video) {
+        Log.d(TAG, "Video with id " + video.id + " requested");
+        setResult(RESULT_OK, new Intent().setData(getVideoPageUri(video)).putExtra(VIDEO_TITLE_EXTRA, video.title));
+    }
+    
+    protected void invokeSelect(Video video) {
+        Log.d(TAG, "Video with id " + video.id + " selected");    	
+        startActivity(new Intent(Intent.ACTION_VIEW, getVideoPageUri(video)).putExtra(VIDEO_TITLE_EXTRA, video.title));    	
+    }    
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

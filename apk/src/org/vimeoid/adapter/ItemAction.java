@@ -44,6 +44,10 @@ public class ItemAction {
             this.id = id;
             this.title = title;
         }
+
+		public boolean contains(ItemAction action) {
+			return actions.contains(action);
+		}
         
     }
     
@@ -62,4 +66,5 @@ public class ItemAction {
         this.title = title;
         this.callback = callback;
     }
+
 }
