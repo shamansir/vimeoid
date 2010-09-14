@@ -207,7 +207,6 @@ public class VideosActivity extends ListActivity {
         
         Video video = (Video)getListView().getItemAtPosition(position);         
         
-        String itemDescription;
         switch (item.getItemId()) {
             /* case R.id.menu_Play: {
                     try {
@@ -221,11 +220,10 @@ public class VideosActivity extends ListActivity {
                     }
             } */
             //case R.id.menu_watchLater: itemDescription = "WatchLater "; break;        
-            case R.id.menu_viewInfo: itemDescription = "View info "; break;
-            case R.id.menu_viewAuthorInfo: itemDescription = "View author info"; break;
-            default: itemDescription = "";
+            case R.id.menu_viewInfo: invokeSelect(video); break;
+            case R.id.menu_viewAuthorInfo: Dialogs.makeToast(this, "Author info"); break;
+            default: Dialogs.makeToast(this, "Unknown item");
         }
-        Dialogs.makeToast(this, itemDescription);
         return super.onContextItemSelected(item);
         
     }

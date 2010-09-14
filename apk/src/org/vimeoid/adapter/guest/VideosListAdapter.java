@@ -75,7 +75,6 @@ public class VideosListAdapter extends EasyCursorsAdapter<Video> {
             
         }
         
-        itemHolder.ivThumb.setTag(video.smallThumbnailUrl);
         imagesLoader.displayImage(video.smallThumbnailUrl, itemHolder.ivThumb);
         
         itemHolder.tvTitle.setText(video.title);

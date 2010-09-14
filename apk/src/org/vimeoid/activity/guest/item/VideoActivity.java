@@ -94,18 +94,19 @@ public class VideoActivity extends Activity {
     	Log.d(TAG, "video " + video.id + " data received, uploader: " + video.uploaderName);
     	((TextView)titleBar.findViewById(R.id.subjectTitle)).setText(video.title);
     	
-    	final SectionedActionsAdapter actionsAdapter = new SectionedActionsAdapter(getLayoutInflater());
+    	final SectionedActionsAdapter actionsAdapter = new SectionedActionsAdapter(this, getLayoutInflater());
     	
     	int infoSection = actionsAdapter.addSection(R.string.information);
-    	actionsAdapter.addAction(infoSection, R.drawable.contact, R.string.information, null);
-    	actionsAdapter.addAction(infoSection, R.drawable.contact, R.string.information, null);
+    	actionsAdapter.addAction(infoSection, R.drawable.contact, R.string.information);
+    	actionsAdapter.addAction(infoSection, R.drawable.contact, R.string.information);
     	
     	int statsSection = actionsAdapter.addSection(R.string.statistics);
-    	actionsAdapter.addAction(statsSection, R.drawable.like, R.string.statistics, null);
-    	actionsAdapter.addAction(statsSection, R.drawable.like, R.string.statistics, null);
+    	actionsAdapter.addAction(statsSection, R.drawable.like, R.string.statistics);
+    	actionsAdapter.addAction(statsSection, R.drawable.like, R.string.statistics);
     	
     	final ListView actionsList = (ListView)findViewById(R.id.actionsList);
     	actionsList.setAdapter(actionsAdapter);
+        actionsList.setSelection(0);
     	actionsList.invalidate();
     }
     

@@ -28,6 +28,7 @@ import android.test.AndroidTestCase;
  * @date Aug 25, 2010 11:20:52 PM 
  *
  */
+// TODO: use ProviderTestCase2
 public class VimeoProviderTest extends AndroidTestCase {
     
     private static final String[] testUsers = {"foo_man", "barman", "user3801", "17318"};

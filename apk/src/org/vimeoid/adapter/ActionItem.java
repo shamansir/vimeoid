@@ -6,6 +6,8 @@ package org.vimeoid.adapter;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.view.View.OnClickListener;
+
 /**
  * <dl>
  * <dt>Project:</dt> <dd>vimeoid</dd>
@@ -25,7 +27,7 @@ public class ActionItem {
     public static class ActionsSection {
         
         public final int id;
-        public final int title;
+        public final String title;
         public final List<ActionItem> actions = new LinkedList<ActionItem>();
         
         void addAction(ActionItem action) {
@@ -40,7 +42,7 @@ public class ActionItem {
             return actions.size();
         }
         
-        ActionsSection(int id, int title) {
+        ActionsSection(int id, String title) {
             this.id = id;
             this.title = title;
         }
@@ -51,20 +53,29 @@ public class ActionItem {
         
     }
     
-    public static interface ActionSelectedCallback {
-        public void execute();
-    }
-    
     public final ActionsSection section;
     public int icon = -1;
-    public int title = -1;
-    public final ActionSelectedCallback callback;
+    public String title = null;
+    public OnClickListener onClick = null;
+    public final String iconUrl;
     
-    ActionItem(ActionsSection section, int icon, int title, ActionSelectedCallback callback) {
+    private ActionItem(ActionsSection section, int icon, String iconUrl, String title) {
         this.section = section;
         this.icon = icon;
         this.title = title;
-        this.callback = callback;
+        this.iconUrl = iconUrl;        
+    }
+    
+    ActionItem(ActionsSection section, int icon, String title) {
+        this(section, icon, null, title);
+    }
+    
+    ActionItem(ActionsSection section, String iconUrl, String title) {
+        this(section, -1, iconUrl, title);
+    }
+    
+    public void onClick() {
+        
     }
 
 }

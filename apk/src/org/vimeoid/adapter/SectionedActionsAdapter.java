@@ -7,9 +7,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.vimeoid.R;
-import org.vimeoid.adapter.ActionItem.ActionSelectedCallback;
 import org.vimeoid.adapter.ActionItem.ActionsSection;
 
+import com.fedorvlasov.lazylist.ImageLoader;
+
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,17 +41,24 @@ public class SectionedActionsAdapter extends BaseAdapter {
     public static final int ITEM_VIEW_TYPE = 0;
     public static final int SECTION_VIEW_TYPE = 1;
     
+    private final Context context;
 	private final LayoutInflater inflater;
+	private final ImageLoader imagesLoader;
     private final int sectionLayout;
     private final int actionLayout;
     
     private final List<ActionsSection> sections = new LinkedList<ActionsSection>();
     private int itemsCount = 0;
     
-    public SectionedActionsAdapter(final LayoutInflater inflater) {
+    public SectionedActionsAdapter(Context context, final LayoutInflater inflater) {
+        this.context = context;
         this.inflater = inflater;
         this.sectionLayout = R.layout.actions_section_title;
         this.actionLayout = R.layout.item_action;
+        this.imagesLoader = (context != null) ? new ImageLoader(context, 
+                                                               R.drawable.item_loading_small, 
+                                                               R.drawable.item_failed_small)
+                                              : null;
     }
 
     @Override
@@ -137,34 +146,61 @@ public class SectionedActionsAdapter extends BaseAdapter {
            	    convertView = inflater.inflate(actionLayout, parent, false);
                 itemHolder = new ActionItemHolder();
                 itemHolder.tvTitle = (TextView) convertView.findViewById(R.id.actionName);
-                itemHolder.ivIcon = (ImageView) convertView.findViewById(R.id.actionIcon); 
+                itemHolder.ivIcon = (ImageView) convertView.findViewById(R.id.actionIcon);
                 convertView.setTag(itemHolder);
            } else {
            	    itemHolder = (ActionItemHolder)convertView.getTag();
            }
            
-           itemHolder.tvTitle.setText(item.title);
-           itemHolder.ivIcon.setImageResource(item.icon);
+           itemHolder.tvTitle.setText(item.title);           
+           if (item.icon != -1) {
+               itemHolder.ivIcon.setImageResource(item.icon);
+           } else {
+               if (imagesLoader != null) {
+                   imagesLoader.displayImage(item.iconUrl, itemHolder.ivIcon);
+               } else throw new IllegalStateException("ImagesLoader must be initialized to load images");
+           }
+           if (item.onClick != null) convertView.setOnClickListener(item.onClick);           
             
         }
         
         return convertView;
     }
-
+    
     public int addSection(int title) {
+        return addSection(context.getString(title));
+    }
+
+    public int addSection(String title) {
         final ActionsSection newGroup = new ActionsSection(sections.size(), title); 
         sections.add(newGroup);
         itemsCount++;
         return newGroup.id;
     }
     
-    public ActionItem addAction(int section, int icon, int title, ActionSelectedCallback callback) {
+    private ActionItem addAction(int section, int icon, String iconUrl, String title) {
         if (section >= sections.size() || (section < 0)) throw new IllegalArgumentException("No section with such id (" + section + ") resgistered");
         final ActionsSection subjGroup = sections.get(section);
-        final ActionItem newAction = new ActionItem(subjGroup, icon, title, callback); 
+        final ActionItem newAction = (icon != -1) ? new ActionItem(subjGroup, icon, title) : new ActionItem(subjGroup, iconUrl, title); 
         subjGroup.addAction(newAction);
         itemsCount++;
-        return newAction;
+        return newAction;        
+    }
+    
+    public ActionItem addAction(int section, String iconUrl, String title) {
+        return addAction(section, -1, iconUrl, title);
+    }    
+    
+    public ActionItem addAction(int section, String iconUrl, int title) {
+        return addAction(section, -1, iconUrl, context.getString(title));
+    }
+    
+    public ActionItem addAction(int section, int icon, String title) {
+        return addAction(section, icon, null, title);
+    }
+    
+    public ActionItem addAction(int section, int icon, int title) {
+        return addAction(section, icon, null, context.getString(title));
     }
     
     public void clear() {

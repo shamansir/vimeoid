@@ -49,7 +49,11 @@ public class ImageLoader {
     @SuppressWarnings("unused")
     private final Context context;
     
-    public ImageLoader(Context context, int progressDrawable, int defaultDrawable){
+    public ImageLoader(Context context, int defaultDrawable) {
+        this(context, -1, defaultDrawable);
+    }
+    
+    public ImageLoader(Context context, int progressDrawable, int defaultDrawable) {
         //Make the background thread low priority. This way it will not affect the UI performance
         photoLoaderThread.setPriority(Thread.NORM_PRIORITY-1);
         
@@ -73,6 +77,7 @@ public class ImageLoader {
             
     }
     
+    // sets imageView tag!
     public void displayImage(String url, ImageView imageView)
     {
         if(cache.containsKey(url)) {
@@ -80,8 +85,9 @@ public class ImageLoader {
             imageView.setImageBitmap(cache.get(url));
         } else {
         	Log.d(TAG, "Image " + url + " not exists in cache, putting it in queue, setting view to default view");
+        	imageView.setTag(url);
             queuePhoto(url, imageView);
-            imageView.setImageResource(progressDrawable);
+            imageView.setImageResource((progressDrawable != -1) ? progressDrawable : defaultDrawable);
         }    
     }
 
