@@ -5,7 +5,7 @@ package org.vimeoid.activity.guest.item;
 
 import org.vimeoid.R;
 import org.vimeoid.activity.guest.list.VideosActivity;
-import org.vimeoid.adapter.ItemActionsAdapter;
+import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.connection.ApiCallInfo;
 import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.simple.VimeoProvider;
@@ -94,15 +94,15 @@ public class VideoActivity extends Activity {
     	Log.d(TAG, "video " + video.id + " data received, uploader: " + video.uploaderName);
     	((TextView)titleBar.findViewById(R.id.subjectTitle)).setText(video.title);
     	
-    	final ItemActionsAdapter actionsAdapter = new ItemActionsAdapter(getLayoutInflater());
+    	final SectionedActionsAdapter actionsAdapter = new SectionedActionsAdapter(getLayoutInflater());
     	
-    	int infoGroup = actionsAdapter.addGroup(R.string.information);
-    	actionsAdapter.addAction(infoGroup, R.drawable.contact, R.string.information, null);
-    	actionsAdapter.addAction(infoGroup, R.drawable.contact, R.string.information, null);
+    	int infoSection = actionsAdapter.addSection(R.string.information);
+    	actionsAdapter.addAction(infoSection, R.drawable.contact, R.string.information, null);
+    	actionsAdapter.addAction(infoSection, R.drawable.contact, R.string.information, null);
     	
-    	int statsGroup = actionsAdapter.addGroup(R.string.statistics);
-    	actionsAdapter.addAction(statsGroup, R.drawable.like, R.string.statistics, null);
-    	actionsAdapter.addAction(statsGroup, R.drawable.like, R.string.statistics, null);
+    	int statsSection = actionsAdapter.addSection(R.string.statistics);
+    	actionsAdapter.addAction(statsSection, R.drawable.like, R.string.statistics, null);
+    	actionsAdapter.addAction(statsSection, R.drawable.like, R.string.statistics, null);
     	
     	final ListView actionsList = (ListView)findViewById(R.id.actionsList);
     	actionsList.setAdapter(actionsAdapter);

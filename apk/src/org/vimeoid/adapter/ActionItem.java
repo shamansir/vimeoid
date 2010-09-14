@@ -12,7 +12,7 @@ import java.util.List;
  * <dt>Package:</dt> <dd>org.vimeoid.adapter</dd>
  * </dl>
  *
- * <code>ItemAction</code>
+ * <code>ActionItem</code>
  *
  * <p>Description</p>
  *
@@ -20,19 +20,19 @@ import java.util.List;
  * @date Sep 13, 2010 9:32:41 PM 
  *
  */
-public class ItemAction {
+public class ActionItem {
     
-    public static class ItemActionsGroup {
+    public static class ActionsSection {
         
         public final int id;
         public final int title;
-        public final List<ItemAction> actions = new LinkedList<ItemAction>();
+        public final List<ActionItem> actions = new LinkedList<ActionItem>();
         
-        void addAction(ItemAction action) {
+        void addAction(ActionItem action) {
             actions.add(action);
         }
         
-        void removeAction(ItemAction action) {
+        void removeAction(ActionItem action) {
             actions.remove(action);
         }
         
@@ -40,12 +40,12 @@ public class ItemAction {
             return actions.size();
         }
         
-        ItemActionsGroup(int id, int title) {
+        ActionsSection(int id, int title) {
             this.id = id;
             this.title = title;
         }
 
-		public boolean contains(ItemAction action) {
+		public boolean contains(ActionItem action) {
 			return actions.contains(action);
 		}
         
@@ -55,13 +55,13 @@ public class ItemAction {
         public void execute();
     }
     
-    public final ItemActionsGroup group;
+    public final ActionsSection section;
     public int icon = -1;
     public int title = -1;
     public final ActionSelectedCallback callback;
     
-    ItemAction(ItemActionsGroup group, int icon, int title, ActionSelectedCallback callback) {
-        this.group = group;
+    ActionItem(ActionsSection section, int icon, int title, ActionSelectedCallback callback) {
+        this.section = section;
         this.icon = icon;
         this.title = title;
         this.callback = callback;

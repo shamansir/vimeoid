@@ -5,9 +5,9 @@ package org.vimeoid.test;
 
 import junit.framework.Assert;
 
-import org.vimeoid.adapter.ItemAction;
-import org.vimeoid.adapter.ItemActionsAdapter;
-import org.vimeoid.adapter.ItemAction.ItemActionsGroup;
+import org.vimeoid.adapter.ActionItem;
+import org.vimeoid.adapter.SectionedActionsAdapter;
+import org.vimeoid.adapter.ActionItem.ActionsSection;
 
 import android.test.AndroidTestCase;
 
@@ -28,18 +28,18 @@ import android.test.AndroidTestCase;
  */
 public class ItemActionsAdapterTest extends AndroidTestCase {
     
-    final ItemActionsAdapter adapter = new ItemActionsAdapter(null);    
+    final SectionedActionsAdapter adapter = new SectionedActionsAdapter(null);    
     
     public void testAddingGroupsAndItems() {
         adapter.clear();
         
-        // group 0
-        Assert.assertEquals(0, adapter.addGroup(128));
+        // section 0
+        Assert.assertEquals(0, adapter.addSection(128));
         Assert.assertEquals(1, adapter.getCount());
         Assert.assertFalse(adapter.isEnabled(0));
-        Assert.assertEquals(ItemActionsAdapter.GROUP_VIEW_TYPE, adapter.getItemViewType(0));
+        Assert.assertEquals(SectionedActionsAdapter.SECTION_VIEW_TYPE, adapter.getItemViewType(0));
         
-        Assert.assertEquals(128, ((ItemActionsGroup)adapter.getItem(0)).title);
+        Assert.assertEquals(128, ((ActionsSection)adapter.getItem(0)).title);
         
         try {
             adapter.addAction(2, -1, -1, null);
@@ -61,131 +61,131 @@ public class ItemActionsAdapterTest extends AndroidTestCase {
             Assert.fail("must produce IAE");
         } catch (IllegalArgumentException iae) { }        
         
-        // group 0: action 0
-        ItemAction added = adapter.addAction(0, -1, 14, null);
-        Assert.assertEquals(0, added.group.id);
+        // section 0: action 0
+        ActionItem added = adapter.addAction(0, -1, 14, null);
+        Assert.assertEquals(0, added.section.id);
         Assert.assertEquals(2, adapter.getCount());
-        Assert.assertEquals(ItemActionsAdapter.ITEM_VIEW_TYPE, adapter.getItemViewType(1));
+        Assert.assertEquals(SectionedActionsAdapter.ITEM_VIEW_TYPE, adapter.getItemViewType(1));
         Assert.assertTrue(adapter.isEnabled(1));
-        Assert.assertEquals(14, ((ItemAction)adapter.getItem(1)).title);
+        Assert.assertEquals(14, ((ActionItem)adapter.getItem(1)).title);
         
-        // group 0: action 1
+        // section 0: action 1
         added = adapter.addAction(0, -1, 114, null);
-        Assert.assertEquals(0, added.group.id);
+        Assert.assertEquals(0, added.section.id);
         Assert.assertEquals(3, adapter.getCount());
-        Assert.assertEquals(ItemActionsAdapter.ITEM_VIEW_TYPE, adapter.getItemViewType(2));
+        Assert.assertEquals(SectionedActionsAdapter.ITEM_VIEW_TYPE, adapter.getItemViewType(2));
         Assert.assertTrue(adapter.isEnabled(2));
-        Assert.assertEquals(114, ((ItemAction)adapter.getItem(2)).title);
+        Assert.assertEquals(114, ((ActionItem)adapter.getItem(2)).title);
 
-        // group 1
-        Assert.assertEquals(1, adapter.addGroup(19));
+        // section 1
+        Assert.assertEquals(1, adapter.addSection(19));
         Assert.assertEquals(4, adapter.getCount());
-        Assert.assertEquals(ItemActionsAdapter.GROUP_VIEW_TYPE, adapter.getItemViewType(3));
+        Assert.assertEquals(SectionedActionsAdapter.SECTION_VIEW_TYPE, adapter.getItemViewType(3));
         Assert.assertFalse(adapter.isEnabled(3));
-        Assert.assertEquals(19, ((ItemActionsGroup)adapter.getItem(3)).title);
+        Assert.assertEquals(19, ((ActionsSection)adapter.getItem(3)).title);
         
-        // group 2
-        Assert.assertEquals(2, adapter.addGroup(1378));
+        // section 2
+        Assert.assertEquals(2, adapter.addSection(1378));
         Assert.assertEquals(5, adapter.getCount());
-        Assert.assertEquals(ItemActionsAdapter.GROUP_VIEW_TYPE, adapter.getItemViewType(4));
+        Assert.assertEquals(SectionedActionsAdapter.SECTION_VIEW_TYPE, adapter.getItemViewType(4));
         Assert.assertFalse(adapter.isEnabled(4));
-        Assert.assertEquals(1378, ((ItemActionsGroup)adapter.getItem(4)).title);
+        Assert.assertEquals(1378, ((ActionsSection)adapter.getItem(4)).title);
 
-        // group 3
-        Assert.assertEquals(3, adapter.addGroup(40));
+        // section 3
+        Assert.assertEquals(3, adapter.addSection(40));
         Assert.assertEquals(6, adapter.getCount());
-        Assert.assertEquals(ItemActionsAdapter.GROUP_VIEW_TYPE, adapter.getItemViewType(5));
+        Assert.assertEquals(SectionedActionsAdapter.SECTION_VIEW_TYPE, adapter.getItemViewType(5));
         Assert.assertFalse(adapter.isEnabled(5));
-        Assert.assertEquals(40, ((ItemActionsGroup)adapter.getItem(5)).title);
+        Assert.assertEquals(40, ((ActionsSection)adapter.getItem(5)).title);
         
-        // group 3: action 0        
+        // section 3: action 0        
         added = adapter.addAction(3, -1, 215, null);
-        Assert.assertEquals(3, added.group.id);
+        Assert.assertEquals(3, added.section.id);
         Assert.assertEquals(7, adapter.getCount());
-        Assert.assertEquals(ItemActionsAdapter.ITEM_VIEW_TYPE, adapter.getItemViewType(6));
+        Assert.assertEquals(SectionedActionsAdapter.ITEM_VIEW_TYPE, adapter.getItemViewType(6));
         Assert.assertTrue(adapter.isEnabled(6));
-        Assert.assertEquals(215, ((ItemAction)adapter.getItem(6)).title);
+        Assert.assertEquals(215, ((ActionItem)adapter.getItem(6)).title);
         
-        // group 3: action 1        
+        // section 3: action 1        
         added = adapter.addAction(3, -1, 19567, null);
-        Assert.assertEquals(3, added.group.id);
+        Assert.assertEquals(3, added.section.id);
         Assert.assertEquals(8, adapter.getCount());
-        Assert.assertEquals(ItemActionsAdapter.ITEM_VIEW_TYPE, adapter.getItemViewType(7));
+        Assert.assertEquals(SectionedActionsAdapter.ITEM_VIEW_TYPE, adapter.getItemViewType(7));
         Assert.assertTrue(adapter.isEnabled(7));
-        Assert.assertEquals(19567, ((ItemAction)adapter.getItem(7)).title);        
+        Assert.assertEquals(19567, ((ActionItem)adapter.getItem(7)).title);        
         
-        // group 1: action 0 
+        // section 1: action 0 
         added = adapter.addAction(1, -1, 2064, null);
-        Assert.assertEquals(1, added.group.id);
+        Assert.assertEquals(1, added.section.id);
         Assert.assertEquals(9, adapter.getCount());
-        Assert.assertEquals(ItemActionsAdapter.ITEM_VIEW_TYPE, adapter.getItemViewType(4));
+        Assert.assertEquals(SectionedActionsAdapter.ITEM_VIEW_TYPE, adapter.getItemViewType(4));
         Assert.assertTrue(adapter.isEnabled(4));
-        Assert.assertEquals(2064, ((ItemAction)adapter.getItem(4)).title);
+        Assert.assertEquals(2064, ((ActionItem)adapter.getItem(4)).title);
         
-        // group 1: action 1
+        // section 1: action 1
         added = adapter.addAction(1, -1, 3095, null);
-        Assert.assertEquals(1, added.group.id);
+        Assert.assertEquals(1, added.section.id);
         Assert.assertEquals(10, adapter.getCount());
-        Assert.assertEquals(ItemActionsAdapter.ITEM_VIEW_TYPE, adapter.getItemViewType(5));
+        Assert.assertEquals(SectionedActionsAdapter.ITEM_VIEW_TYPE, adapter.getItemViewType(5));
         Assert.assertTrue(adapter.isEnabled(5));
-        Assert.assertEquals(3095, ((ItemAction)adapter.getItem(5)).title);
+        Assert.assertEquals(3095, ((ActionItem)adapter.getItem(5)).title);
         
-        // group 1: action 2
+        // section 1: action 2
         added = adapter.addAction(1, -1, 32700, null);
-        Assert.assertEquals(1, added.group.id);
+        Assert.assertEquals(1, added.section.id);
         Assert.assertEquals(11, adapter.getCount());
-        Assert.assertEquals(ItemActionsAdapter.ITEM_VIEW_TYPE, adapter.getItemViewType(6));
+        Assert.assertEquals(SectionedActionsAdapter.ITEM_VIEW_TYPE, adapter.getItemViewType(6));
         Assert.assertTrue(adapter.isEnabled(6));
-        Assert.assertEquals(32700, ((ItemAction)adapter.getItem(6)).title);
+        Assert.assertEquals(32700, ((ActionItem)adapter.getItem(6)).title);
         
-        // is group 0 here
-        Assert.assertEquals(128, ((ItemActionsGroup)adapter.getItem(0)).title);
+        // is section 0 here
+        Assert.assertEquals(128, ((ActionsSection)adapter.getItem(0)).title);
         
-        // is group 1 here
-        Assert.assertEquals(19, ((ItemActionsGroup)adapter.getItem(3)).title);
+        // is section 1 here
+        Assert.assertEquals(19, ((ActionsSection)adapter.getItem(3)).title);
         
-        // is group 2 here
-        Assert.assertEquals(1378, ((ItemActionsGroup)adapter.getItem(7)).title);
+        // is section 2 here
+        Assert.assertEquals(1378, ((ActionsSection)adapter.getItem(7)).title);
         
-        // group 2: action 0
+        // section 2: action 0
         added = adapter.addAction(2, -1, -218, null);
-        Assert.assertEquals(2, added.group.id);
+        Assert.assertEquals(2, added.section.id);
         Assert.assertEquals(12, adapter.getCount());
-        Assert.assertEquals(ItemActionsAdapter.ITEM_VIEW_TYPE, adapter.getItemViewType(8));
+        Assert.assertEquals(SectionedActionsAdapter.ITEM_VIEW_TYPE, adapter.getItemViewType(8));
         Assert.assertTrue(adapter.isEnabled(8));
-        Assert.assertEquals(-218, ((ItemAction)adapter.getItem(8)).title);
+        Assert.assertEquals(-218, ((ActionItem)adapter.getItem(8)).title);
         
-        // is group 3 here
-        Assert.assertEquals(40, ((ItemActionsGroup)adapter.getItem(9)).title);
+        // is section 3 here
+        Assert.assertEquals(40, ((ActionsSection)adapter.getItem(9)).title);
         
-        // group 4
-        Assert.assertEquals(4, adapter.addGroup(120));
+        // section 4
+        Assert.assertEquals(4, adapter.addSection(120));
         Assert.assertEquals(13, adapter.getCount());
-        Assert.assertEquals(ItemActionsAdapter.GROUP_VIEW_TYPE, adapter.getItemViewType(12));
+        Assert.assertEquals(SectionedActionsAdapter.SECTION_VIEW_TYPE, adapter.getItemViewType(12));
         Assert.assertFalse(adapter.isEnabled(12));
-        Assert.assertEquals(120, ((ItemActionsGroup)adapter.getItem(12)).title);        
+        Assert.assertEquals(120, ((ActionsSection)adapter.getItem(12)).title);        
         
-        // group 4: action 0
+        // section 4: action 0
         added = adapter.addAction(4, -1, 315, null);
-        Assert.assertEquals(4, added.group.id);
+        Assert.assertEquals(4, added.section.id);
         Assert.assertEquals(14, adapter.getCount());
-        Assert.assertEquals(ItemActionsAdapter.ITEM_VIEW_TYPE, adapter.getItemViewType(13));
+        Assert.assertEquals(SectionedActionsAdapter.ITEM_VIEW_TYPE, adapter.getItemViewType(13));
         Assert.assertTrue(adapter.isEnabled(13));
-        Assert.assertEquals(315, ((ItemAction)adapter.getItem(13)).title);
+        Assert.assertEquals(315, ((ActionItem)adapter.getItem(13)).title);
         
-        // group 2: action 1
+        // section 2: action 1
         added = adapter.addAction(2, -1, 917, null);
-        Assert.assertEquals(2, added.group.id);
+        Assert.assertEquals(2, added.section.id);
         Assert.assertEquals(15, adapter.getCount());
-        Assert.assertEquals(ItemActionsAdapter.ITEM_VIEW_TYPE, adapter.getItemViewType(9));
+        Assert.assertEquals(SectionedActionsAdapter.ITEM_VIEW_TYPE, adapter.getItemViewType(9));
         Assert.assertTrue(adapter.isEnabled(9));
-        Assert.assertEquals(917, ((ItemAction)adapter.getItem(9)).title);
+        Assert.assertEquals(917, ((ActionItem)adapter.getItem(9)).title);
         
-        // is group 4 here
-        Assert.assertEquals(120, ((ItemActionsGroup)adapter.getItem(13)).title);
+        // is section 4 here
+        Assert.assertEquals(120, ((ActionsSection)adapter.getItem(13)).title);
         
-        // is group 4: action 0 here
-        Assert.assertEquals(315, ((ItemAction)adapter.getItem(14)).title);
+        // is section 4: action 0 here
+        Assert.assertEquals(315, ((ActionItem)adapter.getItem(14)).title);
         
     }
     

@@ -107,8 +107,8 @@ public final class R {
         public static final int welcome=0x7f020033;
     }
     public static final class id {
-        public static final int actionIcon=0x7f080001;
-        public static final int actionName=0x7f080002;
+        public static final int actionIcon=0x7f080003;
+        public static final int actionName=0x7f080004;
         public static final int actionsGroupTitle=0x7f080000;
         public static final int actionsList=0x7f080014;
         public static final int enterButton=0x7f080015;
@@ -123,12 +123,12 @@ public final class R {
         public static final int menu_viewAuthorInfo=0x7f08001d;
         public static final int menu_viewInfo=0x7f08001c;
         public static final int menu_watchLater=0x7f08001e;
-        public static final int progressBar=0x7f080004;
+        public static final int progressBar=0x7f080002;
         public static final int resultIcon=0x7f08000a;
         public static final int subjectIcon=0x7f080008;
         public static final int subjectTitle=0x7f080009;
         public static final int tagItem=0x7f080012;
-        public static final int titleBar=0x7f080003;
+        public static final int titleBar=0x7f080001;
         public static final int videoItemAuthor=0x7f08000c;
         public static final int videoItemDuration=0x7f080011;
         public static final int videoItemImage=0x7f080005;
@@ -140,9 +140,9 @@ public final class R {
         public static final int videoPlayer=0x7f080013;
     }
     public static final class layout {
-        public static final int action_group_title=0x7f030000;
-        public static final int action_item=0x7f030001;
-        public static final int generic_list=0x7f030002;
+        public static final int actions_section_title=0x7f030000;
+        public static final int generic_list=0x7f030001;
+        public static final int item_action=0x7f030002;
         public static final int item_footer_load_more=0x7f030003;
         public static final int item_list_empty=0x7f030004;
         public static final int item_subject_titlebar=0x7f030005;
