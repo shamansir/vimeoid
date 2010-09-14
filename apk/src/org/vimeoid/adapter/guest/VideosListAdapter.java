@@ -93,13 +93,14 @@ public class VideosListAdapter extends EasyCursorsAdapter<Video> {
     protected void injectTags(final String[] tags, final ViewGroup group, final int curPosition) {
     	group.removeAllViews();
     	if (tags.length == 0) {
+    		group.addView(layoutInflater.inflate(R.layout.no_tags_for_item, null));
     		return;
     	}
     	// FIXME: use tagStruct.setTag/getTag to find the actual layout 
     	// FIXME: set to "no tags" if there is no tags 
     	for (final String tag: tags) {
     		if (tag.trim().length() == 0) continue;
-    		final LinearLayout tagStruct = (LinearLayout)layoutInflater.inflate(R.layout.tag_for_the_item, null);
+    		final View tagStruct = layoutInflater.inflate(R.layout.tag_for_the_item, null);
     		((TextView)tagStruct.findViewById(R.id.tagItem)).setText(tag.trim());
     		group.addView(tagStruct);
     	}

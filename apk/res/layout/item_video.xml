@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+              android:orientation="horizontal"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent">
     <ImageView android:id="@+id/videoItemImage"
                android:layout_width="@dimen/item_thumb_width"
                android:layout_height="@dimen/item_thumb_height"
@@ -36,8 +36,7 @@
                   android:scrollHorizontally="true" />
         <LinearLayout android:id="@+id/videoItemTags"
                       android:layout_width="fill_parent" 
-                      android:layout_height="wrap_content"
-                      android:minHeight="@dimen/item_tags_font_size" />
+                      android:layout_height="@dimen/tags_line_height" />
         <LinearLayout android:orientation="horizontal"
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent">
