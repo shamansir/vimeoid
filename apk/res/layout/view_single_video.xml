@@ -20,8 +20,11 @@
     <!-- <LinearLayout android:orientation="horizontal"
                   android:layout_width="fill_parent"
                   android:layout_height="@dimen/description_line_height">
-                  
-    </LinearLayout>  -->
+         <LinearLayout android:orientation="vertical">
+                
+         </LinearLayout>
+         <ImageView android:id="@+id/uploaderPortrait" />         
+    </LinearLayout> -->
     <ListView android:id="@+id/actionsList"
               android:layout_width="fill_parent"
               android:layout_height="20dp"
