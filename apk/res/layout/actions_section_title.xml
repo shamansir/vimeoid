@@ -10,5 +10,7 @@
                 android:textSize="@dimen/actions_group_title_font_size"
                 android:textColor="@color/actions_group_title_text"
                 android:textStyle="bold"
-                android:padding="1dp" />
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:paddingLeft="4dp" />
 </LinearLayout>
