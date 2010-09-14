@@ -6,8 +6,9 @@
       <TextView android:id="@+id/actionsGroupTitle"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_gravity="center_vertical|left"
+                android:gravity="center_vertical"
                 android:textSize="@dimen/actions_group_title_font_size"
                 android:textColor="@color/actions_group_title_text"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:padding="1dp" />
 </LinearLayout>
