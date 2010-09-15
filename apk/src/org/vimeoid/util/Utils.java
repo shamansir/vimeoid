@@ -96,6 +96,21 @@ public class Utils {
         return ((duration - remainder) / 60) + ":" + ((remainder < 10) ? ("0" + remainder) : remainder); 
     }
     
+    public static String adaptTags(String[] tags, String noneText, String delimiter) {
+    	if (tags.length == 0) return noneText;
+    	if (tags.length == 1) return tags[0];
+    	final StringBuffer result = new StringBuffer();
+    	for (int i = 0; i < (tags.length - 1); i++) {
+    		result.append(tags[i]).append(delimiter);
+    	}
+    	result.append(tags[tags.length - 1]);
+    	return result.toString();
+    }    
+    
+    public static String adaptTags(String[] tags, String noneText) {
+    	return adaptTags(tags, noneText, " ");
+    }
+    
     public static int lookupHost(String hostname) {
         InetAddress inetAddress;
         try {

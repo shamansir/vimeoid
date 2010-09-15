@@ -163,6 +163,7 @@ public class SectionedActionsAdapter extends BaseAdapter {
                 itemHolder = new ActionItemHolder();
                 itemHolder.tvTitle = (TextView) convertView.findViewById(R.id.actionName);
                 itemHolder.ivIcon = (ImageView) convertView.findViewById(R.id.actionIcon);
+                itemHolder.ivFwd = (ImageView) convertView.findViewById(R.id.forwardIcon);
                 convertView.setTag(itemHolder);
            } else {
            	    itemHolder = (ActionItemHolder)convertView.getTag();
@@ -176,6 +177,7 @@ public class SectionedActionsAdapter extends BaseAdapter {
                    imagesLoader.displayImage(item.iconUrl, itemHolder.ivIcon);
                } else throw new IllegalStateException("ImagesLoader must be initialized to load images");
            }
+           itemHolder.ivFwd.setVisibility((item.onClick == null) ? View.GONE : View.VISIBLE);
            if (item.onClick != null) convertView.setOnClickListener(item.onClick);           
             
         }
@@ -231,6 +233,7 @@ public class SectionedActionsAdapter extends BaseAdapter {
     private class ActionItemHolder {
         ImageView ivIcon;
         TextView tvTitle;
+        ImageView ivFwd;
     }
 
 }

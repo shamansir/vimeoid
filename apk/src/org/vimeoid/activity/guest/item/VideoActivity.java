@@ -107,10 +107,11 @@ public class VideoActivity extends Activity {
     	
     	final SectionedActionsAdapter actionsAdapter = new SectionedActionsAdapter(this, getLayoutInflater(), imageLoader);
     	
-    	int statsSection = actionsAdapter.addSection("Statistics");
+    	int statsSection = actionsAdapter.addSection("Statistics");    	
+    	actionsAdapter.addAction(statsSection, R.drawable.comment_video, String.valueOf(video.commentsCount));
+    	actionsAdapter.addAction(statsSection, R.drawable.tag, Utils.adaptTags(video.tags, "[none]"));    	
     	actionsAdapter.addAction(statsSection, R.drawable.play, String.valueOf(video.playsCount));
     	actionsAdapter.addAction(statsSection, R.drawable.like, String.valueOf(video.likesCount));
-    	actionsAdapter.addAction(statsSection, R.drawable.comment_video, String.valueOf(video.commentsCount));
     	
     	int infoSection = actionsAdapter.addSection("Information");
     	/* actionsAdapter.addAction(infoSection, video.smallUploaderPortraitUrl, 

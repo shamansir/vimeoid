@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-        <color name="item_thumb_bg">#ff333333</color>
         <color name="item_action">#ff333333</color>        
         <color name="item_title">#ffdddddd</color>
         <color name="item_subtitle">#ff999999</color>
         <color name="item_param">#ffdddddd</color>
         <color name="item_tags">#ffeeeeee</color>
         <color name="item_info">#ffaaaaaa</color>
+        <color name="item_thumb_bg">#ff333333</color>
+        <color name="item_action_bg">#66cccccc</color>
+        <color name="item_tag_bg">#66663333</color>
         <color name="duration_bg">#33666666</color>
         <color name="progress_bg">#cc333333</color>
-        <color name="item_tag_bg">#66663333</color>
         <color name="actions_group_title_bg">#ff666666</color>        
         <color name="action_item_text">#ff333333</color>
         <color name="actions_group_title_text">#ffeeeeee</color>
@@ -17,4 +18,6 @@
         <color name="load_more_disabled_text">#ff666666</color>
         <color name="load_more_default_bg">#00333333</color>
         <color name="load_more_disabled_bg">#00666666</color>
+        <color name="action_tag_bg">#66663333</color>        
+        <color name="action_no_tags_text_color">#ff999999</color>
 </resources>
