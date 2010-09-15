@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Vimeo</string>
-    <string name="information">Information</string>
-    <string name="statistics">Statistics</string>
-    <string name="videoDescription">Description: {description}</string>
-    <string name="videoActualSize">Actual size: {width}x{size}</string>    
-    <string name="videoUploader">Uploader: {name}</string>      
+    <string name="app_name">Vimeo</string>      
 </resources>

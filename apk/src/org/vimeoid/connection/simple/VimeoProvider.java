@@ -8,7 +8,6 @@ import java.util.List;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import org.vimeoid.VimeoConfig;
 import org.vimeoid.connection.ApiCallInfo;
@@ -107,7 +106,7 @@ public class VimeoProvider extends ContentProvider {
     
     @Override
     public Cursor query(Uri contentUri, String[] projection, String selection,
-            String[] selectionArgs, String sortOrder) {
+                        String[] selectionArgs, String sortOrder) {
         if ((selection != null) || (selectionArgs != null))
             throw new UnsupportedOperationException("SQL Where-selections are not supported in VimeoProvider, please use URI to filter the selection query");
         if (sortOrder != null) throw new UnsupportedOperationException("SQL-styled sorting is not supported in VimeoProvider, please use URI parameters to specify sorting order (if supported by the method)");
@@ -130,6 +129,7 @@ public class VimeoProvider extends ContentProvider {
             jsone.printStackTrace();
         } catch (IOException ioe) {
             Log.e(TAG, "Connection/IO exception " + ioe.getLocalizedMessage());
+            // TDODO: catch UnknownHostException and fire it as VimeoUnreachable
             ioe.printStackTrace();
         }
         return null;

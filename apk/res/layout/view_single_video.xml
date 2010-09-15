@@ -17,14 +17,47 @@
 	             android:layout_height="fill_parent"
 	             android:layout_marginLeft="4dp" />
     </LinearLayout>
-    <!-- <LinearLayout android:orientation="horizontal"
+    <LinearLayout android:orientation="horizontal"
                   android:layout_width="fill_parent"
                   android:layout_height="@dimen/description_line_height">
-         <LinearLayout android:orientation="vertical">
-                
-         </LinearLayout>
-         <ImageView android:id="@+id/uploaderPortrait" />         
-    </LinearLayout> -->
+         <TableLayout android:layout_height="fill_parent"
+                      android:layout_width="wrap_content"
+                      android:layout_weight="1"
+                      android:layout_margin="2px">
+              <TableRow>
+                  <TextView android:text="Actual Size"
+                            android:layout_width="60dp"
+                            android:textSize="10dp"
+                            android:textStyle="bold" />
+                  <TextView android:id="@+id/videoDimensions"
+                            android:textSize="10dp" />
+              </TableRow>
+              <TableRow>
+                  <TextView android:text="Uploaded"
+                            android:layout_width="60dp"
+                            android:textSize="10dp"
+                            android:textStyle="bold" />
+                  <TextView android:id="@+id/videoUploadedOn"
+                            android:textSize="10dp" />
+              </TableRow>     
+              <TableRow>
+                  <TextView android:text="Description"
+                            android:layout_width="60dp"
+                            android:textSize="10dp"
+                            android:textStyle="bold" />
+                  <TextView android:id="@+id/videoDescription"
+                            android:textSize="10dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:lines="5" />
+              </TableRow>
+         </TableLayout>
+         <ImageView android:id="@+id/uploaderPortrait"
+                    android:layout_height="@dimen/description_line_height"
+                    android:layout_width="@dimen/description_line_height"                    
+                    android:layout_gravity="right" />         
+    </LinearLayout>
     <ListView android:id="@+id/actionsList"
               android:layout_width="fill_parent"
               android:layout_height="20dp"

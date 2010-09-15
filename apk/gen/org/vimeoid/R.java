@@ -32,22 +32,23 @@ public final class R {
     public static final class dimen {
         public static final int action_icon_side=0x7f050004;
         public static final int action_item_height=0x7f050003;
-        public static final int actions_group_title_font_size=0x7f05000e;
+        public static final int actions_group_title_font_size=0x7f05000f;
         public static final int actions_group_title_height=0x7f050002;
-        public static final int item_action_font_size=0x7f050011;
-        public static final int item_info_font_size=0x7f050013;
-        public static final int item_param_font_size=0x7f050012;
-        public static final int item_subtitle_font_size=0x7f050010;
-        public static final int item_tags_font_size=0x7f050014;
+        public static final int description_line_height=0x7f05000a;
+        public static final int item_action_font_size=0x7f050012;
+        public static final int item_info_font_size=0x7f050014;
+        public static final int item_param_font_size=0x7f050013;
+        public static final int item_subtitle_font_size=0x7f050011;
+        public static final int item_tags_font_size=0x7f050015;
         public static final int item_thumb_height=0x7f050006;
         public static final int item_thumb_width=0x7f050005;
-        public static final int item_title_font_size=0x7f05000f;
-        public static final int load_more_height=0x7f05000c;
+        public static final int item_title_font_size=0x7f050010;
+        public static final int load_more_height=0x7f05000d;
         public static final int single_thumb_height=0x7f050008;
         public static final int single_thumb_width=0x7f050007;
-        public static final int small_progress_side=0x7f05000a;
-        public static final int small_progressbar_height=0x7f05000b;
-        public static final int tags_line_height=0x7f05000d;
+        public static final int small_progress_side=0x7f05000b;
+        public static final int small_progressbar_height=0x7f05000c;
+        public static final int tags_line_height=0x7f05000e;
         public static final int titlebar_height=0x7f050000;
         public static final int titlebar_icons_side=0x7f050001;
         public static final int video_player_height=0x7f050009;
@@ -112,25 +113,28 @@ public final class R {
         public static final int actionIcon=0x7f080003;
         public static final int actionName=0x7f080004;
         public static final int actionsGroupTitle=0x7f080000;
-        public static final int actionsList=0x7f080014;
-        public static final int enterButton=0x7f080015;
-        public static final int guestButton=0x7f080016;
+        public static final int actionsList=0x7f080018;
+        public static final int enterButton=0x7f080019;
+        public static final int guestButton=0x7f08001a;
         public static final int itemsEmptyListView=0x7f080007;
         public static final int itemsListFooterText=0x7f080006;
-        public static final int menuGroup_Main=0x7f080017;
-        public static final int menuGroup_VideoContext=0x7f08001b;
-        public static final int menu_Preferences=0x7f080019;
-        public static final int menu_Refresh=0x7f080018;
-        public static final int menu_SwitchView=0x7f08001a;
-        public static final int menu_viewAuthorInfo=0x7f08001d;
-        public static final int menu_viewInfo=0x7f08001c;
-        public static final int menu_watchLater=0x7f08001e;
+        public static final int menuGroup_Main=0x7f08001b;
+        public static final int menuGroup_VideoContext=0x7f08001f;
+        public static final int menu_Preferences=0x7f08001d;
+        public static final int menu_Refresh=0x7f08001c;
+        public static final int menu_SwitchView=0x7f08001e;
+        public static final int menu_viewAuthorInfo=0x7f080021;
+        public static final int menu_viewInfo=0x7f080020;
+        public static final int menu_watchLater=0x7f080022;
         public static final int progressBar=0x7f080002;
         public static final int resultIcon=0x7f08000a;
         public static final int subjectIcon=0x7f080008;
         public static final int subjectTitle=0x7f080009;
         public static final int tagItem=0x7f080012;
         public static final int titleBar=0x7f080001;
+        public static final int uploaderPortrait=0x7f080017;
+        public static final int videoDescription=0x7f080016;
+        public static final int videoDimensions=0x7f080014;
         public static final int videoItemAuthor=0x7f08000c;
         public static final int videoItemDuration=0x7f080011;
         public static final int videoItemImage=0x7f080005;
@@ -140,6 +144,7 @@ public final class R {
         public static final int videoItemTags=0x7f08000d;
         public static final int videoItemTitle=0x7f08000b;
         public static final int videoPlayer=0x7f080013;
+        public static final int videoUploadedOn=0x7f080015;
     }
     public static final class layout {
         public static final int actions_section_title=0x7f030000;
@@ -162,10 +167,5 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f060000;
-        public static final int information=0x7f060001;
-        public static final int statistics=0x7f060002;
-        public static final int videoActualSize=0x7f060004;
-        public static final int videoDescription=0x7f060003;
-        public static final int videoUploader=0x7f060005;
     }
 }

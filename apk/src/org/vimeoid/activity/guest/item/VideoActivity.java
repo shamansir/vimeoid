@@ -94,21 +94,31 @@ public class VideoActivity extends Activity {
     	Log.d(TAG, "video " + video.id + " data received, uploader: " + video.uploaderName);
     	((TextView)titleBar.findViewById(R.id.subjectTitle)).setText(video.title);
     	
+    	((TextView)findViewById(R.id.videoDescription)).setText(video.description);
+    	// FIXME: add this info to adapter
+    	((TextView)findViewById(R.id.videoUploadedOn)).setText(video.uploadedOn);
+    	((TextView)findViewById(R.id.videoDimensions)).setText(video.width + "x" + video.height);
+    	// TODO: + tags
+    	
+    	// TODO: uploader avatar
+    	
     	final SectionedActionsAdapter actionsAdapter = new SectionedActionsAdapter(this, getLayoutInflater(), null);
     	
-    	int infoSection = actionsAdapter.addSection(R.string.information);
-    	actionsAdapter.addAction(infoSection, /*video.smallUploaderPortraitUrl*/R.drawable.contact, 
-    	                         Utils.format(getString(R.string.videoUploader), "name", video.uploaderName));
-    	actionsAdapter.addAction(infoSection, R.drawable.contact, R.string.information);
+    	int infoSection = actionsAdapter.addSection("Information");
+    	/* actionsAdapter.addAction(infoSection, video.smallUploaderPortraitUrl, 
+    	                            Utils.format(getString(R.string.videoUploader), "name", video.uploaderName)); */
+    	actionsAdapter.addAction(infoSection, R.drawable.contact, video.uploaderName);
     	
-    	int statsSection = actionsAdapter.addSection(R.string.statistics);
-    	actionsAdapter.addAction(statsSection, R.drawable.like, R.string.statistics);
-    	actionsAdapter.addAction(statsSection, R.drawable.like, R.string.statistics);
+    	int statsSection = actionsAdapter.addSection("Statistics");
+    	actionsAdapter.addAction(statsSection, R.drawable.play, String.valueOf(video.playsCount));
+    	actionsAdapter.addAction(statsSection, R.drawable.like, String.valueOf(video.likesCount));
+    	actionsAdapter.addAction(statsSection, R.drawable.comment_video, String.valueOf(video.commentsCount));
     	
     	final ListView actionsList = (ListView)findViewById(R.id.actionsList);
     	actionsList.setAdapter(actionsAdapter);
         actionsList.setSelection(0);
     	actionsList.invalidate();
+    	actionsList.scrollTo(0, 0);
     }
     
     protected class LoadItemTask extends AsyncTask<Uri, Void, Cursor> {

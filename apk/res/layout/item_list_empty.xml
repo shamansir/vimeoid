@@ -11,8 +11,9 @@
                android:background="@color/item_thumb_bg" />      
     <TextView android:id="@+id/itemsEmptyListView"
               android:layout_width="fill_parent" 
-              android:layout_height="wrap_content"
-              android:padding="2dp"              
+              android:layout_height="@dimen/load_more_height"
+              android:padding="2dp"
+              android:gravity="center_vertical"
               android:text="No items in list"
               android:textSize="@dimen/item_title_font_size"
               android:textColor="@color/item_title" />
