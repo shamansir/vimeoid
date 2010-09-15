@@ -19,7 +19,8 @@
     </LinearLayout>
     <LinearLayout android:orientation="horizontal"
                   android:layout_width="fill_parent"
-                  android:layout_height="@dimen/description_line_height">
+                  android:layout_height="@dimen/description_line_height"
+                  android:background="@color/item_action_bg">
          <ScrollView android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:layout_weight="1">
