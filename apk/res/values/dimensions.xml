@@ -4,7 +4,9 @@
 	<dimen name="titlebar_icons_side">32dp</dimen>
 	<dimen name="actions_group_title_height">18dp</dimen>
     <dimen name="action_item_height">36dp</dimen>
-    <dimen name="action_icon_side">32dp</dimen>    
+    <dimen name="action_icon_side">32dp</dimen>
+    <dimen name="fwdbck_icon_width">18dp</dimen>
+    <dimen name="fwdbck_icon_height">24dp</dimen>            
     <dimen name="item_thumb_width">100dp</dimen>	
 	<dimen name="item_thumb_height">75dp</dimen>
     <dimen name="single_thumb_width">200dp</dimen>    

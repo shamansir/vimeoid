@@ -12,8 +12,8 @@
 	                 android:layout_width="@dimen/titlebar_icons_side"
 	                 android:layout_height="@dimen/titlebar_icons_side" />
 	      <TextView android:id="@+id/subjectTitle"
-	                android:layout_height="fill_parent"
 	                android:layout_width="wrap_content"
+	                android:layout_height="fill_parent"
 	                android:layout_weight="1"
 	                android:paddingLeft="5dp"
 	                android:singleLine="true"                               
