@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -94,6 +95,15 @@ public class Utils {
     public static String adaptDuration(long duration) {
     	final long remainder = duration % 60; 
         return ((duration - remainder) / 60) + ":" + ((remainder < 10) ? ("0" + remainder) : remainder); 
+    }
+    
+    // TODO: use
+    public static String[] extractTags(String source) {
+        final List<String> result = new LinkedList<String>();
+        for (String tag: source.split(",")) {
+            if (tag.trim().length() > 0) result.add(tag.trim());
+        }
+        return result.toArray(new String[result.size()]);
     }
     
     public static String adaptTags(String[] tags, String noneText, String delimiter) {

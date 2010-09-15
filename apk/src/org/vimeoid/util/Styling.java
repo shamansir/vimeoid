@@ -9,8 +9,38 @@ import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
+import android.view.View;
 
 public class Styling {
+    
+    public static interface RenderingAdapter {        
+        public View render(View inView);
+    }
+    
+    // public static RenderingAdapter TAGS_RENDERER = new RenderingAdapter() {
+        
+    // TODO: use
+    public static class TagsRenderer implements RenderingAdapter {
+        
+        private final Context context;
+        private final String[] tags;
+        
+        public TagsRenderer(Context context, String[] tags) {
+            this.context = context;
+            this.tags = tags;
+        }
+    
+        @Override
+        public View render(View source) {
+            // FIXME: implement
+            return null;
+        }
+        
+    };
+    
+    public static Spannable stylizeTags(Context context, Spannable target, String[] tags) {
+        return stylizeTags(context, target, tags, 1);
+    }
 
     public static Spannable stylizeTags(Context context, Spannable target, String[] tags, int delimLen) {
     	if (tags.length == 0) {
