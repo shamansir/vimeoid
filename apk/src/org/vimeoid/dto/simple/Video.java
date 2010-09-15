@@ -96,13 +96,13 @@ public class Video {
     public final static String[] FULL_EXTRACT_PROJECTION = {
         FieldsKeys._ID, FieldsKeys.TITLE, FieldsKeys.AUTHOR,
         FieldsKeys.DURATION, FieldsKeys.TAGS, 
-        FieldsKeys.THUMB_SMALL, FieldsKeys.USER_IMG_SMALL, 
+        FieldsKeys.THUMB_SMALL, FieldsKeys.USER_IMG_MEDIUM, 
         FieldsKeys.NUM_OF_LIKES, FieldsKeys.NUM_OF_PLAYS, FieldsKeys.NUM_OF_COMMENTS,
         FieldsKeys.DESCRIPTION, FieldsKeys.UPLOADED_ON, 
         FieldsKeys.WIDTH, FieldsKeys.HEIGHT
-    };    
+    };
     
-    public static Video shortFromCursor(Cursor cursor, int position) {
+    protected static Video generalDataFromCursor(Cursor cursor, int position) {
     	if (cursor.getPosition() != position) throw new IllegalStateException("Please set position the cursor before passing it");
     	
         final Video video = new Video();
@@ -120,14 +120,23 @@ public class Video {
         video.commentsCount = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.NUM_OF_COMMENTS));
         
         video.smallThumbnailUrl = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.THUMB_SMALL));
+        
+        return video;
+    }
+    
+    public static Video shortFromCursor(Cursor cursor, int position) {
+    	final Video video = generalDataFromCursor(cursor, position);
+    	
         video.smallUploaderPortraitUrl = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.USER_IMG_SMALL));
         
         return video;
     }
     
     public static Video fullFromCursor(Cursor cursor, int position) {
-    	final Video video = shortFromCursor(cursor, position);
+    	final Video video = generalDataFromCursor(cursor, position);
         
+    	video.mediumUploaderPortraitUrl = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.USER_IMG_MEDIUM)); 
+    	
         video.description = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.DESCRIPTION));
         video.uploadedOn = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.UPLOADED_ON));
         

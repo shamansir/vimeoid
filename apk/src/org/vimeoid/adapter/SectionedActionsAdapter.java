@@ -41,6 +41,8 @@ public class SectionedActionsAdapter extends BaseAdapter {
     public static final int ITEM_VIEW_TYPE = 0;
     public static final int SECTION_VIEW_TYPE = 1;
     
+    public static final int VIEW_TYPES_COUNT = SECTION_VIEW_TYPE + 1;
+    
     private final Context context;
 	private final LayoutInflater inflater;
 	private final ImageLoader imagesLoader;
@@ -113,7 +115,12 @@ public class SectionedActionsAdapter extends BaseAdapter {
     		itemsLeft -= section.size();
     		
     	}
-    	return -1;
+    	return IGNORE_ITEM_VIEW_TYPE;
+    }
+    
+    @Override
+    public int getViewTypeCount() {
+    	return VIEW_TYPES_COUNT;
     }
     
     @Override
@@ -126,9 +133,9 @@ public class SectionedActionsAdapter extends BaseAdapter {
         
     	final int viewType = getItemViewType(position);
     	
-        if (viewType == -1) throw new IllegalStateException("Failed to get object at position " + position);
+        if (viewType == IGNORE_ITEM_VIEW_TYPE) throw new IllegalStateException("Failed to get object at position " + position);
         
-        Log.d(TAG, "generating view for item " + position);
+        Log.d(TAG, "generating view for item " + position + ", view type " + viewType);
         
         if (viewType == SECTION_VIEW_TYPE) {
         	
@@ -164,7 +171,7 @@ public class SectionedActionsAdapter extends BaseAdapter {
            itemHolder.tvTitle.setText(item.title);           
            if (item.icon != -1) {
                itemHolder.ivIcon.setImageResource(item.icon);
-           } else {
+           } else if ((item.iconUrl != null) && (item.iconUrl.length() > 0)) {
                if (imagesLoader != null) {
                    imagesLoader.displayImage(item.iconUrl, itemHolder.ivIcon);
                } else throw new IllegalStateException("ImagesLoader must be initialized to load images");

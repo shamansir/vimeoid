@@ -36,14 +36,14 @@ import android.widget.TextView;
 public class VideosListAdapter extends EasyCursorsAdapter<Video> {
     
     private final LayoutInflater layoutInflater;
-    private final ImageLoader imagesLoader;    
+    private final ImageLoader imageLoader;    
 
     public VideosListAdapter(Context context, LayoutInflater inflater) {
         super(Video.FieldsKeys._ID);
 
         this.layoutInflater = inflater;        
         
-        this.imagesLoader = new ImageLoader(context, R.drawable.thumb_loading_small, R.drawable.video_unknown_item);
+        this.imageLoader = new ImageLoader(context, R.drawable.thumb_loading_small, R.drawable.video_unknown_item);
     }
     
     @Override
@@ -75,7 +75,7 @@ public class VideosListAdapter extends EasyCursorsAdapter<Video> {
             
         }
         
-        imagesLoader.displayImage(video.smallThumbnailUrl, itemHolder.ivThumb);
+        imageLoader.displayImage(video.smallThumbnailUrl, itemHolder.ivThumb);
         
         itemHolder.tvTitle.setText(video.title);
         itemHolder.tvAuthor.setText(video.uploaderName);
@@ -108,7 +108,7 @@ public class VideosListAdapter extends EasyCursorsAdapter<Video> {
     @Override
     public void finalize() {
         super.finalize();
-        imagesLoader.clearCache();
+        imageLoader.clearCache();
     }
     
     private class VideoItemViewHolder {

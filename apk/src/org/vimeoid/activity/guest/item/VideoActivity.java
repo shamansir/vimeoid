@@ -12,11 +12,14 @@ import org.vimeoid.connection.simple.VimeoProvider;
 import org.vimeoid.dto.simple.Video;
 import org.vimeoid.util.Utils;
 
+import com.fedorvlasov.lazylist.ImageLoader;
+
 import android.app.Activity;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -45,6 +48,7 @@ public class VideoActivity extends Activity {
     public static final String TAG = "Video";
     
     private View titleBar;
+    private ImageLoader imageLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +72,8 @@ public class VideoActivity extends Activity {
         final View progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
         
+        imageLoader = new ImageLoader(this, R.drawable.item_loading_small, R.drawable.item_failed_small);
+        
         WebView playerView = (WebView)findViewById(R.id.videoPlayer);
         playerView.getSettings().setJavaScriptEnabled(true);
         //playerView.getSettings().setLoadsImagesAutomatically(true);
@@ -78,6 +84,7 @@ public class VideoActivity extends Activity {
         playerView.setWebChromeClient(new WebChromeClient() {
             @Override public void onProgressChanged(WebView view, int newProgress) {
                 progressBar.setVisibility(((newProgress == 0) || (newProgress == 100)) ? View.GONE : View.VISIBLE);
+                if (newProgress == 100) ((ListView)findViewById(R.id.actionsList)).setSelectionAfterHeaderView();
                 super.onProgressChanged(view, newProgress);
             }
         });
@@ -94,31 +101,29 @@ public class VideoActivity extends Activity {
     	Log.d(TAG, "video " + video.id + " data received, uploader: " + video.uploaderName);
     	((TextView)titleBar.findViewById(R.id.subjectTitle)).setText(video.title);
     	
-    	((TextView)findViewById(R.id.videoDescription)).setText(video.description);
-    	// FIXME: add this info to adapter
-    	((TextView)findViewById(R.id.videoUploadedOn)).setText(video.uploadedOn);
-    	((TextView)findViewById(R.id.videoDimensions)).setText(video.width + "x" + video.height);
-    	// TODO: + tags
+    	((TextView)findViewById(R.id.videoDescription)).setText(Html.fromHtml(video.description));
     	
-    	// TODO: uploader avatar
+    	imageLoader.displayImage(video.mediumUploaderPortraitUrl, ((ImageView)findViewById(R.id.uploaderPortrait)));
     	
-    	final SectionedActionsAdapter actionsAdapter = new SectionedActionsAdapter(this, getLayoutInflater(), null);
-    	
-    	int infoSection = actionsAdapter.addSection("Information");
-    	/* actionsAdapter.addAction(infoSection, video.smallUploaderPortraitUrl, 
-    	                            Utils.format(getString(R.string.videoUploader), "name", video.uploaderName)); */
-    	actionsAdapter.addAction(infoSection, R.drawable.contact, video.uploaderName);
+    	final SectionedActionsAdapter actionsAdapter = new SectionedActionsAdapter(this, getLayoutInflater(), imageLoader);
     	
     	int statsSection = actionsAdapter.addSection("Statistics");
     	actionsAdapter.addAction(statsSection, R.drawable.play, String.valueOf(video.playsCount));
     	actionsAdapter.addAction(statsSection, R.drawable.like, String.valueOf(video.likesCount));
     	actionsAdapter.addAction(statsSection, R.drawable.comment_video, String.valueOf(video.commentsCount));
     	
+    	int infoSection = actionsAdapter.addSection("Information");
+    	/* actionsAdapter.addAction(infoSection, video.smallUploaderPortraitUrl, 
+    	                            Utils.format(getString(R.string.videoUploader), "name", video.uploaderName)); */
+    	actionsAdapter.addAction(infoSection, R.drawable.contact, video.uploaderName);
+    	// TODO: + tags    	
+    	actionsAdapter.addAction(infoSection, R.drawable.contact, video.uploadedOn);
+    	actionsAdapter.addAction(infoSection, R.drawable.contact, video.width + "x" + video.height);
+    	
     	final ListView actionsList = (ListView)findViewById(R.id.actionsList);
     	actionsList.setAdapter(actionsAdapter);
-        actionsList.setSelection(0);
     	actionsList.invalidate();
-    	actionsList.scrollTo(0, 0);
+    	actionsList.setSelectionAfterHeaderView();    	
     }
     
     protected class LoadItemTask extends AsyncTask<Uri, Void, Cursor> {
