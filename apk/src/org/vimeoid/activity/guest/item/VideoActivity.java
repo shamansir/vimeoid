@@ -89,7 +89,9 @@ public class VideoActivity extends ItemActivity<Video> {
         ((TextView)titleBar.findViewById(R.id.subjectTitle)).setText(video.title);
         
         // description
-        ((TextView)findViewById(R.id.videoDescription)).setText(Html.fromHtml(video.description));
+        ((TextView)findViewById(R.id.videoDescription)).setText((video.description.length() > 0) 
+                                                                 ? Html.fromHtml(video.description)
+                                                                 : getString(R.string.no_description_supplied));        
         
         // uploader portrait
         final ImageView uploaderPortrait = (ImageView)findViewById(R.id.uploaderPortrait);
