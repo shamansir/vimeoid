@@ -3,21 +3,23 @@
  */
 package org.vimeoid.dto.simple;
 
+import org.vimeoid.util.Item;
+
 /**
  * <dl>
  * <dt>Project:</dt> <dd>vimeoid</dd>
  * <dt>Package:</dt> <dd>org.vimeoid.dto.simple</dd>
  * </dl>
  *
- * <code>Action</code>
+ * <code>Operation</code>
  *
- * <p>Vimeo activity representation (named as 'Action' not to correlate with Android Activities)</p>
+ * <p>Vimeo activity representation (named as 'Operation' not to correlate with Android Activities)</p>
  *
  * @author Ulric Wilfred <shaman.sir@gmail.com>
  * @date Aug 19, 2010 9:21:38 PM 
  *
  */
-public class Action {
+public class Operation implements Item {
     
     /* public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoProvider.AUTHORITY +
                                                                    "/actions"); */

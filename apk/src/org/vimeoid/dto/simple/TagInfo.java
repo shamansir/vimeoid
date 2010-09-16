@@ -3,6 +3,8 @@
  */
 package org.vimeoid.dto.simple;
 
+import org.vimeoid.util.Item;
+
 /**
  * <dl>
  * <dt>Project:</dt> <dd>vimeoid</dd>
@@ -17,7 +19,7 @@ package org.vimeoid.dto.simple;
  * @date Aug 25, 2010 12:07:30 AM 
  *
  */
-public class TagInfo {
+public class TagInfo implements Item {
     
     public String name;
     public String url;

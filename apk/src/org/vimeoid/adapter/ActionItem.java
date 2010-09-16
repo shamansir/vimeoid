@@ -81,7 +81,7 @@ public class ActionItem {
         
     }
     
-    public static interface RenderingAdapter {        
+    public static interface RenderingAdapter {
         public TextView render(Context context, TextView source, String value);
     }
 

@@ -3,6 +3,8 @@
  */
 package org.vimeoid.dto.simple;
 
+import org.vimeoid.util.Item;
+
 /**
  * <dl>
  * <dt>Project:</dt> <dd>vimeoid</dd>
@@ -17,7 +19,7 @@ package org.vimeoid.dto.simple;
  * @date Aug 19, 2010 8:54:34 PM 
  *
  */
-public class UserInfo {
+public class UserInfo implements Item {
     
     /* public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoProvider.AUTHORITY +
                                                                    "/users"); */

@@ -14,7 +14,7 @@ import org.vimeoid.connection.ApiCallInfo;
 import org.vimeoid.connection.ContentType;
 import org.vimeoid.connection.JsonObjectsCursor;
 import org.vimeoid.connection.JsonOverHttp;
-import org.vimeoid.dto.simple.Action;
+import org.vimeoid.dto.simple.Operation;
 import org.vimeoid.dto.simple.AlbumInfo;
 import org.vimeoid.dto.simple.ChannelInfo;
 import org.vimeoid.dto.simple.GroupInfo;
@@ -73,8 +73,8 @@ public class VimeoProvider extends ContentProvider {
     @Override
     public String getType(Uri uri) {
         switch (uriMatcher.match(uri)) {
-            case ACTIONS_LIST_URI_TYPE:   return Action.CONTENT_TYPE;
-            case ACTION_SINGLE_URI_TYPE:  return Action.CONTENT_ITEM_TYPE;
+            case OPER8NS_LIST_URI_TYPE:   return Operation.CONTENT_TYPE;
+            case OPER8N_SINGLE_URI_TYPE:  return Operation.CONTENT_ITEM_TYPE;
             case ALBUMS_LIST_URI_TYPE:    return AlbumInfo.CONTENT_TYPE;
             case ALBUM_SINGLE_URI_TYPE:   return AlbumInfo.CONTENT_ITEM_TYPE;
             case CHANNELS_LIST_URI_TYPE:  return ChannelInfo.CONTENT_TYPE;
@@ -158,8 +158,8 @@ public class VimeoProvider extends ContentProvider {
     
     private static final UriMatcher uriMatcher;
     
-    private static final int ACTIONS_LIST_URI_TYPE   = 1;
-    private static final int ACTION_SINGLE_URI_TYPE  = 2;
+    private static final int OPER8NS_LIST_URI_TYPE   = 1;
+    private static final int OPER8N_SINGLE_URI_TYPE  = 2;
     private static final int ALBUMS_LIST_URI_TYPE    = 3;
     private static final int ALBUM_SINGLE_URI_TYPE   = 4;
     private static final int CHANNELS_LIST_URI_TYPE  = 5;
@@ -198,17 +198,17 @@ public class VimeoProvider extends ContentProvider {
         uriMatcher.addURI(AUTHORITY, "album/#/info",   ALBUM_SINGLE_URI_TYPE);
         uriMatcher.addURI(AUTHORITY, "album/#/videos", VIDEOS_LIST_URI_TYPE);
         
-        uriMatcher.addURI(AUTHORITY, "activity/*/did",       ACTIONS_LIST_URI_TYPE);
-        uriMatcher.addURI(AUTHORITY, "activity/*/happened",  ACTIONS_LIST_URI_TYPE);
-        uriMatcher.addURI(AUTHORITY, "activity/*/cdid",      ACTIONS_LIST_URI_TYPE); // contacts did
-        uriMatcher.addURI(AUTHORITY, "activity/*/chappened", ACTIONS_LIST_URI_TYPE); // happened to contacts
-        uriMatcher.addURI(AUTHORITY, "activity/*/edid",      ACTIONS_LIST_URI_TYPE); // everyone did
+        uriMatcher.addURI(AUTHORITY, "activity/*/did",       OPER8NS_LIST_URI_TYPE);
+        uriMatcher.addURI(AUTHORITY, "activity/*/happened",  OPER8NS_LIST_URI_TYPE);
+        uriMatcher.addURI(AUTHORITY, "activity/*/cdid",      OPER8NS_LIST_URI_TYPE); // contacts did
+        uriMatcher.addURI(AUTHORITY, "activity/*/chappened", OPER8NS_LIST_URI_TYPE); // happened to contacts
+        uriMatcher.addURI(AUTHORITY, "activity/*/edid",      OPER8NS_LIST_URI_TYPE); // everyone did
     }
     
     public static ContentType getReturnedContentType(Uri uri) {
         switch (uriMatcher.match(uri)) {
-            case ACTIONS_LIST_URI_TYPE:
-            case ACTION_SINGLE_URI_TYPE:  return ContentType.ACTIVITY;
+            case OPER8NS_LIST_URI_TYPE:
+            case OPER8N_SINGLE_URI_TYPE:  return ContentType.ACTIVITY;
             case ALBUMS_LIST_URI_TYPE:
             case ALBUM_SINGLE_URI_TYPE:   return ContentType.ALBUM;
             case CHANNELS_LIST_URI_TYPE:
@@ -225,13 +225,13 @@ public class VimeoProvider extends ContentProvider {
     
     public static boolean getReturnsMultipleResults(Uri uri) {
         switch (uriMatcher.match(uri)) {
-            case ACTIONS_LIST_URI_TYPE:
+            case OPER8NS_LIST_URI_TYPE:
             case ALBUMS_LIST_URI_TYPE:
             case CHANNELS_LIST_URI_TYPE:
             case GROUPS_LIST_URI_TYPE:
             case USERS_LIST_URI_TYPE:
             case VIDEOS_LIST_URI_TYPE:    return true;            
-            case ACTION_SINGLE_URI_TYPE:  
+            case OPER8N_SINGLE_URI_TYPE:  
             case ALBUM_SINGLE_URI_TYPE:
             case CHANNEL_SINGLE_URI_TYPE:
             case GROUP_SINGLE_URI_TYPE:
