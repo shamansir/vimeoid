@@ -26,6 +26,7 @@ import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.simple.VimeoProvider;
 import org.vimeoid.dto.simple.Video;
 import org.vimeoid.util.Dialogs;
+import org.vimeoid.util.Invoke;
 import org.vimeoid.util.Utils;
 
 /**
@@ -105,9 +106,9 @@ public class VideosActivity extends ListActivity {
             if (Intent.ACTION_PICK.equals(action) ||
                 Intent.ACTION_GET_CONTENT.equals(action))
             { 
-            	invokePick(video);
+            	Invoke.Guest.pickVideo(this, video);
             } else {
-            	invokeSelect(video);
+                Invoke.Guest.selectVideo(this, video);
             }
             
         } else {
@@ -131,23 +132,6 @@ public class VideosActivity extends ListActivity {
     	
         super.onListItemClick(l, v, position, id);
     }
-    
-    protected static Uri getVideoPageUri(Video video) {
-    	return Uri.withAppendedPath(
-                VimeoProvider.BASE_URI, "/video/" + video.id);
-    }
-    
-    protected void invokePick(Video video) {
-        Log.d(TAG, "Video with id " + video.id + " requested");
-        setResult(RESULT_OK, new Intent().setData(getVideoPageUri(video))
-                                         .putExtra(Utils.VIDEO_TITLE_EXTRA, video.title));
-    }
-    
-    protected void invokeSelect(Video video) {
-        Log.d(TAG, "Video with id " + video.id + " selected");    	
-        startActivity(new Intent(Intent.ACTION_VIEW, getVideoPageUri(video))
-                                .putExtra(Utils.VIDEO_TITLE_EXTRA, video.title));    	
-    }    
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -219,8 +203,8 @@ public class VideosActivity extends ListActivity {
             } */
             //case R.id.menu_watchLater: itemDescription = "WatchLater "; break;       
             // view comments, tags, ...
-            case R.id.menu_viewInfo: invokeSelect(video); break;
-            case R.id.menu_viewAuthorInfo: Dialogs.makeToast(this, getString(R.string.currently_not_supported)); break;
+            case R.id.menu_viewInfo: Invoke.Guest.selectVideo(this, video); break;
+            case R.id.menu_viewAuthorInfo: Invoke.Guest.pickUploader(this, video); break;
             default: Dialogs.makeToast(this, getString(R.string.unknown_item));
         }
         return super.onContextItemSelected(item);
@@ -385,6 +369,14 @@ public class VideosActivity extends ListActivity {
             
         }
         
+    }
+    
+    
+    protected static Uri getAuthorPageUri(Video video) {
+        final String authorId = Utils.authorIdFromProfileUrl(video.uploaderProfileUrl);
+        Log.d(TAG, "Extracted authorId " + authorId + " from profile URL " + video.uploaderProfileUrl);
+        
+        return Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + authorId + "/info");
     }
     
 }

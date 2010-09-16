@@ -8,13 +8,11 @@ import org.vimeoid.activity.guest.ItemActivity;
 import org.vimeoid.adapter.ActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.connection.VimeoApi;
-import org.vimeoid.connection.simple.VimeoProvider;
 import org.vimeoid.dto.simple.Video;
+import org.vimeoid.util.Invoke;
 import org.vimeoid.util.Utils;
 
-import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -96,24 +94,12 @@ public class VideoActivity extends ItemActivity<Video> {
         // uploader portrait
         final ImageView uploaderPortrait = (ImageView)findViewById(R.id.uploaderPortrait);
         uploaderPortrait.setOnClickListener(new OnClickListener() {
-            @Override public void onClick(View v) { invokePickAuthor(video); };
+            @Override public void onClick(View v) { Invoke.Guest.pickUploader(VideoActivity.this, video); };
         });
         imageLoader.displayImage(video.mediumUploaderPortraitUrl, uploaderPortrait);        
         
         super.onItemReceived(video);
        
-    }
-    
-    protected static Uri getAuthorPageUri(Video video) {
-        final String authorId = Utils.authorIdFromProfileUrl(video.uploaderProfileUrl);
-        Log.d(TAG, "Extracted authorId " + authorId + " from profile URL " + video.uploaderProfileUrl);
-        
-        return Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + authorId + "/info");
-    }
-    
-    protected void invokePickAuthor(Video video) {
-        startActivity(new Intent(Intent.ACTION_VIEW, getAuthorPageUri(video))
-                                .putExtra(Utils.USERNAME_EXTRA, video.uploaderName));
     }
     
     @Override
@@ -145,7 +131,7 @@ public class VideoActivity extends ItemActivity<Video> {
     	final ActionItem userAction = actionsAdapter.addAction(infoSection, R.drawable.contact, 
     			                 Utils.format(getString(R.string.uploaded_by), "name", video.uploaderName));
     	userAction.onClick =  new OnClickListener() {
-    		@Override public void onClick(View v) { invokePickAuthor(video); };
+    		@Override public void onClick(View v) { Invoke.Guest.pickUploader(VideoActivity.this, video); };
 		};
 		// uploaded on
     	actionsAdapter.addAction(infoSection, R.drawable.upload,

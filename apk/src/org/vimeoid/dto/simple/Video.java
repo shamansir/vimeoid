@@ -90,7 +90,7 @@ public class Video implements Item {
     }
     
     public final static String[] SHORT_EXTRACT_PROJECTION = {
-        FieldsKeys._ID, FieldsKeys.TITLE, FieldsKeys.AUTHOR,
+        FieldsKeys._ID, FieldsKeys.TITLE, FieldsKeys.AUTHOR, FieldsKeys.AUTHOR_URL,
         FieldsKeys.DURATION, FieldsKeys.TAGS, 
         FieldsKeys.THUMB_SMALL, FieldsKeys.USER_IMG_SMALL, 
         FieldsKeys.NUM_OF_LIKES, FieldsKeys.NUM_OF_PLAYS, FieldsKeys.NUM_OF_COMMENTS
@@ -113,6 +113,7 @@ public class Video implements Item {
         video.id = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys._ID));
         video.title = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.TITLE));
         video.uploaderName = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.AUTHOR));
+        video.uploaderProfileUrl = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.AUTHOR_URL));        
         video.duration = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.DURATION));
         video.tags = Utils.extractTags(cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.TAGS))); 
         video.likesCount = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.NUM_OF_LIKES));
@@ -135,7 +136,6 @@ public class Video implements Item {
     public static Video fullFromCursor(Cursor cursor, int position) {
     	final Video video = generalDataFromCursor(cursor, position);
         
-    	video.uploaderProfileUrl = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.AUTHOR_URL));
     	video.mediumUploaderPortraitUrl = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.USER_IMG_MEDIUM)); 
     	
         video.description = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.DESCRIPTION));
