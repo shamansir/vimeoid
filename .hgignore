@@ -1,6 +1,7 @@
 ^apk/bin/*
 ^test-apk/bin/*
 ^mockup/vimeoIMG/*
+^apk/gen/org/vimeoid/R.java
 
 \.settings
 .*\.apk
