@@ -110,7 +110,7 @@ public class UserActivity extends ItemActivity<UserInfo> {
             };
         }
         // number of appearances
-        final ActionItem appearanceAction = actionsAdapter.addAction(statsSection, R.drawable.contact, 
+        final ActionItem appearanceAction = actionsAdapter.addAction(statsSection, R.drawable.appearance, 
                 Utils.format(getString(R.string.num_of_appearances), "num", String.valueOf(user.videosAppearsIn)));
         if (user.videosAppearsIn > 0) {
             appearanceAction.onClick =  new OnClickListener() {
@@ -129,7 +129,7 @@ public class UserActivity extends ItemActivity<UserInfo> {
         // Information section
         int infoSection = actionsAdapter.addSection(getString(R.string.information));
         // location
-        actionsAdapter.addAction(infoSection, R.drawable.contact,
+        actionsAdapter.addAction(infoSection, R.drawable.location,
                                  Utils.format(getString(R.string.location_is), "place", user.location));
         // created on
         actionsAdapter.addAction(infoSection, R.drawable.duration,
