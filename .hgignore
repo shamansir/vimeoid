@@ -2,6 +2,7 @@
 ^test-apk/bin/*
 ^mockup/vimeoIMG/*
 ^apk/gen/org/vimeoid/R.java
+^test-apk/gen/org/vimeoid/test/R.java
 
 \.settings
 .*\.apk
