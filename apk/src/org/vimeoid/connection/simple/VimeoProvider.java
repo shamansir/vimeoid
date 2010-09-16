@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import org.vimeoid.VimeoConfig;
 import org.vimeoid.connection.ApiCallInfo;
@@ -114,13 +115,13 @@ public class VimeoProvider extends ContentProvider {
         final ApiCallInfo apiCallInfo = collectCallInfo(contentUri); 
         final URI fullCallUrl = getFullApiUrl(apiCallInfo.apiUrlPart);
         try {
-            // if (apiCallInfo.multipleResult) {
+            if (getReturnsJsonArray(contentUri)) {
                 final JSONArray jsonArr = JsonOverHttp.use().askForArray(fullCallUrl);
                 return new JsonObjectsCursor(jsonArr, projection, apiCallInfo);
-            /* } else {
+            } else {
                 final JSONObject jsonObj = JsonOverHttp.use().askForObject(fullCallUrl);
                 return new JsonObjectsCursor(jsonObj, projection, apiCallInfo);
-            } */          
+            }          
         } catch (ClientProtocolException cpe) {
             Log.e(TAG, "Client protocol exception" + cpe.getLocalizedMessage());
             cpe.printStackTrace();
@@ -230,7 +231,7 @@ public class VimeoProvider extends ContentProvider {
             case CHANNELS_LIST_URI_TYPE:
             case GROUPS_LIST_URI_TYPE:
             case USERS_LIST_URI_TYPE:
-            case VIDEOS_LIST_URI_TYPE:    return true;            
+            case VIDEOS_LIST_URI_TYPE:    return true;
             case OPER8N_SINGLE_URI_TYPE:  
             case ALBUM_SINGLE_URI_TYPE:
             case CHANNEL_SINGLE_URI_TYPE:
@@ -239,7 +240,12 @@ public class VimeoProvider extends ContentProvider {
             case VIDEO_SINGLE_URI_TYPE:   return false;
             default: throw new IllegalArgumentException("Unknown URI type: " + uri);
         }        
-    }    
+    }
+    
+    protected static boolean getReturnsJsonArray(Uri uri) {
+        if ("video".equals(uri.getPathSegments().get(0))) return true; // videos are always returned as array
+        return getReturnsMultipleResults(uri);
+    }
     
     /* ====================== Simple API: Parsing Uri ======================= */    
         

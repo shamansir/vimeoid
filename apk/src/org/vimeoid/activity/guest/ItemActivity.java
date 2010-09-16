@@ -43,6 +43,8 @@ public abstract class ItemActivity<ItemType extends Item> extends Activity {
     private final int mainView;
     private final String[] projection;
     
+    private boolean loadManually = false;
+    
     protected View titleBar;
     protected View progressBar;    
     
@@ -84,7 +86,12 @@ public abstract class ItemActivity<ItemType extends Item> extends Activity {
         progressBar.setVisibility(View.GONE);
         
         imageLoader = new ImageLoader(this, R.drawable.item_loading_small, R.drawable.item_failed_small);
-        
+    
+        if (!loadManually) runLoadingProcess();
+    }
+    
+    protected void setLoadManually(boolean value) {
+        loadManually = value;
     }
     
     protected void runLoadingProcess() {

@@ -47,6 +47,7 @@ public class VideoActivity extends ItemActivity<Video> {
     
     public VideoActivity() {
         super(R.layout.view_single_video, Video.FULL_EXTRACT_PROJECTION);
+        setLoadManually(true);
     }
     
     @Override
