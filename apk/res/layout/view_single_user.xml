@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+	<include android:id="@+id/titleBar"
+	         layout="@layout/item_subject_titlebar" />
+    <include android:id="@+id/progressBar"
+             layout="@layout/progress_bar_line" />
+    <LinearLayout android:orientation="horizontal"
+                  android:layout_width="fill_parent"
+                  android:layout_height="@dimen/user_portrait_side">
+	    <ImageView android:id="@+id/userPortrait"
+	               android:background="#ffff"
+	               android:layout_gravity="center_horizontal"
+	               android:layout_width="@dimen/user_portrait_side"
+	               android:layout_height="fill_parent"
+	               android:layout_marginLeft="4dp" />
+         <ScrollView android:layout_width="fill_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_weight="1">
+             <TextView android:id="@+id/userBio"
+                       android:textSize="10dp"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:paddingLeft="4dp"
+                       android:linksClickable="true" />
+         </ScrollView>
+    </LinearLayout>
+    <ListView android:id="@+id/actionsList"
+              android:layout_width="fill_parent"
+              android:layout_height="20dp"
+              android:layout_weight="1"
+              android:transcriptMode="disabled"              
+              android:divider="#ccc"
+              android:dividerHeight="1dp" />
+</LinearLayout>

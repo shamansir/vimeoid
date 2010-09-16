@@ -97,7 +97,7 @@ public class Video implements Item {
     };
     
     public final static String[] FULL_EXTRACT_PROJECTION = {
-        FieldsKeys._ID, FieldsKeys.TITLE, FieldsKeys.AUTHOR,
+        FieldsKeys._ID, FieldsKeys.TITLE, FieldsKeys.AUTHOR, FieldsKeys.AUTHOR_URL,
         FieldsKeys.DURATION, FieldsKeys.TAGS, 
         FieldsKeys.THUMB_SMALL, FieldsKeys.USER_IMG_MEDIUM, 
         FieldsKeys.NUM_OF_LIKES, FieldsKeys.NUM_OF_PLAYS, FieldsKeys.NUM_OF_COMMENTS,
@@ -135,6 +135,7 @@ public class Video implements Item {
     public static Video fullFromCursor(Cursor cursor, int position) {
     	final Video video = generalDataFromCursor(cursor, position);
         
+    	video.uploaderProfileUrl = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.AUTHOR_URL));
     	video.mediumUploaderPortraitUrl = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.USER_IMG_MEDIUM)); 
     	
         video.description = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.DESCRIPTION));
@@ -146,16 +147,4 @@ public class Video implements Item {
         return video;
     }    
     
-    /* @Override
-    public ContentValues extract() {
-        final ContentValues result = new ContentValues();
-        result.put(FieldsKeys._ID, this.id);
-        result.put(FieldsKeys.TITLE, this.title);
-        result.put(FieldsKeys.AUTHOR, this.uploaderName);
-        result.put(FieldsKeys.DESCRIPTION, this.description);
-        result.put(FieldsKeys.DURATION, this.duration);
-        result.put(FieldsKeys.TAGS, Arrays.toString(this.tags));
-        return result;
-    } */
-
 }

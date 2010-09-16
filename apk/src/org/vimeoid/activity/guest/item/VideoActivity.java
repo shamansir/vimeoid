@@ -5,15 +5,16 @@ package org.vimeoid.activity.guest.item;
 
 import org.vimeoid.R;
 import org.vimeoid.activity.guest.ItemActivity;
-import org.vimeoid.activity.guest.list.VideosActivity;
 import org.vimeoid.adapter.ActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.connection.VimeoApi;
+import org.vimeoid.connection.simple.VimeoProvider;
 import org.vimeoid.dto.simple.Video;
-import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Utils;
 
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -51,8 +52,8 @@ public class VideoActivity extends ItemActivity<Video> {
     @Override
     protected void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon) {
         super.initTitleBar(subjectIcon, subjectTitle, resultIcon);
-        if (getIntent().hasExtra(VideosActivity.VIDEO_TITLE_EXTRA)) {
-            subjectTitle.setText(getIntent().getStringExtra(VideosActivity.VIDEO_TITLE_EXTRA));
+        if (getIntent().hasExtra(Utils.VIDEO_TITLE_EXTRA)) {
+            subjectTitle.setText(getIntent().getStringExtra(Utils.VIDEO_TITLE_EXTRA));
         }
     }
 
@@ -96,14 +97,22 @@ public class VideoActivity extends ItemActivity<Video> {
         uploaderPortrait.setOnClickListener(new OnClickListener() {
             @Override public void onClick(View v) { invokePickAuthor(video); };
         });
-        imageLoader.displayImage(video.mediumUploaderPortraitUrl, ((ImageView)findViewById(R.id.uploaderPortrait)));        
+        imageLoader.displayImage(video.mediumUploaderPortraitUrl, uploaderPortrait);        
         
         super.onItemReceived(video);
        
     }
     
+    protected static Uri getAuthorPageUri(Video video) {
+        final String authorId = Utils.authorIdFromProfileUrl(video.uploaderProfileUrl);
+        Log.d(TAG, "Extracted authorId " + authorId + " from profile URL " + video.uploaderProfileUrl);
+        
+        return Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + authorId + "/info");
+    }
+    
     protected void invokePickAuthor(Video video) {
-    	Dialogs.makeToast(this, getString(R.string.currently_not_supported));
+        startActivity(new Intent(Intent.ACTION_VIEW, getAuthorPageUri(video))
+                                .putExtra(Utils.USERNAME_EXTRA, video.uploaderName));
     }
     
     @Override
@@ -134,7 +143,7 @@ public class VideoActivity extends ItemActivity<Video> {
     	// uploader
     	final ActionItem userAction = actionsAdapter.addAction(infoSection, R.drawable.contact, 
     			                 Utils.format(getString(R.string.uploaded_by), "name", video.uploaderName));
-    	userAction.onClick =  new OnClickListener() {				
+    	userAction.onClick =  new OnClickListener() {
     		@Override public void onClick(View v) { invokePickAuthor(video); };
 		};
 		// uploaded on

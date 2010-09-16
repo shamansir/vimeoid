@@ -47,8 +47,6 @@ public class VideosActivity extends ListActivity {
     
     public static final String TAG = "Videos";
     
-    public static final String VIDEO_TITLE_EXTRA = "v_title";
-    
     private EasyCursorsAdapter<?> adapter = null;
     private View footerView;
     private int pageNum = 1;
@@ -134,19 +132,21 @@ public class VideosActivity extends ListActivity {
         super.onListItemClick(l, v, position, id);
     }
     
-    protected Uri getVideoPageUri(Video video) {
+    protected static Uri getVideoPageUri(Video video) {
     	return Uri.withAppendedPath(
                 VimeoProvider.BASE_URI, "/video/" + video.id);
     }
     
     protected void invokePick(Video video) {
         Log.d(TAG, "Video with id " + video.id + " requested");
-        setResult(RESULT_OK, new Intent().setData(getVideoPageUri(video)).putExtra(VIDEO_TITLE_EXTRA, video.title));
+        setResult(RESULT_OK, new Intent().setData(getVideoPageUri(video))
+                                         .putExtra(Utils.VIDEO_TITLE_EXTRA, video.title));
     }
     
     protected void invokeSelect(Video video) {
         Log.d(TAG, "Video with id " + video.id + " selected");    	
-        startActivity(new Intent(Intent.ACTION_VIEW, getVideoPageUri(video)).putExtra(VIDEO_TITLE_EXTRA, video.title));    	
+        startActivity(new Intent(Intent.ACTION_VIEW, getVideoPageUri(video))
+                                .putExtra(Utils.VIDEO_TITLE_EXTRA, video.title));    	
     }    
     
     @Override

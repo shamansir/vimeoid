@@ -32,7 +32,8 @@ import org.vimeoid.connection.ContentType;
  */
 public class Utils {
     
-    // TODO: Optimize these methods
+    public static final String VIDEO_TITLE_EXTRA = "v_videotitle";
+    public static final String USERNAME_EXTRA = "v_username";
     
     public static List<NameValuePair> quickApiParams(String name1, String value1) {
         final List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -171,6 +172,10 @@ public class Utils {
             case VIDEO:    return R.drawable.video;
             default: return R.drawable.icon;
         }
+    }
+
+    public static String authorIdFromProfileUrl(String uploaderProfileUrl) {
+        return uploaderProfileUrl.substring(17);
     }
 
 }
