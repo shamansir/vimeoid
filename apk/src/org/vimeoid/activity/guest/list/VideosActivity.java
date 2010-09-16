@@ -222,7 +222,7 @@ public class VideosActivity extends ListActivity {
             //case R.id.menu_watchLater: itemDescription = "WatchLater "; break;       
             // view comments, tags, ...
             case R.id.menu_viewInfo: invokeSelect(video); break;
-            case R.id.menu_viewAuthorInfo: Dialogs.makeToast(this, "Author info"); break;
+            case R.id.menu_viewAuthorInfo: Dialogs.makeToast(this, getString(R.string.currently_not_supported)); break;
             default: Dialogs.makeToast(this, getString(R.string.unknown_item));
         }
         return super.onContextItemSelected(item);
@@ -261,13 +261,13 @@ public class VideosActivity extends ListActivity {
 	                }
 	            }; break; */
             case R.id.menu_Refresh: {
-                    Dialogs.makeToast(this, "Refresh"); 
+                    Dialogs.makeToast(this, getString(R.string.currently_not_supported)); 
                 } break;
             case R.id.menu_Preferences: {
-                	Dialogs.makeToast(this, "Preferences"); 
+                	Dialogs.makeToast(this, getString(R.string.currently_not_supported)); 
 	            } break;
             case R.id.menu_SwitchView: {
-            		Dialogs.makeToast(this, "Switch view"); 
+            		Dialogs.makeToast(this, getString(R.string.currently_not_supported)); 
             	} break;
             default: Dialogs.makeToast(this, getString(R.string.unknown_item));
         }         

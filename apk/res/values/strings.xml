@@ -7,6 +7,7 @@
     <string name="no_pages_more">Maximum number of pages is reached</string>
     <string name="please_do_not_touch">Don\'t mess with me!</string>
     <string name="unknown_item">Unknown item</string>
+    <string name="currently_not_supported">This action is not supported currently</string>
     <!-- lists -->
     <string name="load_more">Load more...</string>
     <string name="no_items_in_list">No items in list</string>

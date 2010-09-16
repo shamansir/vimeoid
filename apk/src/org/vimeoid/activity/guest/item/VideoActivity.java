@@ -99,29 +99,29 @@ public class VideoActivity extends Activity {
         
     }
     
-    protected void onVideoDataReceived(Video video) {
+    protected void invokePickAuthor(Video video) {
+    	Dialogs.makeToast(this, getString(R.string.currently_not_supported));
+    }
+    
+    protected void onVideoDataReceived(final Video video) {
     	
     	Log.d(TAG, "video " + video.id + " data received, uploader: " + video.uploaderName);
     	((TextView)titleBar.findViewById(R.id.subjectTitle)).setText(video.title);
     	
+    	// description
     	((TextView)findViewById(R.id.videoDescription)).setText(Html.fromHtml(video.description));
     	
+    	// uploader portrait
+    	final ImageView uploaderPortrait = (ImageView)findViewById(R.id.uploaderPortrait);
+    	uploaderPortrait.setOnClickListener(new OnClickListener() {
+			@Override public void onClick(View v) { invokePickAuthor(video); };
+		});
     	imageLoader.displayImage(video.mediumUploaderPortraitUrl, ((ImageView)findViewById(R.id.uploaderPortrait)));
     	
     	final SectionedActionsAdapter actionsAdapter = new SectionedActionsAdapter(this, getLayoutInflater(), imageLoader);
     	
     	// Statistics section
     	int statsSection = actionsAdapter.addSection(getString(R.string.statistics));
-    	// number of comments
-    	final ActionItem commentsAction = actionsAdapter.addAction(statsSection, R.drawable.comment_video, 
-    			                 Utils.format(getString(R.string.num_of_comments), "num", String.valueOf(video.commentsCount)));
-    	if (video.commentsCount > 0) {
-    		commentsAction.onClick = new OnClickListener() {				
-				@Override public void onClick(View v) {
-					Dialogs.makeToast(VideoActivity.this, "View comments");
-				}
-			};
-    	}
     	// tags
     	if (video.tags.length > 0) actionsAdapter.addAction(statsSection, R.drawable.tag, 
     							 Utils.format(getString(R.string.tags_are), "list",
@@ -132,22 +132,27 @@ public class VideoActivity extends Activity {
     	// number of likes
     	actionsAdapter.addAction(statsSection, R.drawable.like, 
     			                 Utils.format(getString(R.string.num_of_likes), "num", String.valueOf(video.likesCount)));
+    	// number of comments
+    	actionsAdapter.addAction(statsSection, R.drawable.comment_video, 
+    			                 Utils.format(getString(R.string.num_of_comments), "num", String.valueOf(video.commentsCount)));
+    	
     	
     	// Information section
     	int infoSection = actionsAdapter.addSection(getString(R.string.information));
+    	// duration
+    	actionsAdapter.addAction(infoSection, R.drawable.duration,
+			     				 Utils.format(getString(R.string.duration_is), "time", Utils.adaptDuration(video.duration)));    	
     	// uploader
     	final ActionItem userAction = actionsAdapter.addAction(infoSection, R.drawable.contact, 
     			                 Utils.format(getString(R.string.uploaded_by), "name", video.uploaderName));
     	userAction.onClick =  new OnClickListener() {				
-			@Override public void onClick(View v) {
-				Dialogs.makeToast(VideoActivity.this, "View user page");
-			}
+    		@Override public void onClick(View v) { invokePickAuthor(video); };
 		};
 		// uploaded on
-    	actionsAdapter.addAction(infoSection, R.drawable.contact,
+    	actionsAdapter.addAction(infoSection, R.drawable.upload,
     							 Utils.format(getString(R.string.uploaded_on), "time", video.uploadedOn));
     	// dimensions
-    	actionsAdapter.addAction(infoSection, R.drawable.contact,
+    	actionsAdapter.addAction(infoSection, R.drawable.dimensions,
     						     Utils.format(getString(R.string.dimensions_are), "width", String.valueOf(video.width),
     						    		                                          "height", String.valueOf(video.height)));
     						     
