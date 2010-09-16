@@ -18,8 +18,7 @@
                   android:paddingLeft="5dp">
 	    <TextView android:id="@+id/videoItemTitle"
                   android:layout_width="fill_parent" 
-	              android:layout_height="wrap_content" 
-	              android:text="title"
+	              android:layout_height="wrap_content"
 	              android:textSize="@dimen/item_title_font_size"
 	              android:textColor="@color/item_title"
 	              android:lines="1"
@@ -28,7 +27,6 @@
         <TextView android:id="@+id/videoItemAuthor"
                   android:layout_width="fill_parent" 
                   android:layout_height="wrap_content" 
-                  android:text="author"
                   android:textSize="@dimen/item_subtitle_font_size"
                   android:textColor="@color/item_subtitle"                  
                   android:lines="1"
@@ -73,7 +71,6 @@
                                android:layout_width="wrap_content" 
                                android:layout_height="fill_parent" 
                                android:layout_marginLeft="3dp"
-                               android:text="plays"
                                android:textStyle="bold"                        
                                android:textSize="@dimen/item_info_font_size"
                                android:textColor="@color/item_info" />
@@ -91,7 +88,6 @@
                                android:layout_width="wrap_content" 
                                android:layout_height="fill_parent" 
                                android:layout_marginLeft="3dp"
-                               android:text="comments"
                                android:textStyle="bold"                        
                                android:textSize="@dimen/item_info_font_size"
                                android:textColor="@color/item_info" />
@@ -106,7 +102,6 @@
                        android:paddingRight="2dp"
                        android:paddingLeft="4dp"
                        android:gravity="bottom|right"
-		               android:text="duration"
                        android:textStyle="bold"
 		               android:textSize="@dimen/item_param_font_size"
                        android:textColor="@color/item_param"

@@ -128,8 +128,8 @@ public class VideosActivity extends ListActivity {
                     
                     queryMoreItems(nextPageUri, adapter, Video.SHORT_EXTRACT_PROJECTION);
                     
-                } else Dialogs.makeToast(this, "Maximum number of pages is reached");
-            } else Dialogs.makeToast(this, "Don't mess with me!");
+                } else Dialogs.makeToast(this, getString(R.string.no_pages_more));
+            } else Dialogs.makeToast(this, getString(R.string.please_do_not_touch));
             
         }
     	
@@ -184,7 +184,7 @@ public class VideosActivity extends ListActivity {
         if (position == (getListView().getCount() - 1)) return; 
         
         Video video = (Video)getListView().getItemAtPosition(position);
-        menu.setHeaderTitle("Video " + Utils.crop(video.title, 20));
+        menu.setHeaderTitle(Utils.format(getString(R.string.video_is), "title", Utils.crop(video.title, 20)));
             
         MenuInflater inflater = getMenuInflater(); //from activity
         inflater.inflate(R.menu.video_context_guest_menu, menu);
@@ -219,10 +219,11 @@ public class VideosActivity extends ListActivity {
                         return false;
                     }
             } */
-            //case R.id.menu_watchLater: itemDescription = "WatchLater "; break;        
+            //case R.id.menu_watchLater: itemDescription = "WatchLater "; break;       
+            // view comments, tags, ...
             case R.id.menu_viewInfo: invokeSelect(video); break;
             case R.id.menu_viewAuthorInfo: Dialogs.makeToast(this, "Author info"); break;
-            default: Dialogs.makeToast(this, "Unknown item");
+            default: Dialogs.makeToast(this, getString(R.string.unknown_item));
         }
         return super.onContextItemSelected(item);
         
@@ -268,7 +269,7 @@ public class VideosActivity extends ListActivity {
             case R.id.menu_SwitchView: {
             		Dialogs.makeToast(this, "Switch view"); 
             	} break;
-            default: Dialogs.makeToast(this, "Unknown menu element");
+            default: Dialogs.makeToast(this, getString(R.string.unknown_item));
         }         
         return super.onOptionsItemSelected(item);
         
@@ -286,7 +287,7 @@ public class VideosActivity extends ListActivity {
             
             Log.d(TAG, "Connection test failed");            
            
-            Dialogs.makeToast(this, "No connection. Please enable Internet connection and hit Refresh"); // TODO: change to alert
+            Dialogs.makeToast(this, getString(R.string.no_iternet_connection));
             
         }    	
     	

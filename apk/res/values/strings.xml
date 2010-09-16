@@ -1,4 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Vimeo</string>      
+    <string name="app_name">Vimeo</string>
+    <!-- notifications -->
+    <string name="no_iternet_connection">No connection. Please enable Internet connection</string>
+    <string name="vimeo_not_reachable">Connection exists, but Vimeo site is not reachable... Please fix the problem</string>
+    <string name="no_pages_more">Maximum number of pages is reached</string>
+    <string name="please_do_not_touch">Don\'t mess with me!</string>
+    <string name="unknown_item">Unknown item</string>
+    <!-- lists -->
+    <string name="load_more">Load more...</string>
+    <string name="no_items_in_list">No items in list</string>
+    <!-- menus -->
+    <string name="video_is">Video {title}</string>
+    <!-- actions groups -->
+    <string name="information">Information</string>
+    <string name="statistics">Statistics</string>
+    <!-- welcome page -->
+    <string name="enter">Enter</string>
+    <string name="guest">Guest</string>
+    <!-- video page -->
+    <string name="num_of_plays">{num} plays</string>
+    <string name="num_of_likes">{num} likes</string>
+    <string name="num_of_comments">{num} comments</string>
+    <string name="uploaded_by">{name}</string>
+    <string name="uploaded_on">{time}</string>    
+    <string name="tags_are">{list}</string>
+    <string name="none_of_tags">[none]</string>
+    <string name="dimensions_are">{width}x{height}</string>
+    <string name="duration_is">{time}</string>
 </resources>

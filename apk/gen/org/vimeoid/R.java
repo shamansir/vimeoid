@@ -174,5 +174,38 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f060000;
+        public static final int dimensions_are=0x7f060014;
+        public static final int duration_is=0x7f060015;
+        /**  welcome page 
+         */
+        public static final int enter=0x7f06000b;
+        public static final int guest=0x7f06000c;
+        /**  actions groups 
+         */
+        public static final int information=0x7f060009;
+        /**  lists 
+         */
+        public static final int load_more=0x7f060006;
+        public static final int no_items_in_list=0x7f060007;
+        /**  notifications 
+         */
+        public static final int no_iternet_connection=0x7f060001;
+        public static final int no_pages_more=0x7f060003;
+        public static final int none_of_tags=0x7f060013;
+        public static final int num_of_comments=0x7f06000f;
+        public static final int num_of_likes=0x7f06000e;
+        /**  video page 
+         */
+        public static final int num_of_plays=0x7f06000d;
+        public static final int please_do_not_touch=0x7f060004;
+        public static final int statistics=0x7f06000a;
+        public static final int tags_are=0x7f060012;
+        public static final int unknown_item=0x7f060005;
+        public static final int uploaded_by=0x7f060010;
+        public static final int uploaded_on=0x7f060011;
+        /**  menus 
+         */
+        public static final int video_is=0x7f060008;
+        public static final int vimeo_not_reachable=0x7f060002;
     }
 }

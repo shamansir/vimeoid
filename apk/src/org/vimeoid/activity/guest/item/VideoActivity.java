@@ -110,8 +110,11 @@ public class VideoActivity extends Activity {
     	
     	final SectionedActionsAdapter actionsAdapter = new SectionedActionsAdapter(this, getLayoutInflater(), imageLoader);
     	
-    	int statsSection = actionsAdapter.addSection("Statistics");
-    	final ActionItem commentsAction = actionsAdapter.addAction(statsSection, R.drawable.comment_video, String.valueOf(video.commentsCount));
+    	// Statistics section
+    	int statsSection = actionsAdapter.addSection(getString(R.string.statistics));
+    	// number of comments
+    	final ActionItem commentsAction = actionsAdapter.addAction(statsSection, R.drawable.comment_video, 
+    			                 Utils.format(getString(R.string.num_of_comments), "num", String.valueOf(video.commentsCount)));
     	if (video.commentsCount > 0) {
     		commentsAction.onClick = new OnClickListener() {				
 				@Override public void onClick(View v) {
@@ -119,32 +122,43 @@ public class VideoActivity extends Activity {
 				}
 			};
     	}
-    	if (video.tags.length > 0) actionsAdapter.addAction(statsSection, R.drawable.tag, Utils.adaptTags(video.tags, "[none]"));    	
-    	actionsAdapter.addAction(statsSection, R.drawable.play, String.valueOf(video.playsCount));
-    	actionsAdapter.addAction(statsSection, R.drawable.like, String.valueOf(video.likesCount));
+    	// tags
+    	if (video.tags.length > 0) actionsAdapter.addAction(statsSection, R.drawable.tag, 
+    							 Utils.format(getString(R.string.tags_are), "list",
+    										 Utils.adaptTags(video.tags, getString(R.string.none_of_tags))));
+    	// number of plays
+    	actionsAdapter.addAction(statsSection, R.drawable.play, 
+    			                 Utils.format(getString(R.string.num_of_plays), "num", String.valueOf(video.playsCount)));
+    	// number of likes
+    	actionsAdapter.addAction(statsSection, R.drawable.like, 
+    			                 Utils.format(getString(R.string.num_of_likes), "num", String.valueOf(video.likesCount)));
     	
-    	int infoSection = actionsAdapter.addSection("Information");
-    	/* actionsAdapter.addAction(infoSection, video.smallUploaderPortraitUrl, 
-    	                            Utils.format(getString(R.string.videoUploader), "name", video.uploaderName)); */
-    	final ActionItem userAction = actionsAdapter.addAction(infoSection, R.drawable.contact, video.uploaderName);
+    	// Information section
+    	int infoSection = actionsAdapter.addSection(getString(R.string.information));
+    	// uploader
+    	final ActionItem userAction = actionsAdapter.addAction(infoSection, R.drawable.contact, 
+    			                 Utils.format(getString(R.string.uploaded_by), "name", video.uploaderName));
     	userAction.onClick =  new OnClickListener() {				
 			@Override public void onClick(View v) {
 				Dialogs.makeToast(VideoActivity.this, "View user page");
 			}
 		};
-    	actionsAdapter.addAction(infoSection, R.drawable.contact, video.uploadedOn);
-    	actionsAdapter.addAction(infoSection, R.drawable.contact, video.width + "x" + video.height);
-    	
+		// uploaded on
+    	actionsAdapter.addAction(infoSection, R.drawable.contact,
+    							 Utils.format(getString(R.string.uploaded_on), "time", video.uploadedOn));
+    	// dimensions
+    	actionsAdapter.addAction(infoSection, R.drawable.contact,
+    						     Utils.format(getString(R.string.dimensions_are), "width", String.valueOf(video.width),
+    						    		                                          "height", String.valueOf(video.height)));
+    						     
+    	// attach adapter					     
     	final ListView actionsList = (ListView)findViewById(R.id.actionsList);
     	actionsList.setAdapter(actionsAdapter);
-    	actionsList.invalidate();
-    	actionsList.setSelectionAfterHeaderView();    	
+    	actionsList.invalidate();    	
     }
     
     protected class LoadItemTask extends AsyncTask<Uri, Void, Cursor> {
 
-        // TODO: show progress as a dialog
-        
         private final String[] projection;
         private final View progressBar;
         

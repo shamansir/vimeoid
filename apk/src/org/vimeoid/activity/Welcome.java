@@ -65,12 +65,12 @@ public class Welcome extends Activity {
     protected void tryToEnterAsUser() {
         
         if (!VimeoApi.connectedToWeb(this)) {
-            Dialogs.makeToast(this, "No connection. Please enable Internet connection and push Enter again");
+            Dialogs.makeToast(this, getString(R.string.no_iternet_connection));
             return;
         }
         
         if (!VimeoApi.vimeoSiteReachable(this)) {
-            Dialogs.makeToast(this, "Connection exists, but Vimeo site is not reachable... Please fix the problem");
+            Dialogs.makeToast(this, getString(R.string.vimeo_not_reachable));
             return;
         }
         
