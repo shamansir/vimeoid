@@ -29,5 +29,6 @@
                android:layout_marginLeft="2dp"
                android:layout_marginRight="8dp"
                android:layout_gravity="right|center_vertical"
+               android:visibility="gone"
                android:scaleType="fitXY" />     
 </LinearLayout>

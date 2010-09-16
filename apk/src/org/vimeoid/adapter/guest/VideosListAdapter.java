@@ -95,12 +95,10 @@ public class VideosListAdapter extends EasyCursorsAdapter<Video> {
     		group.addView(layoutInflater.inflate(R.layout.no_tags_for_item, null));
     		return;
     	}
-    	// FIXME: use tagStruct.setTag/getTag to find the actual layout 
-    	// FIXME: set to "no tags" if there is no tags 
+    	
     	for (final String tag: tags) {
-    		if (tag.trim().length() == 0) continue;
     		final View tagStruct = layoutInflater.inflate(R.layout.tag_for_the_item, null);
-    		((TextView)tagStruct.findViewById(R.id.tagItem)).setText(tag.trim());
+    		((TextView)tagStruct.findViewById(R.id.tagItem)).setText(tag);
     		group.addView(tagStruct);
     	}
     }

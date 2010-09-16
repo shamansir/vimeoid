@@ -3,6 +3,8 @@
  */
 package org.vimeoid.dto.simple;
 
+import org.vimeoid.util.Utils;
+
 import android.database.Cursor;
 
 /**
@@ -103,7 +105,7 @@ public class Video {
     };
     
     protected static Video generalDataFromCursor(Cursor cursor, int position) {
-    	if (cursor.getPosition() != position) throw new IllegalStateException("Please set position the cursor before passing it");
+    	if (cursor.getPosition() != position) throw new IllegalStateException("Cursor must be properly positioned before passing it");
     	
         final Video video = new Video();
         
@@ -111,10 +113,7 @@ public class Video {
         video.title = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.TITLE));
         video.uploaderName = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.AUTHOR));
         video.duration = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.DURATION));
-        
-        final String tags = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.TAGS));
-        video.tags = (tags != null) ? tags.split(",") : new String[0]; 
-        
+        video.tags = Utils.extractTags(cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.TAGS))); 
         video.likesCount = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.NUM_OF_LIKES));
         video.playsCount = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.NUM_OF_PLAYS));
         video.commentsCount = cursor.getLong(cursor.getColumnIndex(Video.FieldsKeys.NUM_OF_COMMENTS));

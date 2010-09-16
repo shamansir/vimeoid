@@ -6,7 +6,9 @@ package org.vimeoid.adapter;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.content.Context;
 import android.view.View.OnClickListener;
+import android.widget.TextView;
 
 /**
  * <dl>
@@ -28,7 +30,7 @@ public class ActionItem {
         
         public final int id;
         public final String title;
-        public final List<ActionItem> actions = new LinkedList<ActionItem>();
+        protected final List<ActionItem> actions = new LinkedList<ActionItem>();
         
         void addAction(ActionItem action) {
             actions.add(action);
@@ -58,6 +60,7 @@ public class ActionItem {
     public String title = null;
     public OnClickListener onClick = null;
     public final String iconUrl;
+    public RenderingAdapter adapter = null;  
     
     private ActionItem(ActionsSection section, int icon, String iconUrl, String title) {
         this.section = section;
@@ -76,6 +79,10 @@ public class ActionItem {
     
     public void onClick() {
         
+    }
+    
+    public static interface RenderingAdapter {        
+        public TextView render(Context context, TextView source, String value);
     }
 
 }

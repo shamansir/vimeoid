@@ -97,7 +97,6 @@ public class Utils {
         return ((duration - remainder) / 60) + ":" + ((remainder < 10) ? ("0" + remainder) : remainder); 
     }
     
-    // TODO: use
     public static String[] extractTags(String source) {
         final List<String> result = new LinkedList<String>();
         for (String tag: source.split(",")) {
@@ -118,7 +117,7 @@ public class Utils {
     }    
     
     public static String adaptTags(String[] tags, String noneText) {
-    	return adaptTags(tags, noneText, " ");
+    	return adaptTags(tags, noneText, " / ");
     }
     
     public static int lookupHost(String hostname) {
@@ -173,7 +172,5 @@ public class Utils {
             default: return R.drawable.icon;
         }
     }
-    
-    
-    
+
 }

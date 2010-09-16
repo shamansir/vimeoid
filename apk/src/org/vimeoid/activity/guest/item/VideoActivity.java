@@ -5,11 +5,13 @@ package org.vimeoid.activity.guest.item;
 
 import org.vimeoid.R;
 import org.vimeoid.activity.guest.list.VideosActivity;
+import org.vimeoid.adapter.ActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.connection.ApiCallInfo;
 import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.simple.VimeoProvider;
 import org.vimeoid.dto.simple.Video;
+import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Utils;
 
 import com.fedorvlasov.lazylist.ImageLoader;
@@ -22,6 +24,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -107,17 +110,28 @@ public class VideoActivity extends Activity {
     	
     	final SectionedActionsAdapter actionsAdapter = new SectionedActionsAdapter(this, getLayoutInflater(), imageLoader);
     	
-    	int statsSection = actionsAdapter.addSection("Statistics");    	
-    	actionsAdapter.addAction(statsSection, R.drawable.comment_video, String.valueOf(video.commentsCount));
-    	actionsAdapter.addAction(statsSection, R.drawable.tag, Utils.adaptTags(video.tags, "[none]"));    	
+    	int statsSection = actionsAdapter.addSection("Statistics");
+    	final ActionItem commentsAction = actionsAdapter.addAction(statsSection, R.drawable.comment_video, String.valueOf(video.commentsCount));
+    	if (video.commentsCount > 0) {
+    		commentsAction.onClick = new OnClickListener() {				
+				@Override public void onClick(View v) {
+					Dialogs.makeToast(VideoActivity.this, "View comments");
+				}
+			};
+    	}
+    	if (video.tags.length > 0) actionsAdapter.addAction(statsSection, R.drawable.tag, Utils.adaptTags(video.tags, "[none]"));    	
     	actionsAdapter.addAction(statsSection, R.drawable.play, String.valueOf(video.playsCount));
     	actionsAdapter.addAction(statsSection, R.drawable.like, String.valueOf(video.likesCount));
     	
     	int infoSection = actionsAdapter.addSection("Information");
     	/* actionsAdapter.addAction(infoSection, video.smallUploaderPortraitUrl, 
     	                            Utils.format(getString(R.string.videoUploader), "name", video.uploaderName)); */
-    	actionsAdapter.addAction(infoSection, R.drawable.contact, video.uploaderName);
-    	// TODO: + tags    	
+    	final ActionItem userAction = actionsAdapter.addAction(infoSection, R.drawable.contact, video.uploaderName);
+    	userAction.onClick =  new OnClickListener() {				
+			@Override public void onClick(View v) {
+				Dialogs.makeToast(VideoActivity.this, "View user page");
+			}
+		};
     	actionsAdapter.addAction(infoSection, R.drawable.contact, video.uploadedOn);
     	actionsAdapter.addAction(infoSection, R.drawable.contact, video.width + "x" + video.height);
     	
