@@ -49,8 +49,6 @@ public class VideosActivity extends ListActivity {
     
     public static final String VIDEO_TITLE_EXTRA = "v_title";
     
-    public static final int MAX_NUMBER_OF_PAGES = 3; 
-    
     private EasyCursorsAdapter<?> adapter = null;
     private View footerView;
     private int pageNum = 1;
@@ -119,7 +117,7 @@ public class VideosActivity extends ListActivity {
             // Load more videos
             
             if (!queryRunning) {
-                if (pageNum <= MAX_NUMBER_OF_PAGES) { 
+                if (pageNum <= VimeoApi.MAX_NUMBER_OF_PAGES) { 
                 
                     Log.d(TAG, "Loading next page...");
                     
@@ -350,7 +348,12 @@ public class VideosActivity extends ListActivity {
                 startManagingCursor(cursor);
     
                 adapter.addSource(cursor);
-                onContentChanged();
+                if (cursor.getCount() < VimeoApi.ITEMS_PER_PAGE) {
+                	footerView.setVisibility(View.GONE);
+                }
+                
+                
+                onContentChanged();                
                 
                 cursor.close();
             }
@@ -370,7 +373,7 @@ public class VideosActivity extends ListActivity {
                 else setSelection(0);            	
             }
             
-            if (pageNum == MAX_NUMBER_OF_PAGES) {
+            if (pageNum == VimeoApi.MAX_NUMBER_OF_PAGES) {
                 footerView.setVisibility(View.GONE);
             }
             

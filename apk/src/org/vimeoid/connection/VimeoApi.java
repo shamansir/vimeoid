@@ -52,7 +52,9 @@ public class VimeoApi {
     
     private static final String ADV_API_NAMESPACE = "vimeo";
     
-    public static final String RESPONSE_FORMAT = "json";    
+    public static final String RESPONSE_FORMAT = "json";
+    public static final int ITEMS_PER_PAGE = 20;
+    public static final int MAX_NUMBER_OF_PAGES = 3;
     
     public static final Uri OAUTH_CALLBACK_URL = Uri.parse("vimeoid://oauth.done");
     public static final String OAUTH_API_PREFERENCES_ID = "org.vimeoid.vimeoauth";
