@@ -14,9 +14,20 @@
    id="svg8434"
    version="1.1"
    inkscape:version="0.47pre4 r22446"
-   sodipodi:docname="video.svg">
+   sodipodi:docname="video.svg"
+   inkscape:export-filename="/home/shamansir/Workspace/vimeoid/apk/res/drawable/video.png"
+   inkscape:export-xdpi="10.8"
+   inkscape:export-ydpi="10.8">
   <defs
-     id="defs8436" />
+     id="defs8436">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 200 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="400 : 200 : 1"
+       inkscape:persp3d-origin="200 : 133.33333 : 1"
+       id="perspective2880" />
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -25,7 +36,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.14"
-     inkscape:cx="200"
+     inkscape:cx="69.736842"
      inkscape:cy="200"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -54,7 +65,8 @@
      transform="translate(0,-652.36218)">
     <g
        id="g8978"
-       transform="matrix(1.5372349,0,0,1.5372349,310.50407,289.71327)">
+       transform="matrix(1.5372349,0,0,1.3136875,311.38126,363.9738)"
+       style="fill:#8cc542;fill-opacity:1">
       <rect
          rx="7.4630561"
          ry="7.4630561"
@@ -63,7 +75,7 @@
          height="146.4352"
          width="183.04398"
          id="rect8968"
-         style="fill:none;stroke:#8cc542;stroke-width:18.97004128;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+         style="fill:#8cc542;fill-opacity:1;stroke:#8cc542;stroke-width:18.97004128;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
       <path
          transform="translate(-248.57143,-22.142857)"
          d="m 155,319.86218 c 0,17.16028 -13.91115,31.07143 -31.07143,31.07143 -17.16027,0 -31.071425,-13.91115 -31.071425,-31.07143 0,-17.16027 13.911155,-31.07143 31.071425,-31.07143 17.16028,0 31.07143,13.91116 31.07143,31.07143 z"
@@ -72,7 +84,7 @@
          sodipodi:cy="319.86218"
          sodipodi:cx="123.92857"
          id="path8970"
-         style="fill:none;stroke:#8cc542;stroke-width:17.98699951;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         style="fill:#8cc542;fill-opacity:1;stroke:#8cc542;stroke-width:17.98699951;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
          sodipodi:type="arc" />
       <path
          transform="matrix(0.90856777,0,0,0.90856777,-228.01767,30.557827)"
@@ -82,7 +94,7 @@
          sodipodi:cy="283.43362"
          sodipodi:cx="189.64285"
          id="path8974"
-         style="fill:none;stroke:#8cc542;stroke-width:17.98699951;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         style="fill:#8cc542;fill-opacity:1;stroke:#8cc542;stroke-width:17.98699951;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
          sodipodi:type="arc" />
       <path
          id="path8976"

@@ -1,8 +1,13 @@
 package org.vimeoid.activity.guest.list;
 
+import org.vimeoid.R;
 import org.vimeoid.activity.guest.ItemsListActivity;
 import org.vimeoid.adapter.EasyCursorsAdapter;
+import org.vimeoid.adapter.guest.ChannelsListAdapter;
 import org.vimeoid.dto.simple.Channel;
+
+import android.view.Menu;
+import android.view.MenuInflater;
 
 /**
  * 
@@ -22,13 +27,25 @@ import org.vimeoid.dto.simple.Channel;
 public class ChannelsActivity extends ItemsListActivity<Channel> {
 
 	public ChannelsActivity(String[] projection) {
-		super(Channel.SHORT_EXTRACT_PROJECTION);
+		super(Channel.SHORT_EXTRACT_PROJECTION, R.menu.video_context_guest_menu);
 	}
 
+    @Override
+    protected void onItemSelected(Channel channel) {
+        
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater(); //from activity
+        inflater.inflate(R.menu.main_options_menu, menu); 
+        
+        return true;
+    }
+	
 	@Override
 	protected EasyCursorsAdapter<Channel> createAdapter() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ChannelsListAdapter(this, getLayoutInflater());
 	}
     
     

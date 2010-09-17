@@ -17,6 +17,7 @@
     <string name="load_more">Load more...</string>
     <string name="no_items_in_list">No items in list</string>
     <!-- context menus -->
+    <string name="context_menu">Context menu</string>
     <string name="video_is">Video {title}</string>
     <string name="view_video_info">View info</string>
     <string name="view_author_info">View author info</string>

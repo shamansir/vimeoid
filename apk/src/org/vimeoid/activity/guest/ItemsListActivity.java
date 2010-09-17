@@ -16,6 +16,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -38,17 +41,20 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
     
     protected final int mainView;
     protected final String[] projection;
+    protected final int contextMenu;
+    
     protected Uri contentUri;
     protected ApiCallInfo callInfo;
     private EasyCursorsAdapter<ItemType> adapter;    
     
-    public ItemsListActivity(int mainView, String[] projection) {
+    public ItemsListActivity(int mainView, String[] projection, int contextMenu) {
     	this.mainView = mainView;
     	this.projection = projection;
+    	this.contextMenu = contextMenu;
     }
     
-    public ItemsListActivity(String[] projection) {
-    	this(R.layout.generic_list, projection);
+    public ItemsListActivity(String[] projection, int contextMenu) {
+    	this(R.layout.generic_list, projection, contextMenu);
     }    
     
     protected abstract EasyCursorsAdapter<ItemType> createAdapter();
@@ -57,7 +63,7 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
         subjectIcon.setImageResource(Utils.drawableByContent(callInfo.subjectType));
         subjectTitle.setText(getIntent().hasExtra(Invoke.SUBJ_TITLE_EXTRA) ? getIntent().getStringExtra(Invoke.SUBJ_TITLE_EXTRA) : callInfo.subject);
         resultIcon.setImageResource(getIntent().getIntExtra(Invoke.ICON_EXTRA, R.drawable.info));
-    }    
+    }
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,42 +102,6 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
         
     }
     
-    protected void onItemSelected(ItemType item) { }
-    
-	@Override
-    protected final void onListItemClick(ListView l, View v, int position, long id) {
-
-    	if (!isLoadMoreItem(position)) {
-            Log.d(TAG, "item at position " + position + " (" + getListView().getCount() + ") with id " + id + ", view id " + v.getId() + " is clicked");
-            onItemSelected(getItem(position));        
-        } else { 
-        	loadNextPage();
-        }
-    	
-        super.onListItemClick(l, v, position, id);
-        
-    }
-	
-	protected boolean isLoadMoreItem(int position) {
-		return (position == (getListView().getCount() - 1));
-	}
-    
-    protected void loadNextPage() {
-        if (!queryRunning) {
-            if (pageNum <= VimeoApi.MAX_NUMBER_OF_PAGES) {
-            
-                Log.d(TAG, "Loading next page...");
-                
-                final Uri nextPageUri = Uri.parse(VimeoProvider.BASE_URI + contentUri.getPath() + "?page=" + (++pageNum));
-                
-                Log.d(TAG, "Next page Uri: " + nextPageUri);
-                
-                queryMoreItems(nextPageUri, adapter, projection);
-                
-            } else Dialogs.makeToast(this, getString(R.string.no_pages_more));
-        } else Dialogs.makeToast(this, getString(R.string.please_do_not_touch));    	
-    }
-    
     protected int extractPosition(MenuItem item) {
         return extractPosition(item.getMenuInfo());
     }
@@ -151,6 +121,8 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
 	protected ItemType getItem(int position) {
     	return (ItemType)getListView().getItemAtPosition(position);
     }
+    
+    protected void onItemSelected(ItemType item) { }
 	
     protected void queryMoreItems(Uri uri, EasyCursorsAdapter<?> adapter, String[] projection) {
     	
@@ -170,6 +142,22 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
     	
     }
     
+    protected void loadNextPage() {
+        if (!queryRunning) {
+            if (pageNum <= VimeoApi.MAX_NUMBER_OF_PAGES) {
+            
+                Log.d(TAG, "Loading next page...");
+                
+                final Uri nextPageUri = Uri.parse(VimeoProvider.BASE_URI + contentUri.getPath() + "?page=" + (++pageNum));
+                
+                Log.d(TAG, "Next page Uri: " + nextPageUri);
+                
+                queryMoreItems(nextPageUri, adapter, projection);
+                
+            } else Dialogs.makeToast(this, getString(R.string.no_pages_more));
+        } else Dialogs.makeToast(this, getString(R.string.please_do_not_touch));        
+    }
+    
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -177,6 +165,102 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
         adapter.finalize();
     }
     
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater(); //from activity
+        inflater.inflate(R.menu.main_options_menu, menu); 
+        
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        
+        switch (item.getItemId()) {
+            /* case R.id.menu_Login: { 
+                    Log.d(TAG, "Starting OAuth login");
+                    if (!VimeoApi.ensureOAuth(this)) {
+                        try {
+                            Log.d(TAG, "Requesting OAuth Uri");
+                            Uri authUri = VimeoApi.requestForOAuthUri();
+                            Log.d(TAG, "Got OAuth Uri, staring Browser activity");
+                            Dialogs.makeToast(this, "Please wait while browser opens");
+                            startActivity(new Intent(Intent.ACTION_VIEW, authUri));
+                        } catch (OAuthException oae) {
+                            Log.e(TAG, oae.getLocalizedMessage());
+                            oae.printStackTrace();
+                            Dialogs.makeExceptionToast(this, "OAuth Exception", oae);  
+                        }                       
+                    } else {
+                        Log.d(TAG, "OAuth is ready, loading user name");
+                        try {
+                            JSONObject user = VimeoApi.advancedApi(Methods.test.login, "user");
+                            Log.d(TAG, "user object: " + user);
+                            Log.d(TAG, "got user " + user.getString("id") + " / " + user.get("username"));
+                        } catch (Exception e) {
+                            Log.e(TAG, e.getLocalizedMessage());
+                            e.printStackTrace();
+                            Dialogs.makeExceptionToast(this, "Getting user exception", e); 
+                        }
+                    }
+                }; break; */
+            case R.id.menu_Refresh: {
+                    Dialogs.makeToast(this, getString(R.string.currently_not_supported)); 
+                } break;
+            case R.id.menu_Preferences: {
+                    Dialogs.makeToast(this, getString(R.string.currently_not_supported)); 
+                } break;
+            case R.id.menu_SwitchView: {
+                    Dialogs.makeToast(this, getString(R.string.currently_not_supported)); 
+                } break;
+            default: Dialogs.makeToast(this, getString(R.string.unknown_item));
+        }         
+        return super.onOptionsItemSelected(item);
+        
+    }
+    
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+        
+        final int position = extractPosition(menuInfo);
+        
+        Log.d(TAG, "Opening context menu for item at " + position);
+        
+        if (isLoadMoreItem(position)) return; 
+        
+        menu.setHeaderTitle(getContextMenuTitle(position));
+            
+        MenuInflater inflater = getMenuInflater(); //from activity
+        inflater.inflate(contextMenu, menu);
+    }
+    
+    protected String getContextMenuTitle(int position) { 
+        return getString(R.string.context_menu); 
+    };
+    
+    @Override
+    protected final void onListItemClick(ListView l, View v, int position, long id) {
+
+        if (!isLoadMoreItem(position)) {
+            Log.d(TAG, "item at position " + position + " (" + getListView().getCount() + ") with id " + id + ", view id " + v.getId() + " is clicked");
+            onItemSelected(getItem(position));        
+        } else { 
+            loadNextPage();
+        }
+        
+        super.onListItemClick(l, v, position, id);
+        
+    }
+    
+    protected boolean isLoadMoreItem(int position) {
+        return (position == (getListView().getCount() - 1));
+    }
+
     protected class LoadItemsTask extends AsyncTask<Uri, Void, Cursor> {
 
         // TODO: show progress as a dialog

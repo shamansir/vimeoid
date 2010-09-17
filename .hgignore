@@ -10,6 +10,6 @@
 cook.sh
 .project
 .classpath
-.*\.java.orig
+.*\.orig
 
 ^apk/src/org/vimeoid/VimeoConfig.java
