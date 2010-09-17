@@ -41,8 +41,8 @@ public abstract class ItemActivity<ItemType extends Item> extends Activity {
     
     public static final String TAG = "ItemActivity";
     
-    private final int mainView;
-    private final String[] projection;
+    protected final int mainView;
+    protected final String[] projection;
     
     private boolean loadManually = false;
     
