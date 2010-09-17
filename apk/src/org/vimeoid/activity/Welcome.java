@@ -1,8 +1,6 @@
 package org.vimeoid.activity;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,8 +10,8 @@ import android.widget.Button;
 import org.vimeoid.R;
 
 import org.vimeoid.connection.VimeoApi;
-import org.vimeoid.connection.simple.VimeoProvider;
 import org.vimeoid.util.Dialogs;
+import org.vimeoid.util.Invoke;
 
 /**
  * 
@@ -84,9 +82,7 @@ public class Welcome extends Activity {
     }
     
     protected void enterAsGuest() {
-        final Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.withAppendedPath(VimeoProvider.BASE_URI, "/channel/staffpicks/videos"));
-        startActivity(intent);        
+        Invoke.Guest.selectChannelContent(this, "staffpicks");
     }
        
 }

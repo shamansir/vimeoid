@@ -11,5 +11,6 @@ cook.sh
 .project
 .classpath
 .*\.orig
+.*\.out\.xml
 
 ^apk/src/org/vimeoid/VimeoConfig.java

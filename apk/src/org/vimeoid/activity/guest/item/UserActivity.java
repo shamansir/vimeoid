@@ -92,7 +92,7 @@ public class UserActivity extends ItemActivity<User> {
                 Utils.format(getString(R.string.num_of_channels), "num", String.valueOf(user.channelsCount)));
         if (user.channelsCount > 0) {
             channelAction.onClick =  new OnClickListener() {
-                @Override public void onClick(View v) { Dialogs.makeToast(UserActivity.this, getString(R.string.currently_not_supported)); };
+                @Override public void onClick(View v) { Invoke.Guest.selectChannelsOf(UserActivity.this, user); };
             };
         }
         // number of contacts

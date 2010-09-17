@@ -54,6 +54,22 @@
                 <data android:mimeType="vnd.android.cursor.item/vnd.vimeo.video" />
             </intent-filter>
         </activity>
+        <!-- CHANNELS -->
+        <activity android:label="Channels"
+                  android:name=".activity.guest.list.ChannelsActivity"
+                  android:theme="@android:style/Theme.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.PICK" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="vnd.android.cursor.dir/vnd.vimeo.channel" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.GET_CONTENT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.vimeo.channel" />
+            </intent-filter>
+        </activity>
         <!-- USER -->
         <activity android:label="User"
                   android:name=".activity.guest.item.UserActivity"
@@ -63,7 +79,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="vnd.android.cursor.item/vnd.vimeo.user" />
             </intent-filter>
-        </activity>                
+        </activity>
     </application>    
     <uses-sdk android:minSdkVersion="4" />
     <uses-permission android:name="android.permission.INTERNET" />

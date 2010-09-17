@@ -26,7 +26,7 @@ import android.view.MenuInflater;
  */
 public class ChannelsActivity extends ItemsListActivity<Channel> {
 
-	public ChannelsActivity(String[] projection) {
+	public ChannelsActivity() {
 		super(Channel.SHORT_EXTRACT_PROJECTION, R.menu.video_context_guest_menu);
 	}
 
