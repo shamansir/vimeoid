@@ -16,10 +16,10 @@ import org.vimeoid.connection.ContentType;
 import org.vimeoid.connection.JsonObjectsCursor;
 import org.vimeoid.connection.JsonOverHttp;
 import org.vimeoid.dto.simple.Operation;
-import org.vimeoid.dto.simple.AlbumInfo;
-import org.vimeoid.dto.simple.ChannelInfo;
-import org.vimeoid.dto.simple.GroupInfo;
-import org.vimeoid.dto.simple.UserInfo;
+import org.vimeoid.dto.simple.Album;
+import org.vimeoid.dto.simple.Channel;
+import org.vimeoid.dto.simple.Group;
+import org.vimeoid.dto.simple.User;
 import org.vimeoid.dto.simple.Video;
 import org.vimeoid.util.Utils;
 
@@ -68,22 +68,19 @@ public class VimeoProvider extends ContentProvider {
         throw new UnsupportedOperationException("Deletion of something in not supported in VimeoProvider");
     }
 
-    /* (non-Javadoc)
-     * @see android.content.ContentProvider#getType(android.net.Uri)
-     */
     @Override
     public String getType(Uri uri) {
         switch (uriMatcher.match(uri)) {
             case OPER8NS_LIST_URI_TYPE:   return Operation.CONTENT_TYPE;
             case OPER8N_SINGLE_URI_TYPE:  return Operation.CONTENT_ITEM_TYPE;
-            case ALBUMS_LIST_URI_TYPE:    return AlbumInfo.CONTENT_TYPE;
-            case ALBUM_SINGLE_URI_TYPE:   return AlbumInfo.CONTENT_ITEM_TYPE;
-            case CHANNELS_LIST_URI_TYPE:  return ChannelInfo.CONTENT_TYPE;
-            case CHANNEL_SINGLE_URI_TYPE: return ChannelInfo.CONTENT_ITEM_TYPE;
-            case GROUPS_LIST_URI_TYPE:    return GroupInfo.CONTENT_TYPE;
-            case GROUP_SINGLE_URI_TYPE:   return GroupInfo.CONTENT_ITEM_TYPE;
-            case USERS_LIST_URI_TYPE:     return UserInfo.CONTENT_TYPE;
-            case USER_SINGLE_URI_TYPE:    return UserInfo.CONTENT_ITEM_TYPE;
+            case ALBUMS_LIST_URI_TYPE:    return Album.CONTENT_TYPE;
+            case ALBUM_SINGLE_URI_TYPE:   return Album.CONTENT_ITEM_TYPE;
+            case CHANNELS_LIST_URI_TYPE:  return Channel.CONTENT_TYPE;
+            case CHANNEL_SINGLE_URI_TYPE: return Channel.CONTENT_ITEM_TYPE;
+            case GROUPS_LIST_URI_TYPE:    return Group.CONTENT_TYPE;
+            case GROUP_SINGLE_URI_TYPE:   return Group.CONTENT_ITEM_TYPE;
+            case USERS_LIST_URI_TYPE:     return User.CONTENT_TYPE;
+            case USER_SINGLE_URI_TYPE:    return User.CONTENT_ITEM_TYPE;
             case VIDEOS_LIST_URI_TYPE:    return Video.CONTENT_TYPE;
             case VIDEO_SINGLE_URI_TYPE:   return Video.CONTENT_ITEM_TYPE;
         default: throw new IllegalArgumentException("Unknown URI type: " + uri);

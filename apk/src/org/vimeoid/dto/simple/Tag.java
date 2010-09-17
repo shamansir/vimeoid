@@ -11,7 +11,7 @@ import org.vimeoid.util.Item;
  * <dt>Package:</dt> <dd>org.vimeoid.dto.simple</dd>
  * </dl>
  *
- * <code>TagInfo</code>
+ * <code>Tag</code>
  *
  * <p>Description</p>
  *
@@ -19,7 +19,7 @@ import org.vimeoid.util.Item;
  * @date Aug 25, 2010 12:07:30 AM 
  *
  */
-public class TagInfo implements Item {
+public class Tag implements Item {
     
     public String name;
     public String url;

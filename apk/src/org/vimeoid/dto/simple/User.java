@@ -4,6 +4,7 @@
 package org.vimeoid.dto.simple;
 
 import org.vimeoid.util.Item;
+import org.vimeoid.util.Utils;
 
 import android.database.Cursor;
 
@@ -13,15 +14,15 @@ import android.database.Cursor;
  * <dt>Package:</dt> <dd>org.vimeoid.dto.simple</dd>
  * </dl>
  *
- * <code>UserInfo</code>
+ * <code>User</code>
  *
- * <p>Vimeo UserInfo information</p>
+ * <p>Vimeo User information</p>
  *
  * @author Ulric Wilfred <shaman.sir@gmail.com>
  * @date Aug 19, 2010 8:54:34 PM 
  *
  */
-public class UserInfo implements Item {
+public class User implements Item {
     
     /* public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoProvider.AUTHORITY +
                                                                    "/users"); */
@@ -99,42 +100,42 @@ public class UserInfo implements Item {
         FieldsKeys.CREATED_ON, FieldsKeys.BIO, FieldsKeys.NUM_OF_APPEARANCES, FieldsKeys.NUM_OF_LIKES        
    };
     
-    protected static UserInfo generalDataFromCursor(Cursor cursor, int position) {
+    protected static User generalDataFromCursor(Cursor cursor, int position) {
         if (cursor.getPosition() != position) throw new IllegalStateException("Cursor must be properly positioned before passing it");
         
-        final UserInfo user = new UserInfo();
+        final User user = new User();
         
-        user.id = cursor.getLong(cursor.getColumnIndex(UserInfo.FieldsKeys._ID));
-        user.displayName = cursor.getString(cursor.getColumnIndex(UserInfo.FieldsKeys.NAME));
-        user.location = cursor.getString(cursor.getColumnIndex(UserInfo.FieldsKeys.LOCATION));
-        user.fromStaff = Boolean.valueOf(cursor.getString(cursor.getColumnIndex(UserInfo.FieldsKeys.IS_STAFF)));
-        user.isPlusMember = Boolean.valueOf(cursor.getString(cursor.getColumnIndex(UserInfo.FieldsKeys.IS_PLUS))); 
-        user.videosUploaded = cursor.getLong(cursor.getColumnIndex(UserInfo.FieldsKeys.NUM_OF_VIDEOS));
-        user.contactsCount = cursor.getLong(cursor.getColumnIndex(UserInfo.FieldsKeys.NUM_OF_CONTACTS));
-        user.albumsCount = cursor.getLong(cursor.getColumnIndex(UserInfo.FieldsKeys.NUM_OF_ALBUMS));
-        user.channelsCount = cursor.getLong(cursor.getColumnIndex(UserInfo.FieldsKeys.NUM_OF_CHANNELS));
-        
-        return user;
-    }
-    
-    public static UserInfo shortFromCursor(Cursor cursor, int position) {
-        final UserInfo user = generalDataFromCursor(cursor, position);
-        
-        user.smallPortraitUrl = cursor.getString(cursor.getColumnIndex(UserInfo.FieldsKeys.PORTRAIT_SMALL));
+        user.id = cursor.getLong(cursor.getColumnIndex(User.FieldsKeys._ID));
+        user.displayName = cursor.getString(cursor.getColumnIndex(User.FieldsKeys.NAME));
+        user.location = cursor.getString(cursor.getColumnIndex(User.FieldsKeys.LOCATION));
+        user.fromStaff = Utils.adaptBoolean(cursor.getInt(cursor.getColumnIndex(User.FieldsKeys.IS_STAFF)));
+        user.isPlusMember = Utils.adaptBoolean(cursor.getInt(cursor.getColumnIndex(User.FieldsKeys.IS_PLUS))); 
+        user.videosUploaded = cursor.getLong(cursor.getColumnIndex(User.FieldsKeys.NUM_OF_VIDEOS));
+        user.contactsCount = cursor.getLong(cursor.getColumnIndex(User.FieldsKeys.NUM_OF_CONTACTS));
+        user.albumsCount = cursor.getLong(cursor.getColumnIndex(User.FieldsKeys.NUM_OF_ALBUMS));
+        user.channelsCount = cursor.getLong(cursor.getColumnIndex(User.FieldsKeys.NUM_OF_CHANNELS));
         
         return user;
     }
     
-    public static UserInfo fullFromCursor(Cursor cursor, int position) {
-        final UserInfo user = generalDataFromCursor(cursor, position);
+    public static User shortFromCursor(Cursor cursor, int position) {
+        final User user = generalDataFromCursor(cursor, position);
         
-        user.mediumPortraitUrl = cursor.getString(cursor.getColumnIndex(UserInfo.FieldsKeys.PORTRAIT_MEDIUM)); 
+        user.smallPortraitUrl = cursor.getString(cursor.getColumnIndex(User.FieldsKeys.PORTRAIT_SMALL));
         
-        user.biography = cursor.getString(cursor.getColumnIndex(UserInfo.FieldsKeys.BIO));
-        user.createdOn = cursor.getString(cursor.getColumnIndex(UserInfo.FieldsKeys.CREATED_ON));
+        return user;
+    }
+    
+    public static User fullFromCursor(Cursor cursor, int position) {
+        final User user = generalDataFromCursor(cursor, position);
         
-        user.videosAppearsIn = cursor.getLong(cursor.getColumnIndex(UserInfo.FieldsKeys.NUM_OF_APPEARANCES));
-        user.videosLiked = cursor.getLong(cursor.getColumnIndex(UserInfo.FieldsKeys.NUM_OF_LIKES));
+        user.mediumPortraitUrl = cursor.getString(cursor.getColumnIndex(User.FieldsKeys.PORTRAIT_MEDIUM)); 
+        
+        user.biography = cursor.getString(cursor.getColumnIndex(User.FieldsKeys.BIO));
+        user.createdOn = cursor.getString(cursor.getColumnIndex(User.FieldsKeys.CREATED_ON));
+        
+        user.videosAppearsIn = cursor.getLong(cursor.getColumnIndex(User.FieldsKeys.NUM_OF_APPEARANCES));
+        user.videosLiked = cursor.getLong(cursor.getColumnIndex(User.FieldsKeys.NUM_OF_LIKES));
         
         return user;
     }    

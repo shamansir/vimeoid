@@ -11,7 +11,7 @@ import org.vimeoid.util.Item;
  * <dt>Package:</dt> <dd>org.vimeoid.dto.simple</dd>
  * </dl>
  *
- * <code>GroupInfo</code>
+ * <code>Group</code>
  *
  * <p>Vimeo group representation</p>
  *
@@ -19,7 +19,7 @@ import org.vimeoid.util.Item;
  * @date Aug 19, 2010 8:57:20 PM 
  *
  */
-public class GroupInfo implements Item {
+public class Group implements Item {
     
     /* public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoProvider.AUTHORITY +
                                                                    "/groups"); */

@@ -40,6 +40,8 @@ public class VimeoVideoRunner {
 			urlc.setConnectTimeout(1000 * 30); // mTimeout is in seconds
             urlc.connect();
             
+			// FIXME: re-check User-Agent            
+            
             Log.d(TAG, "RespCode: " + urlc.getResponseCode());
             
             Log.d(TAG, "Location: " + urlc.getHeaderField("Location"));
@@ -70,7 +72,9 @@ public class VimeoVideoRunner {
 			
 			request.setHeader("Host", "vimeo.com");
 			request.setHeader("Connection", "close");	
-			request.setHeader("Referer", CALL_REFERRER);		
+			request.setHeader("Referer", CALL_REFERRER);	
+			
+			// FIXME: re-check User-Agent
 			
 			Log.d(TAG, "Request ready, performing response " + uri.toString());
 			

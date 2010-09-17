@@ -40,5 +40,6 @@
     <string name="created_on">{time}</string>
     <string name="user_from_staff">Staff member</string>
     <string name="user_is_plus_member">Plus member</string>
-    <string name="no_biography_supplied">[No biography supplied]</string>    
+    <string name="no_biography_supplied">[No biography supplied]</string>
+    <string name="subscriptions">Subsriptions</string>    
 </resources>

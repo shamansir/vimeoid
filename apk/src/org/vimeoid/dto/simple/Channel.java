@@ -11,7 +11,7 @@ import org.vimeoid.util.Item;
  * <dt>Package:</dt> <dd>org.vimeoid.dto.simple</dd>
  * </dl>
  *
- * <code>ChannelInfo</code>
+ * <code>Channel</code>
  *
  * <p>Vimeo channel representation</p>
  *
@@ -19,7 +19,7 @@ import org.vimeoid.util.Item;
  * @date Aug 19, 2010 8:56:39 PM 
  *
  */
-public class ChannelInfo implements Item {
+public class Channel implements Item {
     
     /* public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoProvider.AUTHORITY +
                                                                    "/channels"); */

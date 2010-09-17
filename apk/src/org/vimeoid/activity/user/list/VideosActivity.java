@@ -62,8 +62,8 @@ public class VideosActivity extends ListActivity {
             public void onClick(View v) {
                 setListAdapter(new SimpleAdapter(Videos.this, callStubTagsList(),
                         R.layout.item_tag, 
-                        new String[] { TagInfo.FieldsKeys.NAME, 
-                                       TagInfo.FieldsKeys.USAGE_COUNT },
+                        new String[] { Tag.FieldsKeys.NAME, 
+                                       Tag.FieldsKeys.USAGE_COUNT },
                         new int[] { R.id.tagItemName, R.id.tagItemUsageCount }));
                 onContentChanged();  
             }

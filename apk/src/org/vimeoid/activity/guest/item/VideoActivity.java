@@ -47,14 +47,6 @@ public class VideoActivity extends ItemActivity<Video> {
         super(R.layout.view_single_video, Video.FULL_EXTRACT_PROJECTION);
         setLoadManually(true);
     }
-    
-    @Override
-    protected void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon) {
-        super.initTitleBar(subjectIcon, subjectTitle, resultIcon);
-        if (getIntent().hasExtra(Utils.VIDEO_TITLE_EXTRA)) {
-            subjectTitle.setText(getIntent().getStringExtra(Utils.VIDEO_TITLE_EXTRA));
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +55,10 @@ public class VideoActivity extends ItemActivity<Video> {
         WebView playerView = (WebView)findViewById(R.id.videoPlayer);
         playerView.getSettings().setJavaScriptEnabled(true);
         //playerView.getSettings().setLoadsImagesAutomatically(true);
+        playerView.getSettings().setUserAgentString(VimeoApi.WEBVIEW_USER_AGENT);
         
         final long videoId = Long.valueOf(callInfo.subject);
-        final int playerHeight = getResources().getDimensionPixelSize((R.dimen.video_player_height));
+        final int playerHeight = getResources().getDimensionPixelSize((R.dimen.video_player_height));        
         
         playerView.setWebChromeClient(new WebChromeClient() {
             @Override public void onProgressChanged(WebView view, int newProgress) {
@@ -96,7 +89,7 @@ public class VideoActivity extends ItemActivity<Video> {
         // uploader portrait
         final ImageView uploaderPortrait = (ImageView)findViewById(R.id.uploaderPortrait);
         uploaderPortrait.setOnClickListener(new OnClickListener() {
-            @Override public void onClick(View v) { Invoke.Guest.pickUploader(VideoActivity.this, video); };
+            @Override public void onClick(View v) { Invoke.Guest.selectUploader(VideoActivity.this, video); };
         });
         imageLoader.displayImage(video.mediumUploaderPortraitUrl, uploaderPortrait);        
         
@@ -133,7 +126,7 @@ public class VideoActivity extends ItemActivity<Video> {
     	final ActionItem userAction = actionsAdapter.addAction(infoSection, R.drawable.contact, 
     			                 Utils.format(getString(R.string.uploaded_by), "name", video.uploaderName));
     	userAction.onClick =  new OnClickListener() {
-    		@Override public void onClick(View v) { Invoke.Guest.pickUploader(VideoActivity.this, video); };
+    		@Override public void onClick(View v) { Invoke.Guest.selectUploader(VideoActivity.this, video); };
 		};
 		// uploaded on
     	actionsAdapter.addAction(infoSection, R.drawable.upload,

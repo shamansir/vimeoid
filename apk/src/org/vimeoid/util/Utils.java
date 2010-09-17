@@ -32,9 +32,6 @@ import org.vimeoid.connection.ContentType;
  */
 public class Utils {
     
-    public static final String VIDEO_TITLE_EXTRA = "v_videotitle";
-    public static final String USERNAME_EXTRA = "v_username";
-    
     public static List<NameValuePair> quickApiParams(String name1, String value1) {
         final List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair(name1, value1));        
@@ -96,6 +93,10 @@ public class Utils {
     public static String adaptDuration(long duration) {
     	final long remainder = duration % 60; 
         return ((duration - remainder) / 60) + ":" + ((remainder < 10) ? ("0" + remainder) : remainder); 
+    }
+    
+    public static boolean adaptBoolean(int value) {
+    	return (value == 0) ? false : true;
     }
     
     public static String[] extractTags(String source) {
@@ -165,7 +166,6 @@ public class Utils {
             case CHANNEL:  return R.drawable.channel;
             case COMMENT:  return R.drawable.comment;
             case GROUP:    return R.drawable.group;
-            case LIKE:     return R.drawable.like;
             case MESSAGE:  return R.drawable.message;
             case TAG:      return R.drawable.tag;
             case USER:     return R.drawable.contact;

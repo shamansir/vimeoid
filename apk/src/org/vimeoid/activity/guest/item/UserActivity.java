@@ -7,8 +7,9 @@ import org.vimeoid.R;
 import org.vimeoid.activity.guest.ItemActivity;
 import org.vimeoid.adapter.ActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
-import org.vimeoid.dto.simple.UserInfo;
+import org.vimeoid.dto.simple.User;
 import org.vimeoid.util.Dialogs;
+import org.vimeoid.util.Invoke;
 import org.vimeoid.util.Utils;
 
 import android.database.Cursor;
@@ -33,26 +34,19 @@ import android.widget.TextView;
  * @date Sep 16, 2010 6:38:02 PM 
  *
  */
-public class UserActivity extends ItemActivity<UserInfo> {
+public class UserActivity extends ItemActivity<User> {
 
     public UserActivity() {
-        super(R.layout.view_single_user, UserInfo.FULL_EXTRACT_PROJECTION);
+        super(R.layout.view_single_user, User.FULL_EXTRACT_PROJECTION);
     }
 
     @Override
-    protected UserInfo extractFromCursor(Cursor cursor, int position) {
-        return UserInfo.fullFromCursor(cursor, position);
-    }
-    
-    protected void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon) {
-        super.initTitleBar(subjectIcon, subjectTitle, resultIcon);
-        if (getIntent().hasExtra(Utils.USERNAME_EXTRA)) {
-            subjectTitle.setText(getIntent().getStringExtra(Utils.USERNAME_EXTRA));
-        }
+    protected User extractFromCursor(Cursor cursor, int position) {
+        return User.fullFromCursor(cursor, position);
     }
     
     @Override
-    protected void onItemReceived(final UserInfo user) {
+    protected void onItemReceived(final User user) {
         
         Log.d(TAG, "user " + user.id + " data received, name: " + user.displayName);
         ((TextView)titleBar.findViewById(R.id.subjectTitle)).setText(user.displayName);
@@ -71,7 +65,7 @@ public class UserActivity extends ItemActivity<UserInfo> {
     }    
 
     @Override
-    protected SectionedActionsAdapter fillWithActions(SectionedActionsAdapter actionsAdapter, UserInfo user) {
+    protected SectionedActionsAdapter fillWithActions(SectionedActionsAdapter actionsAdapter, final User user) {
         
         // TODO: is staff, is plus
         
@@ -82,7 +76,7 @@ public class UserActivity extends ItemActivity<UserInfo> {
                                  Utils.format(getString(R.string.num_of_videos), "num", String.valueOf(user.videosUploaded)));
         if (user.videosUploaded > 0) {
             videoAction.onClick =  new OnClickListener() {
-                @Override public void onClick(View v) { Dialogs.makeToast(UserActivity.this, getString(R.string.currently_not_supported)); };
+                @Override public void onClick(View v) { Invoke.Guest.selectVideosBy(UserActivity.this, user); };
             };
         }
         // number of albums
@@ -114,23 +108,31 @@ public class UserActivity extends ItemActivity<UserInfo> {
                 Utils.format(getString(R.string.num_of_appearances), "num", String.valueOf(user.videosAppearsIn)));
         if (user.videosAppearsIn > 0) {
             appearanceAction.onClick =  new OnClickListener() {
-                @Override public void onClick(View v) { Dialogs.makeToast(UserActivity.this, getString(R.string.currently_not_supported)); };
+                @Override public void onClick(View v) { Invoke.Guest.selectApperancesOf(UserActivity.this, user); };
             };
         }
         // number of likes
-        final ActionItem likesAction = actionsAdapter.addAction(statsSection, R.drawable.like, 
+        final ActionItem likeAction = actionsAdapter.addAction(statsSection, R.drawable.like, 
                 Utils.format(getString(R.string.num_of_likes), "num", String.valueOf(user.videosLiked)));
         if (user.videosLiked > 0) {
-            likesAction.onClick =  new OnClickListener() {
-                @Override public void onClick(View v) { Dialogs.makeToast(UserActivity.this, getString(R.string.currently_not_supported)); };
+        	likeAction.onClick =  new OnClickListener() {
+                @Override public void onClick(View v) { Invoke.Guest.selectLikesOf(UserActivity.this, user); };
             };
         }
+        // subsriptions
+        final ActionItem subscriptionAction = actionsAdapter.addAction(statsSection, R.drawable.subscribe, 
+        																			 getString(R.string.subscriptions));
+        subscriptionAction.onClick =  new OnClickListener() {
+            @Override public void onClick(View v) { Invoke.Guest.selectSubsriptionsOf(UserActivity.this, user); };
+        };        
         
         // Information section
         int infoSection = actionsAdapter.addSection(getString(R.string.information));
         // location
-        actionsAdapter.addAction(infoSection, R.drawable.location,
-                                 Utils.format(getString(R.string.location_is), "place", user.location));
+        if (user.location.length() > 0) {
+        	actionsAdapter.addAction(infoSection, R.drawable.location,
+                    Utils.format(getString(R.string.location_is), "place", user.location));        			
+        }
         // created on
         actionsAdapter.addAction(infoSection, R.drawable.duration,
                                  Utils.format(getString(R.string.created_on), "time", user.createdOn));

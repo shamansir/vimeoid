@@ -84,8 +84,10 @@ public class VideosActivity extends ListActivity {
         final ApiCallInfo callInfo = VimeoProvider.collectCallInfo(contentUri);
         
         ((ImageView)findViewById(R.id.subjectIcon)).setImageResource(Utils.drawableByContent(callInfo.subjectType));
-        ((TextView)findViewById(R.id.subjectTitle)).setText(callInfo.subject);        
-        ((ImageView)findViewById(R.id.resultIcon)).setImageResource(Utils.drawableByContent(callInfo.resultType));
+        ((TextView)findViewById(R.id.subjectTitle)).setText(
+        		getIntent().hasExtra(Invoke.SUBJ_TITLE_EXTRA) ? getIntent().getStringExtra(Invoke.SUBJ_TITLE_EXTRA) : callInfo.subject);        
+        ((ImageView)findViewById(R.id.resultIcon)).setImageResource(
+        		getIntent().getIntExtra(Invoke.ICON_EXTRA, Utils.drawableByContent(callInfo.resultType)));
         
         queryMoreItems(contentUri, adapter, Video.SHORT_EXTRACT_PROJECTION);
         
@@ -204,7 +206,7 @@ public class VideosActivity extends ListActivity {
             //case R.id.menu_watchLater: itemDescription = "WatchLater "; break;       
             // view comments, tags, ...
             case R.id.menu_viewInfo: Invoke.Guest.selectVideo(this, video); break;
-            case R.id.menu_viewAuthorInfo: Invoke.Guest.pickUploader(this, video); break;
+            case R.id.menu_viewAuthorInfo: Invoke.Guest.selectUploader(this, video); break;
             default: Dialogs.makeToast(this, getString(R.string.unknown_item));
         }
         return super.onContextItemSelected(item);

@@ -56,6 +56,8 @@ public class VimeoApi {
     public static final int ITEMS_PER_PAGE = 20;
     public static final int MAX_NUMBER_OF_PAGES = 3;
     
+    public static final String WEBVIEW_USER_AGENT = null; // default
+    
     public static final Uri OAUTH_CALLBACK_URL = Uri.parse("vimeoid://oauth.done");
     public static final String OAUTH_API_PREFERENCES_ID = "org.vimeoid.vimeoauth";
     

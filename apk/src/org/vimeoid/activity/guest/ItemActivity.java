@@ -7,6 +7,7 @@ import org.vimeoid.R;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.connection.ApiCallInfo;
 import org.vimeoid.connection.simple.VimeoProvider;
+import org.vimeoid.util.Invoke;
 import org.vimeoid.util.Item;
 import org.vimeoid.util.Utils;
 
@@ -64,8 +65,8 @@ public abstract class ItemActivity<ItemType extends Item> extends Activity {
     
     protected void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon) {
         subjectIcon.setImageResource(Utils.drawableByContent(callInfo.subjectType));
-        subjectTitle.setText(callInfo.subject);
-        resultIcon.setImageResource(R.drawable.info);     
+        subjectTitle.setText(getIntent().hasExtra(Invoke.SUBJ_TITLE_EXTRA) ? getIntent().getStringExtra(Invoke.SUBJ_TITLE_EXTRA) : callInfo.subject);
+        resultIcon.setImageResource(getIntent().getIntExtra(Invoke.ICON_EXTRA, R.drawable.info));
     }
     
     @Override

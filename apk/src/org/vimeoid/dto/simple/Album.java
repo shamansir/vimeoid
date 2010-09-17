@@ -11,7 +11,7 @@ import org.vimeoid.util.Item;
  * <dt>Package:</dt> <dd>org.vimeoid.dto.simple</dd>
  * </dl>
  *
- * <code>AlbumInfo</code>
+ * <code>Album</code>
  *
  * <p>Vimeo album information</p>
  *
@@ -19,7 +19,7 @@ import org.vimeoid.util.Item;
  * @date Aug 20, 2010 9:55:45 AM 
  *
  */
-public class AlbumInfo implements Item {
+public class Album implements Item {
     
     /* public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoProvider.AUTHORITY +
                                                                    "/albums"); */
