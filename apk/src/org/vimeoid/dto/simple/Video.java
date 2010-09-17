@@ -7,6 +7,7 @@ import org.vimeoid.util.Item;
 import org.vimeoid.util.Utils;
 
 import android.database.Cursor;
+import android.util.Log;
 
 /**
  * <dl>
@@ -91,7 +92,7 @@ public class Video implements Item {
     
     public final static String[] SHORT_EXTRACT_PROJECTION = {
         FieldsKeys._ID, FieldsKeys.TITLE, FieldsKeys.AUTHOR, FieldsKeys.AUTHOR_URL,
-        FieldsKeys.DURATION, FieldsKeys.TAGS, 
+        FieldsKeys.DURATION, FieldsKeys.TAGS,
         FieldsKeys.THUMB_SMALL, FieldsKeys.USER_IMG_SMALL, 
         FieldsKeys.NUM_OF_LIKES, FieldsKeys.NUM_OF_PLAYS, FieldsKeys.NUM_OF_COMMENTS
     };

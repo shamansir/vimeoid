@@ -1,6 +1,9 @@
 package org.vimeoid.activity.guest.list;
 
-import android.app.ListActivity;
+import org.vimeoid.activity.guest.ItemsListActivity;
+import org.vimeoid.adapter.EasyCursorsAdapter;
+import org.vimeoid.dto.simple.Channel;
+
 /**
  * 
  * <dl>
@@ -8,7 +11,7 @@ import android.app.ListActivity;
  * <dt>Package:</dt> <dd>org.vimeoid</dd>
  * </dl>
  *
- * <code>Videos</code>
+ * <code>Channels</code>
  *
  * <p>Description</p>
  *
@@ -16,7 +19,17 @@ import android.app.ListActivity;
  * @date Sep 3, 2010 11:58:57 PM 
  *
  */
-public class ChannelsActivity extends ListActivity {
+public class ChannelsActivity extends ItemsListActivity<Channel> {
+
+	public ChannelsActivity(String[] projection) {
+		super(Channel.SHORT_EXTRACT_PROJECTION);
+	}
+
+	@Override
+	protected EasyCursorsAdapter<Channel> createAdapter() {
+		// TODO Auto-generated method stub
+		return null;
+	}
     
     
 }

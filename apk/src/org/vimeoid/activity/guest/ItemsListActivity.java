@@ -5,7 +5,6 @@ import org.vimeoid.adapter.EasyCursorsAdapter;
 import org.vimeoid.connection.ApiCallInfo;
 import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.simple.VimeoProvider;
-import org.vimeoid.dto.simple.Video;
 import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
 import org.vimeoid.util.Item;
@@ -119,14 +118,15 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
     
     protected void loadNextPage() {
         if (!queryRunning) {
-            if (pageNum <= VimeoApi.MAX_NUMBER_OF_PAGES) { 
+            if (pageNum <= VimeoApi.MAX_NUMBER_OF_PAGES) {
             
                 Log.d(TAG, "Loading next page...");
                 
-                final Uri nextPageUri = Uri.parse(
-                        VimeoProvider.BASE_URI + "/channel/staffpicks/videos" + "?page=" + (++pageNum));
+                final Uri nextPageUri = Uri.parse(VimeoProvider.BASE_URI + contentUri.getPath() + "?page=" + (++pageNum));
                 
-                queryMoreItems(nextPageUri, adapter, Video.SHORT_EXTRACT_PROJECTION);
+                Log.d(TAG, "Next page Uri: " + nextPageUri);
+                
+                queryMoreItems(nextPageUri, adapter, projection);
                 
             } else Dialogs.makeToast(this, getString(R.string.no_pages_more));
         } else Dialogs.makeToast(this, getString(R.string.please_do_not_touch));    	

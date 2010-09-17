@@ -37,11 +37,12 @@ public final class Invoke {
     public static class Guest {
     
         protected static Uri getUploaderPageUri(Video video) {
-            final String authorId = Utils.authorIdFromProfileUrl(video.uploaderProfileUrl);
-            Log.d(TAG, "Extracted authorId " + authorId + " from profile URL " + video.uploaderProfileUrl);
-            
-            return Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + authorId + "/info");
+            return Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + getUploaderId(video) + "/info");
         }
+        
+        protected static String getUploaderId(Video video) {
+            return Utils.authorIdFromProfileUrl(video.uploaderProfileUrl);
+        }        
         
         protected static Uri getVideoPageUri(Video video) {
             return Uri.withAppendedPath(VimeoProvider.BASE_URI, "/video/" + video.id);
@@ -52,6 +53,13 @@ public final class Invoke {
             		                Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + user.id + "/videos"))
                                     .putExtra(SUBJ_TITLE_EXTRA, user.displayName));
         }
+        
+        public static void selectVideosByUploader(Activity parent, Video video) {
+            parent.startActivity(new Intent(Intent.ACTION_VIEW, 
+            		                Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + getUploaderId(video) + "/videos"))
+                                    .putExtra(SUBJ_TITLE_EXTRA, video.uploaderName)
+                                    .putExtra(ICON_EXTRA, R.drawable.video));
+        }        
         
         public static void selectUploader(Activity parent, Video video) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, getUploaderPageUri(video))

@@ -101,6 +101,7 @@ public class VideosActivity extends ItemsListActivity<Video> {
             // view comments, tags, ...
             case R.id.menu_viewInfo: Invoke.Guest.selectVideo(this, video); break;
             case R.id.menu_viewAuthorInfo: Invoke.Guest.selectUploader(this, video); break;
+            case R.id.menu_viewAuthorVideos: Invoke.Guest.selectVideosByUploader(this, video); break;
             default: Dialogs.makeToast(this, getString(R.string.unknown_item));
         }
         return super.onContextItemSelected(item);
