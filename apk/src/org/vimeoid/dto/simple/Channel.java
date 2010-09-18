@@ -61,7 +61,7 @@ public class Channel implements Item {
         public static final String CREATOR_URL = "creator_url";
         
         public static final String NUM_OF_VIDEOS = "total_videos";
-        public static final String NUM_OF_SUBSCRIBERS = "total_subsribers";        
+        public static final String NUM_OF_SUBSCRIBERS = "total_subscribers";        
         
     }    
     
