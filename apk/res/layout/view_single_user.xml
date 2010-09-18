@@ -10,11 +10,10 @@
     <LinearLayout android:orientation="horizontal"
                   android:layout_width="fill_parent"
                   android:layout_height="@dimen/user_portrait_side"
-                  android:background="@drawable/action_item_shape">
+                  android:background="@color/item_action_bg">
 	    <ImageView android:id="@+id/userPortrait"
-	               android:layout_gravity="center_horizontal"
 	               android:layout_width="@dimen/user_portrait_side"
-	               android:layout_height="fill_parent"
+	               android:layout_height="@dimen/user_portrait_side"
 	               android:background="@drawable/grey_border_line" />
          <ScrollView android:layout_width="fill_parent"
                      android:layout_height="wrap_content"

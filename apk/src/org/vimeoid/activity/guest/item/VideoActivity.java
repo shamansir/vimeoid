@@ -78,9 +78,6 @@ public class VideoActivity extends ItemActivity<Video> {
     @Override
     protected void onItemReceived(final Video video) {
         
-        Log.d(TAG, "video " + video.id + " data received, uploader: " + video.uploaderName);
-        ((TextView)titleBar.findViewById(R.id.subjectTitle)).setText(video.title);
-        
         // description
         ((TextView)findViewById(R.id.videoDescription)).setText((video.description.length() > 0) 
                                                                  ? Html.fromHtml(video.description)
