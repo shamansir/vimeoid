@@ -5,6 +5,8 @@ package org.vimeoid.dto.simple;
 
 import org.vimeoid.util.Item;
 
+import android.database.Cursor;
+
 /**
  * <dl>
  * <dt>Project:</dt> <dd>vimeoid</dd>
@@ -27,7 +29,7 @@ public class Album implements Item {
     public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.vimeo.album";
     public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.vimeo.album";    
     
-    public int id;
+    public long id;
     public String title;
     public String description;
     
@@ -35,12 +37,76 @@ public class Album implements Item {
     public String thumbnail;    
     
     public /*long*/ String createdOn;
-    public int creatorId;
+    public long creatorId;
     public String creatorDisplayName;
     public String creatorProfileUrl;    
     
-    public int videosCount;    
+    public long videosCount;    
     
     public /*long*/ String lastModifiedOn;
+    
+    public final static class FieldsKeys {
+        
+        public static final String _ID = "_id";
+        
+        public static final String TITLE = "title";
+        public static final String DESCRIPTION = "description";        
+        public static final String THUMBNAIL = "thumbnail";
+        public static final String PAGE_URL = "url";
+        
+        public static final String CREATED_ON = "created_on";
+        public static final String MODIFIED_ON = "last_modified";        
+        
+        public static final String CREATOR_ID = "user_id";
+        public static final String CREATOR_DISPLAY_NAME = "user_display_name";
+        public static final String CREATOR_URL = "user_url";
+        
+        public static final String NUM_OF_VIDEOS = "total_videos";
+        
+    }    
+    
+    public final static String[] SHORT_EXTRACT_PROJECTION = {
+        FieldsKeys._ID, FieldsKeys.TITLE, FieldsKeys.THUMBNAIL, 
+        FieldsKeys.CREATOR_DISPLAY_NAME, FieldsKeys.CREATOR_ID, 
+        FieldsKeys.CREATED_ON, FieldsKeys.MODIFIED_ON, FieldsKeys.NUM_OF_VIDEOS
+    };
+    
+    public final static String[] FULL_EXTRACT_PROJECTION = {
+        FieldsKeys._ID, FieldsKeys.TITLE, FieldsKeys.THUMBNAIL, 
+        FieldsKeys.CREATOR_DISPLAY_NAME, FieldsKeys.CREATOR_ID, 
+        FieldsKeys.CREATED_ON, FieldsKeys.MODIFIED_ON, FieldsKeys.NUM_OF_VIDEOS,
+        
+        FieldsKeys.DESCRIPTION
+    };    
+    
+    protected static Album generalDataFromCursor(Cursor cursor, int position) {
+        if (cursor.getPosition() != position) throw new IllegalStateException("Cursor must be properly positioned before passing it");
+        
+        final Album album = new Album();
+        
+        album.id = cursor.getLong(cursor.getColumnIndex(Album.FieldsKeys._ID));
+        album.title = cursor.getString(cursor.getColumnIndex(Album.FieldsKeys.TITLE));
+        album.thumbnail = cursor.getString(cursor.getColumnIndex(Album.FieldsKeys.THUMBNAIL));
+        album.creatorDisplayName = cursor.getString(cursor.getColumnIndex(Album.FieldsKeys.CREATOR_DISPLAY_NAME));        
+        album.creatorId = cursor.getLong(cursor.getColumnIndex(Album.FieldsKeys.CREATOR_ID));
+        album.createdOn = cursor.getString(cursor.getColumnIndex(Album.FieldsKeys.CREATED_ON)); 
+        album.lastModifiedOn = cursor.getString(cursor.getColumnIndex(Album.FieldsKeys.MODIFIED_ON));        
+        album.videosCount = cursor.getLong(cursor.getColumnIndex(Album.FieldsKeys.NUM_OF_VIDEOS));
+        
+        return album;
+    }
+    
+    public static Album shortFromCursor(Cursor cursor, int position) {
+        return generalDataFromCursor(cursor, position);
+    }
+    
+    public static Album fullFromCursor(Cursor cursor, int position) {
+        final Album album = generalDataFromCursor(cursor, position);
+        
+        album.description = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.DESCRIPTION)); 
+        
+        return album;
+    }    
+    
     
 }

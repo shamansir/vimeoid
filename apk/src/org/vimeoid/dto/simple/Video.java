@@ -7,7 +7,6 @@ import org.vimeoid.util.Item;
 import org.vimeoid.util.Utils;
 
 import android.database.Cursor;
-import android.util.Log;
 
 /**
  * <dl>
