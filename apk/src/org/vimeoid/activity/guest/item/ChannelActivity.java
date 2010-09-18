@@ -13,8 +13,10 @@ import org.vimeoid.util.Utils;
 
 import android.database.Cursor;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -32,6 +34,8 @@ import android.widget.TextView;
  *
  */
 public class ChannelActivity extends ItemActivity<Channel> {
+    
+    public static final String TAG = "ChannelActivity";
 
     public ChannelActivity() {
         super(R.layout.view_single_channel, Channel.FULL_EXTRACT_PROJECTION);
@@ -49,7 +53,11 @@ public class ChannelActivity extends ItemActivity<Channel> {
         ((TextView)findViewById(R.id.channelDescription)).setText((channel.description.length() > 0) 
                                                        ? Html.fromHtml(channel.description)
                                                        : getString(R.string.no_description_supplied));
-        
+        if (channel.logoHeader.length() > 0) {
+            Log.d(TAG, "Logo header URL: " + channel.logoHeader);
+            imageLoader.displayImage(channel.logoHeader, (ImageView)findViewById(R.id.channelHeader));
+        }
+            
         super.onItemReceived(channel);
     }    
 
@@ -72,7 +80,7 @@ public class ChannelActivity extends ItemActivity<Channel> {
         
         // Information section
         int infoSection = actionsAdapter.addSection(getString(R.string.information));
-        actionsAdapter.addAction(infoSection, R.drawable.info, channel.logoHeader);
+        //actionsAdapter.addAction(infoSection, R.drawable.info, channel.logoHeader);
         // creator
         final ActionItem creatorAction = actionsAdapter.addAction(infoSection, R.drawable.contact,
                                  Utils.format(getString(R.string.created_by), "name", channel.creatorDisplayName));

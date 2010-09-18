@@ -37,4 +37,8 @@
               android:transcriptMode="disabled"              
               android:divider="#ccc"
               android:dividerHeight="1dp" />
+     <ImageView android:id="@+id/channelHeader"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/channel_logo_height"
+                android:background="#fff" />
 </LinearLayout>

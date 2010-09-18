@@ -18,6 +18,7 @@
     <dimen name="video_player_height">155dp</dimen>
     <dimen name="user_portrait_side">100dp</dimen>
     <dimen name="channel_thumb_side">100dp</dimen>
+    <dimen name="channel_logo_height">88dp</dimen>
     <dimen name="description_line_height">66dp</dimen>
     <dimen name="medium_portrait_side">64dp</dimen>
     <dimen name="small_progress_side">32dp</dimen>

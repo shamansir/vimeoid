@@ -35,6 +35,8 @@ import android.widget.TextView;
  *
  */
 public class UserActivity extends ItemActivity<User> {
+    
+    public static final String TAG = "UserActivity";
 
     public UserActivity() {
         super(R.layout.view_single_user, User.FULL_EXTRACT_PROJECTION);
