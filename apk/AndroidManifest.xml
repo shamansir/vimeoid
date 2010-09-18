@@ -54,6 +54,16 @@
                 <data android:mimeType="vnd.android.cursor.item/vnd.vimeo.video" />
             </intent-filter>
         </activity>
+        <!-- CHANNEL -->
+        <activity android:label="Channel"
+                  android:name=".activity.guest.item.ChannelActivity"
+                  android:theme="@android:style/Theme.Light.NoTitleBar">
+            <intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.vimeo.channel" />
+            </intent-filter>
+        </activity>        
         <!-- CHANNELS -->
         <activity android:label="Channels"
                   android:name=".activity.guest.list.ChannelsActivity"

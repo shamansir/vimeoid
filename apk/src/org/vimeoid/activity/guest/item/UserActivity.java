@@ -67,8 +67,6 @@ public class UserActivity extends ItemActivity<User> {
     @Override
     protected SectionedActionsAdapter fillWithActions(SectionedActionsAdapter actionsAdapter, final User user) {
         
-        // TODO: is staff, is plus
-        
         // Statistics section
         int statsSection = actionsAdapter.addSection(getString(R.string.statistics));
         // number of videos

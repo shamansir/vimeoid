@@ -21,7 +21,9 @@
     <string name="video_is">Video {title}</string>
     <string name="view_video_info">View info</string>
     <string name="view_author_info">View author info</string>
+    <string name="view_channel_info">View info</string>    
     <string name="view_author_videos">View videos by author</string>
+    <string name="view_channel_videos">View videos in channel</string>    
     <!-- actions groups -->
     <string name="information">Information</string>
     <string name="statistics">Statistics</string>
@@ -45,8 +47,10 @@
     <string name="num_of_channels">{num} channels</string>
     <string name="num_of_contacts">{num} contacts</string>
     <string name="num_of_appearances">Appears in {num} videos</string>
+    <string name="num_of_subscribers">{num} subscribers</string>
     <string name="location_is">{place}</string>
     <string name="created_on">{time}</string>
+    <string name="created_by">{name}</string>
     <string name="user_from_staff">Staff member</string>
     <string name="user_is_plus_member">Plus member</string>
     <string name="no_biography_supplied">[No biography supplied]</string>

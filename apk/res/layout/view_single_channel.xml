@@ -9,16 +9,20 @@
              layout="@layout/progress_bar_line" />
     <LinearLayout android:orientation="horizontal"
                   android:layout_width="fill_parent"
-                  android:layout_height="@dimen/user_portrait_side"
+                  android:layout_height="@dimen/channel_thumb_side"
                   android:background="@color/item_action_bg">
-	    <ImageView android:id="@+id/userPortrait"
-	               android:layout_width="@dimen/user_portrait_side"
-	               android:layout_height="@dimen/user_portrait_side"
-	               android:background="@drawable/grey_border_line" />
+	     <LinearLayout android:layout_width="@dimen/channel_thumb_side"
+	                   android:layout_height="@dimen/channel_thumb_side"
+	                   android:background="@color/item_thumb_bg">
+	         <ImageView android:layout_width="@dimen/item_icon_side"
+	                    android:layout_height="@dimen/item_icon_side"
+	                    android:layout_margin="@dimen/item_thumb_margin"
+	                    android:src="@drawable/channel" />
+	     </LinearLayout>
          <ScrollView android:layout_width="fill_parent"
                      android:layout_height="wrap_content"
                      android:layout_weight="1">
-             <TextView android:id="@+id/userBio"
+             <TextView android:id="@+id/channelDescription"
                        android:textSize="@dimen/item_text_font_size"
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"

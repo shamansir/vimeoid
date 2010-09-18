@@ -109,13 +109,24 @@ public final class Invoke {
                                  .putExtra(SUBJ_TITLE_EXTRA, user.displayName)
                                  .putExtra(ICON_EXTRA, R.drawable.channel));          
         }		
+        
+        public static void pickChannel(Activity parent, Channel channel) {
+            parent.setResult(Activity.RESULT_OK, new Intent()
+                                        .setData(Uri.withAppendedPath(VimeoProvider.BASE_URI, "/channel/" + channel.id + "/info"))
+                                        .putExtra(SUBJ_TITLE_EXTRA, channel.name));
+        }        
 		
-        // TODO:
         public static void selectChannel(Activity parent, Channel channel) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
                                  Uri.withAppendedPath(VimeoProvider.BASE_URI, "/channel/" + channel.id + "/info"))
                                  .putExtra(SUBJ_TITLE_EXTRA, channel.name));          
         }
+        
+        public static void selectCreator(Activity parent, Channel channel) {
+            parent.startActivity(new Intent(Intent.ACTION_VIEW, 
+                                     Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + channel.creatorId + "/info"))
+                                     .putExtra(SUBJ_TITLE_EXTRA, channel.creatorDisplayName));
+        }        
 
         public static void selectChannelContent(Activity parent, Channel channel) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
@@ -129,7 +140,7 @@ public final class Invoke {
                                  Uri.withAppendedPath(VimeoProvider.BASE_URI, "/channel/" + channelName + "/videos"))
                                  .putExtra(SUBJ_TITLE_EXTRA, channelName)
                                  .putExtra(ICON_EXTRA, R.drawable.video));
-        }        
+        }   
     
     }
     

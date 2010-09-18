@@ -5,9 +5,11 @@ import org.vimeoid.activity.guest.ItemsListActivity;
 import org.vimeoid.adapter.EasyCursorsAdapter;
 import org.vimeoid.adapter.guest.ChannelsListAdapter;
 import org.vimeoid.dto.simple.Channel;
+import org.vimeoid.util.Dialogs;
+import org.vimeoid.util.Invoke;
 
-import android.view.Menu;
-import android.view.MenuInflater;
+import android.content.Intent;
+import android.view.MenuItem;
 
 /**
  * 
@@ -27,26 +29,39 @@ import android.view.MenuInflater;
 public class ChannelsActivity extends ItemsListActivity<Channel> {
 
 	public ChannelsActivity() {
-		super(Channel.SHORT_EXTRACT_PROJECTION, R.menu.video_context_guest_menu);
+		super(Channel.SHORT_EXTRACT_PROJECTION, R.menu.channel_context_guest_menu);
 	}
 
     @Override
     protected void onItemSelected(Channel channel) {
-        
+        String action = getIntent().getAction();
+        if (Intent.ACTION_PICK.equals(action) ||
+            Intent.ACTION_GET_CONTENT.equals(action))
+        { 
+            Invoke.Guest.pickChannel(this, channel);
+        } else {
+            Invoke.Guest.selectChannel(this, channel);
+        }        
     }
     
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater(); //from activity
-        inflater.inflate(R.menu.main_options_menu, menu); 
-        
-        return true;
-    }
-	
 	@Override
 	protected EasyCursorsAdapter<Channel> createAdapter() {
 		return new ChannelsListAdapter(this, getLayoutInflater());
 	}
     
-    
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        
+        Channel channel = getItem(extractPosition(item));         
+        
+        switch (item.getItemId()) {
+            case R.id.menu_viewInfo: Invoke.Guest.selectChannel(this, channel); break;
+            case R.id.menu_viewAuthorInfo: Invoke.Guest.selectCreator(this, channel); break;
+            case R.id.menu_viewChannelVideos: Invoke.Guest.selectChannelContent(this, channel); break;
+            default: Dialogs.makeToast(this, getString(R.string.unknown_item));
+        }
+        return super.onContextItemSelected(item);
+        
+    }    
+	
 }
