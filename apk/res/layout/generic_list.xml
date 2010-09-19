@@ -14,4 +14,6 @@
 	          android:transcriptMode="normal"
 	          android:divider="#333"
 	          android:dividerHeight="1dp" />
+    <include android:id="@+id/emptyView"
+             layout="@layout/item_list_empty" />	      
 </LinearLayout>

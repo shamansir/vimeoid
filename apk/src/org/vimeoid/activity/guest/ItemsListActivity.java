@@ -77,7 +77,7 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
         
         registerForContextMenu(listView);
         listView.setItemsCanFocus(true);                    
-        listView.setEmptyView(getLayoutInflater().inflate(R.layout.item_list_empty, null));        
+        listView.setEmptyView(findViewById(R.id.emptyView));        
 
         footerView = getLayoutInflater().inflate(R.layout.item_footer_load_more, null);
         listView.addFooterView(footerView);
@@ -311,22 +311,26 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
                 startManagingCursor(cursor);
     
                 adapter.addSource(cursor);
-                if (cursor.getCount() < VimeoApi.ITEMS_PER_PAGE) {
+                if (cursor.getCount() == 0) {
+                    getListView().removeFooterView(footerView);
+                } else if ((cursor.getCount() < VimeoApi.ITEMS_PER_PAGE) || 
+                           (pageNum == VimeoApi.MAX_NUMBER_OF_PAGES)) {
                 	footerView.setVisibility(View.GONE);
+                } else {
+                    footerView.setEnabled(true);
+                    footerText.setTextColor(getResources().getColor(R.color.load_more_default_text));
+                    footerText.setBackgroundResource(R.color.load_more_default_bg);                    
                 }
                 
+                Log.d(TAG, "Cursor count: " + cursor.getCount());
                 
-                onContentChanged();                
+                onContentChanged();
                 
                 cursor.close();
             }
             
             progressBar.setVisibility(View.GONE);
                         
-            footerView.setEnabled(true);
-            footerText.setTextColor(getResources().getColor(R.color.load_more_default_text));
-            footerText.setBackgroundResource(R.color.load_more_default_bg);            
-            
             // TODO: scroll to the first received item (smoothScrollToPosition in API 8)
 
             Log.d(TAG, "List count: " + getListView().getCount() + "; cursor: " + cursor);
@@ -335,14 +339,6 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
                 if (newPos >= 0) setSelection(newPos);
                 else setSelection(0);            	
             }
-            
-            if (pageNum == VimeoApi.MAX_NUMBER_OF_PAGES) {
-                footerView.setVisibility(View.GONE);
-            }
-            
-            // TODO: change window title
-            /* final ApiCallInfo callInfo = ((StatsCollectingCursor)cursor).getCallStats();
-            setTitle(VimeoApi.getSimpleApiCallDescription(callInfo)); */
             
             queryRunning = false;
             

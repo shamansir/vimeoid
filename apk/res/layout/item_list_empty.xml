@@ -12,6 +12,7 @@
     <TextView android:id="@+id/itemsEmptyListView"
               android:layout_width="fill_parent" 
               android:layout_height="@dimen/load_more_height"
+              android:layout_marginLeft="3dp"
               android:padding="2dp"
               android:gravity="center_vertical"
               android:text="@string/no_items_in_list"

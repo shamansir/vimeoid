@@ -113,5 +113,10 @@ public abstract class EasyCursorsAdapter<ItemType extends Item> extends BaseAdap
         }
         cache.clear();
     }
+    
+    @Override
+    public boolean isEmpty() {
+        return itemsCount == 0;
+    }
 
 }
