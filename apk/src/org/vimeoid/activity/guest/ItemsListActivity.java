@@ -32,6 +32,7 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
     public static final String TAG = "ItemsListActivity";	
 
     private View footerView;
+    private View emptyView;
     private int pageNum = 1;
     
     private boolean queryRunning = false;
@@ -74,15 +75,15 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
         setContentView(mainView);
 
         final ListView listView = getListView();
-        
+        listView.setTextFilterEnabled(true);
+        listView.setItemsCanFocus(true);                
         registerForContextMenu(listView);
-        listView.setItemsCanFocus(true);                    
-        listView.setEmptyView(findViewById(R.id.emptyView));        
+        
+        emptyView = findViewById(R.id.emptyView);
+        listView.setEmptyView(emptyView);
 
         footerView = getLayoutInflater().inflate(R.layout.item_footer_load_more, null);
-        listView.addFooterView(footerView);
-        
-        listView.setTextFilterEnabled(true);  
+        listView.addFooterView(footerView);        
         
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);           
@@ -268,6 +269,8 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
         private final String[] projection;
         private final View progressBar;
         private final TextView footerText;
+        private final TextView emptyText;
+        private final ImageView emptyImage;
         private final EasyCursorsAdapter<?> adapter;
         
         protected LoadItemsTask(EasyCursorsAdapter<?> adapter, String[] projection) {
@@ -276,6 +279,8 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
             this.projection = projection;
             this.progressBar = findViewById(R.id.progressBar);   
             this.footerText = (TextView) footerView.findViewById(R.id.itemsListFooterText);
+            this.emptyText = (TextView) emptyView.findViewById(R.id.itemsEmptyListView);
+            this.emptyImage = (ImageView) emptyView.findViewById(R.id.itemsEmptyListImage);
         }
         
         @Override
@@ -286,9 +291,13 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
             
             progressBar.setVisibility(View.VISIBLE);
             
-            footerView.setEnabled(false);            
+            footerView.setEnabled(false);
             footerText.setTextColor(getResources().getColor(R.color.load_more_disabled_text));
             footerText.setBackgroundResource(R.color.load_more_disabled_bg);
+            footerText.setText(R.string.loading);            
+            
+            emptyImage.setImageResource(R.drawable.item_loading_small);            
+            emptyText.setText(R.string.loading);
             
         }
 
@@ -313,13 +322,16 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
                 adapter.addSource(cursor);
                 if (cursor.getCount() == 0) {
                     getListView().removeFooterView(footerView);
+                    emptyImage.setImageResource(R.drawable.no_more_small);
+                    emptyText.setText(R.string.no_items_in_list);
                 } else if ((cursor.getCount() < VimeoApi.ITEMS_PER_PAGE) || 
                            (pageNum == VimeoApi.MAX_NUMBER_OF_PAGES)) {
                 	footerView.setVisibility(View.GONE);
                 } else {
                     footerView.setEnabled(true);
                     footerText.setTextColor(getResources().getColor(R.color.load_more_default_text));
-                    footerText.setBackgroundResource(R.color.load_more_default_bg);                    
+                    footerText.setBackgroundResource(R.color.load_more_default_bg); 
+                    footerText.setText(R.string.load_more);
                 }
                 
                 Log.d(TAG, "Cursor count: " + cursor.getCount());

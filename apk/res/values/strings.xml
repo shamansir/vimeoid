@@ -15,7 +15,8 @@
     <string name="switch_to_list">Switch view (to List)</string>    
     <!-- lists -->
     <string name="load_more">Load more...</string>
-    <string name="no_items_in_list">No items...</string>
+    <string name="loading">Loading...</string>
+    <string name="no_items_in_list">No items</string>
     <!-- context menus -->
     <string name="context_menu">Context menu</string>
     <string name="video_is">Video {title}</string>
