@@ -58,7 +58,7 @@ public class AlbumsListAdapter extends EasyCursorsAdapter<Album> {
             itemHolder.ivThumb = (ImageView) convertView.findViewById(R.id.albumItemImage);
             
             itemHolder.tvTitle = (TextView) convertView.findViewById(R.id.albumItemTitle);
-            itemHolder.tvAuthor = (TextView) convertView.findViewById(R.id.albumItemAuthor);
+            //itemHolder.tvAuthor = (TextView) convertView.findViewById(R.id.albumItemAuthor);
             itemHolder.tvUpdatedOn = (TextView) convertView.findViewById(R.id.albumItemUpdatedOn);
             
             itemHolder.tvVideos = (TextView) convertView.findViewById(R.id.albumItemNumOfVideos);
@@ -71,10 +71,10 @@ public class AlbumsListAdapter extends EasyCursorsAdapter<Album> {
             
         }
         
-        imageLoader.displayImage(album.thumbnail, itemHolder.ivThumb);
+        imageLoader.displayImage(album.smallThumbnailUrl, itemHolder.ivThumb);
         
         itemHolder.tvTitle.setText(album.title);
-        itemHolder.tvAuthor.setText(album.creatorDisplayName);
+        //itemHolder.tvAuthor.setText(album.creatorDisplayName);
         itemHolder.tvUpdatedOn.setText(album.lastModifiedOn);
         
         itemHolder.tvVideos.setText(String.valueOf(album.videosCount));
@@ -93,7 +93,7 @@ public class AlbumsListAdapter extends EasyCursorsAdapter<Album> {
         ImageView ivThumb;
         
         TextView tvTitle;
-        TextView tvAuthor;
+        //TextView tvAuthor;
         TextView tvUpdatedOn;                
         
         TextView tvVideos;

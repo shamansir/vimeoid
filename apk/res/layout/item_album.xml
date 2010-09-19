@@ -26,7 +26,7 @@
                   android:ellipsize="marquee"                 
                   android:scrollHorizontally="true"
                   android:text="Titlegyfj" />
-        <TextView android:id="@+id/albumItemAuthor"
+        <!-- <TextView android:id="@+id/albumItemAuthor"
                   android:layout_width="fill_parent" 
                   android:layout_height="fill_parent"
                   android:layout_weight="0.22"                              
@@ -35,11 +35,11 @@
                   android:lines="1"
                   android:ellipsize="marquee"
                   android:scrollHorizontally="true"
-                  android:text="Authorghyj" />
+                  android:text="Authorghyj" />  -->
         <TextView android:id="@+id/albumItemUpdatedOn"
                   android:layout_width="fill_parent" 
                   android:layout_height="fill_parent"
-                  android:layout_weight="0.25"
+                  android:layout_weight="0.20"
                   android:textSize="@dimen/item_tags_font_size"
                   android:textColor="@color/item_subtitle"
                   android:lines="1"
@@ -49,7 +49,7 @@
         <LinearLayout android:orientation="horizontal"
                       android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
-                      android:layout_weight="0.22">
+                      android:layout_weight="0.25">
               <LinearLayout android:orientation="horizontal"
                             android:layout_width="wrap_content"
                             android:layout_height="fill_parent">
