@@ -87,8 +87,8 @@
                        android:layout_height="wrap_content"
                        android:layout_gravity="center"
                        android:layout_weight="0.45"
-                       android:layout_marginRight="5dp"                  
+                       android:layout_marginRight="6dp"                  
                        android:src="@drawable/video_small" />		              
-		</LinearLayout>		
+		</LinearLayout>
 	</LinearLayout>
 </LinearLayout>
