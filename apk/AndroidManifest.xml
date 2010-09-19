@@ -80,6 +80,22 @@
                 <data android:mimeType="vnd.android.cursor.item/vnd.vimeo.channel" />
             </intent-filter>
         </activity>
+        <!-- ALBUMS -->
+        <activity android:label="Albums"
+                  android:name=".activity.guest.list.AlbumsActivity"
+                  android:theme="@android:style/Theme.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.PICK" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="vnd.android.cursor.dir/vnd.vimeo.album" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.GET_CONTENT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.vimeo.album" />
+            </intent-filter>
+        </activity>        
         <!-- USER -->
         <activity android:label="User"
                   android:name=".activity.guest.item.UserActivity"

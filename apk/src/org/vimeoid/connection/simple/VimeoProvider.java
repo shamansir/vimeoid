@@ -114,9 +114,11 @@ public class VimeoProvider extends ContentProvider {
         try {
             if (getReturnsJsonArray(contentUri)) {
                 final JSONArray jsonArr = JsonOverHttp.use().askForArray(fullCallUrl);
+                Log.d(TAG, "JSON Array received: " + jsonArr.toString());
                 return new JsonObjectsCursor(jsonArr, projection, apiCallInfo);
             } else {
                 final JSONObject jsonObj = JsonOverHttp.use().askForObject(fullCallUrl);
+                Log.d(TAG, "JSON Object received: " + jsonObj.toString());                
                 return new JsonObjectsCursor(jsonObj, projection, apiCallInfo);
             }          
         } catch (ClientProtocolException cpe) {

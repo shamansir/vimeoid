@@ -5,6 +5,7 @@ package org.vimeoid.util;
 
 import org.vimeoid.R;
 import org.vimeoid.connection.simple.VimeoProvider;
+import org.vimeoid.dto.simple.Album;
 import org.vimeoid.dto.simple.Channel;
 import org.vimeoid.dto.simple.User;
 import org.vimeoid.dto.simple.Video;
@@ -37,6 +38,8 @@ public final class Invoke {
 
     public static class Guest {
     
+        // Video
+        
         protected static Uri getUploaderPageUri(Video video) {
             return Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + getUploaderId(video) + "/info");
         }
@@ -81,6 +84,8 @@ public final class Invoke {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, getUploaderPageUri(video))
                                     .putExtra(SUBJ_TITLE_EXTRA, video.uploaderName));
         }
+        
+        // User
 
 		public static void selectApperancesOf(Activity parent, User user) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
@@ -103,19 +108,28 @@ public final class Invoke {
 					   				 .putExtra(ICON_EXTRA, R.drawable.subscribe));			
 		}
 		
+        public static void selectAlbumsOf(Activity parent, User user) {
+            parent.startActivity(new Intent(Intent.ACTION_VIEW, 
+                                 Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + user.id + "/albums"))
+                                 .putExtra(SUBJ_TITLE_EXTRA, user.displayName)
+                                 .putExtra(ICON_EXTRA, R.drawable.album));          
+        }
+        
         public static void selectChannelsOf(Activity parent, User user) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
                                  Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + user.id + "/channels"))
                                  .putExtra(SUBJ_TITLE_EXTRA, user.displayName)
                                  .putExtra(ICON_EXTRA, R.drawable.channel));          
-        }		
+        }        
+        
+        // Channel
         
         public static void pickChannel(Activity parent, Channel channel) {
             parent.setResult(Activity.RESULT_OK, new Intent()
                                         .setData(Uri.withAppendedPath(VimeoProvider.BASE_URI, "/channel/" + channel.id + "/info"))
                                         .putExtra(SUBJ_TITLE_EXTRA, channel.name));
-        }        
-		
+        }
+        
         public static void selectChannel(Activity parent, Channel channel) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
                                  Uri.withAppendedPath(VimeoProvider.BASE_URI, "/channel/" + channel.id + "/info"))
@@ -140,8 +154,35 @@ public final class Invoke {
                                  Uri.withAppendedPath(VimeoProvider.BASE_URI, "/channel/" + channelName + "/videos"))
                                  .putExtra(SUBJ_TITLE_EXTRA, channelName)
                                  .putExtra(ICON_EXTRA, R.drawable.video));
-        }   
-    
+        }
+        
+        // Album
+        
+        public static void pickAlbum(Activity parent, Album album) {
+            parent.setResult(Activity.RESULT_OK, new Intent()
+                                        .setData(Uri.withAppendedPath(VimeoProvider.BASE_URI, "/album/" + album.id + "/info"))
+                                        .putExtra(SUBJ_TITLE_EXTRA, album.title));
+        }
+        
+        public static void selectAlbum(Activity parent, Album album) {
+            parent.startActivity(new Intent(Intent.ACTION_VIEW, 
+                                 Uri.withAppendedPath(VimeoProvider.BASE_URI, "/album/" + album.id + "/info"))
+                                 .putExtra(SUBJ_TITLE_EXTRA, album.title));          
+        }
+        
+        public static void selectCreator(Activity parent, Album album) {
+            parent.startActivity(new Intent(Intent.ACTION_VIEW, 
+                                     Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + album.creatorId + "/info"))
+                                     .putExtra(SUBJ_TITLE_EXTRA, album.creatorDisplayName));
+        }        
+
+        public static void selectAlbumContent(Activity parent, Album album) {
+            parent.startActivity(new Intent(Intent.ACTION_VIEW, 
+                                 Uri.withAppendedPath(VimeoProvider.BASE_URI, "/album/" + album.id + "/videos"))
+                                 .putExtra(SUBJ_TITLE_EXTRA, album.title)
+                                 .putExtra(ICON_EXTRA, R.drawable.video));            
+        }
+        
     }
     
 }

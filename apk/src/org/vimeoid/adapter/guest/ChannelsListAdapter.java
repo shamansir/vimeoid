@@ -7,8 +7,6 @@ import org.vimeoid.R;
 import org.vimeoid.adapter.EasyCursorsAdapter;
 import org.vimeoid.dto.simple.Channel;
 
-import com.fedorvlasov.lazylist.ImageLoader;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.view.LayoutInflater;
@@ -33,14 +31,11 @@ import android.widget.TextView;
 public class ChannelsListAdapter extends EasyCursorsAdapter<Channel> {
     
     private final LayoutInflater layoutInflater;
-    private final ImageLoader imageLoader;    
 
     public ChannelsListAdapter(Context context, LayoutInflater inflater) {
         super(Channel.FieldsKeys._ID);
 
         this.layoutInflater = inflater;        
-        
-        this.imageLoader = new ImageLoader(context, R.drawable.thumb_loading_small, R.drawable.video_unknown_item);
     }
     
     @Override
@@ -77,12 +72,6 @@ public class ChannelsListAdapter extends EasyCursorsAdapter<Channel> {
         itemHolder.tvSubsribers.setText(String.valueOf(channel.subscribersCount));
         
         return convertView;
-    }
-    
-    @Override
-    public void finalize() {
-        super.finalize();
-        imageLoader.clearCache();
     }
     
     private class ChannelItemViewHolder {

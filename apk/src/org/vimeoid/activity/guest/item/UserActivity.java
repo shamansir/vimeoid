@@ -84,7 +84,7 @@ public class UserActivity extends ItemActivity<User> {
                                  Utils.format(getString(R.string.num_of_albums), "num", String.valueOf(user.albumsCount)));
         if (user.albumsCount > 0) {
             albumAction.onClick =  new OnClickListener() {
-                @Override public void onClick(View v) { Dialogs.makeToast(UserActivity.this, getString(R.string.currently_not_supported)); };
+                @Override public void onClick(View v) { Invoke.Guest.selectAlbumsOf(UserActivity.this, user); };
             };
         }
         // number of channels

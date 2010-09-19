@@ -22,8 +22,10 @@
     <string name="view_video_info">View info</string>
     <string name="view_author_info">View author info</string>
     <string name="view_channel_info">View info</string>    
+    <string name="view_album_info">View info</string>
     <string name="view_author_videos">View videos by author</string>
-    <string name="view_channel_videos">View videos in channel</string>    
+    <string name="view_channel_videos">View videos in channel</string>
+    <string name="view_album_videos">View videos in album</string>    
     <!-- actions groups -->
     <string name="information">Information</string>
     <string name="statistics">Statistics</string>
