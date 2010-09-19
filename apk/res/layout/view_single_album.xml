@@ -7,17 +7,19 @@
 	         layout="@layout/item_subject_titlebar" />
     <include android:id="@+id/progressBar"
              layout="@layout/progress_bar_line" />
-    <ImageView android:id="@+id/albumThumb"
-               android:orientation="horizontal"
-               android:layout_width="fill_parent"
-               android:layout_height="@dimen/album_med_thumb_height" />
     <LinearLayout android:orientation="horizontal"
                   android:layout_width="fill_parent"
-                  android:layout_height="@dimen/description_line_height"
+                  android:layout_height="@dimen/album_med_thumb_height"
                   android:background="@color/item_action_bg">
-         <ScrollView android:layout_width="wrap_content"
+        <ImageView android:id="@+id/albumThumb"
+                   android:orientation="horizontal"
+                   android:layout_width="@dimen/album_med_thumb_width"
+                   android:layout_height="@dimen/album_med_thumb_height"
+                   android:background="@drawable/grey_border_line" />                  
+         <ScrollView android:layout_width="fill_parent"
                      android:layout_height="wrap_content"
-                     android:layout_weight="1">
+                     android:layout_weight="1"
+                     android:background="@color/item_action_bg">
 	         <TextView android:id="@+id/albumDescription"
                        android:textSize="@dimen/item_text_font_size"
 	                   android:layout_width="wrap_content"
@@ -32,5 +34,5 @@
               android:layout_weight="1"
               android:transcriptMode="disabled"              
               android:divider="#ccc"
-              android:dividerHeight="1dp" />    
+              android:dividerHeight="1dp" />
 </LinearLayout>

@@ -16,7 +16,8 @@
     <dimen name="single_thumb_height">150dp</dimen>
     <dimen name="item_default_height">75dp</dimen>
     <dimen name="video_player_height">155dp</dimen>
-    <dimen name="album_med_thumb_height">155dp</dimen>    
+    <dimen name="album_med_thumb_width">200dp</dimen>
+    <dimen name="album_med_thumb_height">150dp</dimen>    
     <dimen name="user_portrait_side">100dp</dimen>
     <dimen name="channel_thumb_side">100dp</dimen>
     <dimen name="channel_logo_height">88dp</dimen>
