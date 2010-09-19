@@ -3,7 +3,7 @@
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/load_more_height"
-        android:background="@drawable/grey_border_on_black">
+        android:background="@drawable/grey_border">
     <ImageView android:id="@+id/itemsEmptyListImage"
                android:layout_width="@dimen/item_thumb_width"
                android:layout_height="@dimen/load_more_height"

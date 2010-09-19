@@ -43,19 +43,22 @@
     <string name="none_of_tags">[none]</string>
     <string name="dimensions_are">{width}x{height}</string>
     <string name="duration_is">{time}</string>
-    <string name="no_description_supplied">[No description supplied]</string>
+    <string name="no_description_supplied">[No description supplied]</string>    
     <!-- user page -->
     <string name="num_of_videos">{num} videos</string>
     <string name="num_of_albums">{num} albums</string>
     <string name="num_of_channels">{num} channels</string>
     <string name="num_of_contacts">{num} contacts</string>
     <string name="num_of_appearances">Appears in {num} videos</string>
-    <string name="num_of_subscribers">{num} subscribers</string>
-    <string name="location_is">{place}</string>
-    <string name="created_on">{time}</string>
-    <string name="created_by">{name}</string>
     <string name="user_from_staff">Staff member</string>
     <string name="user_is_plus_member">Plus member</string>
-    <string name="no_biography_supplied">[No biography supplied]</string>
     <string name="subscriptions">Subsriptions</string>    
+    <string name="location_is">{place}</string>
+    <string name="created_on">{time}</string>    
+    <string name="no_biography_supplied">[No biography supplied]</string>    
+    <!-- channel page -->    
+    <string name="num_of_subscribers">{num} subscribers</string>
+    <string name="created_by">{name}</string>
+    <!-- album page -->
+    <string name="updated_on">{time}</string>
 </resources>
