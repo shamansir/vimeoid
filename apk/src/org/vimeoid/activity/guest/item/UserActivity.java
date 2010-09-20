@@ -8,7 +8,6 @@ import org.vimeoid.activity.guest.ItemActivity;
 import org.vimeoid.adapter.ActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.dto.simple.User;
-import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
 import org.vimeoid.util.Utils;
 
@@ -96,13 +95,8 @@ public class UserActivity extends ItemActivity<User> {
             };
         }
         // number of contacts
-        final ActionItem contactAction = actionsAdapter.addAction(statsSection, R.drawable.contact, 
+        actionsAdapter.addAction(statsSection, R.drawable.contact, 
                 Utils.format(getString(R.string.num_of_contacts), "num", String.valueOf(user.contactsCount)));
-        if (user.contactsCount > 0) {
-            contactAction.onClick =  new OnClickListener() {
-                @Override public void onClick(View v) { Dialogs.makeToast(UserActivity.this, getString(R.string.currently_not_supported)); };
-            };
-        }
         // number of appearances
         final ActionItem appearanceAction = actionsAdapter.addAction(statsSection, R.drawable.appearance, 
                 Utils.format(getString(R.string.num_of_appearances), "num", String.valueOf(user.videosAppearsIn)));
@@ -114,7 +108,7 @@ public class UserActivity extends ItemActivity<User> {
         // number of likes
         final ActionItem likeAction = actionsAdapter.addAction(statsSection, R.drawable.like, 
                 Utils.format(getString(R.string.num_of_likes), "num", String.valueOf(user.videosLiked)));
-        if (user.videosLiked > 0) {
+        if (user.videosLiked > 0) {	
         	likeAction.onClick =  new OnClickListener() {
                 @Override public void onClick(View v) { Invoke.Guest.selectLikesOf(UserActivity.this, user); };
             };
