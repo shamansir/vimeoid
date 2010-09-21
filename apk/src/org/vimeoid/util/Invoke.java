@@ -3,9 +3,11 @@
  */
 package org.vimeoid.util;
 
+import java.io.InputStream;
+
 import org.vimeoid.R;
-import org.vimeoid.connection.VimeoVideoRunner;
-import org.vimeoid.connection.VimeoVideoRunner.VideoLinkRequestException;
+import org.vimeoid.connection.VideoLinkRequestException;
+import org.vimeoid.connection.VimeoVideoStreamer;
 import org.vimeoid.connection.simple.VimeoProvider;
 import org.vimeoid.dto.simple.Album;
 import org.vimeoid.dto.simple.Channel;
@@ -54,15 +56,19 @@ public final class Invoke {
             return Uri.withAppendedPath(VimeoProvider.BASE_URI, "/video/" + video.id);
         }
         
-        public static void pickVideo(Activity parent, Video video) {
+        public static void playVideo(Activity parent, Video video) {
         	Log.d(TAG, "Trying to get direct url for video " + video.id);
         	try {
-        		final Uri resultUri = VimeoVideoRunner.askForVideoUri(video);
-				Log.d(TAG, (resultUri != null) ? resultUri.toString() : "null");
+        		final InputStream videoStream = VimeoVideoStreamer.getVideoStream(video);
+				Log.d(TAG, (videoStream != null) ? videoStream.toString() : "null");
 			} catch (VideoLinkRequestException e) {
 				Log.e(TAG, e.getLocalizedMessage());
 				e.printStackTrace();
-			}        	
+			}
+        }
+        
+        public static void pickVideo(Activity parent, Video video) {
+	
             Log.d(TAG, "Video with id " + video.id + " requested");
             parent.setResult(Activity.RESULT_OK, new Intent().setData(getVideoPageUri(video))
                                                              .putExtra(SUBJ_TITLE_EXTRA, video.title 
@@ -70,14 +76,6 @@ public final class Invoke {
         }
         
         public static void selectVideo(Activity parent, Video video) {
-        	Log.d(TAG, "Trying to get direct url for video " + video.id);
-        	try {
-        		final Uri resultUri = VimeoVideoRunner.askForVideoUri(video);
-				Log.d(TAG, (resultUri != null) ? resultUri.toString() : "null");
-			} catch (VideoLinkRequestException e) {
-				Log.e(TAG, e.getLocalizedMessage());
-				e.printStackTrace();
-			}
             Log.d(TAG, "Video with id " + video.id + " selected");      
             parent.startActivity(new Intent(Intent.ACTION_VIEW, getVideoPageUri(video))
                                     .putExtra(SUBJ_TITLE_EXTRA, video.title
