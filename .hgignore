@@ -14,3 +14,4 @@ cook.sh
 .*\.out\.xml
 
 ^apk/src/org/vimeoid/VimeoConfig.java
+^apk/src/org/vimeoid/connection/VimeoVideoStreamer.java
