@@ -78,7 +78,7 @@ public class JsonOverHttp {
 
     public static JsonOverHttp use() {
       return SingletonHolder.INSTANCE;
-    }    
+    }
     
     public static final String TAG = "JsonOverHttp";
     

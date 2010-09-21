@@ -7,6 +7,7 @@
 \.settings
 .*\.apk
 .*\.ogv
+.*\.avi
 
 cook.sh
 .project
