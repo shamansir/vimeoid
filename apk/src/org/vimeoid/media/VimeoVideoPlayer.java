@@ -13,6 +13,7 @@ import org.vimeoid.connection.VimeoVideoStreamer;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.os.Handler;
 import android.util.Log;
 
 /**
@@ -35,6 +36,12 @@ public final class VimeoVideoPlayer {
     
     private Context context;
     private MediaPlayer mediaPlayer;
+    
+    private final Handler handler = new Handler(); // UI Handler
+    private File cacheFile;    
+    
+    private int kBytesRead = 0;
+    private boolean isInterrupted;
 
     private VimeoVideoPlayer() { }
     
@@ -84,19 +91,19 @@ public final class VimeoVideoPlayer {
     // used article: 
     // http://www.androidapps.org/android-tutorial-3-custom-media-streaming-with-mediaplayer
     private void manageReceivedStream(InputStream videoStream) throws IOException {
-        File cacheFile = File.createTempFile("v_videoCache", ".dat");
+        cacheFile = File.createTempFile("v_videoCache", ".dat");
         FileOutputStream out = new FileOutputStream(cacheFile);
         
         byte byteBuf[] = new byte[16384 * 1024];
         int bytesRead = 0;
-        int kBytesRead = 0;
+        kBytesRead = 0;
         
         do {
             int streamGave = videoStream.read(byteBuf);
             if (streamGave <= 0) break;
             out.write(byteBuf, 0, streamGave);
             bytesRead += streamGave;
-            kBytesRead = kBytesRead >> 10;
+            kBytesRead = bytesRead >> 10;
             mayBePassBuffer();
         } while (true);
         
