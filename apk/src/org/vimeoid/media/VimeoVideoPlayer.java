@@ -17,6 +17,8 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.util.Log;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 
 /**
  * <dl>
@@ -47,6 +49,7 @@ public final class VimeoVideoPlayer {
     
     private Context context;
     private MediaPlayer mediaPlayer;
+    private SurfaceHolder canvas;
     
     private final Handler handler = new Handler(); // UI Handler
     private File cacheFile;    
@@ -76,7 +79,11 @@ public final class VimeoVideoPlayer {
       return SingletonHolder.INSTANCE.withContext(context);
     }        
     
-    public void startPlaying(final long videoId) {
+    public void startPlaying(final SurfaceHolder canvas, final long videoId) {
+    	
+    	this.canvas = canvas;
+    	//whereToProject.getHolder().setFixedSize(400, 300);
+    	
         Runnable r = new Runnable() {
 
             @Override
@@ -98,8 +105,7 @@ public final class VimeoVideoPlayer {
         };
         new Thread(r).start();
     	
-    	/*
-        try {            
+       /* try {            
             final InputStream videoStream = VimeoVideoStreamer.getVideoStream(videoId);
             if (videoStream == null) {
                 Log.e(TAG, "The returned video stream is null, so I will not play anything :(");
@@ -111,9 +117,24 @@ public final class VimeoVideoPlayer {
     				try {
     					mediaPlayer = new MediaPlayer();
         				if (mediaPlayer == null) throw new IllegalStateException("Failed to create media player");
-						mediaPlayer.setDataSource(context, VimeoVideoStreamer.getVideoUri(videoId));
-	    				//mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        				mediaPlayer.setDisplay(canvas);
+	    				File temp = Utils.newTempFile(context, "mediaplayertmp", "dat");
+	    				//String tempPath = temp.getAbsolutePath();
+	    				FileOutputStream out = new FileOutputStream(temp);
+	    				byte buf[] = new byte[128];
+	    				do {
+	    					int numread = videoStream.read(buf);
+	    					if (numread <= 0) break;
+	    					out.write(buf, 0, numread);
+	    				} while (true);
+	    				mediaPlayer.setDataSource(new FileInputStream(temp).getFD());
+	    				try {
+	    					videoStream.close();
+	    				} catch (IOException ex) {
+	    					Log.e(TAG, "error: " + ex.getMessage(), ex);
+	    				}
 	    				mediaPlayer.prepare();
+	    				mediaPlayer.start();
 					} catch (IllegalArgumentException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -133,8 +154,6 @@ public final class VimeoVideoPlayer {
     		
         } catch (VideoLinkRequestException vlre) {
             informException(vlre);
-        } catch (IOException ioe) {
-            informException(ioe);
         } */
         
     }
@@ -212,8 +231,10 @@ public final class VimeoVideoPlayer {
 			mediaPlayer = new MediaPlayer();
 			if (mediaPlayer == null) throw new IllegalStateException("Failed to create media player");
 			mediaPlayer.setDataSource(new FileInputStream(bufferedFile).getFD());
+			mediaPlayer.setDisplay(canvas);
 			//mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			mediaPlayer.prepare();
+			mediaPlayer.start();
 
 		} catch (IOException e) {
 			Log.e(getClass().getName(), "Error initializing the MediaPlaer.", e);
@@ -228,6 +249,7 @@ public final class VimeoVideoPlayer {
 			boolean wasPlaying = mediaPlayer.isPlaying();
 			int curPosition = mediaPlayer.getCurrentPosition();
 			mediaPlayer.pause();
+			mediaPlayer.release();
 
 			File bufferedFile = new File(context.getCacheDir(), "playingMedia"
 					+ (counter++) + ".dat");
@@ -236,6 +258,7 @@ public final class VimeoVideoPlayer {
 			mediaPlayer = new MediaPlayer();
 			mediaPlayer.setDataSource(new FileInputStream(bufferedFile).getFD());
 			// mediaPlayer.setAudioStreamType(AudioSystem.STREAM_MUSIC);
+			mediaPlayer.setDisplay(canvas);			
 			mediaPlayer.prepare();
 			mediaPlayer.seekTo(curPosition);
 

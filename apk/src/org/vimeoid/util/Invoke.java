@@ -4,6 +4,7 @@
 package org.vimeoid.util;
 
 import org.vimeoid.R;
+import org.vimeoid.activity.Player;
 import org.vimeoid.connection.simple.VimeoProvider;
 import org.vimeoid.dto.simple.Album;
 import org.vimeoid.dto.simple.Channel;
@@ -36,6 +37,7 @@ public final class Invoke {
     
     public static final String SUBJ_TITLE_EXTRA = "v_subjtitle";
     public static final String ICON_EXTRA = "v_icon";
+    public static final String VIDEO_ID_EXTRA = "v_video_id";
 
     public static class Guest {
     
@@ -55,7 +57,8 @@ public final class Invoke {
         
         public static void playVideo(Activity parent, Video video) {
         	Log.d(TAG, "Trying to play video " + video.id);
-        	VimeoVideoPlayer.use(parent).startPlaying(video.id);
+        	parent.startActivity(new Intent(parent, Player.class)
+        	                     .putExtra(VIDEO_ID_EXTRA, video.id));        	
         }
         
         public static void pickVideo(Activity parent, Video video) {
