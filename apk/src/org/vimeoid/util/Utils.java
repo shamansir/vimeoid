@@ -3,6 +3,12 @@
  */
 package org.vimeoid.util;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
@@ -15,6 +21,9 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.vimeoid.R;
 import org.vimeoid.connection.ContentType;
+
+import android.content.Context;
+import android.util.Log;
 
 /**
  * <dl>
@@ -31,6 +40,13 @@ import org.vimeoid.connection.ContentType;
  *
  */
 public class Utils {
+	
+	public static final String TAG = "Utils";
+	
+	public static final String CACHE_DIR_NAME = "__vimeo_v_cache";
+	
+	private static File cacheDir = null;
+	private static boolean cacheDirCreated = false;
     
     public static List<NameValuePair> quickApiParams(String name1, String value1) {
         final List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -73,22 +89,6 @@ public class Utils {
         }
         return result;
     }
-    
-    public static void copyStream(InputStream is, OutputStream os) {
-        final int buffer_size=1024;
-        try
-        {
-            byte[] bytes=new byte[buffer_size];
-            for(;;)
-            {
-              int count=is.read(bytes, 0, buffer_size);
-              if(count==-1)
-                  break;
-              os.write(bytes, 0, count);
-            }
-        }
-        catch(Exception ex){}
-    }    
     
     public static String adaptDuration(long duration) {
     	final long remainder = duration % 60; 
@@ -177,5 +177,87 @@ public class Utils {
     public static String authorIdFromProfileUrl(String uploaderProfileUrl) {
         return uploaderProfileUrl.substring(17);
     }
+    
+    public static void copyStream(InputStream is, OutputStream os) {
+        final int buffer_size=1024;
+        try
+        {
+            byte[] bytes=new byte[buffer_size];
+            for(;;)
+            {
+              int count=is.read(bytes, 0, buffer_size);
+              if(count==-1)
+                  break;
+              os.write(bytes, 0, count);
+            }
+        }
+        catch(Exception ex){}
+    }    
+    
+	public static void moveFile(File oldLocation, File newLocation) throws IOException {
 
+		if (oldLocation.exists()) {
+			BufferedInputStream reader = new BufferedInputStream(
+					new FileInputStream(oldLocation));
+			BufferedOutputStream writer = new BufferedOutputStream(
+					new FileOutputStream(newLocation, false));
+			try {
+				byte[] buff = new byte[8192];
+				int numChars;
+				while ((numChars = reader.read(buff, 0, buff.length)) != -1) {
+					writer.write(buff, 0, numChars);
+				}
+			} catch (IOException ex) {
+				throw new IOException("IOException when transferring "
+						+ oldLocation.getPath() + " to "
+						+ newLocation.getPath());
+			} finally {
+				try {
+					if (reader != null) {
+						writer.close();
+						reader.close();
+					}
+				} catch (IOException ex) {
+					Log.e(TAG, "Error closing files when transferring "
+									+ oldLocation.getPath() + " to "
+									+ newLocation.getPath());
+				}
+			}
+		} else {
+			throw new IOException(
+					"Old location does not exist when transferring "
+							+ oldLocation.getPath() + " to "
+							+ newLocation.getPath());
+		}
+	}    
+	
+	public static File createCacheDir(Context context, String dirName)  {
+		File preparedDir;
+		if (android.os.Environment.MEDIA_MOUNTED.equals(android.os.Environment.getExternalStorageState())) {
+			preparedDir = context.getDir(dirName /* + UUID.randomUUID().toString()*/, Context.MODE_PRIVATE);
+            Log.d(TAG, "Cache dir initialized at SD card " + preparedDir.getAbsolutePath());
+        } else {
+        	preparedDir = context.getCacheDir();
+            Log.d(TAG, "Cache dir initialized at phone storage " + preparedDir.getAbsolutePath());
+        }
+        if(!preparedDir.exists()) {
+        	Log.d(TAG, "Cache dir not existed, creating");
+        	preparedDir.mkdirs();
+        }
+        return preparedDir;
+	}
+    
+	public static File getDefaultCacheDir(Context context)  {
+		if (cacheDirCreated) return cacheDir;
+		else {
+			cacheDir = createCacheDir(context, CACHE_DIR_NAME);
+	        cacheDirCreated = true;
+	        return cacheDir;
+		}
+	}
+	
+	public static File newTempFile(Context context, String prefix, String suffix) throws IOException {
+		return File.createTempFile(prefix, suffix, getDefaultCacheDir(context));
+	}
+	
 }

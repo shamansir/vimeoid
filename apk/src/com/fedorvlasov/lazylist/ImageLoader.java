@@ -37,12 +37,14 @@ import android.widget.ImageView;
  */
 public class ImageLoader {
 	
-	public static final String TAG = "ImageLoader"; 
+	public static final String TAG = "ImageLoader";
+	
+	public static final String CACHE_DIR_NAME = "__imgldcache"; 
     
     //the simplest in-memory cache implementation. This should be replaced with something like SoftReference or BitmapOptions.inPurgeable(since 1.6)
     private HashMap<String, Bitmap> cache=new HashMap<String, Bitmap>();
     
-    private File cacheDir;
+    private static File cacheDir = null;
     private final int progressDrawable;    
     private final int defaultDrawable;
     
@@ -63,18 +65,19 @@ public class ImageLoader {
         this.defaultDrawable = defaultDrawable;
         
         //Find the dir to save cached images
-        if (android.os.Environment.MEDIA_MOUNTED.equals(android.os.Environment.getExternalStorageState())) {
-            cacheDir=context.getDir("__imgldcache" /* + UUID.randomUUID().toString()*/, Context.MODE_PRIVATE);
-            Log.d(TAG, "Cache dir initialized at SD card " + cacheDir.getAbsolutePath());
-        } else {
-            cacheDir=context.getCacheDir();
-            Log.d(TAG, "Cache dir initialized at phone storage " + cacheDir.getAbsolutePath());
-        }
-        if(!cacheDir.exists()) {
-        	Log.d(TAG, "Cache dir not existed, creating");
-        	cacheDir.mkdirs();
-        }
-            
+        if (cacheDir == null) {
+	        if (android.os.Environment.MEDIA_MOUNTED.equals(android.os.Environment.getExternalStorageState())) {
+	            cacheDir=context.getDir("__imgldcache" /* + UUID.randomUUID().toString()*/, Context.MODE_PRIVATE);
+	            Log.d(TAG, "Cache dir initialized at SD card " + cacheDir.getAbsolutePath());
+	        } else {
+	            cacheDir=context.getCacheDir();
+	            Log.d(TAG, "Cache dir initialized at phone storage " + cacheDir.getAbsolutePath());
+	        }
+	        if(!cacheDir.exists()) {
+	        	Log.d(TAG, "Cache dir not existed, creating");
+	        	cacheDir.mkdirs();
+	        }
+        }    
     }
     
     // sets imageView tag!

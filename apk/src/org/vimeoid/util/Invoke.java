@@ -55,7 +55,7 @@ public final class Invoke {
         
         public static void playVideo(Activity parent, Video video) {
         	Log.d(TAG, "Trying to play video " + video.id);
-        	VimeoVideoPlayer.use(parent).startPlaying(video);
+        	VimeoVideoPlayer.use(parent).startPlaying(video.id);
         }
         
         public static void pickVideo(Activity parent, Video video) {
