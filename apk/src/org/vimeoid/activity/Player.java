@@ -32,7 +32,13 @@ public class Player extends Activity {
 		/*final Runnable r = new Runnable() {
 		    
 		    public void run() {*/
-		        VimeoVideoPlayer.use(Player.this).startPlaying(surfaceView.getHolder(), videoId);
+		        runOnUiThread(new Runnable() {
+		            
+		            public void run() {
+		                VimeoVideoPlayer.use(Player.this).startPlaying(surfaceView.getHolder(), videoId);		                
+		            }
+		            
+		        });
 		    /*}
 		};
 		new Handler().post(r);*/
