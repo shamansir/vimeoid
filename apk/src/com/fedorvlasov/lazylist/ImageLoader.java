@@ -64,20 +64,8 @@ public class ImageLoader {
         this.progressDrawable = progressDrawable;
         this.defaultDrawable = defaultDrawable;
         
-        //Find the dir to save cached images
-        if (cacheDir == null) {
-	        if (android.os.Environment.MEDIA_MOUNTED.equals(android.os.Environment.getExternalStorageState())) {
-	            cacheDir=context.getDir("__imgldcache" /* + UUID.randomUUID().toString()*/, Context.MODE_PRIVATE);
-	            Log.d(TAG, "Cache dir initialized at SD card " + cacheDir.getAbsolutePath());
-	        } else {
-	            cacheDir=context.getCacheDir();
-	            Log.d(TAG, "Cache dir initialized at phone storage " + cacheDir.getAbsolutePath());
-	        }
-	        if(!cacheDir.exists()) {
-	        	Log.d(TAG, "Cache dir not existed, creating");
-	        	cacheDir.mkdirs();
-	        }
-        }    
+        //get the dir to save cached images
+        if (cacheDir == null) cacheDir = Utils.createCacheDir(context, CACHE_DIR_NAME);
     }
     
     // sets imageView tag!
