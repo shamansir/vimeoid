@@ -10,7 +10,6 @@ import org.vimeoid.dto.simple.Album;
 import org.vimeoid.dto.simple.Channel;
 import org.vimeoid.dto.simple.User;
 import org.vimeoid.dto.simple.Video;
-import org.vimeoid.media.VimeoVideoPlayer;
 
 import android.app.Activity;
 import android.content.Intent;

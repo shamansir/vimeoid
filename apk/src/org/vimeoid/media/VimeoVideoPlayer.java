@@ -15,6 +15,7 @@ import org.vimeoid.util.Utils;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnErrorListener;
 import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -104,7 +105,7 @@ public final class VimeoVideoPlayer {
             }
             
         };
-        new Thread(r).start(); */
+        new Thread(r).start();  */
     	
         try {            
         	Log.d(TAG, "Let's get stream");
@@ -117,23 +118,34 @@ public final class VimeoVideoPlayer {
             Log.d(TAG, "Creating player");
 			mediaPlayer = new MediaPlayer();
 			if (mediaPlayer == null) throw new IllegalStateException("Failed to create media player");
-			mediaPlayer.setDisplay(canvas);            
-            
+			mediaPlayer.setDisplay(canvas);
+			mediaPlayer.setAudioStreamType(2);
+			mediaPlayer.setOnErrorListener(new OnErrorListener() {
+                
+                @Override
+                public boolean onError(MediaPlayer mp, int what, int extra) {
+                    Log.e(TAG, "Media player error: " + what + "/" + extra);
+                    return false;
+                }
+            });
+			
     		Runnable updater = new Runnable() {
     			public void run() {
     				try {
     		            Log.d(TAG, "Starting the media thread");
 	    				File temp = Utils.newTempFile(context, "mediaplayertmp", "dat");
+	    				temp.deleteOnExit();
 	    				//String tempPath = temp.getAbsolutePath();
 	    				FileOutputStream out = new FileOutputStream(temp);
 	    				Log.d(TAG, "Created stream to temp file");
-	    				byte buf[] = new byte[128];
+	    				byte buf[] = new byte[CHUNK_BUFFER_SIZE];
 	    				Log.d(TAG, "Now we will read video stream");
 	    				do {
 	    					int numread = videoStream.read(buf);
 	    					if (numread <= 0) break;
 	    					out.write(buf, 0, numread);
 	    				} while (true);
+	    				//out.close();
 	    				Log.d(TAG, "Stream is written to the output, setting data source");
 	    				mediaPlayer.setDataSource(new FileInputStream(temp).getFD());
 	    				try {
@@ -143,7 +155,7 @@ public final class VimeoVideoPlayer {
 	    					Log.e(TAG, "error: " + ex.getMessage(), ex);
 	    				}
 	    				mediaPlayer.prepare();
-	    				Log.d(TAG, "Starting player!");
+	    				Log.d(TAG, "Starting player! Duration: " + Utils.adaptDuration(mediaPlayer.getDuration() / 1000));
 	    				mediaPlayer.start();
 					} catch (IllegalArgumentException e) {
 						// TODO Auto-generated catch block
@@ -160,6 +172,7 @@ public final class VimeoVideoPlayer {
 					}
     			}
     		};
+    		//updater.run();
     		//handler.post(updater);
     		new Thread(updater).start();
     		
@@ -178,6 +191,8 @@ public final class VimeoVideoPlayer {
         cacheFile = Utils.newTempFile(context, "v_videoCache", ".dat");
         FileOutputStream out = new FileOutputStream(cacheFile);
         
+        Log.d(TAG, "Starting to read stream into the buffer");
+        
         byte byteBuf[] = new byte[CHUNK_BUFFER_SIZE];
         int bytesRead = 0;
         kBytesRead = 0;
@@ -189,7 +204,7 @@ public final class VimeoVideoPlayer {
             bytesRead += streamGave;
             kBytesRead = bytesRead >> 10;
         	Log.d(TAG, "new chunk is written, may be pass it to player?");            
-            desideIfPassBufferToPlayer();
+            decideIfPassBufferToPlayer();
         } while (true);
         
         whenStreamFinished();
@@ -201,7 +216,7 @@ public final class VimeoVideoPlayer {
         
     }
 
-    private void desideIfPassBufferToPlayer() {
+    private void decideIfPassBufferToPlayer() {
 		Runnable updater = new Runnable() {
 			public void run() {
 				if (mediaPlayer == null) {
@@ -245,15 +260,17 @@ public final class VimeoVideoPlayer {
 			
 			Log.d(TAG, "cache file moved to buffered");
 
-			Log.e(TAG, bufferedFile.length() + "");
-			Log.e(TAG, bufferedFile.getAbsolutePath());
+			Log.d(TAG, bufferedFile.length() + "");
+			Log.d(TAG, bufferedFile.getAbsolutePath());
 
 			mediaPlayer = new MediaPlayer();
 			if (mediaPlayer == null) throw new IllegalStateException("Failed to create media player");
 			mediaPlayer.setDataSource(new FileInputStream(bufferedFile).getFD());
 			mediaPlayer.setDisplay(canvas);
 			//mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			
 			mediaPlayer.prepare();
+            Log.d(TAG, "Starting player! Duration: " + Utils.adaptDuration(mediaPlayer.getDuration() / 1000));
 			mediaPlayer.start();
 			
 			Log.d(TAG, "player started ok");
@@ -274,7 +291,7 @@ public final class VimeoVideoPlayer {
 			boolean wasPlaying = mediaPlayer.isPlaying();
 			int curPosition = mediaPlayer.getCurrentPosition();
 			mediaPlayer.pause();
-			mediaPlayer.release();
+			//mediaPlayer.release();
 
 			File bufferedFile = new File(context.getCacheDir(), "playingMedia"
 					+ (counter++) + ".dat");

@@ -3,7 +3,7 @@
              android:layout_width="fill_parent"
              android:layout_height="fill_parent"
              android:background="@drawable/welcome">
-     <SurfaceView android:id="@+id/surface"
-                  android:layout_width="fill_parent"
-                  android:layout_height="fill_parent" />
+     <VideoView android:id="@+id/surface"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" />
 </FrameLayout>
