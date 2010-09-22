@@ -55,7 +55,8 @@ public final class VimeoVideoPlayer {
     private File downloadingMedia;    
     private static File cacheDir;
     
-    private static int chunk = 0;    
+    private static int bytesRead = 0;
+    private static int chunk = 0; 
 
     private VimeoVideoPlayer() { 
         this.handler = new Handler();
@@ -148,7 +149,7 @@ public final class VimeoVideoPlayer {
         Log.d(TAG, "Starting to read stream into the cache");
         
         byte byteBuf[] = new byte[TRANSFER_CHUNK_SIZE];
-        int bytesRead = 0;
+        bytesRead = 0;
         
         do {
             int streamGave = videoStream.read(byteBuf);
@@ -156,15 +157,24 @@ public final class VimeoVideoPlayer {
             out.write(byteBuf, 0, streamGave);
             bytesRead += streamGave;
             
-            if (mediaPlayer == null) { // if not created and first chunk is ready, start
-                if (bytesRead >= MIN_FIRST_CHUNK_SIZE) {
-                    startMediaPlayer();
+            Runnable updater = new Runnable() {
+
+                @Override
+                public void run() {
+                    if (mediaPlayer == null) { // if not created and first chunk is ready, start
+                        if (bytesRead >= MIN_FIRST_CHUNK_SIZE) {
+                            startMediaPlayer();
+                        }
+                    } else if (mediaPlayer.getDuration() -
+                               mediaPlayer.getCurrentPosition() <= 1000) {
+                         // player reached the last seconds of current chunk
+                        passNewChunkToPlayer();
+                    }
                 }
-            } else if (mediaPlayer.getDuration() -
-                       mediaPlayer.getCurrentPosition() <= 1000) {
-                 // player reached the last seconds of current chunk
-                passNewChunkToPlayer();
-            }
+                
+            };
+            
+            handler.post(updater);
         } while (true);
         
         videoStream.close();
@@ -172,6 +182,7 @@ public final class VimeoVideoPlayer {
 
 	private void startMediaPlayer() {
 		try {
+		    
 			Log.d(TAG, "Starting new player");
 			
 			final File firstBuffer = File.createTempFile(CACHE_FILES_PREFIX + (chunk++), ".dat", cacheDir);
@@ -189,38 +200,26 @@ public final class VimeoVideoPlayer {
 			Log.d(TAG, "buffer size:" + firstBuffer.length());
 			Log.d(TAG, "buffering to: " + firstBuffer.getAbsolutePath());
 
-			// Run on UI thread
-			final Runnable startPlayer = new Runnable() {
-
-                @Override
-                public void run() {
-                    try {
-                        mediaPlayer = createMediaPlayer(firstBuffer);
+			mediaPlayer = createMediaPlayer(firstBuffer);
                     
-                        mediaPlayer.setDisplay(canvas);                    
-                        // We have pre-loaded enough content
-                        mediaPlayer.prepare();
-                        mediaPlayer.start();
-                        Log.d(TAG, "Starting player! Duration: " + Utils.adaptDuration(mediaPlayer.getDuration() / 1000));
-                        
-                        Log.d(TAG, "Player started ok");
-                    } catch (IOException ioe) {
-                        ioe.printStackTrace();
-                    }
-                }
-			    
-			};
-			
-			handler.post(startPlayer);
+            mediaPlayer.setDisplay(canvas);                    
+            // We have pre-loaded enough content
+            mediaPlayer.prepare();
+            Log.d(TAG, "Starting player! Duration: " + Utils.adaptDuration(mediaPlayer.getDuration() / 1000));            
+            mediaPlayer.start();
+            
 		} catch (IOException ioe) {
+		    
 			Log.e(TAG, "Error initializing the MediaPlayer.", ioe);
 			informException(ioe);
 			return;
+			
 		}
 	}
 	
 	private void passNewChunkToPlayer() {
 		try {
+		    
             // First determine if we need to restart the player after transferring data...e.g. perhaps the user pressed pause
             final boolean wasPlaying = mediaPlayer.isPlaying();
             final int curPosition = mediaPlayer.getCurrentPosition();
@@ -234,41 +233,27 @@ public final class VimeoVideoPlayer {
             currentBuffer.deleteOnExit();   
             Utils.copyFile(downloadingMedia, currentBuffer);
 
-            final Runnable reloadPlayer = new Runnable() {
+            // Pause the current player now as we are about to create and start a new one.  So far (Android v1.5),
+            // this always happens so quickly that the user never realized we've stopped the player and started a new one
+            mediaPlayer.pause();
 
-                @Override
-                public void run() {
-                    try {                    
-                        // Pause the current player now as we are about to create and start a new one.  So far (Android v1.5),
-                        // this always happens so quickly that the user never realized we've stopped the player and started a new one
-                        mediaPlayer.pause();
-    
-                        // Create a new MediaPlayer rather than try to re-prepare the prior one.
-                        mediaPlayer = createMediaPlayer(currentBuffer);
-                        mediaPlayer.setDisplay(canvas);
-                        mediaPlayer.prepare();
-    
-                        mediaPlayer.seekTo(curPosition);
-                        
-                        //  Restart if at end of prior buffered content or mediaPlayer was previously playing.  
-                        //  NOTE:  We test for < 1second of data because the media player can stop when there is still
-                        //  a few milliseconds of data left to play
-                        boolean atEndOfFile = mediaPlayer.getDuration() - mediaPlayer.getCurrentPosition() <= 1000;
-                        if (wasPlaying || atEndOfFile){
-                            mediaPlayer.start();
-                        }
-    
-                        // Lastly delete the previously playing buffered File as it's no longer needed.
-                        previousBuffer.delete();
-                    } catch (IOException ioe) {
-                        informException(ioe);
-                    }                    
-                }
-                
-            };
+            // Create a new MediaPlayer rather than try to re-prepare the prior one.
+            mediaPlayer = createMediaPlayer(currentBuffer);
+            mediaPlayer.setDisplay(canvas);
+            mediaPlayer.prepare();
+
+            mediaPlayer.seekTo(curPosition);
             
-            handler.post(reloadPlayer);
-            
+            //  Restart if at end of prior buffered content or mediaPlayer was previously playing.  
+            //  NOTE:  We test for < 1second of data because the media player can stop when there is still
+            //  a few milliseconds of data left to play
+            boolean atEndOfFile = mediaPlayer.getDuration() - mediaPlayer.getCurrentPosition() <= 1000;
+            if (wasPlaying || atEndOfFile){
+                mediaPlayer.start();
+            }
+
+            // Lastly delete the previously playing buffered File as it's no longer needed.
+            previousBuffer.delete();
 		} catch (IOException ioe) {
 			Log.e(TAG, "Error updating to newly loaded content.", ioe);
 			informException(ioe);
