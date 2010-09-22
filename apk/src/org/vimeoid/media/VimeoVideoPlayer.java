@@ -3,6 +3,8 @@
  */
 package org.vimeoid.media;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -47,16 +49,16 @@ public final class VimeoVideoPlayer {
     private static final int MIN_FIRST_CHUNK_SIZE = 256 << 10; // 256 kBytes  
     private static final int TRANSFER_CHUNK_SIZE =  16 << 10; // 16 kBytes
      
-    //private Context context;
+    private Context context;
     private MediaPlayer mediaPlayer;
     private SurfaceHolder canvas;
     
     private final Handler handler; // UI Handler
-    private File downloadingMedia;    
+    private File downloadingMediaFile;    
     private static File cacheDir;
     
-    private static int bytesRead = 0;
-    private static int chunk = 0; 
+    private static int totalKbRead = 0;
+    private static int counter = 0; 
 
     private VimeoVideoPlayer() { 
         this.handler = new Handler();
@@ -73,6 +75,7 @@ public final class VimeoVideoPlayer {
     }
     
     private VimeoVideoPlayer withContext(Context context) {
+        this.context = context;
         ensureCleanedUp(context);
         return this;
     }
@@ -89,39 +92,129 @@ public final class VimeoVideoPlayer {
     public void startPlaying(final SurfaceHolder canvas, final long videoId) {
     	
     	this.canvas = canvas;
-    	//whereToProject.getHolder().setFixedSize(400, 300);
     	
-        Runnable r = new Runnable() {
-
-            @Override
-            public void run() {
-                try {            
-                	Log.d(TAG, "Let's get stream");
-                    final InputStream videoStream = VimeoVideoStreamer.getVideoStream(videoId);
-                    if (videoStream == null) {
-                        Log.e(TAG, "The returned video stream is null, so I will not play anything :(");
-                        return;
-                    }
-                    Log.d(TAG, "Starting to manage the stream");
-                    weGotStream(videoStream);
-                } catch (VideoLinkRequestException vlre) {
-                    informException(vlre);
-                } catch (IOException ioe) {
-                    informException(ioe);
-                }
-            }
-            
-        };
+    	try {
+            startStreaming(VimeoVideoStreamer.getVideoStream(videoId));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (VideoLinkRequestException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    
+    public void startStreaming(final InputStream videoStream) throws IOException {
+        
+        Runnable r = new Runnable() {   
+            public void run() {   
+                try {   
+                    downloadAudioIncrement(videoStream);
+                } catch (IOException e) {
+                    Log.e(getClass().getName(), "Unable to initialize the MediaPlayer for fileUrl=");
+                    return;
+                }   
+            }   
+        };   
         new Thread(r).start();
     }
     
-    private static MediaPlayer createMediaPlayer(File mediaFile) throws IOException {
+    /**  
+     * Download the url stream to a temporary location and then call the setDataSource  
+     * for that local file
+     */  
+    public void downloadAudioIncrement(InputStream videoStream) throws IOException {
+        
+        InputStream stream = videoStream;
+        if (stream == null) {
+            Log.e(getClass().getName(), "Unable to create InputStream for mediaUrl:" );
+        }
+        
+        downloadingMediaFile = new File(context.getCacheDir(),"downloadingMedia.dat");
+        
+        // Just in case a prior deletion failed because our code crashed or something, we also delete any previously 
+        // downloaded file to ensure we start fresh.  If you use this code, always delete 
+        // no longer used downloads else you'll quickly fill up your hard disk memory.  Of course, you can also 
+        // store any previously downloaded file in a separate data cache for instant replay if you wanted as well.
+        if (downloadingMediaFile.exists()) {
+            downloadingMediaFile.delete();
+        }
+
+        FileOutputStream out = new FileOutputStream(downloadingMediaFile);   
+        byte buf[] = new byte[16384];
+        int totalBytesRead = 0, incrementalBytesRead = 0;
+        do {
+            int numread = stream.read(buf);   
+            if (numread <= 0)   
+                break;   
+            out.write(buf, 0, numread);
+            totalBytesRead += numread;
+            incrementalBytesRead += numread;
+            totalKbRead = totalBytesRead/1000;
+            
+            testMediaBuffer();
+        } while (true);   
+    }  
+
+    /**
+     * Test whether we need to transfer buffered data to the MediaPlayer.
+     * Interacting with MediaPlayer on non-main UI thread can causes crashes to so perform this using a Handler.
+     */  
+    private void  testMediaBuffer() {
+        Runnable updater = new Runnable() {
+            public void run() {
+                if (mediaPlayer == null) {
+                    //  Only create the MediaPlayer once we have the minimum buffered data
+                    if ( totalKbRead >= MIN_FIRST_CHUNK_SIZE) {
+                        try {
+                            startMediaPlayer();
+                        } catch (Exception e) {
+                            Log.e(getClass().getName(), "Error copying buffered conent.", e);               
+                        }
+                    }
+                } else if ( mediaPlayer.getDuration() - mediaPlayer.getCurrentPosition() <= 1000 ){ 
+                    //  NOTE:  The media player has stopped at the end so transfer any existing buffered data
+                    //  We test for < 1second of data because the media player can stop when there is still
+                    //  a few milliseconds of data left to play
+                    transferBufferToMediaPlayer();
+                }
+            }
+        };
+        handler.post(updater);
+    }
+    
+    private void startMediaPlayer() {
+        try {   
+            File bufferedFile = new File(context.getCacheDir(),"playingMedia" + (counter++) + ".dat");
+            
+            // We double buffer the data to avoid potential read/write errors that could happen if the 
+            // download thread attempted to write at the same time the MediaPlayer was trying to read.
+            // For example, we can't guarantee that the MediaPlayer won't open a file for playing and leave it locked while 
+            // the media is playing.  This would permanently deadlock the file download.  To avoid such a deadloack, 
+            // we move the currently loaded data to a temporary buffer file that we start playing while the remaining 
+            // data downloads.  
+            moveFile(downloadingMediaFile,bufferedFile);
+            
+            Log.e(getClass().getName(),"Buffered File path: " + bufferedFile.getAbsolutePath());
+            Log.e(getClass().getName(),"Buffered File length: " + bufferedFile.length()+"");
+            
+            mediaPlayer = createMediaPlayer(bufferedFile);
+            mediaPlayer.setDisplay(canvas);
+            
+            // We have pre-loaded enough content and started the MediaPlayer so update the buttons & progress meters.
+            mediaPlayer.start();
+        } catch (IOException e) {
+            Log.e(getClass().getName(), "Error initializing the MediaPlayer.", e);
+            return;
+        }   
+    }
+    
+    private MediaPlayer createMediaPlayer(File mediaFile)
+    throws IOException {
         MediaPlayer mPlayer = new MediaPlayer();
-        if (mPlayer == null) throw new IllegalStateException("Failed to create media player");
         mPlayer.setOnErrorListener(
                 new MediaPlayer.OnErrorListener() {
                     public boolean onError(MediaPlayer mp, int what, int extra) {
-                        Log.e(TAG, "Error in MediaPlayer: (" + what +") with extra (" +extra +")" );
+                        Log.e(getClass().getName(), "Error in MediaPlayer: (" + what +") with extra (" +extra +")" );
                         return false;
                     }
                 });
@@ -129,119 +222,41 @@ public final class VimeoVideoPlayer {
         //  It appears that for security/permission reasons, it is better to pass a FileDescriptor rather than a direct path to the File.
         //  Also I have seen errors such as "PVMFErrNotSupported" and "Prepare failed.: status=0x1" if a file path String is passed to
         //  setDataSource().  So unless otherwise noted, we use a FileDescriptor here.
-        FileInputStream fis = new FileInputStream(mediaFile);      
+        FileInputStream fis = new FileInputStream(mediaFile);
         mPlayer.setDataSource(fis.getFD());
-        return mPlayer;     
+        mPlayer.prepare();
+        return mPlayer;
     }
     
-    private void weGotStream(InputStream videoStream) throws IOException {
-    	
-    	Log.d(TAG, "Creating cache file");
-    	
-        downloadingMedia = File.createTempFile(STREAM_FILE_NAME, ".dat", cacheDir);
-        
-        if (downloadingMedia.exists()) {
-            downloadingMedia.delete();
-        }
-        
-        FileOutputStream out = new FileOutputStream(downloadingMedia);
-        
-        Log.d(TAG, "Starting to read stream into the cache");
-        
-        byte byteBuf[] = new byte[TRANSFER_CHUNK_SIZE];
-        bytesRead = 0;
-        
-        do {
-            int streamGave = videoStream.read(byteBuf);
-            if (streamGave <= 0) break;
-            out.write(byteBuf, 0, streamGave);
-            bytesRead += streamGave;
-            
-            Runnable updater = new Runnable() {
-
-                @Override
-                public void run() {
-                    if (mediaPlayer == null) { // if not created and first chunk is ready, start
-                        if (bytesRead >= MIN_FIRST_CHUNK_SIZE) {
-                            startMediaPlayer();
-                        }
-                    } else if (mediaPlayer.getDuration() -
-                               mediaPlayer.getCurrentPosition() <= 1000) {
-                         // player reached the last seconds of current chunk
-                        passNewChunkToPlayer();
-                    }
-                }
-                
-            };
-            
-            handler.post(updater);
-        } while (true);
-        
-        videoStream.close();
-    }
-
-	private void startMediaPlayer() {
-		try {
-		    
-			Log.d(TAG, "Starting new player");
-			
-			final File firstBuffer = File.createTempFile(CACHE_FILES_PREFIX + (chunk++), ".dat", cacheDir);
-			
-            // We double buffer the data to avoid potential read/write errors that could happen if the 
-            // download thread attempted to write at the same time the MediaPlayer was trying to read.
-            // For example, we can't guarantee that the MediaPlayer won't open a file for playing and leave it locked while 
-            // the media is playing.  This would permanently deadlock the file download.  To avoid such a deadloack, 
-            // we move the currently loaded data to a temporary buffer file that we start playing while the remaining 
-            // data downloads.  			
-			Utils.copyFile(downloadingMedia, firstBuffer);
-			
-			Log.d(TAG, "Downloading file is copied to first buffer ok ");
-
-			Log.d(TAG, "buffer size:" + firstBuffer.length());
-			Log.d(TAG, "buffering to: " + firstBuffer.getAbsolutePath());
-
-			mediaPlayer = createMediaPlayer(firstBuffer);
-                    
-            mediaPlayer.setDisplay(canvas);                    
-            // We have pre-loaded enough content
-            mediaPlayer.prepare();
-            Log.d(TAG, "Starting player! Duration: " + Utils.adaptDuration(mediaPlayer.getDuration() / 1000));            
-            mediaPlayer.start();
-            
-		} catch (IOException ioe) {
-		    
-			Log.e(TAG, "Error initializing the MediaPlayer.", ioe);
-			informException(ioe);
-			return;
-			
-		}
-	}
-	
-	private void passNewChunkToPlayer() {
-		try {
-		    
+    /**
+     * Transfer buffered data to the MediaPlayer.
+     * NOTE: Interacting with a MediaPlayer on a non-main UI thread can cause thread-lock and crashes so 
+     * this method should always be called using a Handler.
+     */  
+    private void transferBufferToMediaPlayer() {
+        try {
             // First determine if we need to restart the player after transferring data...e.g. perhaps the user pressed pause
-            final boolean wasPlaying = mediaPlayer.isPlaying();
-            final int curPosition = mediaPlayer.getCurrentPosition();
+            boolean wasPlaying = mediaPlayer.isPlaying();
+            int curPosition = mediaPlayer.getCurrentPosition();
             
             // Copy the currently downloaded content to a new buffered File.  Store the old File for deleting later. 
-            final File previousBuffer = File.createTempFile(CACHE_FILES_PREFIX + chunk, ".dat", cacheDir);
-            final File currentBuffer = File.createTempFile(CACHE_FILES_PREFIX + (chunk++), ".dat", cacheDir);
-            
+            File oldBufferedFile = new File(context.getCacheDir(),"playingMedia" + counter + ".dat");
+            File bufferedFile = new File(context.getCacheDir(),"playingMedia" + (counter++) + ".dat");
+
             //  This may be the last buffered File so ask that it be delete on exit.  If it's already deleted, then this won't mean anything.  If you want to 
             // keep and track fully downloaded files for later use, write caching code and please send me a copy.
-            currentBuffer.deleteOnExit();   
-            Utils.copyFile(downloadingMedia, currentBuffer);
+            bufferedFile.deleteOnExit();   
+            moveFile(downloadingMediaFile,bufferedFile);
 
             // Pause the current player now as we are about to create and start a new one.  So far (Android v1.5),
             // this always happens so quickly that the user never realized we've stopped the player and started a new one
             mediaPlayer.pause();
 
+            //mediaPlayer.release();
+            mediaPlayer.setDataSource(new FileInputStream(bufferedFile).getFD());
             // Create a new MediaPlayer rather than try to re-prepare the prior one.
-            mediaPlayer = createMediaPlayer(currentBuffer);
-            mediaPlayer.setDisplay(canvas);
-            mediaPlayer.prepare();
-
+            //mediaPlayer = createMediaPlayer(bufferedFile);
+            //mediaPlayer.setDisplay(canvas);            
             mediaPlayer.seekTo(curPosition);
             
             //  Restart if at end of prior buffered content or mediaPlayer was previously playing.  
@@ -253,90 +268,42 @@ public final class VimeoVideoPlayer {
             }
 
             // Lastly delete the previously playing buffered File as it's no longer needed.
-            previousBuffer.delete();
-		} catch (IOException ioe) {
-			Log.e(TAG, "Error updating to newly loaded content.", ioe);
-			informException(ioe);
-		}
-	}
-	
-    private void informException(Exception exception) {
-        //Dialogs.makeToast(context, exception.getLocalizedMessage());
-        Log.e(TAG, exception.getLocalizedMessage());
-        exception.printStackTrace();
+            oldBufferedFile.delete();
+            
+        }catch (Exception e) {
+            Log.e(getClass().getName(), "Error updating to newly loaded content.", e);                  
+        }
     }
     
-    /* try {            
-        Log.d(TAG, "Let's get stream");
-        final InputStream videoStream = VimeoVideoStreamer.getVideoStream(videoId);
-        if (videoStream == null) {
-            Log.e(TAG, "The returned video stream is null, so I will not play anything :(");
-            return;
-        }
-        
-        Log.d(TAG, "Creating player");
-        mediaPlayer = new MediaPlayer();
-        if (mediaPlayer == null) throw new IllegalStateException("Failed to create media player");
-        mediaPlayer.setDisplay(canvas);
-        mediaPlayer.setAudioStreamType(2);
-        mediaPlayer.setOnErrorListener(new OnErrorListener() {
-            
-            @Override
-            public boolean onError(MediaPlayer mp, int what, int extra) {
-                Log.e(TAG, "Media player error: " + what + "/" + extra);
-                return false;
-            }
-        });
-        
-        Runnable updater = new Runnable() {
-            public void run() {
+    /**
+     *  Move the file in oldLocation to newLocation.
+     */
+    public void moveFile(File   oldLocation, File   newLocation)
+    throws IOException {
+
+        if ( oldLocation.exists( )) {
+            BufferedInputStream  reader = new BufferedInputStream( new FileInputStream(oldLocation) );
+            BufferedOutputStream  writer = new BufferedOutputStream( new FileOutputStream(newLocation, false));
+            try {
+                byte[]  buff = new byte[8192];
+                int numChars;
+                while ( (numChars = reader.read(  buff, 0, buff.length ) ) != -1) {
+                    writer.write( buff, 0, numChars );
+                }
+            } catch( IOException ex ) {
+                throw new IOException("IOException when transferring " + oldLocation.getPath() + " to " + newLocation.getPath());
+            } finally {
                 try {
-                    Log.d(TAG, "Starting the media thread");
-                    File temp = Utils.newTempFile(context, "mediaplayertmp", "dat");
-                    temp.deleteOnExit();
-                    //String tempPath = temp.getAbsolutePath();
-                    FileOutputStream out = new FileOutputStream(temp);
-                    Log.d(TAG, "Created stream to temp file");
-                    byte buf[] = new byte[CHUNK_BUFFER_SIZE];
-                    Log.d(TAG, "Now we will read video stream");
-                    do {
-                        int numread = videoStream.read(buf);
-                        if (numread <= 0) break;
-                        out.write(buf, 0, numread);
-                    } while (true);
-                    //out.close();
-                    Log.d(TAG, "Stream is written to the output, setting data source");
-                    mediaPlayer.setDataSource(new FileInputStream(temp).getFD());
-                    try {
-                        videoStream.close();
-                        Log.d(TAG, "Video stream closed");
-                    } catch (IOException ex) {
-                        Log.e(TAG, "error: " + ex.getMessage(), ex);
+                    if ( reader != null ){                      
+                        writer.close();
+                        reader.close();
                     }
-                    mediaPlayer.prepare();
-                    Log.d(TAG, "Starting player! Duration: " + Utils.adaptDuration(mediaPlayer.getDuration() / 1000));
-                    mediaPlayer.start();
-                } catch (IllegalArgumentException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (SecurityException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IllegalStateException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                } catch( IOException ex ){
+                    Log.e(getClass().getName(),"Error closing files when transferring " + oldLocation.getPath() + " to " + newLocation.getPath() ); 
                 }
             }
-        };
-        //updater.run();
-        //handler.post(updater);
-        new Thread(updater).start();
-        
-    } catch (VideoLinkRequestException vlre) {
-        informException(vlre);
-    } */    
-    
+        } else {
+            throw new IOException("Old location does not exist when transferring " + oldLocation.getPath() + " to " + newLocation.getPath() );
+        }
+    }    
 }

@@ -34,8 +34,8 @@ public class Player extends Activity {
 		                VimeoVideoPlayer.use(Player.this).startPlaying(surfaceView.getHolder(), videoId);		                
 		            }
 		        };
-		playing.run();
-		//runOnUiThread(playing);
+		//playing.run();
+		runOnUiThread(playing);
 		//new Handler().post(playing);
 		
 		Log.d(TAG, "We're back at the Player activity  " + videoId);
