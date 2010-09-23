@@ -13,5 +13,7 @@ public class VimeoVideoStreamer {
 		// to share this method with developers :(. 
 		return null;
 	}
+	
+	public static long getReceivedStreamLength() { }
 
 }

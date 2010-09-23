@@ -29,14 +29,7 @@ public class Player extends Activity {
 		
 		Log.d(TAG, "Running video player for video " + videoId);
 		
-		final Runnable playing = new Runnable() {
-		            public void run() {
-		                VimeoVideoPlayer.use(Player.this).startPlaying(surfaceView.getHolder(), videoId);		                
-		            }
-		        };
-		//playing.run();
-		runOnUiThread(playing);
-		//new Handler().post(playing);
+		VimeoVideoPlayer.use(Player.this).startPlaying(surfaceView.getHolder(), videoId);		                
 		
 		Log.d(TAG, "We're back at the Player activity  " + videoId);
 	}

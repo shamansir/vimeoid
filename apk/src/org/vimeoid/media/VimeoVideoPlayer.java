@@ -54,7 +54,6 @@ public final class VimeoVideoPlayer {
     private static MediaPlayer mediaPlayer;
     //private SurfaceHolder canvas;
     
-    @SuppressWarnings("unused")
 	private final Handler handler; // UI Handler
     private static File cacheDir;
     
@@ -101,6 +100,8 @@ public final class VimeoVideoPlayer {
     			 return;
     		 }
     		 
+    		 ensureWeHaveEnoughSpace(VimeoVideoStreamer.getReceivedStreamLength());
+    		 
     		 Log.d(TAG, "Creating player");
     		 mediaPlayer = new MediaPlayer();
     		 if (mediaPlayer == null) throw new IllegalStateException("Failed to create media player");
@@ -116,9 +117,10 @@ public final class VimeoVideoPlayer {
     			 	}
     		 });
     		 
-    		 Runnable updater = new Runnable() {
+    		 Runnable saveAndRun = new Runnable() {
     			 public void run() {
     				 try {
+    					 
     					 Log.d(TAG, "Starting the media thread");
     					 File streamFile = File.createTempFile(STREAM_FILE_NAME, ".dat", cacheDir);
     					 streamFile.deleteOnExit();
@@ -144,9 +146,8 @@ public final class VimeoVideoPlayer {
     						 Log.e(TAG, "error: " + ex.getMessage(), ex);
     					 }
     					 
-    					 mediaPlayer.prepare();
-    					 Log.d(TAG, "Starting player! Duration: " + Utils.adaptDuration(mediaPlayer.getDuration() / 1000));
-    					 mediaPlayer.start();
+    					 letPlayerStart();
+    					 
     				 } catch (IllegalArgumentException iae) {
     					 informException(iae);
     				 } catch (SecurityException se) {
@@ -160,17 +161,40 @@ public final class VimeoVideoPlayer {
     		 
     		 };
     		 
-    	     new Thread(updater).start();    		 
+    	     new Thread(saveAndRun).start();    		 
     	} catch (VideoLinkRequestException vlre) {
     		 informException(vlre); 
         }
     	
+    }
+    
+	private void letPlayerStart() {
+		 final Runnable playThread = new Runnable() {
+			@Override
+			public void run() {
+				try {
+					mediaPlayer.prepare();
+				} catch (IllegalStateException ise) {
+					informException(ise);
+				} catch (IOException ioe) {
+					informException(ioe);
+				}
+				Log.d(TAG, "Starting player! Duration: " + Utils.adaptDuration(mediaPlayer.getDuration() / 1000));
+				mediaPlayer.start();
+				
+			}
+		 };
+		 handler.post(playThread);
     }
     	
  	private void informException(Exception exception) {
  		 //Dialogs.makeToast(context, exception.getLocalizedMessage());
  	     Log.e(TAG, exception.getLocalizedMessage());
  	     exception.printStackTrace();
- 	}    	
+ 	}
+ 	
+    private void ensureWeHaveEnoughSpace(long receivedStreamLength) {
+		// TODO: implement (~50kbps)
+	}
 
 }
