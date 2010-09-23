@@ -90,7 +90,7 @@ public final class VimeoVideoPlayer {
         }
     }
     
-    public void startPlaying(final SurfaceHolder canvas, final long videoId) {
+    public void startPlaying(final SurfaceHolder canvas, final long videoId) throws NoSpaceForVideoCacheException {
     	try {
     		 Log.d(TAG, "Let's get the stream");
     		 
@@ -100,7 +100,7 @@ public final class VimeoVideoPlayer {
     			 return;
     		 }
     		 
-    		 ensureWeHaveEnoughSpace(VimeoVideoStreamer.getReceivedStreamLength());
+    		 ensureWeHaveEnoughSpace(VimeoVideoStreamer.getLastContentLength());
     		 
     		 Log.d(TAG, "Creating player");
     		 mediaPlayer = new MediaPlayer();
@@ -193,8 +193,31 @@ public final class VimeoVideoPlayer {
  	     exception.printStackTrace();
  	}
  	
-    private void ensureWeHaveEnoughSpace(long receivedStreamLength) {
-		// TODO: implement (~50kbps)
+    private void ensureWeHaveEnoughSpace(long expectedSpace) throws NoSpaceForVideoCacheException {
+        final long spaceLeft = Utils.computeFreeSpace();
+		Log.d(TAG, "Checking free space | required " + expectedSpace + " : left " + spaceLeft);
+		if (expectedSpace > (spaceLeft * 0.8)) throw new NoSpaceForVideoCacheException(expectedSpace, spaceLeft);
 	}
+    
+    @SuppressWarnings("serial")
+    public static final class NoSpaceForVideoCacheException extends IOException {
+        
+        private final long requiredSpace;
+        private final long actualSpace;
+        
+        public NoSpaceForVideoCacheException(long requiredSpace, long actualSpace) {
+            this.requiredSpace = requiredSpace;
+            this.actualSpace = actualSpace;
+        }
+        
+        public long getRequiredSpace() {
+            return requiredSpace;
+        }
+        
+        public long getActualSpace() {
+            return actualSpace;
+        }        
+        
+    }
 
 }

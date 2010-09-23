@@ -8,6 +8,7 @@
     <string name="please_do_not_touch">Don\'t mess with me!</string>
     <string name="unknown_item">Unknown item</string>
     <string name="currently_not_supported">This action is not supported currently</string>
+    <string name="no_space_for_video_cache">There is no free space to make cache of this file. Required: {required}KB | Actual: {actual}KB </string>
     <!-- main menu -->
     <string name="refresh">Refresh</string>
     <string name="preferences">Preferences</string>

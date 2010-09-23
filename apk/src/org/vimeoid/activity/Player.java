@@ -2,7 +2,10 @@ package org.vimeoid.activity;
 
 import org.vimeoid.R;
 import org.vimeoid.media.VimeoVideoPlayer;
+import org.vimeoid.media.VimeoVideoPlayer.NoSpaceForVideoCacheException;
+import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
+import org.vimeoid.util.Utils;
 
 import android.app.Activity;
 import android.graphics.PixelFormat;
@@ -29,9 +32,14 @@ public class Player extends Activity {
 		
 		Log.d(TAG, "Running video player for video " + videoId);
 		
-		VimeoVideoPlayer.use(Player.this).startPlaying(surfaceView.getHolder(), videoId);		                
-		
-		Log.d(TAG, "We're back at the Player activity  " + videoId);
+		try {
+            VimeoVideoPlayer.use(Player.this).startPlaying(surfaceView.getHolder(), videoId);
+        } catch (NoSpaceForVideoCacheException nsfvce) {
+            Dialogs.makeLongToast(this, Utils.format(getString(R.string.no_space_for_video_cache), 
+                                                     "required", String.valueOf(nsfvce.getRequiredSpace() >> 10),
+                                                     "actual", String.valueOf(nsfvce.getActualSpace() >> 10)));
+        }		                
+
 	}
 	
 	@Override

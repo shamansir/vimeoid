@@ -22,12 +22,18 @@ import android.widget.Toast;
  */
 public class Dialogs {
     
-    public static final int TOAST_KEEPS_HOT = 40000;    
+    // public static final int TOAST_KEEPS_HOT = 60000;    
     
-    public static void makeToast(Context context, String description) {
-        Toast t = Toast.makeText(context, description, TOAST_KEEPS_HOT);
+    public static void makeLongToast(Context context, String description) {
+        Toast t = Toast.makeText(context, description, Toast.LENGTH_LONG);
         t.show();
     }
+    
+    public static void makeToast(Context context, String description) {
+        Toast t = Toast.makeText(context, description, Toast.LENGTH_SHORT);
+        t.show();
+    }
+    
     
     public static void makeExceptionToast(Context context, String description, Exception e) {
         makeToast(context, description + " " + e.getLocalizedMessage());

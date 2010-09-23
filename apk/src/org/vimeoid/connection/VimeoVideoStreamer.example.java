@@ -14,6 +14,6 @@ public class VimeoVideoStreamer {
 		return null;
 	}
 	
-	public static long getReceivedStreamLength() { }
+	public static long getLastContentLength() { return -1; }
 
 }

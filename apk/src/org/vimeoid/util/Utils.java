@@ -23,6 +23,8 @@ import org.vimeoid.R;
 import org.vimeoid.connection.ContentType;
 
 import android.content.Context;
+import android.os.Environment;
+import android.os.StatFs;
 import android.util.Log;
 
 /**
@@ -249,6 +251,12 @@ public class Utils {
 	
 	public static File newTempFile(Context context, String prefix, String suffix) throws IOException {
 		return File.createTempFile(prefix, suffix, getDefaultCacheDir(context));
+	}
+	
+	public static long computeFreeSpace() {
+	    File dataDir = Environment.getDataDirectory();
+        StatFs stat = new StatFs(dataDir.getPath());
+        return stat.getAvailableBlocks() * stat.getBlockSize();
 	}
 	
 }
