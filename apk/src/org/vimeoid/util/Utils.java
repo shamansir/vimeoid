@@ -197,7 +197,6 @@ public class Utils {
     }    
     
     public static void copyFile(File oldLocation, File newLocation) throws IOException {
-
         if ( oldLocation.exists( )) {
             BufferedInputStream  reader = new BufferedInputStream( new FileInputStream(oldLocation) );
             BufferedOutputStream  writer = new BufferedOutputStream( new FileOutputStream(newLocation, false));
@@ -228,13 +227,13 @@ public class Utils {
 		File preparedDir;
 		if (android.os.Environment.MEDIA_MOUNTED.equals(android.os.Environment.getExternalStorageState())) {
 			preparedDir = context.getDir(dirName /* + UUID.randomUUID().toString()*/, Context.MODE_PRIVATE);
-            Log.d(TAG, "Cache dir initialized at SD card " + preparedDir.getAbsolutePath());
+            Log.i(TAG, "Cache dir initialized at SD card " + preparedDir.getAbsolutePath());
         } else {
         	preparedDir = context.getCacheDir();
-            Log.d(TAG, "Cache dir initialized at phone storage " + preparedDir.getAbsolutePath());
+            Log.i(TAG, "Cache dir initialized at phone storage " + preparedDir.getAbsolutePath());
         }
         if(!preparedDir.exists()) {
-        	Log.d(TAG, "Cache dir not existed, creating");
+        	Log.i(TAG, "Cache dir not existed, creating");
         	preparedDir.mkdirs();
         }
         return preparedDir;

@@ -90,11 +90,13 @@ public final class VimeoVideoPlayer {
     }
     
     public static void ensureCleanedUp(Context context) {
-        for (File file: cacheDir.listFiles()) if (file.isFile() && file.exists()) file.delete();
         if (mediaPlayer != null) {
-        	mediaPlayer.release();
-        	mediaPlayer = null;
-        }
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+            Log.i(TAG, "Stopped previous instance and called reset for it");
+        }        
+        for (File file: cacheDir.listFiles()) if (file.isFile() && file.exists()) file.delete();
+        Log.i(TAG, "Cleared player cache");
     }
     
     public void startPlaying(final SurfaceHolder canvas, final long videoId) throws NoSpaceForVideoCacheException {
@@ -116,7 +118,7 @@ public final class VimeoVideoPlayer {
     		 ensureWeHaveEnoughSpace(cacheSize);
     		 
     		 Log.d(TAG, "Creating player");
-    		 mediaPlayer = new MediaPlayer();
+    		 if (mediaPlayer == null) mediaPlayer = new MediaPlayer();
     		 if (mediaPlayer == null) throw new IllegalStateException("Failed to create media player");
     		 
     		 mediaPlayer.setDisplay(canvas);

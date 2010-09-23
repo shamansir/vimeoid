@@ -53,20 +53,10 @@ public class VideosActivity extends ItemsListActivity<Video> {
         Video video = getItem(extractPosition(item));         
         
         switch (item.getItemId()) {
-            /* case R.id.menu_Play: {
-                    try {
-                        final Uri playUri = VimeoApi.getPlayUri(video);
-                        startActivity(new Intent(Intent.ACTION_VIEW).setData(playUri));
-                        return true;                            
-                    } catch (VideoLinkRequestException vlre) {  
-                        Dialogs.makeExceptionToast(this, "Getting Video URL exception", vlre);
-                        vlre.printStackTrace();
-                        return false;
-                    }
-            } */
+            case R.id.menu_Play: { Invoke.Guest.playVideo(this, video); } break;
             //case R.id.menu_watchLater: itemDescription = "WatchLater "; break;       
             // view comments, tags, ...
-            case R.id.menu_viewInfo: Invoke.Guest.playVideo(this, video); /* Invoke.Guest.selectVideo(this, video) */; break;
+            case R.id.menu_viewInfo: Invoke.Guest.selectVideo(this, video); break;
             case R.id.menu_viewAuthorInfo: Invoke.Guest.selectUploader(this, video); break;
             case R.id.menu_viewAuthorVideos: Invoke.Guest.selectVideosByUploader(this, video); break;
             default: Dialogs.makeToast(this, getString(R.string.unknown_item));

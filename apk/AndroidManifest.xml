@@ -118,7 +118,8 @@
         </activity>
         <!-- PLAYER -->
         <activity android:label="Player"
-                  android:name=".activity.Player" />
+                  android:name=".activity.Player"
+                  android:theme="@android:style/Theme.NoTitleBar" />
     </application>    
     <uses-sdk android:minSdkVersion="4" />
     <uses-permission android:name="android.permission.INTERNET" />

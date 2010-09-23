@@ -14,8 +14,12 @@
                   android:layout_marginLeft="5dp"
                   android:text="@string/caching_video" />
      </LinearLayout>
-     <VideoView android:id="@+id/surface"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:visibility="gone" />
+     <FrameLayout android:id="@+id/surfaceWrapper"
+                  android:layout_width="fill_parent"
+                  android:layout_height="fill_parent"
+                  android:visibility="gone">
+	     <VideoView android:id="@+id/surface"
+	                android:layout_width="fill_parent"
+	                android:layout_height="fill_parent" />
+	 </FrameLayout>
 </FrameLayout>
