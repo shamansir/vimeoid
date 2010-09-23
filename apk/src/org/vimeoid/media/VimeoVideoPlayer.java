@@ -49,6 +49,12 @@ public final class VimeoVideoPlayer {
     private static final int COPY_CHUNK_SIZE =  4 << 10; // 4 kBytes
     //private static final int TRANSFER_CHUNK_SIZE =  16 << 10; // 16 kBytes
      
+    public static interface CachingMonitor {
+        public void beforeStreamRequest();
+        public void whenStartedCaching(long cacheSize);
+        public void whenFinishedCaching();
+    }
+    
     @SuppressWarnings("unused")
 	private Context context;
     private static MediaPlayer mediaPlayer;
@@ -56,6 +62,7 @@ public final class VimeoVideoPlayer {
     
 	private final Handler handler; // UI Handler
     private static File cacheDir;
+    private static CachingMonitor cachingMonitor;
     
     private VimeoVideoPlayer() { 
         this.handler = new Handler();
@@ -94,13 +101,19 @@ public final class VimeoVideoPlayer {
     	try {
     		 Log.d(TAG, "Let's get the stream");
     		 
+    		 if (cachingMonitor != null) {
+    		     handler.post(new Runnable() { 
+    		         @Override public void run() { cachingMonitor.beforeStreamRequest(); } });
+    		 }
+    		 
     		 final InputStream videoStream = VimeoVideoStreamer.getVideoStream(videoId);
     		 if (videoStream == null) {
     			 Log.e(TAG, "The returned video stream is null, so I will not play anything :(");
     			 return;
     		 }
     		 
-    		 ensureWeHaveEnoughSpace(VimeoVideoStreamer.getLastContentLength());
+    		 final long cacheSize = VimeoVideoStreamer.getLastContentLength();
+    		 ensureWeHaveEnoughSpace(cacheSize);
     		 
     		 Log.d(TAG, "Creating player");
     		 mediaPlayer = new MediaPlayer();
@@ -121,6 +134,11 @@ public final class VimeoVideoPlayer {
     			 public void run() {
     				 try {
     					 
+    		             if (cachingMonitor != null) {
+    		                 handler.post(new Runnable() { 
+    		                     @Override public void run() { cachingMonitor.whenStartedCaching(cacheSize); } });
+    		             }
+    				     
     					 Log.d(TAG, "Starting the media thread");
     					 File streamFile = File.createTempFile(STREAM_FILE_NAME, ".dat", cacheDir);
     					 streamFile.deleteOnExit();
@@ -135,7 +153,7 @@ public final class VimeoVideoPlayer {
     						 if (numread <= 0) break;
     						 out.write(buf, 0, numread);
     					 } while (true);
-    		 
+    					 
     					 Log.d(TAG, "Stream is written to the file, setting data source");
     					 mediaPlayer.setDataSource(new FileInputStream(streamFile).getFD());
     		 
@@ -145,6 +163,11 @@ public final class VimeoVideoPlayer {
     					 } catch (IOException ex) {
     						 Log.e(TAG, "error: " + ex.getMessage(), ex);
     					 }
+    					 
+                         if (cachingMonitor != null) {
+                             handler.post(new Runnable() { 
+                                 @Override public void run() { cachingMonitor.whenFinishedCaching(); } });
+                         }    					 
     					 
     					 letPlayerStart();
     					 
@@ -186,6 +209,12 @@ public final class VimeoVideoPlayer {
 		 };
 		 handler.post(playThread);
     }
+	
+	public static CachingMonitor setCachingMonitor(CachingMonitor monitor) {
+	    CachingMonitor prevMonitor = cachingMonitor;
+	    cachingMonitor = monitor;
+	    return prevMonitor;
+	}
     	
  	private void informException(Exception exception) {
  		 //Dialogs.makeToast(context, exception.getLocalizedMessage());

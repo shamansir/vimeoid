@@ -58,7 +58,7 @@ public class VideoActivity extends ItemActivity<Video> {
         playerView.getSettings().setUserAgentString(VimeoApi.WEBVIEW_USER_AGENT);
         
         final long videoId = Long.valueOf(callInfo.subject);
-        final int playerHeight = getResources().getDimensionPixelSize((R.dimen.video_player_height));        
+        final int playerHeight = getResources().getDimensionPixelSize((R.dimen.vimeo_player_height));        
         
         playerView.setWebChromeClient(new WebChromeClient() {
             @Override public void onProgressChanged(WebView view, int newProgress) {
