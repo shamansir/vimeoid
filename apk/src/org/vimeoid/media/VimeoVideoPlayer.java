@@ -46,7 +46,7 @@ public final class VimeoVideoPlayer {
     public static final String CACHE_FILES_PREFIX = "___v_video_chunk";
     public static final String STREAM_FILE_NAME = "___v_video_streamed";
     
-    private static final int MIN_FIRST_CHUNK_SIZE = 256 << 10; // 256 kBytes  
+    private static final int MIN_FIRST_CHUNK_SIZE = 256/* << 10*/; // 256 kBytes  
     private static final int TRANSFER_CHUNK_SIZE =  16 << 10; // 16 kBytes
      
     private Context context;
@@ -129,7 +129,7 @@ public final class VimeoVideoPlayer {
             Log.e(getClass().getName(), "Unable to create InputStream for mediaUrl:" );
         }
         
-        downloadingMediaFile = new File(context.getCacheDir(),"downloadingMedia.dat");
+        downloadingMediaFile = new File(cacheDir, "downloadingMedia.dat");
         
         // Just in case a prior deletion failed because our code crashed or something, we also delete any previously 
         // downloaded file to ensure we start fresh.  If you use this code, always delete 
@@ -184,7 +184,7 @@ public final class VimeoVideoPlayer {
     
     private void startMediaPlayer() {
         try {   
-            File bufferedFile = new File(context.getCacheDir(),"playingMedia" + (counter++) + ".dat");
+            File bufferedFile = new File(cacheDir,"playingMedia" + (counter++) + ".dat");
             
             // We double buffer the data to avoid potential read/write errors that could happen if the 
             // download thread attempted to write at the same time the MediaPlayer was trying to read.
@@ -240,8 +240,8 @@ public final class VimeoVideoPlayer {
             int curPosition = mediaPlayer.getCurrentPosition();
             
             // Copy the currently downloaded content to a new buffered File.  Store the old File for deleting later. 
-            File oldBufferedFile = new File(context.getCacheDir(),"playingMedia" + counter + ".dat");
-            File bufferedFile = new File(context.getCacheDir(),"playingMedia" + (counter++) + ".dat");
+            File oldBufferedFile = new File(cacheDir,"playingMedia" + counter + ".dat");
+            File bufferedFile = new File(cacheDir,"playingMedia" + (counter++) + ".dat");
 
             //  This may be the last buffered File so ask that it be delete on exit.  If it's already deleted, then this won't mean anything.  If you want to 
             // keep and track fully downloaded files for later use, write caching code and please send me a copy.
