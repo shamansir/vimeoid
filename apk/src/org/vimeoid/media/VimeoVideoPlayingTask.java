@@ -63,19 +63,19 @@ public class VimeoVideoPlayingTask extends AsyncTask<Long, Long, FileInputStream
     	
     	Log.d(TAG, "Creating player");
     	
-		 if (mediaPlayer == null) mediaPlayer = new MediaPlayer();
-		 if (mediaPlayer == null) throw new IllegalStateException("Failed to create media player");
+		mediaPlayer = new MediaPlayer();
+		if (mediaPlayer == null) throw new IllegalStateException("Failed to create media player");
 		 
-		 mediaPlayer.setDisplay(canvas);
-		 mediaPlayer.setAudioStreamType(2);
+		mediaPlayer.setDisplay(canvas);		
+		mediaPlayer.setAudioStreamType(2);
 		 
-		 mediaPlayer.setOnErrorListener(new OnErrorListener() {
-			 @Override
-			 	public boolean onError(MediaPlayer mp, int what, int extra) {
-				 	Log.e(TAG, "Media player error: " + what + "/" + extra);
-				 	return false;
-			 	}
-		 });    	
+		mediaPlayer.setOnErrorListener(new OnErrorListener() {
+		    @Override
+		 	public boolean onError(MediaPlayer mp, int what, int extra) {
+			 	Log.e(TAG, "Media player error: " + what + "/" + extra);
+			 	return false;
+		 	}
+		});    	
     }
 
 	@Override
@@ -121,6 +121,9 @@ public class VimeoVideoPlayingTask extends AsyncTask<Long, Long, FileInputStream
 			onNoSpaceForVideoCache(nsfvce.getRequiredSpace(), nsfvce.getActualSpace());
 		} catch (VideoLinkRequestException vle) { onException(vle); }
 	      catch (IOException ioe) { onException(ioe); }
+	      /* finally {
+	    	  videoStream.close();
+	      } */
 	      
 	    return null;
 	}
@@ -128,8 +131,14 @@ public class VimeoVideoPlayingTask extends AsyncTask<Long, Long, FileInputStream
 	@Override
 	protected void onPostExecute(FileInputStream dataSource) {
 		try {
+			if (dataSource == null) {
+				Log.e(TAG, "No dataSource was passed to player");
+				return;
+			}
+			
 			mediaPlayer.setDataSource(dataSource.getFD());		
 			dataSource.close();
+			mediaPlayer.setScreenOnWhilePlaying(true);
 			mediaPlayer.prepare();
 			Log.i(TAG, "Starting player! Duration: " + Utils.adaptDuration(mediaPlayer.getDuration() / 1000));
 			mediaPlayer.start();
@@ -138,9 +147,9 @@ public class VimeoVideoPlayingTask extends AsyncTask<Long, Long, FileInputStream
 	
     public static void ensureCleanedUp() {
         if (mediaPlayer != null) {        	
-            if (mediaPlayer.isPlaying()) mediaPlayer.stop();
+            //if (mediaPlayer.isPlaying()) mediaPlayer.stop();
             mediaPlayer.reset();
-            Log.i(TAG, "Stopped previous instance and called reset for it");
+            Log.i(TAG, "Called reset for previous instance");
         }        
         for (File file: cacheDir.listFiles()) if (file.isFile() && file.exists()) file.delete();
         Log.i(TAG, "Cleared player cache");
@@ -158,11 +167,9 @@ public class VimeoVideoPlayingTask extends AsyncTask<Long, Long, FileInputStream
 		if (expectedSpace > (spaceLeft * 0.8)) throw new NoSpaceForVideoCacheException(expectedSpace, spaceLeft);
 	}
     
-	protected void onException(Exception e) {
-		informException(e);
-	}
+	protected void onException(Exception e) { informException(e); }
 	
-	protected void onNoSpaceForVideoCache(long required, long actual) { }
+	protected void onNoSpaceForVideoCache(final long required, final long actual) { }
     
     @SuppressWarnings("serial")
     public static final class NoSpaceForVideoCacheException extends IOException {

@@ -23,39 +23,39 @@ public class Player extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		getWindow().setFormat(PixelFormat.TRANSPARENT);		
-		
-		setContentView(R.layout.player);
-		
 		final long videoId = getIntent().getLongExtra(Invoke.VIDEO_ID_EXTRA, -1);
 		if (videoId == -1) throw new IllegalStateException("Video ID must be passed to player");
 		
-		//final View progressView = findViewById(R.id.progressHolder);
-		//final View surfaceWrapper = findViewById(R.id.surfaceWrapper);
-		final SurfaceView surface = (SurfaceView) findViewById(R.id.surface);
+		final View loadingView = getLayoutInflater().inflate(R.layout.video_loading, null);
+		final View playerView = getLayoutInflater().inflate(R.layout.player, null);
+		//final ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.viewSwitcher);
+		final SurfaceView surface = (SurfaceView) playerView.findViewById(R.id.surface);
+		//switcher.showNext();
 		
 		Log.d(TAG, "Running video player for video " + videoId);
 		
 		new VimeoVideoPlayingTask(this, surface.getHolder()) {
 			
 			protected void onPreExecute() {
-                //progressView.setVisibility(View.VISIBLE);
-                //surfaceWrapper.setVisibility(View.GONE);
+				setContentView(loadingView);
 				super.onPreExecute();
 			};
 			
 			protected void onPostExecute(FileInputStream dataSource) {
-				super.onPostExecute(dataSource);
-                //progressView.setVisibility(View.GONE);  
-                //getWindow().setFormat(PixelFormat.TRANSPARENT);
-                //surfaceWrapper.setVisibility(View.VISIBLE);
-                //surface.requestFocus();				
+				getWindow().setFormat(PixelFormat.TRANSPARENT);
+				setContentView(playerView);
+				super.onPostExecute(dataSource);                
 			};
 			
-			protected void onNoSpaceForVideoCache(long required, long actual) {
-				Dialogs.makeLongToast(Player.this, Utils.format(getString(R.string.no_space_for_video_cache), 
-							                       "required", String.valueOf(required >> 10),
-							                       "actual", String.valueOf(actual >> 10)));
+			protected void onNoSpaceForVideoCache(final long required, final long actual) {
+				runOnUiThread(new Runnable() {					
+					@Override public void run() {
+						Dialogs.makeLongToast(Player.this, Utils.format(getString(R.string.no_space_for_video_cache), 
+			                       						   "required", String.valueOf(required >> 10),
+			                       						   "actual", String.valueOf(actual >> 10)));
+						
+					}
+				}); 
 				finish();				
 			};
 			
