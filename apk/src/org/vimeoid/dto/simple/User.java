@@ -84,14 +84,14 @@ public class User implements Item {
         
     }
     
-    public final static String[] SHORT_EXTRACT_PROJECTION = {
+    public final static String[] LIST_PROJECTION = {
         FieldsKeys._ID, FieldsKeys.NAME, FieldsKeys.LOCATION,
         FieldsKeys.PORTRAIT_SMALL, FieldsKeys.NUM_OF_VIDEOS,
         FieldsKeys.NUM_OF_CONTACTS, FieldsKeys.NUM_OF_ALBUMS,
         FieldsKeys.NUM_OF_CHANNELS, FieldsKeys.IS_STAFF, FieldsKeys.IS_PLUS
     };
     
-    public final static String[] FULL_EXTRACT_PROJECTION = {
+    public final static String[] SINGLE_PROJECTION = {
         FieldsKeys._ID, FieldsKeys.NAME, FieldsKeys.LOCATION,
         FieldsKeys.PORTRAIT_MEDIUM, FieldsKeys.NUM_OF_VIDEOS,
         FieldsKeys.NUM_OF_CONTACTS, FieldsKeys.NUM_OF_ALBUMS,
@@ -118,7 +118,7 @@ public class User implements Item {
         return user;
     }
     
-    public static User shortFromCursor(Cursor cursor, int position) {
+    public static User itemFromCursor(Cursor cursor, int position) {
         final User user = generalDataFromCursor(cursor, position);
         
         user.smallPortraitUrl = cursor.getString(cursor.getColumnIndex(User.FieldsKeys.PORTRAIT_SMALL));
@@ -126,7 +126,7 @@ public class User implements Item {
         return user;
     }
     
-    public static User fullFromCursor(Cursor cursor, int position) {
+    public static User singleFromCursor(Cursor cursor, int position) {
         final User user = generalDataFromCursor(cursor, position);
         
         user.mediumPortraitUrl = cursor.getString(cursor.getColumnIndex(User.FieldsKeys.PORTRAIT_MEDIUM)); 

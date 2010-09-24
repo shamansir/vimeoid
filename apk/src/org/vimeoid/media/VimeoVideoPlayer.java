@@ -104,8 +104,7 @@ public final class VimeoVideoPlayer {
     		 Log.d(TAG, "Let's get the stream");
     		 
     		 if (cachingMonitor != null) {
-    		     handler.post(new Runnable() { 
-    		         @Override public void run() { cachingMonitor.beforeStreamRequest(); } });
+    		     cachingMonitor.beforeStreamRequest();
     		 }
     		 
     		 final InputStream videoStream = VimeoVideoStreamer.getVideoStream(videoId);
@@ -137,8 +136,7 @@ public final class VimeoVideoPlayer {
     				 try {
     					 
     		             if (cachingMonitor != null) {
-    		                 handler.post(new Runnable() { 
-    		                     @Override public void run() { cachingMonitor.whenStartedCaching(cacheSize); } });
+    		                 cachingMonitor.whenStartedCaching(cacheSize);
     		             }
     				     
     					 Log.d(TAG, "Starting the media thread");
@@ -148,7 +146,7 @@ public final class VimeoVideoPlayer {
     					 FileOutputStream out = new FileOutputStream(streamFile);
     					 byte buf[] = new byte[COPY_CHUNK_SIZE];
     					 
-    					 Log.d(TAG, "Now we will write stream to file");
+    					 Log.i(TAG, "Now we will write stream to file");
     					 
     					 do {
     						 int numread = videoStream.read(buf);
@@ -156,7 +154,7 @@ public final class VimeoVideoPlayer {
     						 out.write(buf, 0, numread);
     					 } while (true);
     					 
-    					 Log.d(TAG, "Stream is written to the file, setting data source");
+    					 Log.i(TAG, "Stream is written to the file, setting data source");
     					 mediaPlayer.setDataSource(new FileInputStream(streamFile).getFD());
     		 
     					 try {
@@ -167,8 +165,7 @@ public final class VimeoVideoPlayer {
     					 }
     					 
                          if (cachingMonitor != null) {
-                             handler.post(new Runnable() { 
-                                 @Override public void run() { cachingMonitor.whenFinishedCaching(); } });
+                             cachingMonitor.whenFinishedCaching();
                          }    					 
     					 
     					 letPlayerStart();
@@ -204,7 +201,7 @@ public final class VimeoVideoPlayer {
 				} catch (IOException ioe) {
 					informException(ioe);
 				}
-				Log.d(TAG, "Starting player! Duration: " + Utils.adaptDuration(mediaPlayer.getDuration() / 1000));
+				Log.i(TAG, "Starting player! Duration: " + Utils.adaptDuration(mediaPlayer.getDuration() / 1000));
 				mediaPlayer.start();
 				
 			}
@@ -226,7 +223,7 @@ public final class VimeoVideoPlayer {
  	
     private void ensureWeHaveEnoughSpace(long expectedSpace) throws NoSpaceForVideoCacheException {
         final long spaceLeft = Utils.computeFreeSpace();
-		Log.d(TAG, "Checking free space | required " + expectedSpace + " : left " + spaceLeft);
+		Log.i(TAG, "Checking free space | required " + expectedSpace + " : left " + spaceLeft);
 		if (expectedSpace > (spaceLeft * 0.8)) throw new NoSpaceForVideoCacheException(expectedSpace, spaceLeft);
 	}
     

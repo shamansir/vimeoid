@@ -32,7 +32,7 @@ public class VideosActivity extends ItemsListActivity<Video> {
     public static final String TAG = "Videos";
     
     public VideosActivity() {
-    	super(Video.SHORT_EXTRACT_PROJECTION, R.menu.video_context_guest_menu);
+    	super(Video.LIST_PROJECTION, R.menu.video_context_guest_menu);
     }
     
     @Override

@@ -87,7 +87,7 @@ public class ChannelsListAdapter extends EasyCursorsAdapter<Channel> {
 
 	@Override
 	public Channel extractItem(Cursor cursor, int position) {
-		return Channel.shortFromCursor(cursor, position);
+		return Channel.itemFromCursor(cursor, position);
 	}
 
 }

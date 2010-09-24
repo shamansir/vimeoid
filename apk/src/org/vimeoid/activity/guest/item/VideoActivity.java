@@ -44,7 +44,7 @@ public class VideoActivity extends ItemActivity<Video> {
     public static final String TAG = "Video";
     
     public VideoActivity() {
-        super(R.layout.view_single_video, Video.FULL_EXTRACT_PROJECTION);
+        super(R.layout.view_single_video, Video.SINGLE_PROJECTION);
         setLoadManually(true);
     }
 
@@ -139,7 +139,7 @@ public class VideoActivity extends ItemActivity<Video> {
 
     @Override
     protected Video extractFromCursor(Cursor cursor, int position) {        
-        return Video.fullFromCursor(cursor, position);
+        return Video.singleFromCursor(cursor, position);
     }    
     
 }

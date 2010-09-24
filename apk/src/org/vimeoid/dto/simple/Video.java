@@ -89,14 +89,14 @@ public class Video implements Item {
                
     }
     
-    public final static String[] SHORT_EXTRACT_PROJECTION = {
+    public final static String[] LIST_PROJECTION = {
         FieldsKeys._ID, FieldsKeys.TITLE, FieldsKeys.AUTHOR, FieldsKeys.AUTHOR_URL,
         FieldsKeys.DURATION, FieldsKeys.TAGS,
         FieldsKeys.THUMB_SMALL, FieldsKeys.USER_IMG_SMALL, 
         FieldsKeys.NUM_OF_LIKES, FieldsKeys.NUM_OF_PLAYS, FieldsKeys.NUM_OF_COMMENTS
     };
     
-    public final static String[] FULL_EXTRACT_PROJECTION = {
+    public final static String[] SINGLE_PROJECTION = {
         FieldsKeys._ID, FieldsKeys.TITLE, FieldsKeys.AUTHOR, FieldsKeys.AUTHOR_URL,
         FieldsKeys.DURATION, FieldsKeys.TAGS, 
         FieldsKeys.THUMB_SMALL, FieldsKeys.USER_IMG_MEDIUM, 
@@ -125,7 +125,7 @@ public class Video implements Item {
         return video;
     }
     
-    public static Video shortFromCursor(Cursor cursor, int position) {
+    public static Video itemFromCursor(Cursor cursor, int position) {
     	final Video video = generalDataFromCursor(cursor, position);
     	
         video.smallUploaderPortraitUrl = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.USER_IMG_SMALL));
@@ -133,7 +133,7 @@ public class Video implements Item {
         return video;
     }
     
-    public static Video fullFromCursor(Cursor cursor, int position) {
+    public static Video singleFromCursor(Cursor cursor, int position) {
     	final Video video = generalDataFromCursor(cursor, position);
         
     	video.mediumUploaderPortraitUrl = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.USER_IMG_MEDIUM)); 

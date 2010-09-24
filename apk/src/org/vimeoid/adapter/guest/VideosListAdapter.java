@@ -125,7 +125,7 @@ public class VideosListAdapter extends EasyCursorsAdapter<Video> {
 
 	@Override
 	public Video extractItem(Cursor cursor, int position) {
-		return Video.shortFromCursor(cursor, position);
+		return Video.itemFromCursor(cursor, position);
 	}
 
 }

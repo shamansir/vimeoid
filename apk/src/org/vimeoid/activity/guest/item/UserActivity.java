@@ -38,12 +38,12 @@ public class UserActivity extends ItemActivity<User> {
     public static final String TAG = "UserActivity";
 
     public UserActivity() {
-        super(R.layout.view_single_user, User.FULL_EXTRACT_PROJECTION);
+        super(R.layout.view_single_user, User.SINGLE_PROJECTION);
     }
 
     @Override
     protected User extractFromCursor(Cursor cursor, int position) {
-        return User.fullFromCursor(cursor, position);
+        return User.singleFromCursor(cursor, position);
     }
     
     @Override

@@ -251,7 +251,7 @@ public class VimeoProvider extends ContentProvider {
     public static ApiCallInfo collectCallInfo(Uri contentUri) {
         final List<String> segments = contentUri.getPathSegments();
         final StringBuffer urlBuffer = new StringBuffer();
-        Log.d(TAG, "generating API Call URL for URI " + contentUri.toString());
+        Log.i(TAG, "generating API Call URL for URI " + contentUri.toString());
         
         final ApiCallInfo urlInfo = new ApiCallInfo();
         urlInfo.subjectType = ContentType.fromAlias(segments.get(0));

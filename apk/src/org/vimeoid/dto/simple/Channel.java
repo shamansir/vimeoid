@@ -65,13 +65,13 @@ public class Channel implements Item {
         
     }    
     
-    public final static String[] SHORT_EXTRACT_PROJECTION = {
+    public final static String[] ITEM_PROJECTION = {
         FieldsKeys._ID, FieldsKeys.NAME, FieldsKeys.LOGO, 
         FieldsKeys.CREATOR_DISPLAY_NAME, FieldsKeys.CREATOR_ID, 
         FieldsKeys.CREATED_ON, FieldsKeys.NUM_OF_VIDEOS, FieldsKeys.NUM_OF_SUBSCRIBERS        
     };
     
-    public final static String[] FULL_EXTRACT_PROJECTION = {
+    public final static String[] SINGLE_PROJECTION = {
         FieldsKeys._ID, FieldsKeys.NAME, FieldsKeys.LOGO, 
         FieldsKeys.CREATOR_DISPLAY_NAME, FieldsKeys.CREATOR_ID, 
         FieldsKeys.CREATED_ON, FieldsKeys.NUM_OF_VIDEOS, FieldsKeys.NUM_OF_SUBSCRIBERS,
@@ -96,11 +96,11 @@ public class Channel implements Item {
         return channel;
     }
     
-    public static Channel shortFromCursor(Cursor cursor, int position) {
+    public static Channel itemFromCursor(Cursor cursor, int position) {
     	return generalDataFromCursor(cursor, position);
     }
     
-    public static Channel fullFromCursor(Cursor cursor, int position) {
+    public static Channel singleFromCursor(Cursor cursor, int position) {
     	final Channel channel = generalDataFromCursor(cursor, position);
         
     	channel.description = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.DESCRIPTION)); 

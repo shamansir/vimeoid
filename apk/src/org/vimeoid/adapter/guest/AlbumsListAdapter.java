@@ -102,7 +102,7 @@ public class AlbumsListAdapter extends EasyCursorsAdapter<Album> {
 
 	@Override
 	public Album extractItem(Cursor cursor, int position) {
-		return Album.shortFromCursor(cursor, position);
+		return Album.itemFromCursor(cursor, position);
 	}
 
 }

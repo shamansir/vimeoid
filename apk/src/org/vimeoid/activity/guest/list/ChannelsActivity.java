@@ -29,7 +29,7 @@ import android.view.MenuItem;
 public class ChannelsActivity extends ItemsListActivity<Channel> {
 
 	public ChannelsActivity() {
-		super(Channel.SHORT_EXTRACT_PROJECTION, R.menu.channel_context_guest_menu);
+		super(Channel.ITEM_PROJECTION, R.menu.channel_context_guest_menu);
 	}
 
     @Override

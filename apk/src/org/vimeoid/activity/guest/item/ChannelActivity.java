@@ -38,12 +38,12 @@ public class ChannelActivity extends ItemActivity<Channel> {
     public static final String TAG = "ChannelActivity";
 
     public ChannelActivity() {
-        super(R.layout.view_single_channel, Channel.FULL_EXTRACT_PROJECTION);
+        super(R.layout.view_single_channel, Channel.SINGLE_PROJECTION);
     }
 
     @Override
     protected Channel extractFromCursor(Cursor cursor, int position) {
-        return Channel.fullFromCursor(cursor, position);
+        return Channel.singleFromCursor(cursor, position);
     }
     
     @Override

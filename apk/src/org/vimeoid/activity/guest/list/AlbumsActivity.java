@@ -29,7 +29,7 @@ import android.view.MenuItem;
 public class AlbumsActivity extends ItemsListActivity<Album> {
 
 	public AlbumsActivity() {
-		super(Album.SHORT_EXTRACT_PROJECTION, R.menu.album_context_guest_menu);
+		super(Album.LIST_PROJECTION, R.menu.album_context_guest_menu);
 	}
 
     @Override

@@ -69,12 +69,12 @@ public class Album implements Item {
         
     }    
     
-    public final static String[] SHORT_EXTRACT_PROJECTION = {
+    public final static String[] LIST_PROJECTION = {
         FieldsKeys._ID, FieldsKeys.TITLE, FieldsKeys.THUMBNAIL_SMALL, 
         FieldsKeys.CREATED_ON, FieldsKeys.MODIFIED_ON, FieldsKeys.NUM_OF_VIDEOS
     };
     
-    public final static String[] FULL_EXTRACT_PROJECTION = {
+    public final static String[] SINGLE_PROJECTION = {
         FieldsKeys._ID, FieldsKeys.TITLE, FieldsKeys.THUMBNAIL_MEDIUM, 
         FieldsKeys.CREATOR_DISPLAY_NAME, FieldsKeys.CREATOR_ID, 
         FieldsKeys.CREATED_ON, FieldsKeys.MODIFIED_ON, FieldsKeys.NUM_OF_VIDEOS,        
@@ -95,7 +95,7 @@ public class Album implements Item {
         return album;
     }
     
-    public static Album shortFromCursor(Cursor cursor, int position) {
+    public static Album itemFromCursor(Cursor cursor, int position) {
         final Album album = generalDataFromCursor(cursor, position);
         
         album.smallThumbnailUrl = cursor.getString(cursor.getColumnIndex(Album.FieldsKeys.THUMBNAIL_SMALL));
@@ -103,7 +103,7 @@ public class Album implements Item {
         return album;
     }
     
-    public static Album fullFromCursor(Cursor cursor, int position) {
+    public static Album singleFromCursor(Cursor cursor, int position) {
         final Album album = generalDataFromCursor(cursor, position);
         
         album.mediumThumbnailUrl = cursor.getString(cursor.getColumnIndex(Album.FieldsKeys.THUMBNAIL_MEDIUM));        

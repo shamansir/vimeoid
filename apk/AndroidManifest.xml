@@ -119,7 +119,8 @@
         <!-- PLAYER -->
         <activity android:label="Player"
                   android:name=".activity.Player"
-                  android:theme="@android:style/Theme.NoTitleBar" />
+                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+                  android:screenOrientation="landscape" />
     </application>    
     <uses-sdk android:minSdkVersion="4" />
     <uses-permission android:name="android.permission.INTERNET" />

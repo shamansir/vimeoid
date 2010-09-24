@@ -38,7 +38,7 @@ public class AlbumActivity extends ItemActivity<Album> {
     public static final String TAG = "Album";
     
     public AlbumActivity() {
-        super(R.layout.view_single_album, Album.FULL_EXTRACT_PROJECTION);
+        super(R.layout.view_single_album, Album.SINGLE_PROJECTION);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class AlbumActivity extends ItemActivity<Album> {
 
     @Override
     protected Album extractFromCursor(Cursor cursor, int position) {        
-        return Album.fullFromCursor(cursor, position);
+        return Album.singleFromCursor(cursor, position);
     }    
     
 }
