@@ -29,6 +29,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.VimeoConfig;
+import org.vimeoid.util.Dialogs;
 
 /**
  * <dl>
@@ -166,9 +167,14 @@ public class VimeoApi {
             throw new AdvancedApiCallError(errObj.getInt("code"), errObj.getString("msg"));
         }
         return result.getJSONObject(object);
-    }    
+    }
     
-    /* ====================== Simple API ==================================== */
+    /* ====================== Advanced Api: Exceptions / Errors ============= */
+    
+    public static void handleApiError(Context context, AdvancedApiCallError error) {
+        Log.e(TAG, error.getLocalizedMessage());
+        Dialogs.makeExceptionToast(context, "API Call error", error);
+    }
     
     @SuppressWarnings("serial")
     public static class IllegalCallbackUriException extends Exception {
@@ -181,7 +187,7 @@ public class VimeoApi {
     
     @SuppressWarnings("serial")
     public static class AdvancedApiCallError extends Exception {
-
+        
         public final int code;
         public final String message;
         
@@ -193,10 +199,38 @@ public class VimeoApi {
         }
         
     }
+    
+    public static class ApiError {
+        
+        public static int INVALID_SIGNATURE = 96;
+        public static int MISSING_SIGNATURE = 97;
+        public static int LOGIN_FAILED_OR_INVALID_TOKEN = 98;
+        public static int INSUFFICIENT_PERMISSIONS = 99;
+        
+        public static int SERVICE_UNAVAILABLE = 105;
+        
+        public static int FORMAT_NOT_FOUND = 111;
+        public static int METHOD_NOT_FOUND = 112;
+        
+        public static int INVALID_CONSUMER_KEY = 301;
+        public static int INVALID_OR_EXPIRED_TOKEN = 302;
+        public static int INVALID_OAUTH_SIGNATURE = 303;
+        public static int INVALID_OAUTH_NONCE = 304;
+        public static int INVALID_OAUTH_SIGNATURE2 = 305;        
+        public static int UNSUPPORTED_SIGNATURE_METHOD = 306;
+        
+        public static int MISSING_REQUIRED_PARAMETER = 307;
+        public static int DUPLICATE_PARAMETER = 308;
+        
+        public static int RATE_LIMIT_EXCEEDED = 999;
+        
+    }
 
-	public static String getPlayerUrl(long videoId, int height) {
-	    Log.d(TAG, "Construction player URL for video " + videoId);
-	    return PLAYER_URL + videoId + "?title=0&byline=0&portrait=0&js_api=1&fp_version=10&height=" + height;
-	}
+    /* ====================== Helpers ======================================= */    
+    
+    public static String getPlayerUrl(long videoId, int height) {
+        Log.d(TAG, "Construction player URL for video " + videoId);
+        return PLAYER_URL + videoId + "?title=0&byline=0&portrait=0&js_api=1&fp_version=10&height=" + height;
+    }
     
 }

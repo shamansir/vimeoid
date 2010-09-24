@@ -9,7 +9,7 @@
                   android:authorities="org.vimeoid.simple.provider" />
         <!-- <activity android:label="@string/app_name" android:name="LauncherActivity"
                        android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">  -->
-        <!-- WELCOME -->       
+        <!-- WELCOME --> 
         <activity android:label="@string/app_name" 
                   android:name=".activity.Welcome"
                   android:theme="@android:style/Theme.NoTitleBar">
@@ -17,7 +17,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity>        
         <!-- CREDENTIALS -->
         <activity android:label="@string/app_name" 
                   android:name=".activity.ReceiveCredentials">
@@ -28,7 +28,12 @@
                 <data android:scheme="vimeoid" android:host="oauth.done"></data>  
             </intent-filter>
         </activity>
-        <!-- VIDEO -->        
+        <!-- PLAYER -->
+        <activity android:label="Player"
+                  android:name=".activity.Player"
+                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+                  android:screenOrientation="landscape" />
+        <!-- GUEST: VIDEO -->
         <activity android:label="Video"
                   android:name=".activity.guest.item.VideoActivity"
                   android:theme="@android:style/Theme.Light.NoTitleBar">
@@ -38,7 +43,7 @@
                 <data android:mimeType="vnd.android.cursor.item/vnd.vimeo.video" />
             </intent-filter>
         </activity>
-        <!-- VIDEOS -->
+        <!-- GUEST: VIDEOS -->
         <activity android:label="Videos"
                   android:name=".activity.guest.list.VideosActivity"
                   android:theme="@android:style/Theme.NoTitleBar">
@@ -54,7 +59,7 @@
                 <data android:mimeType="vnd.android.cursor.item/vnd.vimeo.video" />
             </intent-filter>
         </activity>
-        <!-- CHANNEL -->
+        <!-- GUEST: CHANNEL -->
         <activity android:label="Channel"
                   android:name=".activity.guest.item.ChannelActivity"
                   android:theme="@android:style/Theme.Light.NoTitleBar">
@@ -64,7 +69,7 @@
                 <data android:mimeType="vnd.android.cursor.item/vnd.vimeo.channel" />
             </intent-filter>
         </activity>        
-        <!-- CHANNELS -->
+        <!-- GUEST: CHANNELS -->
         <activity android:label="Channels"
                   android:name=".activity.guest.list.ChannelsActivity"
                   android:theme="@android:style/Theme.NoTitleBar">
@@ -80,7 +85,7 @@
                 <data android:mimeType="vnd.android.cursor.item/vnd.vimeo.channel" />
             </intent-filter>
         </activity>
-        <!-- ALBUM -->
+        <!-- GUEST: ALBUM -->
         <activity android:label="Album"
                   android:name=".activity.guest.item.AlbumActivity"
                   android:theme="@android:style/Theme.Light.NoTitleBar">
@@ -90,7 +95,7 @@
                 <data android:mimeType="vnd.android.cursor.item/vnd.vimeo.album" />
             </intent-filter>
         </activity>        
-        <!-- ALBUMS -->
+        <!-- GUEST: ALBUMS -->
         <activity android:label="Albums"
                   android:name=".activity.guest.list.AlbumsActivity"
                   android:theme="@android:style/Theme.NoTitleBar">
@@ -106,7 +111,7 @@
                 <data android:mimeType="vnd.android.cursor.item/vnd.vimeo.album" />
             </intent-filter>
         </activity>        
-        <!-- USER -->
+        <!-- GUEST: USER -->
         <activity android:label="User"
                   android:name=".activity.guest.item.UserActivity"
                   android:theme="@android:style/Theme.Light.NoTitleBar">
@@ -116,11 +121,10 @@
                 <data android:mimeType="vnd.android.cursor.item/vnd.vimeo.user" />
             </intent-filter>
         </activity>
-        <!-- PLAYER -->
-        <activity android:label="Player"
-                  android:name=".activity.Player"
-                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-                  android:screenOrientation="landscape" />
+        <!-- USER: USER -->
+        <activity android:label="User"
+                  android:name=".activity.user.item.UserActivity"
+                  android:theme="@android:style/Theme.NoTitleBar" />
     </application>    
     <uses-sdk android:minSdkVersion="4" />
     <uses-permission android:name="android.permission.INTERNET" />

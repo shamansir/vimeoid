@@ -99,8 +99,8 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
     
     protected void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon) {
         subjectIcon.setImageResource(Utils.drawableByContent(callInfo.subjectType));
-        subjectTitle.setText(getIntent().hasExtra(Invoke.SUBJ_TITLE_EXTRA) ? getIntent().getStringExtra(Invoke.SUBJ_TITLE_EXTRA) : callInfo.subject);
-        resultIcon.setImageResource(getIntent().getIntExtra(Invoke.ICON_EXTRA, R.drawable.info));
+        subjectTitle.setText(getIntent().hasExtra(Invoke.Extras.SUBJ_TITLE) ? getIntent().getStringExtra(Invoke.Extras.SUBJ_TITLE) : callInfo.subject);
+        resultIcon.setImageResource(getIntent().getIntExtra(Invoke.Extras.ICON, R.drawable.info));
     }
     
     protected final int extractPosition(MenuItem item) {
@@ -174,33 +174,6 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
     public boolean onOptionsItemSelected(MenuItem item) {
         
         switch (item.getItemId()) {
-            /* case R.id.menu_Login: { 
-                    Log.d(TAG, "Starting OAuth login");
-                    if (!VimeoApi.ensureOAuth(this)) {
-                        try {
-                            Log.d(TAG, "Requesting OAuth Uri");
-                            Uri authUri = VimeoApi.requestForOAuthUri();
-                            Log.d(TAG, "Got OAuth Uri, staring Browser activity");
-                            Dialogs.makeToast(this, "Please wait while browser opens");
-                            startActivity(new Intent(Intent.ACTION_VIEW, authUri));
-                        } catch (OAuthException oae) {
-                            Log.e(TAG, oae.getLocalizedMessage());
-                            oae.printStackTrace();
-                            Dialogs.makeExceptionToast(this, "OAuth Exception", oae);  
-                        }                       
-                    } else {
-                        Log.d(TAG, "OAuth is ready, loading user name");
-                        try {
-                            JSONObject user = VimeoApi.advancedApi(Methods.test.login, "user");
-                            Log.d(TAG, "user object: " + user);
-                            Log.d(TAG, "got user " + user.getString("id") + " / " + user.get("username"));
-                        } catch (Exception e) {
-                            Log.e(TAG, e.getLocalizedMessage());
-                            e.printStackTrace();
-                            Dialogs.makeExceptionToast(this, "Getting user exception", e); 
-                        }
-                    }
-                }; break; */
             case R.id.menu_Refresh: {
                     Dialogs.makeToast(this, getString(R.string.currently_not_supported)); 
                 } break;

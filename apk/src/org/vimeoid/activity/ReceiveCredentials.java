@@ -7,10 +7,12 @@ import android.app.Activity;
 import android.net.Uri;
 import android.util.Log;
 
+import org.json.JSONObject;
 import org.vimeoid.connection.VimeoApi;
+import org.vimeoid.connection.VimeoApi.AdvancedApiCallError;
 import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.util.Dialogs;
-import org.vimeoid.util.Utils;
+import org.vimeoid.util.Invoke;
 
 /**
  * <dl>
@@ -37,18 +39,23 @@ public class ReceiveCredentials extends Activity {
     @Override
     protected void onResume() {
     	super.onResume(); 
-        Uri uri = getIntent().getData(); // came here from browser with OAuth    
-        Log.d(TAG, "Uri is " + uri);
+        Uri uri = getIntent().getData(); // came here from browser with OAuth
         if (uri != null) {
             try {
-                Log.d(TAG, "Got credentials from browser, checking and saving");
+                Log.i(TAG, "Got credentials from browser, checking and saving");
                 // TODO: use AbstractAccountAuthenticator (see SampleSyncAdapter) in 2.0> to store credentials
                 //       and sync with Vimeo
                 VimeoApi.ensureOAuthCallbackAndSaveToken(this, uri);
-                Log.d(TAG, "Checking finished");
+                Log.i(TAG, "Credential saved");
                 
-                VimeoApi.advancedApi(Methods.activity.happenedToUser, 
-                                     Utils.quickApiParams("user_id", "shamansir"), "activity");
+                JSONObject user = VimeoApi.advancedApi(Methods.test.login, "user");
+                Log.d(TAG, "got user " + user.getString("id") + " / " + user.get("username"));
+                Invoke.User_.showPersonalPage(this, user.getLong("id"), user.getString("username"));                
+                
+                /* VimeoApi.advancedApi(Methods.activity.happenedToUser, 
+                                     Utils.quickApiParams("user_id", "shamansir"), "activity"); */
+            } catch (AdvancedApiCallError aace) {
+                VimeoApi.handleApiError(this, aace);
             } catch (Exception e) {
                 Log.e(TAG, e.getLocalizedMessage());
                 e.printStackTrace();

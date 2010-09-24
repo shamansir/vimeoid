@@ -9,10 +9,12 @@ import org.vimeoid.util.Invoke;
 import org.vimeoid.util.Utils;
 
 import android.app.Activity;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.VideoView;
+import android.widget.ViewFlipper;
 
 public class Player extends Activity {
     
@@ -21,29 +23,37 @@ public class Player extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+        getWindow().setFormat(PixelFormat.TRANSPARENT);
+        setContentView(R.layout.player);
 
-		final long videoId = getIntent().getLongExtra(Invoke.VIDEO_ID_EXTRA, -1);
+		final long videoId = getIntent().getLongExtra(Invoke.Extras.VIDEO_ID, -1);
 		if (videoId == -1) throw new IllegalStateException("Video ID must be passed to player");
 		
-		final View loadingView = getLayoutInflater().inflate(R.layout.video_loading, null);
-		final View playerView = getLayoutInflater().inflate(R.layout.player, null);
+		final ViewFlipper flipper = (ViewFlipper) findViewById(R.id.viewFlipper);
+		final View loadingView = (View) findViewById(R.id.loadingProgress);
+		//final View playerView = getLayoutInflater().inflate(R.layout.player, null);
 		//final ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.viewSwitcher);
-		final VideoView videoView = (VideoView) playerView.findViewById(R.id.canvas);
+		final VideoView videoView = (VideoView) findViewById(R.id.canvas);
+		//videoView.setVisibility(View.INVISIBLE);
 		//switcher.showNext();
 		
 		Log.d(TAG, "Running video player for video " + videoId);
 		
 		new VimeoVideoPlayingTask(this, videoView.getHolder()) {
 			
-			protected void onPreExecute() {
+			/* protected void onPreExecute() {
 				setContentView(loadingView);
 				super.onPreExecute();
-			};
+			}; */
 			
 			protected void onPostExecute(FileInputStream dataSource) {
-				//getWindow().setFormat(PixelFormat.TRANSPARENT);
-				setContentView(playerView);
-				videoView.requestFocus();
+				//setContentView(playerView);
+				flipper.showNext();
+				//videoView.setVisibility(View.VISIBLE);
+                //videoView.bringToFront();
+				//videoView.requestFocus();
+				loadingView.setVisibility(View.INVISIBLE);
 				super.onPostExecute(dataSource);                
 			};
 			

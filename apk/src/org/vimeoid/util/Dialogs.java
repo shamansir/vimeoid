@@ -36,7 +36,7 @@ public class Dialogs {
     
     
     public static void makeExceptionToast(Context context, String description, Exception e) {
-        makeToast(context, description + " " + e.getLocalizedMessage());
+        makeLongToast(context, description + " " + e.getLocalizedMessage());
     }
 
 }

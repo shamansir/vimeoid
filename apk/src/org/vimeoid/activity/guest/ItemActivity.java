@@ -65,8 +65,8 @@ public abstract class ItemActivity<ItemType extends Item> extends Activity {
     
     protected void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon) {
         subjectIcon.setImageResource(Utils.drawableByContent(callInfo.subjectType));
-        subjectTitle.setText(getIntent().hasExtra(Invoke.SUBJ_TITLE_EXTRA) ? getIntent().getStringExtra(Invoke.SUBJ_TITLE_EXTRA) : callInfo.subject);
-        resultIcon.setImageResource(getIntent().getIntExtra(Invoke.ICON_EXTRA, R.drawable.info));
+        subjectTitle.setText(getIntent().hasExtra(Invoke.Extras.SUBJ_TITLE) ? getIntent().getStringExtra(Invoke.Extras.SUBJ_TITLE) : callInfo.subject);
+        resultIcon.setImageResource(getIntent().getIntExtra(Invoke.Extras.ICON, R.drawable.info));
     }
     
     @Override
