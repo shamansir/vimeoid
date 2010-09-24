@@ -9,11 +9,10 @@ import org.vimeoid.util.Invoke;
 import org.vimeoid.util.Utils;
 
 import android.app.Activity;
-import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.SurfaceView;
 import android.view.View;
+import android.widget.VideoView;
 
 public class Player extends Activity {
     
@@ -29,12 +28,12 @@ public class Player extends Activity {
 		final View loadingView = getLayoutInflater().inflate(R.layout.video_loading, null);
 		final View playerView = getLayoutInflater().inflate(R.layout.player, null);
 		//final ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.viewSwitcher);
-		final SurfaceView surface = (SurfaceView) playerView.findViewById(R.id.surface);
+		final VideoView videoView = (VideoView) playerView.findViewById(R.id.canvas);
 		//switcher.showNext();
 		
 		Log.d(TAG, "Running video player for video " + videoId);
 		
-		new VimeoVideoPlayingTask(this, surface.getHolder()) {
+		new VimeoVideoPlayingTask(this, videoView.getHolder()) {
 			
 			protected void onPreExecute() {
 				setContentView(loadingView);
@@ -42,8 +41,9 @@ public class Player extends Activity {
 			};
 			
 			protected void onPostExecute(FileInputStream dataSource) {
-				getWindow().setFormat(PixelFormat.TRANSPARENT);
+				//getWindow().setFormat(PixelFormat.TRANSPARENT);
 				setContentView(playerView);
+				videoView.requestFocus();
 				super.onPostExecute(dataSource);                
 			};
 			
