@@ -1,9 +1,9 @@
 package org.vimeoid.activity;
 
+import java.io.FileInputStream;
+
 import org.vimeoid.R;
-import org.vimeoid.media.VimeoVideoPlayer;
-import org.vimeoid.media.VimeoVideoPlayer.CachingMonitor;
-import org.vimeoid.media.VimeoVideoPlayer.NoSpaceForVideoCacheException;
+import org.vimeoid.media.VimeoVideoPlayingTask;
 import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
 import org.vimeoid.util.Utils;
@@ -32,50 +32,40 @@ public class Player extends Activity {
 		final View surfaceWrapper = findViewById(R.id.surfaceWrapper);
 		final SurfaceView surface = (SurfaceView) findViewById(R.id.surface);
 		
-		VimeoVideoPlayer.setCachingMonitor(new CachingMonitor() {
-            
-            @Override
-            public void beforeStreamRequest() {
+		Log.d(TAG, "Running video player for video " + videoId);
+		
+		new VimeoVideoPlayingTask(this, surface.getHolder()) {
+			
+			protected void onPreExecute() {
                 progressView.setVisibility(View.VISIBLE);
                 surfaceWrapper.setVisibility(View.GONE);
-            }
-		    
-            @Override
-            public void whenStartedCaching(long cacheSize) { }
-            
-            @Override
-            public void whenFinishedCaching() {
+				super.onPreExecute();
+			};
+			
+			protected void onPostExecute(FileInputStream dataSource) {
+				super.onPostExecute(dataSource);
                 progressView.setVisibility(View.GONE);  
                 getWindow().setFormat(PixelFormat.TRANSPARENT);
                 surfaceWrapper.setVisibility(View.VISIBLE);
-                surface.requestFocus();                
-            }
-
-        });
+                surface.requestFocus();				
+			};
+			
+			protected void onNoSpaceForVideoCache(long required, long actual) {
+				Dialogs.makeLongToast(Player.this, Utils.format(getString(R.string.no_space_for_video_cache), 
+							                       "required", String.valueOf(required >> 10),
+							                       "actual", String.valueOf(actual >> 10)));
+				finish();				
+			};
+			
+		}.execute(videoId);
 		
-		Log.d(TAG, "Running video player for video " + videoId);
-		
-		/*runOnUiThread(new Runnable() {
-            
-            @Override
-            public void run() { */
-                try {
-                    VimeoVideoPlayer.use(Player.this).startPlaying(surface.getHolder(), videoId);
-                } catch (NoSpaceForVideoCacheException nsfvce) {
-                    Dialogs.makeLongToast(Player.this, Utils.format(getString(R.string.no_space_for_video_cache), 
-                                                             "required", String.valueOf(nsfvce.getRequiredSpace() >> 10),
-                                                             "actual", String.valueOf(nsfvce.getActualSpace() >> 10)));
-                    finish();
-                }                       
-            /* }
-        }); */
 	}
 	
 	@Override
 	protected void onStop() {
 	    super.onStop();
 	    
-	    VimeoVideoPlayer.ensureCleanedUp(this);
+	    VimeoVideoPlayingTask.ensureCleanedUp();
 	}
 	
 }

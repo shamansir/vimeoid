@@ -56,15 +56,9 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
     
     public ItemsListActivity(String[] projection, int contextMenu) {
     	this(R.layout.generic_list, projection, contextMenu);
-    }    
+    }
     
     protected abstract EasyCursorsAdapter<ItemType> createAdapter();
-    
-    protected void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon) {
-        subjectIcon.setImageResource(Utils.drawableByContent(callInfo.subjectType));
-        subjectTitle.setText(getIntent().hasExtra(Invoke.SUBJ_TITLE_EXTRA) ? getIntent().getStringExtra(Invoke.SUBJ_TITLE_EXTRA) : callInfo.subject);
-        resultIcon.setImageResource(getIntent().getIntExtra(Invoke.ICON_EXTRA, R.drawable.info));
-    }
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,12 +97,17 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
         
     }
     
-    protected int extractPosition(MenuItem item) {
+    protected void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon) {
+        subjectIcon.setImageResource(Utils.drawableByContent(callInfo.subjectType));
+        subjectTitle.setText(getIntent().hasExtra(Invoke.SUBJ_TITLE_EXTRA) ? getIntent().getStringExtra(Invoke.SUBJ_TITLE_EXTRA) : callInfo.subject);
+        resultIcon.setImageResource(getIntent().getIntExtra(Invoke.ICON_EXTRA, R.drawable.info));
+    }
+    
+    protected final int extractPosition(MenuItem item) {
         return extractPosition(item.getMenuInfo());
     }
     
-    protected int extractPosition(ContextMenuInfo info) {
-        
+    protected final int extractPosition(ContextMenuInfo info) {
         try {
             return ((AdapterView.AdapterContextMenuInfo) info).position;
         } catch (ClassCastException cce) {
@@ -119,26 +118,18 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
     }    
     
     @SuppressWarnings("unchecked")
-	protected ItemType getItem(int position) {
+	protected final ItemType getItem(int position) {
     	return (ItemType)getListView().getItemAtPosition(position);
     }
     
-    protected void onItemSelected(ItemType item) { }
-	
     protected void queryMoreItems(Uri uri, EasyCursorsAdapter<?> adapter, String[] projection) {
-    	
-        if (VimeoApi.connectedToWeb(this) && VimeoApi.vimeoSiteReachable(this)) {
-
+        
+    	if (VimeoApi.connectedToWeb(this) && VimeoApi.vimeoSiteReachable(this)) {
             Log.d(TAG, "Connection test is passed OK");
-            
             new LoadItemsTask(adapter, projection).execute(uri);
-            
         } else {
-            
             Log.d(TAG, "Connection test failed");            
-           
             Dialogs.makeToast(this, getString(R.string.no_iternet_connection));
-            
         }
     	
     }
@@ -240,10 +231,6 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
         inflater.inflate(contextMenu, menu);
     }
     
-    protected String getContextMenuTitle(int position) { 
-        return getString(R.string.context_menu); 
-    };
-    
     @Override
     protected final void onListItemClick(ListView l, View v, int position, long id) {
 
@@ -258,11 +245,17 @@ public abstract class ItemsListActivity<ItemType extends Item> extends ListActiv
         
     }
     
+    protected void onItemSelected(ItemType item) { }
+    
     protected boolean isLoadMoreItem(int position) {
         return (position == (getListView().getCount() - 1));
     }
+    
+    protected String getContextMenuTitle(int position) { 
+        return getString(R.string.context_menu); 
+    };
 
-    protected class LoadItemsTask extends AsyncTask<Uri, Void, Cursor> {
+    protected final class LoadItemsTask extends AsyncTask<Uri, Void, Cursor> {
 
         // TODO: show progress as a dialog
         
