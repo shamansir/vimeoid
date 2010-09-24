@@ -85,14 +85,14 @@ public class VimeoVideoPlayingTask extends AsyncTask<Long, Long, FileInputStream
 		
 		final long videoId = params[0];
 		
-		final long cacheSize = VimeoVideoStreamer.getLastContentLength();
 		try {
 			InputStream videoStream = VimeoVideoStreamer.getVideoStream(videoId);
 			if (videoStream == null) {
 				Log.e(TAG, "The returned video stream is null, so I will not play anything :(");
 				return null;
 			}
-			ensureWeHaveEnoughSpace(cacheSize);
+			
+			ensureWeHaveEnoughSpace(VimeoVideoStreamer.getLastContentLength());
 			
 			Log.d(TAG, "Starting the media thread");
 			

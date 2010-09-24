@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="fill_parent"
              android:layout_height="fill_parent">
-     <LinearLayout android:id="@+id/progressHolder"
+     <!-- <LinearLayout android:id="@+id/progressHolder"
                    android:layout_width="fill_parent"
                    android:layout_height="fill_parent"               
                    android:gravity="center"
@@ -13,11 +13,10 @@
                   android:layout_height="wrap_content"
                   android:layout_marginLeft="5dp"
                   android:text="@string/caching_video" />
-     </LinearLayout>
+     </LinearLayout> -->
      <FrameLayout android:id="@+id/surfaceWrapper"
                   android:layout_width="fill_parent"
-                  android:layout_height="fill_parent"
-                  android:visibility="gone">
+                  android:layout_height="fill_parent">
 	     <VideoView android:id="@+id/surface"
 	                android:layout_width="fill_parent"
 	                android:layout_height="fill_parent" />

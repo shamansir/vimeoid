@@ -7,7 +7,7 @@
     <string name="no_pages_more">Maximum number of pages is reached</string>
     <string name="please_do_not_touch">Don\'t mess with me!</string>
     <string name="unknown_item">Unknown item</string>
-    <string name="caching_video">Caching video...</string>
+    <string name="caching_video">Loading video...</string>
     <string name="currently_not_supported">This action is not supported currently</string>
     <string name="no_space_for_video_cache">There is no free space to make cache of this file. Required: {required}KB | Actual: {actual}KB </string>
     <!-- main menu -->
