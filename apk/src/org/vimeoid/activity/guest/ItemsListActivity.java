@@ -12,6 +12,7 @@ import org.vimeoid.util.Utils;
 
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,8 +39,14 @@ public abstract class ItemsListActivity<ItemType extends Item> extends
     	this(R.layout.generic_list, projection, contextMenu);
     }
     
-    protected void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         contentUri = getIntent().getData();
+        
+        super.onCreate(savedInstanceState);
+    }
+    
+    protected void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon) {
         callInfo = VimeoProvider.collectCallInfo(contentUri);        
         
         subjectIcon.setImageResource(Utils.drawableByContent(callInfo.subjectType));

@@ -4,6 +4,7 @@
 package org.vimeoid.activity.guest;
 
 import org.vimeoid.R;
+import org.vimeoid.activity.base.SingleItemActivity_;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.connection.ApiCallInfo;
 import org.vimeoid.connection.simple.VimeoProvider;
@@ -11,16 +12,11 @@ import org.vimeoid.util.Invoke;
 import org.vimeoid.util.Item;
 import org.vimeoid.util.Utils;
 
-import com.fedorvlasov.lazylist.ImageLoader;
-
-import android.app.Activity;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 /**
@@ -37,26 +33,25 @@ import android.widget.TextView;
  * @date Sep 16, 2010 6:41:44 PM 
  *
  */
-public abstract class SingleItemActivity<ItemType extends Item> extends Activity {
+public abstract class SingleItemActivity<ItemType extends Item> extends SingleItemActivity_<ItemType> {
     
     // private static final String TAG = "SingleItemActivity";
     
-    protected final int mainView;
     protected final String[] projection;
-    
-    private boolean loadManually = false;
-    
-    protected View titleBar;
-    protected View progressBar;    
-    
-    protected ImageLoader imageLoader;
     
     protected Uri contentUri;
     protected ApiCallInfo callInfo;
     
     public SingleItemActivity(int mainView, String[] projection) {
-        this.mainView = mainView;
+        super(mainView);
         this.projection = projection;
+    }
+    
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        contentUri = getIntent().getData();      
+        
+        super.onCreate(savedInstanceState);
     }
     
     protected abstract SectionedActionsAdapter fillWithActions(final SectionedActionsAdapter actionsAdapter, final ItemType item);
@@ -64,62 +59,31 @@ public abstract class SingleItemActivity<ItemType extends Item> extends Activity
     protected abstract ItemType extractFromCursor(Cursor cursor, int position);    
     
     protected void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon) {
+        callInfo = VimeoProvider.collectCallInfo(contentUri);        
+        
         subjectIcon.setImageResource(Utils.drawableByContent(callInfo.subjectType));
         subjectTitle.setText(getIntent().hasExtra(Invoke.Extras.SUBJ_TITLE) ? getIntent().getStringExtra(Invoke.Extras.SUBJ_TITLE) : callInfo.subject);
         resultIcon.setImageResource(getIntent().getIntExtra(Invoke.Extras.ICON, R.drawable.info));
     }
     
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        
-        setContentView(mainView);
-        
-        contentUri = getIntent().getData();
-        callInfo = VimeoProvider.collectCallInfo(contentUri);        
-        
-        titleBar = findViewById(R.id.titleBar);
-        initTitleBar((ImageView)titleBar.findViewById(R.id.subjectIcon),
-                     (TextView)titleBar.findViewById(R.id.subjectTitle),
-                     (ImageView)titleBar.findViewById(R.id.resultIcon));
-        
-        progressBar = findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.GONE);
-        
-        imageLoader = new ImageLoader(this, R.drawable.item_loading_small, R.drawable.item_failed_small);
-    
-        if (!loadManually) runLoadingProcess();
-    }
-    
-    protected void setLoadManually(boolean value) {
-        loadManually = value;
-    }
-    
-    protected void runLoadingProcess() {
+    protected void queryItem() {
         new LoadItemTask(projection).execute(contentUri);
-    }
-    
-    protected void onItemReceived(final ItemType item) {
-        final ListView actionsList = (ListView)findViewById(R.id.actionsList);
-        actionsList.setAdapter(fillWithActions(new SectionedActionsAdapter(this, getLayoutInflater(), imageLoader), item));
-        actionsList.invalidate();        
     }
     
     protected class LoadItemTask extends AsyncTask<Uri, Void, Cursor> {
 
         private final String[] projection;
-        private final View progressBar;
         
         protected LoadItemTask(String[] projection) {
             this.projection = projection;
-            this.progressBar = findViewById(R.id.progressBar);   
         }
         
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             
-            progressBar.setVisibility(View.VISIBLE);            
+            showProgressBar();            
         }
 
         @Override
@@ -142,7 +106,8 @@ public abstract class SingleItemActivity<ItemType extends Item> extends Activity
                 cursor.close();
             }
             
-            progressBar.setVisibility(View.GONE);            
+            hideProgressBar();
+            
         }
 
     }

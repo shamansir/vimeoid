@@ -62,7 +62,7 @@ public class VideoActivity extends SingleItemActivity<Video> {
         
         playerView.setWebChromeClient(new WebChromeClient() {
             @Override public void onProgressChanged(WebView view, int newProgress) {
-                progressBar.setVisibility(((newProgress == 0) || (newProgress == 100)) ? View.GONE : View.VISIBLE);
+                setProgressBarVisibile((newProgress != 0) && (newProgress != 100));
                 if (newProgress == 100) ((ListView)findViewById(R.id.actionsList)).setSelectionAfterHeaderView();
                 super.onProgressChanged(view, newProgress);
             }
@@ -71,7 +71,7 @@ public class VideoActivity extends SingleItemActivity<Video> {
         Log.d(TAG, "Loading player: " + VimeoApi.getPlayerUrl(videoId, playerHeight));
         playerView.loadUrl(VimeoApi.getPlayerUrl(videoId, playerHeight));
         
-        runLoadingProcess();
+        queryItem();
         
     }
     

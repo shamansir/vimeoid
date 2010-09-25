@@ -13,7 +13,6 @@ import org.vimeoid.util.Utils;
 
 import android.database.Cursor;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -48,9 +47,6 @@ public class UserActivity extends SingleItemActivity<User> {
     
     @Override
     protected void onItemReceived(final User user) {
-        
-        Log.d(TAG, "user " + user.id + " data received, name: " + user.displayName);
-        ((TextView)titleBar.findViewById(R.id.subjectTitle)).setText(user.displayName);
         
         // biography        
         ((TextView)findViewById(R.id.userBio)).setText((user.biography.length() > 0) 

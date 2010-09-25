@@ -46,8 +46,6 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
     	this(R.layout.generic_list, contextMenu);
     }
     
-    protected abstract AdapterType createAdapter();
-    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,30 +80,17 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
         
     }
     
+    protected abstract AdapterType createAdapter();
+    
     protected abstract void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon);
     
     protected abstract void queryMoreItems(AdapterType adapter, int pageNum);
     
-    private void checkConnectionAndQueryMoreItems(AdapterType adapter, int pageNum) {
-        
-    	if (VimeoApi.connectedToWeb(this) && VimeoApi.vimeoSiteReachable(this)) {
-            Log.d(TAG, "Connection test is passed OK");
-            queryMoreItems(adapter, pageNum);
-        } else {
-            Log.d(TAG, "Connection test failed");            
-            Dialogs.makeToast(this, getString(R.string.no_iternet_connection));
-        }
-    	
-    }
+    protected void onItemSelected(ItemType item) { }
     
-    private void loadNextPage() {
-        if (!queryRunning) {
-            if (pageNum <= VimeoApi.MAX_NUMBER_OF_PAGES) {
-                Log.d(TAG, "Loading next page...");
-                checkConnectionAndQueryMoreItems(adapter, ++pageNum);
-            } else Dialogs.makeToast(this, getString(R.string.no_pages_more));
-        } else Dialogs.makeToast(this, getString(R.string.please_do_not_touch));        
-    }
+    protected String getContextMenuTitle(int position) { 
+        return getString(R.string.context_menu); 
+    };
     
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
@@ -136,15 +121,30 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
         
     }
     
+    private void checkConnectionAndQueryMoreItems(AdapterType adapter, int pageNum) {
+        
+        if (VimeoApi.connectedToWeb(this) && VimeoApi.vimeoSiteReachable(this)) {
+            Log.d(TAG, "Connection test is passed OK");
+            queryMoreItems(adapter, pageNum);
+        } else {
+            Log.d(TAG, "Connection test failed");            
+            Dialogs.makeToast(this, getString(R.string.no_iternet_connection));
+        }
+        
+    }
+    
+    private void loadNextPage() {
+        if (!queryRunning) {
+            if (pageNum <= VimeoApi.MAX_NUMBER_OF_PAGES) {
+                Log.d(TAG, "Loading next page...");
+                checkConnectionAndQueryMoreItems(adapter, ++pageNum);
+            } else Dialogs.makeToast(this, getString(R.string.no_pages_more));
+        } else Dialogs.makeToast(this, getString(R.string.please_do_not_touch));        
+    }
+    
     protected final boolean isLoadMoreItem(int position) {
         return (position == (getListView().getCount() - 1));
     }
-    
-    protected void onItemSelected(ItemType item) { }
-    
-    protected String getContextMenuTitle(int position) { 
-        return getString(R.string.context_menu); 
-    };
     
     protected final int extractPosition(MenuItem item) {
         return extractPosition(item.getMenuInfo());
