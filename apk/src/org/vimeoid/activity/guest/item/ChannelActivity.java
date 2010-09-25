@@ -4,7 +4,7 @@
 package org.vimeoid.activity.guest.item;
 
 import org.vimeoid.R;
-import org.vimeoid.activity.guest.ItemActivity;
+import org.vimeoid.activity.guest.SingleItemActivity;
 import org.vimeoid.adapter.ActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.dto.simple.Channel;
@@ -33,7 +33,7 @@ import android.widget.TextView;
  * @date Sep 16, 2010 6:38:02 PM 
  *
  */
-public class ChannelActivity extends ItemActivity<Channel> {
+public class ChannelActivity extends SingleItemActivity<Channel> {
     
     public static final String TAG = "ChannelActivity";
 

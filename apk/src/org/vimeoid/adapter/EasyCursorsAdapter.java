@@ -107,7 +107,7 @@ public abstract class EasyCursorsAdapter<ItemType extends Item> extends BaseAdap
         cursor.moveToFirst();
     }    
         
-    public void finalize() {
+    protected void finalize() {
         for (int i = 0; i < cursorsCount; i++) {
             cursors[i].close();
         }

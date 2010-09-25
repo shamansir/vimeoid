@@ -4,7 +4,7 @@
 package org.vimeoid.activity.guest.item;
 
 import org.vimeoid.R;
-import org.vimeoid.activity.guest.ItemActivity;
+import org.vimeoid.activity.guest.SingleItemActivity;
 import org.vimeoid.adapter.ActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.connection.VimeoApi;
@@ -39,7 +39,7 @@ import android.widget.TextView;
  * @date Sep 10, 2010 12:15:38 AM 
  *
  */
-public class VideoActivity extends ItemActivity<Video> {
+public class VideoActivity extends SingleItemActivity<Video> {
     
     public static final String TAG = "Video";
     

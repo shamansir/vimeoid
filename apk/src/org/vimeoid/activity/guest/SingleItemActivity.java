@@ -29,7 +29,7 @@ import android.widget.TextView;
  * <dt>Package:</dt> <dd>org.vimeoid.activity.guest</dd>
  * </dl>
  *
- * <code>ItemActivity</code>
+ * <code>SingleItemActivity</code>
  *
  * <p>Description</p>
  *
@@ -37,9 +37,9 @@ import android.widget.TextView;
  * @date Sep 16, 2010 6:41:44 PM 
  *
  */
-public abstract class ItemActivity<ItemType extends Item> extends Activity {
+public abstract class SingleItemActivity<ItemType extends Item> extends Activity {
     
-    // private static final String TAG = "ItemActivity";
+    // private static final String TAG = "SingleItemActivity";
     
     protected final int mainView;
     protected final String[] projection;
@@ -54,7 +54,7 @@ public abstract class ItemActivity<ItemType extends Item> extends Activity {
     protected Uri contentUri;
     protected ApiCallInfo callInfo;
     
-    public ItemActivity(int mainView, String[] projection) {
+    public SingleItemActivity(int mainView, String[] projection) {
         this.mainView = mainView;
         this.projection = projection;
     }

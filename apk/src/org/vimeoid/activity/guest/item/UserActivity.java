@@ -4,7 +4,7 @@
 package org.vimeoid.activity.guest.item;
 
 import org.vimeoid.R;
-import org.vimeoid.activity.guest.ItemActivity;
+import org.vimeoid.activity.guest.SingleItemActivity;
 import org.vimeoid.adapter.ActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.dto.simple.User;
@@ -33,7 +33,7 @@ import android.widget.TextView;
  * @date Sep 16, 2010 6:38:02 PM 
  *
  */
-public class UserActivity extends ItemActivity<User> {
+public class UserActivity extends SingleItemActivity<User> {
     
     public static final String TAG = "UserActivity";
 
