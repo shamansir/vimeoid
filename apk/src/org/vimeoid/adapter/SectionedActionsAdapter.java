@@ -139,7 +139,7 @@ public class SectionedActionsAdapter extends BaseAdapter {
         
         if (viewType == SECTION_VIEW_TYPE) {
         	
-            final ActionsSection group = (ActionsSection) getItem(position);
+            final ActionsSection section = (ActionsSection) getItem(position);
             SectionHeaderHolder itemHolder = null;
             
             if (convertView == null) {
@@ -151,7 +151,7 @@ public class SectionedActionsAdapter extends BaseAdapter {
             	itemHolder = (SectionHeaderHolder)convertView.getTag();
             }
             
-            itemHolder.tvTitle.setText(group.title);
+            itemHolder.tvTitle.setText(section.title);
             
         } else if (viewType == ITEM_VIEW_TYPE) {
             
@@ -195,17 +195,17 @@ public class SectionedActionsAdapter extends BaseAdapter {
     }
 
     public int addSection(String title) {
-        final ActionsSection newGroup = new ActionsSection(sections.size(), title); 
-        sections.add(newGroup);
+        final ActionsSection newSection = new ActionsSection(sections.size(), title); 
+        sections.add(newSection);
         itemsCount++;
-        return newGroup.id;
+        return newSection.id;
     }
     
     private ActionItem addAction(int section, int icon, String iconUrl, String title) {
         if (section >= sections.size() || (section < 0)) throw new IllegalArgumentException("No section with such id (" + section + ") resgistered");
-        final ActionsSection subjGroup = sections.get(section);
-        final ActionItem newAction = (icon != -1) ? new ActionItem(subjGroup, icon, title) : new ActionItem(subjGroup, iconUrl, title); 
-        subjGroup.addAction(newAction);
+        final ActionsSection subjSection = sections.get(section);
+        final ActionItem newAction = (icon != -1) ? new ActionItem(subjSection, icon, title) : new ActionItem(subjSection, iconUrl, title); 
+        subjSection.addAction(newAction);
         itemsCount++;
         return newAction;        
     }
