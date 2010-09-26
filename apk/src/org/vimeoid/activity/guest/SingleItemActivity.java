@@ -9,7 +9,7 @@ import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.connection.ApiCallInfo;
 import org.vimeoid.connection.simple.VimeoProvider;
 import org.vimeoid.util.Invoke;
-import org.vimeoid.util.Item;
+import org.vimeoid.util.SimpleItem;
 import org.vimeoid.util.Utils;
 
 import android.database.Cursor;
@@ -33,7 +33,7 @@ import android.widget.TextView;
  * @date Sep 16, 2010 6:41:44 PM 
  *
  */
-public abstract class SingleItemActivity<ItemType extends Item> extends SingleItemActivity_<ItemType> {
+public abstract class SingleItemActivity<ItemType extends SimpleItem> extends SingleItemActivity_<ItemType> {
     
     // private static final String TAG = "SingleItemActivity";
     
@@ -63,7 +63,7 @@ public abstract class SingleItemActivity<ItemType extends Item> extends SingleIt
         
         subjectIcon.setImageResource(Utils.drawableByContent(callInfo.subjectType));
         subjectTitle.setText(getIntent().hasExtra(Invoke.Extras.SUBJ_TITLE) ? getIntent().getStringExtra(Invoke.Extras.SUBJ_TITLE) : callInfo.subject);
-        resultIcon.setImageResource(getIntent().getIntExtra(Invoke.Extras.ICON, R.drawable.info));
+        resultIcon.setImageResource(getIntent().getIntExtra(Invoke.Extras.RES_ICON, R.drawable.info));
     }
     
     @Override

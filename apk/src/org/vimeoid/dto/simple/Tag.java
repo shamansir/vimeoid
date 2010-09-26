@@ -3,7 +3,7 @@
  */
 package org.vimeoid.dto.simple;
 
-import org.vimeoid.util.Item;
+import org.vimeoid.util.SimpleItem;
 
 /**
  * <dl>
@@ -19,7 +19,7 @@ import org.vimeoid.util.Item;
  * @date Aug 25, 2010 12:07:30 AM 
  *
  */
-public class Tag implements Item {
+public class Tag implements SimpleItem {
     
     public String name;
     public String url;

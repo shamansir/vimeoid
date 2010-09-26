@@ -9,7 +9,7 @@ package org.vimeoid.util;
  * <dt>Package:</dt> <dd>org.vimeoid.util</dd>
  * </dl>
  *
- * <code>Item</code>
+ * <code>SimpleItem</code>
  *
  * <p>Description</p>
  *
@@ -17,6 +17,6 @@ package org.vimeoid.util;
  * @date Sep 16, 2010 6:51:19 PM 
  *
  */
-public interface Item {
+public interface AdvancedItem {
 
 }

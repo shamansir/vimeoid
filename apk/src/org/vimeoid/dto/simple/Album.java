@@ -3,7 +3,7 @@
  */
 package org.vimeoid.dto.simple;
 
-import org.vimeoid.util.Item;
+import org.vimeoid.util.SimpleItem;
 
 import android.database.Cursor;
 
@@ -21,7 +21,7 @@ import android.database.Cursor;
  * @date Aug 20, 2010 9:55:45 AM 
  *
  */
-public class Album implements Item {
+public class Album implements SimpleItem {
     
     /* public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoProvider.AUTHORITY +
                                                                    "/albums"); */

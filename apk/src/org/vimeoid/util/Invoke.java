@@ -37,8 +37,9 @@ public final class Invoke {
     
     public static class Extras {
     
+        public static final String SUBJ_ICON = "v_subjicon";
         public static final String SUBJ_TITLE = "v_subjtitle";
-        public static final String ICON = "v_icon";        
+        public static final String RES_ICON = "v_resicon";        
         
         public static final String VIDEO_ID = "v_video_id";
         public static final String USERNAME = "v_username";
@@ -87,14 +88,14 @@ public final class Invoke {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
                                     Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + user.id + "/videos"))
                                     .putExtra(Extras.SUBJ_TITLE, user.displayName)
-                                    .putExtra(Extras.ICON, R.drawable.video));
+                                    .putExtra(Extras.RES_ICON, R.drawable.video));
         }
         
         public static void selectVideosByUploader(Activity parent, Video video) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
                                     Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + getUploaderId(video) + "/videos"))
                                     .putExtra(Extras.SUBJ_TITLE, video.uploaderName)
-                                    .putExtra(Extras.ICON, R.drawable.video));
+                                    .putExtra(Extras.RES_ICON, R.drawable.video));
         }        
         
         public static void selectUploader(Activity parent, Video video) {
@@ -108,35 +109,35 @@ public final class Invoke {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
 					   				 Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + user.id + "/appears"))
 					   				 .putExtra(Extras.SUBJ_TITLE, user.displayName)
-					   				 .putExtra(Extras.ICON, R.drawable.appearance));
+					   				 .putExtra(Extras.RES_ICON, R.drawable.appearance));
 		}
 
 		public static void selectLikesOf(Activity parent, User user) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
 	                				 Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + user.id + "/likes"))
                     				 .putExtra(Extras.SUBJ_TITLE, user.displayName)
-                    				 .putExtra(Extras.ICON, R.drawable.like));
+                    				 .putExtra(Extras.RES_ICON, R.drawable.like));
 		}
 
 		public static void selectSubsriptionsOf(Activity parent, User user) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
 					   				 Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + user.id + "/subscr"))
 					   				 .putExtra(Extras.SUBJ_TITLE, user.displayName)
-					   				 .putExtra(Extras.ICON, R.drawable.subscribe));			
+					   				 .putExtra(Extras.RES_ICON, R.drawable.subscribe));			
 		}
 		
         public static void selectAlbumsOf(Activity parent, User user) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
                                      Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + user.id + "/albums"))
                                      .putExtra(Extras.SUBJ_TITLE, user.displayName)
-                                     .putExtra(Extras.ICON, R.drawable.album));          
+                                     .putExtra(Extras.RES_ICON, R.drawable.album));          
         }
         
         public static void selectChannelsOf(Activity parent, User user) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
                                      Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + user.id + "/channels"))
                                      .putExtra(Extras.SUBJ_TITLE, user.displayName)
-                                     .putExtra(Extras.ICON, R.drawable.channel));          
+                                     .putExtra(Extras.RES_ICON, R.drawable.channel));          
         }        
         
         // Channel
@@ -163,14 +164,14 @@ public final class Invoke {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
                                      Uri.withAppendedPath(VimeoProvider.BASE_URI, "/channel/" + channel.id + "/videos"))
                                      .putExtra(Extras.SUBJ_TITLE, channel.name)
-                                     .putExtra(Extras.ICON, R.drawable.video));            
+                                     .putExtra(Extras.RES_ICON, R.drawable.video));            
         }
         
         public static void selectChannelContent(Activity parent, String channelName) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
                                      Uri.withAppendedPath(VimeoProvider.BASE_URI, "/channel/" + channelName + "/videos"))
                                      .putExtra(Extras.SUBJ_TITLE, channelName)
-                                     .putExtra(Extras.ICON, R.drawable.video));
+                                     .putExtra(Extras.RES_ICON, R.drawable.video));
         }
         
         // Album
@@ -197,7 +198,7 @@ public final class Invoke {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
                                      Uri.withAppendedPath(VimeoProvider.BASE_URI, "/album/" + album.id + "/videos"))
                                      .putExtra(Extras.SUBJ_TITLE, album.title)
-                                     .putExtra(Extras.ICON, R.drawable.video));            
+                                     .putExtra(Extras.RES_ICON, R.drawable.video));            
         }
         
     }
@@ -212,7 +213,10 @@ public final class Invoke {
         public static void showUserPage(Activity parent, long userId, String username) {
             parent.startActivity(new Intent(parent, UserActivity.class)
                                      .putExtra(Extras.USER_ID, userId)
-                                     .putExtra(Extras.USERNAME, username));
+                                     .putExtra(Extras.USERNAME, username)
+                                     .putExtra(Extras.SUBJ_ICON, R.drawable.contact)
+                                     .putExtra(Extras.SUBJ_TITLE, username)
+                                     .putExtra(Extras.RES_ICON, R.drawable.info));
         }
 
         public static void showPersonalPage(Activity parent, long userId, String username) {

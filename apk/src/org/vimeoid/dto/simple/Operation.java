@@ -3,7 +3,7 @@
  */
 package org.vimeoid.dto.simple;
 
-import org.vimeoid.util.Item;
+import org.vimeoid.util.SimpleItem;
 
 /**
  * <dl>
@@ -19,7 +19,7 @@ import org.vimeoid.util.Item;
  * @date Aug 19, 2010 9:21:38 PM 
  *
  */
-public class Operation implements Item {
+public class Operation implements SimpleItem {
     
     /* public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoProvider.AUTHORITY +
                                                                    "/actions"); */

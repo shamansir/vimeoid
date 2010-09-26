@@ -1,13 +1,13 @@
-package org.vimeoid.activity.guest;
+package org.vimeoid.activity.user;
 
 import org.vimeoid.R;
 import org.vimeoid.activity.base.ItemsListActivity_;
 import org.vimeoid.adapter.EasyCursorsAdapter;
 import org.vimeoid.connection.ApiCallInfo;
 import org.vimeoid.connection.simple.VimeoProvider;
+import org.vimeoid.util.AdvancedItem;
 import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
-import org.vimeoid.util.SimpleItem;
 import org.vimeoid.util.Utils;
 
 import android.database.Cursor;
@@ -20,7 +20,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public abstract class ItemsListActivity<ItemType extends SimpleItem> extends 
+public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends 
                       ItemsListActivity_<ItemType, EasyCursorsAdapter<ItemType>> {
 	
     public static final String TAG = "ItemsListActivity";	

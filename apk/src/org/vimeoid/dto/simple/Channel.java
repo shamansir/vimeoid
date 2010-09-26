@@ -3,7 +3,7 @@
  */
 package org.vimeoid.dto.simple;
 
-import org.vimeoid.util.Item;
+import org.vimeoid.util.SimpleItem;
 
 import android.database.Cursor;
 
@@ -21,7 +21,7 @@ import android.database.Cursor;
  * @date Aug 19, 2010 8:56:39 PM 
  *
  */
-public class Channel implements Item {
+public class Channel implements SimpleItem {
     
     /* public static final Uri CONTENT_URI = Uri.parse("content://" + VimeoProvider.AUTHORITY +
                                                                    "/channels"); */

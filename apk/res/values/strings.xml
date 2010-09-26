@@ -6,6 +6,7 @@
     <string name="vimeo_not_reachable">Connection exists, but Vimeo site is not reachable... Please fix the problem</string>
     <string name="no_pages_more">Maximum number of pages is reached</string>
     <string name="please_do_not_touch">Don\'t mess with me!</string>
+    <string name="unknown">Unknown</string>
     <string name="unknown_item">Unknown item</string>
     <string name="caching_video">Loading video...</string>
     <string name="currently_not_supported">This action is not supported currently</string>
