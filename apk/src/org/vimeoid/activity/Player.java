@@ -69,6 +69,15 @@ public class Player extends Activity {
 				finish();				
 			};
 			
+			protected void onFailedToGetVideoStream() {
+                runOnUiThread(new Runnable() {                  
+                    @Override public void run() {
+                        Dialogs.makeLongToast(Player.this, getString(R.string.failed_to_get_video_stream));
+                    }
+                }); 
+                finish();			    
+			};
+			
 		}.execute(videoId);
 		
 	}

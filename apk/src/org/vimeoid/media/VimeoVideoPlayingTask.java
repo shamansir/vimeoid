@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.vimeoid.connection.FailedToGetVideoStreamException;
 import org.vimeoid.connection.VideoLinkRequestException;
 import org.vimeoid.connection.VimeoVideoStreamer;
 import org.vimeoid.util.Utils;
@@ -119,6 +120,8 @@ public class VimeoVideoPlayingTask extends AsyncTask<Long, Long, FileInputStream
 		} catch (NoSpaceForVideoCacheException nsfvce) {
 			//onException(nsfvce);
 			onNoSpaceForVideoCache(nsfvce.getRequiredSpace(), nsfvce.getActualSpace());
+		} catch (FailedToGetVideoStreamException ftgvse) {
+		    onFailedToGetVideoStream();
 		} catch (VideoLinkRequestException vle) { onException(vle); }
 	      catch (IOException ioe) { onException(ioe); }
 	      /* finally {
@@ -170,7 +173,9 @@ public class VimeoVideoPlayingTask extends AsyncTask<Long, Long, FileInputStream
 	protected void onException(Exception e) { informException(e); }
 	
 	protected void onNoSpaceForVideoCache(final long required, final long actual) { }
-    
+	
+	protected void onFailedToGetVideoStream() { }
+	
     @SuppressWarnings("serial")
     public static final class NoSpaceForVideoCacheException extends IOException {
         

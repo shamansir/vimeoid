@@ -10,6 +10,7 @@
     <string name="caching_video">Loading video...</string>
     <string name="currently_not_supported">This action is not supported currently</string>
     <string name="no_space_for_video_cache">There is no free space to make cache of this file. Required: {required}KB | Actual: {actual}KB </string>
+    <string name="failed_to_get_video_stream">Failed to get video stream</string>
     <!-- main menu -->
     <string name="refresh">Refresh</string>
     <string name="preferences">Preferences</string>
