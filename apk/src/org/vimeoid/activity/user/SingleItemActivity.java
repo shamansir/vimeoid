@@ -3,7 +3,6 @@
  */
 package org.vimeoid.activity.user;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -55,10 +54,10 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        params = prepareMethodParams(getIntent().getExtras(), new ArrayList<NameValuePair>());
+        params = prepareMethodParams(getIntent().getExtras());
     }
     
-    protected abstract List<NameValuePair> prepareMethodParams(Bundle extras, List<NameValuePair> params);
+    protected abstract List<NameValuePair> prepareMethodParams(Bundle extras);
     
     protected abstract ItemType extractFromJson(JSONObject jsonObj);
     
@@ -73,6 +72,7 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     }
     
     @Override
+    @SuppressWarnings("unchecked")    
     protected final void queryItem() {
         new LoadItemTask(apiMethod, objectKey).execute(params);
     }
