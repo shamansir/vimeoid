@@ -8,8 +8,6 @@ import org.json.JSONObject;
 import org.vimeoid.util.AdvancedItem;
 import org.vimeoid.util.Utils;
 
-import android.util.Log;
-
 /**
  * <dl>
  * <dt>Project:</dt> <dd>vimeoid</dd>
@@ -42,16 +40,16 @@ public class User implements AdvancedItem {
     public long videosLiked;
     
     public long contactsCount;
-    public long albumsCount;
-    public long channelsCount;
+    //public long albumsCount;
+    //public long channelsCount;
     
     public String location;
-    public String websiteUrl;
+    public String[] websiteUrls;
     public String biography; 
     
-    public String smallPortraitUrl;
+    /* public String smallPortraitUrl;
     public String mediumPortraitUrl;
-    public String largePortraitUrl;
+    public String largePortraitUrl; */
 
     public final static class FieldsKeys {
         
@@ -79,9 +77,7 @@ public class User implements AdvancedItem {
         
     }
     
-    public static User extractFromJson(JSONObject jsonObj) throws JSONException {
-        Log.d("Extracting user", jsonObj.toString());
-        
+    public static User collectFromJson(JSONObject jsonObj) throws JSONException {
         final User user = new User();
         
         user.id = jsonObj.getLong(FieldsKeys.ID);
@@ -93,7 +89,7 @@ public class User implements AdvancedItem {
         user.username = jsonObj.getString(FieldsKeys.USERNAME);
         user.location = jsonObj.getString(FieldsKeys.LOCATION);
         
-        user.websiteUrl = jsonObj.getString(FieldsKeys.URL);
+        user.websiteUrls = Utils.stringArrayFromJson(jsonObj.getJSONArray(FieldsKeys.URL));
         user.biography = jsonObj.getString(FieldsKeys.BIO);
         
         user.profileUrl = jsonObj.getString(FieldsKeys.PROFILE_URL);

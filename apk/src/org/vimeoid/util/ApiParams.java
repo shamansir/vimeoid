@@ -29,7 +29,7 @@ public class ApiParams {
     
     public ApiParams() { }
     
-    public ApiParams param(String name, String value) {
+    public ApiParams add(String name, String value) {
         params.add(new BasicNameValuePair(name, value));
         return this;
     }
@@ -40,6 +40,15 @@ public class ApiParams {
 
     public boolean isEmpty() {
         return params.isEmpty();
+    }
+    
+    @Override
+    public String toString() {
+        final StringBuffer result = new StringBuffer().append('{');
+        for (NameValuePair pair: params) {
+            result.append(pair.getName()).append('=').append(pair.getValue()).append(';');
+        }
+        return result.append('}').toString();
     }
 
 }

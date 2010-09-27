@@ -47,12 +47,12 @@ public class UserActivity extends SingleItemActivity<User> {
 
     @Override
     protected User extractFromJson(JSONObject jsonObj) throws JSONException {
-        return User.extractFromJson(jsonObj);
+        return User.collectFromJson(jsonObj);
     }
 
     @Override
     protected ApiParams prepareMethodParams(String methodName, String objectKey, Bundle extras) {
-        return new ApiParams().param("user_id", String.valueOf(extras.getLong(Invoke.Extras.USER_ID)));
+        return new ApiParams().add("user_id", String.valueOf(extras.getLong(Invoke.Extras.USER_ID)));
     }
 
     @Override

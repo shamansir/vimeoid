@@ -114,7 +114,7 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
         
         @Override
         protected void onPostExecute(JSONObject jsonObj) {
-            Log.d(TAG, jsonObj.toString());
+            // Log.d(TAG, jsonObj.toString());
             if (jsonObj != null) {
                 try {
                     onItemReceived(extractFromJson(jsonObj.getJSONObject(objectKey)));

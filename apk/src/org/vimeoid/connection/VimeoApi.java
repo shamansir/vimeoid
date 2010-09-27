@@ -156,8 +156,8 @@ public class VimeoApi {
                                                                            OAuthMessageSignerException, OAuthExpectationFailedException, 
                                                                            OAuthCommunicationException, JSONException, IOException, 
                                                                            URISyntaxException, AdvancedApiCallError {
-        params.param("method", ADV_API_NAMESPACE + "." + method);
-        params.param("format", RESPONSE_FORMAT);
+        params.add("method", ADV_API_NAMESPACE + "." + method);
+        params.add("format", RESPONSE_FORMAT);
         JSONObject result = JsonOverHttp.use().signedAskForObject(new URI(VimeoConfig.VIMEO_ADVANCED_API_ROOT), params);
         if (!"ok".equals(result.getString("stat"))) {
             final JSONObject errObj = result.getJSONObject("err");

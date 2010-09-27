@@ -16,6 +16,8 @@ import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.vimeoid.R;
 import org.vimeoid.connection.ContentType;
 
@@ -48,30 +50,30 @@ public class Utils {
 	private static boolean cacheDirCreated = false;
     
     public static ApiParams quickApiParams(String name1, String value1) {        
-        return new ApiParams().param(name1, value1);
+        return new ApiParams().add(name1, value1);
     }
     
     public static ApiParams quickApiParams(String name1, String value1,
                                            String name2, String value2) {
-        return new ApiParams().param(name1, value1).param(name2, value2);
+        return new ApiParams().add(name1, value1).add(name2, value2);
     }
     
     public static ApiParams quickApiParams(String name1, String value1,
                                            String name2, String value2,
                                            String name3, String value3) {
-        return new ApiParams().param(name1, value1)
-                              .param(name2, value2)
-                              .param(name3, value3);
+        return new ApiParams().add(name1, value1)
+                              .add(name2, value2)
+                              .add(name3, value3);
     }
     
     public static ApiParams quickApiParams(String name1, String value1,
                                            String name2, String value2,
                                            String name3, String value3,
                                            String name4, String value4) {
-        return new ApiParams().param(name1, value1)
-                              .param(name2, value2)
-                              .param(name3, value3)
-                              .param(name4, value4);
+        return new ApiParams().add(name1, value1)
+                              .add(name2, value2)
+                              .add(name3, value3)
+                              .add(name4, value4);
     }
     
     public static String format(String source, String... params) {
@@ -247,6 +249,14 @@ public class Utils {
 	    File dataDir = Environment.getDataDirectory();
         StatFs stat = new StatFs(dataDir.getPath());
         return stat.getAvailableBlocks() * stat.getBlockSize();
+	}
+	
+	public static String[] stringArrayFromJson(JSONArray jsonArr) throws JSONException {
+	    final String[] array = new String[jsonArr.length()];
+	    for (int i = 0; i < jsonArr.length(); i++) {
+	        array[i] = jsonArr.getString(i);
+	    }
+	    return array;
 	}
 	
 }
