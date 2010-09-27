@@ -138,7 +138,7 @@ public class Welcome extends Activity {
                                   JSONException, IOException, URISyntaxException, AdvancedApiCallError,
                                   OAuthMessageSignerException, OAuthExpectationFailedException, 
                                   OAuthCommunicationException {
-        JSONObject user = VimeoApi.advancedApi(Methods.test.login, "user");
+        JSONObject user = VimeoApi.advancedApi(Methods.test.login).getJSONObject("user");
         Log.d(TAG, "got user " + user.getString("id") + " / " + user.get("username"));
         Invoke.User_.showPersonalPage(this, user.getLong("id"), user.getString("username"));        
     }     

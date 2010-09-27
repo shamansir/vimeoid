@@ -3,16 +3,14 @@
  */
 package org.vimeoid.activity.user;
 
-import java.util.List;
-
-import org.apache.http.NameValuePair;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.R;
 import org.vimeoid.activity.base.SingleItemActivity_;
-import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.VimeoApi.AdvancedApiCallError;
 import org.vimeoid.util.AdvancedItem;
+import org.vimeoid.util.ApiParams;
 import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
 
@@ -42,7 +40,7 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     
     private final String apiMethod;
     private final String objectKey;
-    private List<NameValuePair> params;
+    private ApiParams params;
     
     public SingleItemActivity(int mainView, String apiMethod, String objectKey) {
         super(mainView);
@@ -54,14 +52,12 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        params = prepareMethodParams(getIntent().getExtras());
+        params = prepareMethodParams(apiMethod, objectKey, getIntent().getExtras());
     }
     
-    protected abstract List<NameValuePair> prepareMethodParams(Bundle extras);
+    protected abstract ApiParams prepareMethodParams(String methodName, String objectKey, Bundle extras);
     
     protected abstract ItemType extractFromJson(JSONObject jsonObj);
-    
-    protected abstract SectionedActionsAdapter fillWithActions(final SectionedActionsAdapter actionsAdapter, final ItemType item);
     
     protected void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon) {
         subjectIcon.setImageResource(getIntent().getIntExtra(Invoke.Extras.SUBJ_ICON, R.drawable.info));
@@ -71,18 +67,17 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
         resultIcon.setImageResource(getIntent().getIntExtra(Invoke.Extras.RES_ICON, R.drawable.info));
     }
     
-    @Override
-    @SuppressWarnings("unchecked")    
+    @Override 
     protected final void queryItem() {
-        new LoadItemTask(apiMethod, objectKey).execute(params);
+        new LoadUserItemTask(apiMethod, objectKey).execute(params);
     }
     
-    protected class LoadItemTask extends AsyncTask<List<NameValuePair>, Void, JSONObject> {
+    protected class LoadUserItemTask extends AsyncTask<ApiParams, Void, JSONObject> {
 
         private final String apiMethod;
         private final String objectKey;
         
-        protected LoadItemTask(String apiMethod, String keyParam) {
+        protected LoadUserItemTask(String apiMethod, String keyParam) {
             this.apiMethod = apiMethod;
             this.objectKey = keyParam;
         }
@@ -95,16 +90,16 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
         }
 
         @Override
-        protected JSONObject doInBackground(List<NameValuePair>... paramsLists) {
+        protected JSONObject doInBackground(ApiParams... paramsLists) {
             if (paramsLists.length <= 0) return null;
             if (paramsLists.length > 1) throw new UnsupportedOperationException("This task do not supports several params lists");
             
             try {
-                final List<NameValuePair> params = paramsLists[0];
+                final ApiParams params = paramsLists[0];
                 if (params == null || params.isEmpty()) {
-                    return VimeoApi.advancedApi(apiMethod, objectKey);
+                    return VimeoApi.advancedApi(apiMethod);
                 } else {
-                    return VimeoApi.advancedApi(apiMethod, params, objectKey);
+                    return VimeoApi.advancedApi(apiMethod, params.getValue());
                 }
             } catch(AdvancedApiCallError aace) {
                 VimeoApi.handleApiError(SingleItemActivity.this, aace);
@@ -120,7 +115,13 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
         @Override
         protected void onPostExecute(JSONObject jsonObj) {
             if (jsonObj != null) {
-                onItemReceived(extractFromJson(jsonObj));
+                try {
+                    onItemReceived(extractFromJson(jsonObj.getJSONObject(objectKey)));
+                } catch (JSONException jsone) {
+                    Log.d(TAG, "JSON parsing failure: " + jsone.getLocalizedMessage());
+                    jsone.printStackTrace();
+                    Dialogs.makeExceptionToast(SingleItemActivity.this, "JSON parsing failure", jsone);
+                }
             }
             hideProgressBar();
         }

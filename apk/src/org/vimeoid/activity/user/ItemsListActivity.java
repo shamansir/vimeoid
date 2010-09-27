@@ -1,17 +1,18 @@
 package org.vimeoid.activity.user;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.vimeoid.R;
 import org.vimeoid.activity.base.ItemsListActivity_;
-import org.vimeoid.adapter.EasyCursorsAdapter;
-import org.vimeoid.connection.ApiCallInfo;
-import org.vimeoid.connection.simple.VimeoProvider;
+import org.vimeoid.adapter.user.JsonObjectsAdapter;
+import org.vimeoid.connection.VimeoApi;
+import org.vimeoid.connection.VimeoApi.AdvancedApiCallError;
 import org.vimeoid.util.AdvancedItem;
+import org.vimeoid.util.ApiParams;
 import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
-import org.vimeoid.util.Utils;
 
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -21,52 +22,51 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends 
-                      ItemsListActivity_<ItemType, EasyCursorsAdapter<ItemType>> {
+                      ItemsListActivity_<ItemType, JsonObjectsAdapter> {
 	
-    public static final String TAG = "ItemsListActivity";	
+    public static final String TAG = "ItemsListActivity";
+    
+    private final String apiMethod;
+    private final String arrayKey;
+    private ApiParams params;    
 
-    protected final String[] projection;
-    
-    protected Uri contentUri;
-    protected ApiCallInfo callInfo;
-    
-    public ItemsListActivity(int mainView, String[] projection, int contextMenu) {
+    public ItemsListActivity(int mainView, int contextMenu, String apiMethod, String arrayKey) {
     	super(mainView, contextMenu);
-    	this.projection = projection;
+    	this.apiMethod = apiMethod;
+    	this.arrayKey = arrayKey;
     }
     
-    public ItemsListActivity(String[] projection, int contextMenu) {
-    	this(R.layout.generic_list, projection, contextMenu);
+    public ItemsListActivity(int contextMenu, String apiMethod, String arrayKey) {
+    	this(R.layout.generic_list, contextMenu, apiMethod, arrayKey);
     }
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        contentUri = getIntent().getData();
+        params = prepareMethodParams(apiMethod, arrayKey, getIntent().getExtras());
         
         super.onCreate(savedInstanceState);
     }
     
+    protected abstract ApiParams prepareMethodParams(String methodName, String arrayKey, Bundle extras);    
+    
     protected void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon) {
-        callInfo = VimeoProvider.collectCallInfo(contentUri);        
-        
-        subjectIcon.setImageResource(Utils.drawableByContent(callInfo.subjectType));
-        subjectTitle.setText(getIntent().hasExtra(Invoke.Extras.SUBJ_TITLE) ? getIntent().getStringExtra(Invoke.Extras.SUBJ_TITLE) : callInfo.subject);
+        subjectIcon.setImageResource(getIntent().getIntExtra(Invoke.Extras.SUBJ_ICON, R.drawable.info));
+        subjectTitle.setText(getIntent().hasExtra(Invoke.Extras.SUBJ_TITLE) 
+                             ? getIntent().getStringExtra(Invoke.Extras.SUBJ_TITLE) 
+                             : getString(R.string.unknown));
         resultIcon.setImageResource(getIntent().getIntExtra(Invoke.Extras.RES_ICON, R.drawable.info));
     }
     
     @Override
-    protected final void queryMoreItems(EasyCursorsAdapter<ItemType> adapter, int pageNum) {
-        final Uri nextPageUri = (pageNum == 1) 
-                                ? contentUri 
-                                : Uri.parse(VimeoProvider.BASE_URI + contentUri.getPath() + "?page=" + pageNum);
-        Log.d(TAG, "Next page Uri: " + nextPageUri);        
-        new LoadGuestItemsTask(adapter, projection).execute(nextPageUri);
+    protected final void queryMoreItems(JsonObjectsAdapter adapter, int pageNum) {
+        // FIXME: use pageNum
+        new LoadUserItemsTask(adapter, apiMethod, arrayKey).execute(params);
     }
     
    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater(); //from activity
-        inflater.inflate(R.menu.guest_options_menu, menu); 
+        inflater.inflate(R.menu.user_options_menu, menu); 
         
         return true;
     }
@@ -95,39 +95,61 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
         
     }
     
-    protected final class LoadGuestItemsTask extends LoadItemsTask<Uri, Void, Cursor> {
+    protected final class LoadUserItemsTask extends LoadItemsTask<ApiParams, Void, JSONObject> {
 
-        // TODO: show progress as a dialog
-        private final String[] projection;
-        private final EasyCursorsAdapter<?> adapter;
+        private final JsonObjectsAdapter adapter;
+        private final String apiMethod;
+        private final String arrayKey;
         
-        protected LoadGuestItemsTask(EasyCursorsAdapter<?> adapter, String[] projection) {
-            super();
-            if (adapter == null) throw new IllegalArgumentException("Adapter must not be null");
+        protected LoadUserItemsTask(JsonObjectsAdapter adapter, String apiMethod, String keyParam) {
             this.adapter = adapter;
-            this.projection = projection;
+            this.apiMethod = apiMethod;
+            this.arrayKey = keyParam;
         }
         
         @Override
-        protected Cursor doInBackground(Uri... uris) {
-            if (uris.length <= 0) return null;
-            if (uris.length > 1) throw new UnsupportedOperationException("This task do not supports several params");
-            return getContentResolver().query(uris[0], projection, null, null, null);
-        }
-        
-        @Override
-        protected void onPostExecute(Cursor cursor) {
-            super.onPostExecute(cursor);
+        protected JSONObject doInBackground(ApiParams... paramsLists) {
+            if (paramsLists.length <= 0) return null;
+            if (paramsLists.length > 1) throw new UnsupportedOperationException("This task do not supports several params lists");
             
-        	if (cursor == null) {
+            try {
+                final ApiParams params = paramsLists[0];
+                if (params == null || params.isEmpty()) {
+                    return VimeoApi.advancedApi(apiMethod);
+                } else {
+                    return VimeoApi.advancedApi(apiMethod, params.getValue());
+                }
+            } catch(AdvancedApiCallError aace) {
+                VimeoApi.handleApiError(ItemsListActivity.this, aace);
+            } catch(Exception e) {
+                Log.e(TAG, "Error while calling " + apiMethod + ": " + e.getLocalizedMessage());
+                e.printStackTrace();
+                Dialogs.makeExceptionToast(ItemsListActivity.this, "Error while calling " + apiMethod, e);
+            }
+            
+            return null;
+        }
+        
+        @Override
+        protected void onPostExecute(JSONObject object) {
+        	if (object == null) {
         	    Log.e(TAG, "Failed to receive next page");
         		rollback();
         	} else {
-                startManagingCursor(cursor);
-                adapter.addSource(cursor);
-                onItemsReceived(cursor.getCount());
-                cursor.close();
+        	    JSONArray values;
+                try {
+                    values = object.getJSONArray(arrayKey);
+                    adapter.addSource(values);
+                    onItemsReceived(values.length());                    
+                } catch (JSONException jsone) {
+                    rollback();
+                    Log.d(TAG, "JSON parsing failure: " + jsone.getLocalizedMessage());
+                    jsone.printStackTrace();
+                    Dialogs.makeExceptionToast(ItemsListActivity.this, "JSON parsing failure", jsone);                    
+                }
             }
+        	
+            super.onPostExecute(object);
         }
         
     }

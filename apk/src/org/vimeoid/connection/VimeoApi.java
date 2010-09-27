@@ -145,16 +145,16 @@ public class VimeoApi {
     
     /* ====================== Advanced API: Calls =========================== */
     
-    public static JSONObject advancedApi(final String method, final String object) 
+    public static JSONObject advancedApi(final String method) 
                                                         throws ClientProtocolException, NoSuchAlgorithmException, 
                                                                OAuthMessageSignerException, OAuthExpectationFailedException, 
                                                                OAuthCommunicationException, JSONException, IOException, 
                                                                URISyntaxException, AdvancedApiCallError {
         
-        return advancedApi(method, new ArrayList<NameValuePair>(), object);
+        return advancedApi(method, new ArrayList<NameValuePair>());
     }
     
-    public static JSONObject advancedApi(final String method, List<NameValuePair> params, final String object) 
+    public static JSONObject advancedApi(final String method, List<NameValuePair> params) 
                                                                     throws ClientProtocolException, NoSuchAlgorithmException, 
                                                                            OAuthMessageSignerException, OAuthExpectationFailedException, 
                                                                            OAuthCommunicationException, JSONException, IOException, 
@@ -166,7 +166,7 @@ public class VimeoApi {
             final JSONObject errObj = result.getJSONObject("err");
             throw new AdvancedApiCallError(errObj.getInt("code"), errObj.getString("msg"));
         }
-        return result.getJSONObject(object);
+        return result;
     }
     
     /* ====================== Advanced Api: Exceptions / Errors ============= */

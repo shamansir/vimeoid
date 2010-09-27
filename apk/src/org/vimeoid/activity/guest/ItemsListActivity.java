@@ -117,8 +117,6 @@ public abstract class ItemsListActivity<ItemType extends SimpleItem> extends
         
         @Override
         protected void onPostExecute(Cursor cursor) {
-            super.onPostExecute(cursor);
-            
         	if (cursor == null) {
         	    Log.e(TAG, "Failed to receive next page");
         		rollback();
@@ -128,6 +126,7 @@ public abstract class ItemsListActivity<ItemType extends SimpleItem> extends
                 onItemsReceived(cursor.getCount());
                 cursor.close();
             }
+            super.onPostExecute(cursor);
         }
         
     }

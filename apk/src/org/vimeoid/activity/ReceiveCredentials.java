@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.net.Uri;
 import android.util.Log;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.VimeoApi.AdvancedApiCallError;
@@ -48,7 +49,7 @@ public class ReceiveCredentials extends Activity {
                 VimeoApi.ensureOAuthCallbackAndSaveToken(this, uri);
                 Log.i(TAG, "Credential saved");
                 
-                JSONObject user = VimeoApi.advancedApi(Methods.test.login, "user");
+                JSONObject user = VimeoApi.advancedApi(Methods.test.login).getJSONObject("user");
                 Log.d(TAG, "got user " + user.getString("id") + " / " + user.get("username"));
                 Invoke.User_.showPersonalPage(this, user.getLong("id"), user.getString("username"));                
                 
@@ -56,10 +57,14 @@ public class ReceiveCredentials extends Activity {
                                      Utils.quickApiParams("user_id", "shamansir"), "activity"); */
             } catch (AdvancedApiCallError aace) {
                 VimeoApi.handleApiError(this, aace);
+            } catch (JSONException jsone) {
+                Log.e(TAG, "Error while getting user: " + jsone.getLocalizedMessage());
+                jsone.printStackTrace();
+                Dialogs.makeExceptionToast(this, "JSON Parsing Failure: ", jsone);                
             } catch (Exception e) {
                 Log.e(TAG, e.getLocalizedMessage());
                 e.printStackTrace();
-                Dialogs.makeExceptionToast(this, "Failure: ", e);                
+                Dialogs.makeExceptionToast(this, "Failure: ", e);
             }
         } else {
             Dialogs.makeToast(this, "Failed to get OAuth token");
