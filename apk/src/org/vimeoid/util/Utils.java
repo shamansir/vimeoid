@@ -13,12 +13,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.vimeoid.R;
 import org.vimeoid.connection.ContentType;
 
@@ -50,37 +47,31 @@ public class Utils {
 	private static File cacheDir = null;
 	private static boolean cacheDirCreated = false;
     
-    public static List<NameValuePair> quickApiParams(String name1, String value1) {
-        final List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair(name1, value1));        
-        return params;
+    public static ApiParams quickApiParams(String name1, String value1) {        
+        return new ApiParams().param(name1, value1);
     }
     
-    public static List<NameValuePair> quickApiParams(String name1, String value1,
-                                                     String name2, String value2) {
-        final List<NameValuePair> params = quickApiParams(name1, value1);
-        params.add(new BasicNameValuePair(name2, value2));        
-        return params;
+    public static ApiParams quickApiParams(String name1, String value1,
+                                           String name2, String value2) {
+        return new ApiParams().param(name1, value1).param(name2, value2);
     }
     
-    public static List<NameValuePair> quickApiParams(String name1, String value1,
-                                                     String name2, String value2,
-                                                     String name3, String value3) {
-        final List<NameValuePair> params = quickApiParams(name1, value1, 
-                                                          name2, value2);
-        params.add(new BasicNameValuePair(name3, value3));        
-        return params;
+    public static ApiParams quickApiParams(String name1, String value1,
+                                           String name2, String value2,
+                                           String name3, String value3) {
+        return new ApiParams().param(name1, value1)
+                              .param(name2, value2)
+                              .param(name3, value3);
     }
     
-    public static List<NameValuePair> quickApiParams(String name1, String value1,
-                                                     String name2, String value2,
-                                                     String name3, String value3,
-                                                     String name4, String value4) {
-        final List<NameValuePair> params = quickApiParams(name1, value1, 
-                                                          name2, value2,
-                                                          name3, value3);
-        params.add(new BasicNameValuePair(name4, value4));        
-        return params;
+    public static ApiParams quickApiParams(String name1, String value1,
+                                           String name2, String value2,
+                                           String name3, String value3,
+                                           String name4, String value4) {
+        return new ApiParams().param(name1, value1)
+                              .param(name2, value2)
+                              .param(name3, value3)
+                              .param(name4, value4);
     }
     
     public static String format(String source, String... params) {

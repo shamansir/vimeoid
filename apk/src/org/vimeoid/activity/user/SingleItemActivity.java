@@ -57,7 +57,7 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     
     protected abstract ApiParams prepareMethodParams(String methodName, String objectKey, Bundle extras);
     
-    protected abstract ItemType extractFromJson(JSONObject jsonObj);
+    protected abstract ItemType extractFromJson(JSONObject jsonObj) throws JSONException;
     
     protected void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon) {
         subjectIcon.setImageResource(getIntent().getIntExtra(Invoke.Extras.SUBJ_ICON, R.drawable.info));
@@ -99,7 +99,7 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
                 if (params == null || params.isEmpty()) {
                     return VimeoApi.advancedApi(apiMethod);
                 } else {
-                    return VimeoApi.advancedApi(apiMethod, params.getValue());
+                    return VimeoApi.advancedApi(apiMethod, params);
                 }
             } catch(AdvancedApiCallError aace) {
                 VimeoApi.handleApiError(SingleItemActivity.this, aace);
@@ -114,6 +114,7 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
         
         @Override
         protected void onPostExecute(JSONObject jsonObj) {
+            Log.d(TAG, jsonObj.toString());
             if (jsonObj != null) {
                 try {
                     onItemReceived(extractFromJson(jsonObj.getJSONObject(objectKey)));

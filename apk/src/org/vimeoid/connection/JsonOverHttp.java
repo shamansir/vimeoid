@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 
 import oauth.signpost.OAuth;
 import oauth.signpost.OAuthConsumer;
@@ -21,7 +20,6 @@ import oauth.signpost.exception.OAuthNotAuthorizedException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -36,6 +34,7 @@ import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.vimeoid.util.ApiParams;
 
 import android.net.Uri;
 import android.util.Log;
@@ -100,7 +99,7 @@ public class JsonOverHttp {
         return new JSONObject(execute(uri, params));
     }
     
-    public JSONObject signedAskForObject(final URI uri, List<NameValuePair> params) throws ClientProtocolException, NoSuchAlgorithmException, 
+    public JSONObject signedAskForObject(final URI uri, ApiParams params) throws ClientProtocolException, NoSuchAlgorithmException, 
                                                                                            OAuthMessageSignerException, OAuthExpectationFailedException, 
                                                                                            OAuthCommunicationException, JSONException, IOException {
         return new JSONObject(executeWithOAuth(uri, params));
@@ -204,16 +203,16 @@ public class JsonOverHttp {
         return consumer.getTokenSecret();
     }    
     
-    protected String executeWithOAuth(final URI uri, List<NameValuePair> params) throws ClientProtocolException, IOException, NoSuchAlgorithmException, 
+    protected String executeWithOAuth(final URI uri, ApiParams params) throws ClientProtocolException, IOException, NoSuchAlgorithmException, 
     																				    OAuthMessageSignerException, OAuthExpectationFailedException, 
     																					OAuthCommunicationException {
         if (consumer == null) throw new IllegalStateException("OAuth Consumer is not set, call initOuathConfiguration");
         if (provider == null) throw new IllegalStateException("OAuth Provider is not ready, call initOuathConfiguration");
         
-        Log.d(TAG, "executing Uri" + uri + " with OAuth");
+        Log.d(TAG, "executing Uri " + uri + " / " + params.toString() + " with OAuth");
         HttpPost post = new HttpPost(uri);
         
-        post.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+        post.setEntity(new UrlEncodedFormEntity(params.getValue(), HTTP.UTF_8));
         post.getParams().setBooleanParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false);
         
         Log.d(TAG, "Signing consumer");

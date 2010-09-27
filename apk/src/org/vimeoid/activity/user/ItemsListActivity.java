@@ -117,7 +117,7 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
                 if (params == null || params.isEmpty()) {
                     return VimeoApi.advancedApi(apiMethod);
                 } else {
-                    return VimeoApi.advancedApi(apiMethod, params.getValue());
+                    return VimeoApi.advancedApi(apiMethod, params);
                 }
             } catch(AdvancedApiCallError aace) {
                 VimeoApi.handleApiError(ItemsListActivity.this, aace);

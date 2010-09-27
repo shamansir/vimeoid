@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -23,12 +21,11 @@ import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
 import oauth.signpost.exception.OAuthNotAuthorizedException;
 
-import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.VimeoConfig;
+import org.vimeoid.util.ApiParams;
 import org.vimeoid.util.Dialogs;
 
 /**
@@ -151,16 +148,16 @@ public class VimeoApi {
                                                                OAuthCommunicationException, JSONException, IOException, 
                                                                URISyntaxException, AdvancedApiCallError {
         
-        return advancedApi(method, new ArrayList<NameValuePair>());
+        return advancedApi(method, new ApiParams());
     }
     
-    public static JSONObject advancedApi(final String method, List<NameValuePair> params) 
+    public static JSONObject advancedApi(final String method, ApiParams params) 
                                                                     throws ClientProtocolException, NoSuchAlgorithmException, 
                                                                            OAuthMessageSignerException, OAuthExpectationFailedException, 
                                                                            OAuthCommunicationException, JSONException, IOException, 
                                                                            URISyntaxException, AdvancedApiCallError {
-        params.add(new BasicNameValuePair("method", ADV_API_NAMESPACE + "." + method));
-        params.add(new BasicNameValuePair("format", RESPONSE_FORMAT));
+        params.param("method", ADV_API_NAMESPACE + "." + method);
+        params.param("format", RESPONSE_FORMAT);
         JSONObject result = JsonOverHttp.use().signedAskForObject(new URI(VimeoConfig.VIMEO_ADVANCED_API_ROOT), params);
         if (!"ok".equals(result.getString("stat"))) {
             final JSONObject errObj = result.getJSONObject("err");

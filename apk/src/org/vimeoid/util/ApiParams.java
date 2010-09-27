@@ -29,7 +29,7 @@ public class ApiParams {
     
     public ApiParams() { }
     
-    public ApiParams addParam(String name, String value) {
+    public ApiParams param(String name, String value) {
         params.add(new BasicNameValuePair(name, value));
         return this;
     }
