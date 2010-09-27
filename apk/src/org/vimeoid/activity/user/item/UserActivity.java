@@ -9,11 +9,15 @@ import org.vimeoid.R;
 import org.vimeoid.activity.user.SingleItemActivity;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.connection.advanced.Methods;
+import org.vimeoid.dto.advanced.PortraitsData;
 import org.vimeoid.dto.advanced.User;
 import org.vimeoid.util.ApiParams;
 import org.vimeoid.util.Invoke;
 
 import android.os.Bundle;
+import android.text.Html;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * <dl>
@@ -72,7 +76,9 @@ public class UserActivity extends SingleItemActivity<User> {
     
     @Override
     protected void onItemReceived(User user) {
-        // FIXME: initialize bio
+        ((TextView)findViewById(R.id.userBio)).setText((user.biography.length() > 0) 
+                                                       ? Html.fromHtml(user.biography)
+                                                       : getString(R.string.no_biography_supplied));
         
         super.onItemReceived(user);
     }
@@ -81,7 +87,10 @@ public class UserActivity extends SingleItemActivity<User> {
     public void onSecondaryTaskPerfomed(int taskId, JSONObject result) throws JSONException {
         switch (taskId) {
             case LOAD_PORTRAITS_TASK: {
-                // FIXME: implement
+                final ImageView uploaderPortrait = (ImageView)findViewById(R.id.userPortrait);
+                final String mediumPortraitUrl = result.getJSONArray(PortraitsData.FieldsKeys.OBJECT_KEY)
+                                                       .getJSONObject(2).getString(PortraitsData.FieldsKeys.URL);
+                imageLoader.displayImage(mediumPortraitUrl, uploaderPortrait);
             }; break;
             case LOAD_ALBUMS_TASK: {
                 // FIXME: implement

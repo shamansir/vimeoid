@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.concurrent.ExecutionException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +23,7 @@ import org.vimeoid.util.Invoke;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.AsyncTask.Status;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -48,7 +51,7 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     private final String objectKey;
     private ApiParams params;
     
-    private List<SecondaryTask> secondaryTasks = null;
+    private LinkedList<SecondaryTask> secondaryTasks = null;
     private Map<Integer, ApiParams> secondaryTasksParams = null;
     
     public SingleItemActivity(int mainView, String apiMethod, String objectKey) {
@@ -77,7 +80,13 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     
     @Override 
     protected final void queryItem() {
-        new LoadUserItemTask(apiMethod, objectKey).execute(params);
+        try {
+            new LoadUserItemTask(apiMethod, objectKey).execute(params).get();
+        } catch (Exception e) {
+            Log.e(TAG, "failed to get item");
+            e.printStackTrace();
+            Dialogs.makeExceptionToast(this, "Failed to get item", e);
+        }    
         runSecondaryTasks();
     }
     
@@ -85,7 +94,12 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     public final void addSecondaryTask(int taskId, String apiMethod, ApiParams params, String objectKey) {
         if (secondaryTasks == null) secondaryTasks = new LinkedList<SecondaryTask>();
         if (secondaryTasksParams == null) secondaryTasksParams = new HashMap<Integer, ApiParams>();
-        secondaryTasks.add(new SecondaryTask(taskId, apiMethod, objectKey));
+        final SecondaryTask newTask = new SecondaryTask(taskId, apiMethod, objectKey);
+        try {
+            SecondaryTask last = secondaryTasks.getLast();
+            last.setNextTask(newTask);
+        } catch (NoSuchElementException nsee) { };
+        secondaryTasks.add(newTask);
         secondaryTasksParams.put(taskId, params);
     }
     
@@ -99,9 +113,14 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     
     @Override
     public final void runSecondaryTasks() {
-        if (secondaryTasks != null) 
-            for (SecondaryTask task: secondaryTasks) 
-                task.execute(secondaryTasksParams.get(task.getId()));
+        if (secondaryTasks != null) {
+            SecondaryTask first = secondaryTasks.getFirst();
+            first.execute(secondaryTasksParams.get(first.getId())); // will automatically call runNextSecondaryTask
+        }
+    }
+    
+    private void runNextSecondaryTask(SecondaryTask task) {
+        task.execute(secondaryTasksParams.get(task.getId()));
     }
     
     protected class LoadUserItemTask extends AsyncTask<ApiParams, Void, JSONObject> {
@@ -164,6 +183,7 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     protected class SecondaryTask extends LoadUserItemTask {
         
         private final int taskId;
+        private SecondaryTask nextTask = null;
         
         public SecondaryTask(int taskId, String apiMethod, String keyParam) {
             super(apiMethod, keyParam);
@@ -183,9 +203,16 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
                 }
             }
             hideProgressBar();
+            
+            if (nextTask != null) runNextSecondaryTask(nextTask);
         }        
         
         public int getId() { return taskId; }
+        
+        public void setNextTask(SecondaryTask nextTask) {
+            if (this.nextTask != null) throw new IllegalStateException("Next task is already set");
+            this.nextTask = nextTask;
+        }
         
     }
 
