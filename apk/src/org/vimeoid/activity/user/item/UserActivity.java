@@ -11,7 +11,6 @@ import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.dto.advanced.User;
 import org.vimeoid.util.ApiParams;
-import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
 
 import android.os.Bundle;
@@ -32,17 +31,28 @@ import android.os.Bundle;
  */
 public class UserActivity extends SingleItemActivity<User> {
     
+    private static final int LOAD_PORTRAITS_TASK = 1;
+    private static final int LOAD_ALBUMS_TASK = 2;
+    private static final int LOAD_CHANNELS_TASK = 3;
+    
+    private long userId;
+    
     public UserActivity() {
         super(R.layout.view_single_user, Methods.people.getInfo, "person");
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         
-        Dialogs.makeLongToast(this, "You are " + 
-                getIntent().getExtras().getLong(Invoke.Extras.USER_ID) + " : " + 
-                getIntent().getExtras().getString(Invoke.Extras.USERNAME));
+        userId = getIntent().getExtras().getLong(Invoke.Extras.USER_ID);
+        
+        final ApiParams withId = new ApiParams().add("user_id", String.valueOf(userId));
+        
+        addSecondaryTask(LOAD_PORTRAITS_TASK, Methods.people.getPortraitUrls, withId, "portraits");
+        addSecondaryTask(LOAD_ALBUMS_TASK, Methods.albums.getAll, withId, "albums");
+        addSecondaryTask(LOAD_CHANNELS_TASK, Methods.channels.getAll, withId, "channels");
+        
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -52,7 +62,7 @@ public class UserActivity extends SingleItemActivity<User> {
 
     @Override
     protected ApiParams prepareMethodParams(String methodName, String objectKey, Bundle extras) {
-        return new ApiParams().add("user_id", String.valueOf(extras.getLong(Invoke.Extras.USER_ID)));
+        return new ApiParams().add("user_id", String.valueOf(userId));
     }
 
     @Override
@@ -62,7 +72,24 @@ public class UserActivity extends SingleItemActivity<User> {
     
     @Override
     protected void onItemReceived(User user) {
+        // FIXME: initialize bio
+        
         super.onItemReceived(user);
+    }
+    
+    @Override
+    public void onSecondaryTaskPerfomed(int taskId, JSONObject result) throws JSONException {
+        switch (taskId) {
+            case LOAD_PORTRAITS_TASK: {
+                // FIXME: implement
+            }; break;
+            case LOAD_ALBUMS_TASK: {
+                // FIXME: implement
+            }; break;
+            case LOAD_CHANNELS_TASK: {
+                // FIXME: implement
+            }; break;            
+        }
     }
 
 }

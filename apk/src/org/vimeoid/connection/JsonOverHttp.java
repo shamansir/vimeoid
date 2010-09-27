@@ -209,7 +209,7 @@ public class JsonOverHttp {
         if (consumer == null) throw new IllegalStateException("OAuth Consumer is not set, call initOuathConfiguration");
         if (provider == null) throw new IllegalStateException("OAuth Provider is not ready, call initOuathConfiguration");
         
-        Log.d(TAG, "executing Uri " + uri + " / " + params.toString() + " with OAuth");
+        Log.d(TAG, "executing Uri " + uri + " : " + params.toString() + " with OAuth");
         HttpPost post = new HttpPost(uri);
         
         post.setEntity(new UrlEncodedFormEntity(params.getValue(), HTTP.UTF_8));

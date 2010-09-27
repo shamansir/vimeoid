@@ -44,11 +44,11 @@ public class ApiParams {
     
     @Override
     public String toString() {
-        final StringBuffer result = new StringBuffer().append('{');
+        final StringBuffer result = new StringBuffer().append('(');
         for (NameValuePair pair: params) {
-            result.append(pair.getName()).append('=').append(pair.getValue()).append(';');
+            result.append('(').append(pair.getName()).append(' ').append(pair.getValue()).append(") ");
         }
-        return result.append('}').toString();
+        return result.append(')').toString();
     }
 
 }

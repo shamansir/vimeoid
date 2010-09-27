@@ -3,6 +3,11 @@
  */
 package org.vimeoid.activity.user;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.R;
@@ -34,13 +39,17 @@ import android.widget.TextView;
  * @date Sep 26, 2010 2:35:40 PM 
  *
  */
-public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends SingleItemActivity_<ItemType> {
+public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends SingleItemActivity_<ItemType> 
+    implements SecondaryTasksSupport {
     
     private static final String TAG = "SingleItemActivity";
     
     private final String apiMethod;
     private final String objectKey;
     private ApiParams params;
+    
+    private List<SecondaryTask> secondaryTasks = null;
+    private Map<Integer, ApiParams> secondaryTasksParams = null;
     
     public SingleItemActivity(int mainView, String apiMethod, String objectKey) {
         super(mainView);
@@ -49,10 +58,9 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     }
     
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        
+    protected void onCreate(Bundle savedInstanceState) {        
         params = prepareMethodParams(apiMethod, objectKey, getIntent().getExtras());
+        super.onCreate(savedInstanceState);
     }
     
     protected abstract ApiParams prepareMethodParams(String methodName, String objectKey, Bundle extras);
@@ -70,6 +78,30 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     @Override 
     protected final void queryItem() {
         new LoadUserItemTask(apiMethod, objectKey).execute(params);
+        runSecondaryTasks();
+    }
+    
+    @Override
+    public final void addSecondaryTask(int taskId, String apiMethod, ApiParams params, String objectKey) {
+        if (secondaryTasks == null) secondaryTasks = new LinkedList<SecondaryTask>();
+        if (secondaryTasksParams == null) secondaryTasksParams = new HashMap<Integer, ApiParams>();
+        secondaryTasks.add(new SecondaryTask(taskId, apiMethod, objectKey));
+        secondaryTasksParams.put(taskId, params);
+    }
+    
+    @Override
+    public void onSecondaryTaskPerfomed(int id, JSONObject result)  throws JSONException { }
+    
+    @Override
+    protected void onItemReceived(ItemType item) {
+        super.onItemReceived(item);
+    }
+    
+    @Override
+    public final void runSecondaryTasks() {
+        if (secondaryTasks != null) 
+            for (SecondaryTask task: secondaryTasks) 
+                task.execute(secondaryTasksParams.get(task.getId()));
     }
     
     protected class LoadUserItemTask extends AsyncTask<ApiParams, Void, JSONObject> {
@@ -127,6 +159,34 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
             hideProgressBar();
         }
 
+    }
+
+    protected class SecondaryTask extends LoadUserItemTask {
+        
+        private final int taskId;
+        
+        public SecondaryTask(int taskId, String apiMethod, String keyParam) {
+            super(apiMethod, keyParam);
+            this.taskId = taskId;
+        }
+        
+        @Override
+        protected void onPostExecute(JSONObject jsonObj) {
+            // Log.d(TAG, jsonObj.toString());
+            if (jsonObj != null) {
+                try {
+                    onSecondaryTaskPerfomed(taskId, jsonObj.getJSONObject(objectKey));
+                } catch (JSONException jsone) {
+                    Log.d(TAG, "JSON parsing failure: " + jsone.getLocalizedMessage());
+                    jsone.printStackTrace();
+                    Dialogs.makeExceptionToast(SingleItemActivity.this, "JSON parsing failure", jsone);
+                }
+            }
+            hideProgressBar();
+        }        
+        
+        public int getId() { return taskId; }
+        
     }
 
 }
