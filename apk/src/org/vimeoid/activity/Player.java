@@ -24,8 +24,8 @@ public class Player extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-        getWindow().setFormat(PixelFormat.TRANSPARENT);
         setContentView(R.layout.player);
+        getWindow().setFormat(PixelFormat.TRANSPARENT);        
 
 		final long videoId = getIntent().getLongExtra(Invoke.Extras.VIDEO_ID, -1);
 		if (videoId == -1) throw new IllegalStateException("Video ID must be passed to player");

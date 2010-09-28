@@ -75,9 +75,13 @@ public abstract class SingleItemActivity_<ItemType> extends Activity {
     protected abstract void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon);
     
     protected void onItemReceived(final ItemType item) {
-        final ListView actionsList = (ListView)findViewById(R.id.actionsList);
+        final ListView actionsList = getActionsList();
         actionsList.setAdapter(fillWithActions(new SectionedActionsAdapter(this, getLayoutInflater(), imageLoader), item));
         actionsList.invalidate();        
+    }
+    
+    protected final ListView getActionsList() {
+        return (ListView)findViewById(R.id.actionsList);
     }
     
     protected final void showProgressBar() {

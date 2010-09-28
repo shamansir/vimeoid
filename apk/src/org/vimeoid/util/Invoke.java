@@ -7,10 +7,6 @@ import org.vimeoid.R;
 import org.vimeoid.activity.Player;
 import org.vimeoid.activity.user.item.UserActivity;
 import org.vimeoid.connection.simple.VimeoProvider;
-import org.vimeoid.dto.simple.Album;
-import org.vimeoid.dto.simple.Channel;
-import org.vimeoid.dto.simple.User;
-import org.vimeoid.dto.simple.Video;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -51,25 +47,25 @@ public final class Invoke {
     
         // Video
         
-        protected static Uri getUploaderPageUri(Video video) {
+        protected static Uri getUploaderPageUri(org.vimeoid.dto.simple.Video video) {
             return Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + getUploaderId(video) + "/info");
         }
         
-        protected static String getUploaderId(Video video) {
+        protected static String getUploaderId(org.vimeoid.dto.simple.Video video) {
             return Utils.authorIdFromProfileUrl(video.uploaderProfileUrl);
         }        
         
-        protected static Uri getVideoPageUri(Video video) {
+        protected static Uri getVideoPageUri(org.vimeoid.dto.simple.Video video) {
             return Uri.withAppendedPath(VimeoProvider.BASE_URI, "/video/" + video.id);
         }
         
-        public static void playVideo(Activity parent, Video video) {
+        public static void playVideo(Activity parent, org.vimeoid.dto.simple.Video video) {
         	Log.d(TAG, "Trying to play video " + video.id);
         	parent.startActivity(new Intent(parent, Player.class)
         	                     .putExtra(Extras.VIDEO_ID, video.id));        	
         }
         
-        public static void pickVideo(Activity parent, Video video) {
+        public static void pickVideo(Activity parent, org.vimeoid.dto.simple.Video video) {
 	
             Log.d(TAG, "Video with id " + video.id + " requested");
             parent.setResult(Activity.RESULT_OK, new Intent().setData(getVideoPageUri(video))
@@ -77,63 +73,63 @@ public final class Invoke {
                                                               + " (" + video.uploaderName + ")"));
         }
         
-        public static void selectVideo(Activity parent, Video video) {
+        public static void selectVideo(Activity parent, org.vimeoid.dto.simple.Video video) {
             Log.d(TAG, "Video with id " + video.id + " selected");      
             parent.startActivity(new Intent(Intent.ACTION_VIEW, getVideoPageUri(video))
                                     .putExtra(Extras.SUBJ_TITLE, video.title
                                      + " (" + video.uploaderName + ")"));            
         }
         
-        public static void selectVideosBy(Activity parent, User user) {
+        public static void selectVideosBy(Activity parent, org.vimeoid.dto.simple.User user) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
                                     Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + user.id + "/videos"))
                                     .putExtra(Extras.SUBJ_TITLE, user.displayName)
                                     .putExtra(Extras.RES_ICON, R.drawable.video));
         }
         
-        public static void selectVideosByUploader(Activity parent, Video video) {
+        public static void selectVideosByUploader(Activity parent, org.vimeoid.dto.simple.Video video) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
                                     Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + getUploaderId(video) + "/videos"))
                                     .putExtra(Extras.SUBJ_TITLE, video.uploaderName)
                                     .putExtra(Extras.RES_ICON, R.drawable.video));
         }        
         
-        public static void selectUploader(Activity parent, Video video) {
+        public static void selectUploader(Activity parent, org.vimeoid.dto.simple.Video video) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, getUploaderPageUri(video))
                                     .putExtra(Extras.SUBJ_TITLE, video.uploaderName));
         }
         
         // User
 
-		public static void selectApperancesOf(Activity parent, User user) {
+		public static void selectApperancesOf(Activity parent, org.vimeoid.dto.simple.User user) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
 					   				 Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + user.id + "/appears"))
 					   				 .putExtra(Extras.SUBJ_TITLE, user.displayName)
 					   				 .putExtra(Extras.RES_ICON, R.drawable.appearance));
 		}
 
-		public static void selectLikesOf(Activity parent, User user) {
+		public static void selectLikesOf(Activity parent, org.vimeoid.dto.simple.User user) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
 	                				 Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + user.id + "/likes"))
                     				 .putExtra(Extras.SUBJ_TITLE, user.displayName)
                     				 .putExtra(Extras.RES_ICON, R.drawable.like));
 		}
 
-		public static void selectSubsriptionsOf(Activity parent, User user) {
+		public static void selectSubsriptionsOf(Activity parent, org.vimeoid.dto.simple.User user) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
 					   				 Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + user.id + "/subscr"))
 					   				 .putExtra(Extras.SUBJ_TITLE, user.displayName)
 					   				 .putExtra(Extras.RES_ICON, R.drawable.subscribe));			
 		}
 		
-        public static void selectAlbumsOf(Activity parent, User user) {
+        public static void selectAlbumsOf(Activity parent, org.vimeoid.dto.simple.User user) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
                                      Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + user.id + "/albums"))
                                      .putExtra(Extras.SUBJ_TITLE, user.displayName)
                                      .putExtra(Extras.RES_ICON, R.drawable.album));          
         }
         
-        public static void selectChannelsOf(Activity parent, User user) {
+        public static void selectChannelsOf(Activity parent, org.vimeoid.dto.simple.User user) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
                                      Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + user.id + "/channels"))
                                      .putExtra(Extras.SUBJ_TITLE, user.displayName)
@@ -142,25 +138,25 @@ public final class Invoke {
         
         // Channel
         
-        public static void pickChannel(Activity parent, Channel channel) {
+        public static void pickChannel(Activity parent, org.vimeoid.dto.simple.Channel channel) {
             parent.setResult(Activity.RESULT_OK, new Intent()
                                      .setData(Uri.withAppendedPath(VimeoProvider.BASE_URI, "/channel/" + channel.id + "/info"))
                                      .putExtra(Extras.SUBJ_TITLE, channel.name));
         }
         
-        public static void selectChannel(Activity parent, Channel channel) {
+        public static void selectChannel(Activity parent, org.vimeoid.dto.simple.Channel channel) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
                                      Uri.withAppendedPath(VimeoProvider.BASE_URI, "/channel/" + channel.id + "/info"))
                                      .putExtra(Extras.SUBJ_TITLE, channel.name));          
         }
         
-        public static void selectCreator(Activity parent, Channel channel) {
+        public static void selectCreator(Activity parent, org.vimeoid.dto.simple.Channel channel) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
                                      Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + channel.creatorId + "/info"))
                                      .putExtra(Extras.SUBJ_TITLE, channel.creatorDisplayName));
         }        
 
-        public static void selectChannelContent(Activity parent, Channel channel) {
+        public static void selectChannelContent(Activity parent, org.vimeoid.dto.simple.Channel channel) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
                                      Uri.withAppendedPath(VimeoProvider.BASE_URI, "/channel/" + channel.id + "/videos"))
                                      .putExtra(Extras.SUBJ_TITLE, channel.name)
@@ -176,25 +172,25 @@ public final class Invoke {
         
         // Album
         
-        public static void pickAlbum(Activity parent, Album album) {
+        public static void pickAlbum(Activity parent, org.vimeoid.dto.simple.Album album) {
             parent.setResult(Activity.RESULT_OK, new Intent()
                                      .setData(Uri.withAppendedPath(VimeoProvider.BASE_URI, "/album/" + album.id + "/info"))
                                      .putExtra(Extras.SUBJ_TITLE, album.title));
         }
         
-        public static void selectAlbum(Activity parent, Album album) {
+        public static void selectAlbum(Activity parent, org.vimeoid.dto.simple.Album album) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
                                      Uri.withAppendedPath(VimeoProvider.BASE_URI, "/album/" + album.id + "/info"))
                                      .putExtra(Extras.SUBJ_TITLE, album.title));          
         }
         
-        public static void selectCreator(Activity parent, Album album) {
+        public static void selectCreator(Activity parent, org.vimeoid.dto.simple.Album album) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
                                      Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + album.creatorId + "/info"))
                                      .putExtra(Extras.SUBJ_TITLE, album.creatorDisplayName));
         }        
 
-        public static void selectAlbumContent(Activity parent, Album album) {
+        public static void selectAlbumContent(Activity parent, org.vimeoid.dto.simple.Album album) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
                                      Uri.withAppendedPath(VimeoProvider.BASE_URI, "/album/" + album.id + "/videos"))
                                      .putExtra(Extras.SUBJ_TITLE, album.title)
@@ -221,6 +217,41 @@ public final class Invoke {
 
         public static void showPersonalPage(Activity parent, long userId, String username) {
             showUserPage(parent, userId, username);
+        }
+
+        public static void selectVideosBy(UserActivity userActivity, org.vimeoid.dto.advanced.User user) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        public static void selectAlbumsOf(UserActivity userActivity, org.vimeoid.dto.advanced.User user) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        public static void selectChannelsOf(UserActivity userActivity, org.vimeoid.dto.advanced.User user) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        public static void selectContactsOf(UserActivity userActivity, org.vimeoid.dto.advanced.User user) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        public static void selectApperancesOf(UserActivity userActivity, org.vimeoid.dto.advanced.User user) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        public static void selectLikesOf(UserActivity userActivity, org.vimeoid.dto.advanced.User user) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        public static void selectSubsriptionsOf(UserActivity userActivity, org.vimeoid.dto.advanced.User user) {
+            // TODO Auto-generated method stub
+            
         }
         
     }

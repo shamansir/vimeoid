@@ -38,7 +38,7 @@ import android.view.SurfaceHolder;
  * @date Sep 21, 2010 9:20:36 PM 
  *
  */
-public class VimeoVideoPlayingTask extends AsyncTask<Long, Long, FileInputStream> {
+public class VimeoVideoPlayingTask extends AsyncTask<Long, Long, FileInputStream> implements SurfaceHolder.Callback {
 	
 	public static final String TAG = "VimeoVideoPlayingTask";
     
@@ -55,6 +55,8 @@ public class VimeoVideoPlayingTask extends AsyncTask<Long, Long, FileInputStream
     public VimeoVideoPlayingTask(Context context, SurfaceHolder canvas) { 
         if (cacheDir == null) cacheDir = Utils.createCacheDir(context, CACHE_DIR_NAME);
         this.canvas = canvas;
+        this.canvas.addCallback(this);
+        this.canvas.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         ensureCleanedUp();
     }
     
@@ -67,7 +69,7 @@ public class VimeoVideoPlayingTask extends AsyncTask<Long, Long, FileInputStream
 		mediaPlayer = new MediaPlayer();
 		if (mediaPlayer == null) throw new IllegalStateException("Failed to create media player");
 		 
-		mediaPlayer.setDisplay(canvas);		
+		//mediaPlayer.setDisplay(canvas);		
 		mediaPlayer.setAudioStreamType(2);
 		 
 		mediaPlayer.setOnErrorListener(new OnErrorListener() {
@@ -139,6 +141,7 @@ public class VimeoVideoPlayingTask extends AsyncTask<Long, Long, FileInputStream
 				return;
 			}
 			
+			mediaPlayer.setDisplay(canvas);
 			mediaPlayer.setDataSource(dataSource.getFD());		
 			dataSource.close();
 			mediaPlayer.setScreenOnWhilePlaying(true);
@@ -194,6 +197,31 @@ public class VimeoVideoPlayingTask extends AsyncTask<Long, Long, FileInputStream
         public long getActualSpace() {
             return actualSpace;
         }        
+        
+    }
+
+    
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width,
+            int height) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        if (mediaPlayer == null) {
+            Log.w(TAG, "Media Player was null when surface already created");
+            return;
+        }
+        mediaPlayer.setDisplay(canvas);
+    }
+
+    
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        // TODO Auto-generated method stub
         
     }
 
