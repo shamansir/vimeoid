@@ -4,6 +4,7 @@ import org.vimeoid.R;
 import org.vimeoid.activity.base.ItemsListActivity_;
 import org.vimeoid.adapter.EasyCursorsAdapter;
 import org.vimeoid.connection.ApiCallInfo;
+import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.simple.VimeoProvider;
 import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
@@ -33,6 +34,9 @@ public abstract class ItemsListActivity<ItemType extends SimpleItem> extends
     public ItemsListActivity(int mainView, String[] projection, int contextMenu) {
     	super(mainView, contextMenu);
     	this.projection = projection;
+    	
+    	setMaxPagesCount(VimeoApi.MAX_NUMBER_OF_PAGES);
+    	setItemsPerPage(VimeoApi.ITEMS_PER_PAGE);
     }
     
     public ItemsListActivity(String[] projection, int contextMenu) {
@@ -123,7 +127,7 @@ public abstract class ItemsListActivity<ItemType extends SimpleItem> extends
         	} else {
                 startManagingCursor(cursor);
                 adapter.addSource(cursor);
-                onItemsReceived(cursor.getCount());
+                onItemsReceived(cursor.getCount(), -1);
                 cursor.close();
             }
             super.onPostExecute(cursor);

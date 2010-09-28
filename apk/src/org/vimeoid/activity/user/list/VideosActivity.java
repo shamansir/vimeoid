@@ -4,8 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.vimeoid.R;
+import org.vimeoid.activity.user.ItemsListActivity;
+import org.vimeoid.adapter.user.JsonObjectsAdapter;
+import org.vimeoid.dto.advanced.Video;
+import org.vimeoid.util.ApiParams;
 
-import android.app.ListActivity;
 import android.content.ContentValues;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -32,8 +35,15 @@ import android.view.ContextMenu.ContextMenuInfo;
  */
 
 // TODO: for sync use SyncAdapter on API Level 7
-public class VideosActivity extends ListActivity {
+public class VideosActivity extends ItemsListActivity<Video> {
     
+
+    public VideosActivity(int contextMenu, String apiMethod, String dataKey,
+            String arrayKey) {
+        super(contextMenu, apiMethod, dataKey, arrayKey);
+        // TODO Auto-generated constructor stub
+    }
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -162,5 +172,23 @@ public class VideosActivity extends ListActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // TODO Auto-generated method stub
         return super.onOptionsItemSelected(item);
+    }
+
+    /* (non-Javadoc)
+     * @see org.vimeoid.activity.user.ItemsListActivity#prepareMethodParams(java.lang.String, android.os.Bundle)
+     */
+    @Override
+    protected ApiParams prepareMethodParams(String methodName, Bundle extras) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /* (non-Javadoc)
+     * @see org.vimeoid.activity.base.ItemsListActivity_#createAdapter()
+     */
+    @Override
+    protected JsonObjectsAdapter createAdapter() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

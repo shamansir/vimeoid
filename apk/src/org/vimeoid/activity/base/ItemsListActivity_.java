@@ -21,9 +21,12 @@ import android.widget.TextView;
 
 public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapter> extends ListActivity {
 	
-    public static final String TAG = "ItemsListActivity_";	
-
+    public static final String TAG = "ItemsListActivity_";
+    
     private int pageNum = 1;
+    
+    private int maxPages = 3;
+    private int perPage = 20;    
     
     private boolean queryRunning = false;
     
@@ -135,11 +138,27 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
     
     private void loadNextPage() {
         if (!queryRunning) {
-            if (pageNum <= VimeoApi.MAX_NUMBER_OF_PAGES) {
+            if (pageNum < maxPages) {
                 Log.d(TAG, "Loading next page...");
                 checkConnectionAndQueryMoreItems(adapter, ++pageNum);
             } else Dialogs.makeToast(this, getString(R.string.no_pages_more));
         } else Dialogs.makeToast(this, getString(R.string.please_do_not_touch));        
+    }
+    
+    protected final int getCurrentPage() {
+        return pageNum;
+    }
+    
+    protected final void setMaxPagesCount(int count) {
+        this.maxPages = count;
+    }
+    
+    protected final void setItemsPerPage(int perPage) {
+        this.perPage = perPage;
+    }
+    
+    protected final int getItemsPerPage() {
+        return perPage;
     }
     
     protected final boolean isLoadMoreItem(int position) {
@@ -158,7 +177,7 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
             return -1;
         }
         
-    }    
+    }
     
     @SuppressWarnings("unchecked")
     protected final ItemType getItem(int position) {
@@ -197,15 +216,15 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
             
         }
         
-        protected void onItemsReceived(int howMuch) {
-            
+        protected void onItemsReceived(int howMuch, int total) {
             if ((howMuch == 0) && (pageNum == 1)) {
                 // no items in list at all
                 getListView().removeFooterView(footerView);
                 emptyImage.setImageResource(R.drawable.no_more_small);
                 emptyText.setText(R.string.no_items_in_list);            
-            } else if ((howMuch < VimeoApi.ITEMS_PER_PAGE) ||                    
-                       (pageNum == VimeoApi.MAX_NUMBER_OF_PAGES)) {
+            } else if ((howMuch < perPage) ||     
+                       (pageNum == maxPages) ||
+                       ((total != -1) && (((perPage * (pageNum - 1)) + howMuch) == total))) {
                 // no items more
                 footerView.setVisibility(View.GONE);
             } else {

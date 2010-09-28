@@ -1,6 +1,5 @@
 package org.vimeoid.activity.user;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.R;
@@ -27,27 +26,32 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     public static final String TAG = "ItemsListActivity";
     
     private final String apiMethod;
+    private final String dataKey;
     private final String arrayKey;
     private ApiParams params;    
 
-    public ItemsListActivity(int mainView, int contextMenu, String apiMethod, String arrayKey) {
+    public ItemsListActivity(int mainView, int contextMenu, String apiMethod, String dataKey, String arrayKey) {
     	super(mainView, contextMenu);
     	this.apiMethod = apiMethod;
+    	this.dataKey = dataKey;
     	this.arrayKey = arrayKey;
+    	
+    	setMaxPagesCount(8);
+    	setItemsPerPage(20);
     }
     
-    public ItemsListActivity(int contextMenu, String apiMethod, String arrayKey) {
-    	this(R.layout.generic_list, contextMenu, apiMethod, arrayKey);
+    public ItemsListActivity(int contextMenu, String apiMethod, String dataKey, String arrayKey) {
+    	this(R.layout.generic_list, contextMenu, apiMethod, dataKey, arrayKey);
     }
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        params = prepareMethodParams(apiMethod, arrayKey, getIntent().getExtras());
+        params = prepareMethodParams(apiMethod, getIntent().getExtras());
         
         super.onCreate(savedInstanceState);
     }
     
-    protected abstract ApiParams prepareMethodParams(String methodName, String arrayKey, Bundle extras);    
+    protected abstract ApiParams prepareMethodParams(String methodName, Bundle extras);    
     
     protected void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon) {
         subjectIcon.setImageResource(getIntent().getIntExtra(Invoke.Extras.SUBJ_ICON, R.drawable.info));
@@ -59,8 +63,10 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     
     @Override
     protected final void queryMoreItems(JsonObjectsAdapter adapter, int pageNum) {
-        // FIXME: use pageNum
-        new LoadUserItemsTask(adapter, apiMethod, arrayKey).execute(params);
+        params.add("page", String.valueOf(pageNum));
+        params.add("per_page", String.valueOf(getItemsPerPage()));
+        // TODO: params.add("sort", "");
+        new LoadUserItemsTask(adapter, apiMethod, dataKey, arrayKey).execute(params);
     }
     
    @Override
@@ -99,12 +105,14 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
 
         private final JsonObjectsAdapter adapter;
         private final String apiMethod;
+        private final String dataKey;
         private final String arrayKey;
         
-        protected LoadUserItemsTask(JsonObjectsAdapter adapter, String apiMethod, String keyParam) {
+        protected LoadUserItemsTask(JsonObjectsAdapter adapter, String apiMethod, String dataKey, String arrayKey) {
             this.adapter = adapter;
             this.apiMethod = apiMethod;
-            this.arrayKey = keyParam;
+            this.dataKey = dataKey;
+            this.arrayKey = arrayKey;
         }
         
         @Override
@@ -136,11 +144,16 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
         	    Log.e(TAG, "Failed to receive next page");
         		rollback();
         	} else {
-        	    JSONArray values;
                 try {
-                    values = object.getJSONArray(arrayKey);
-                    adapter.addSource(values);
-                    onItemsReceived(values.length());                    
+                    final JSONObject dataObj = object.getJSONObject(dataKey); 
+                    final int perPage = dataObj.getInt("perpage");
+                    final int onThisPage = dataObj.getInt("on_this_page");
+                    final int total = dataObj.getInt("total");
+                    final int pageNum = dataObj.getInt("page");
+                    if (pageNum != getCurrentPage()) throw new IllegalStateException("Received page number dp not matches actual");
+                    if (perPage != getCurrentPage()) throw new IllegalStateException("Received number of items per page do not matches actual");                    
+                    adapter.addSource(dataObj.getJSONArray(arrayKey));
+                    onItemsReceived(onThisPage, total);                    
                 } catch (JSONException jsone) {
                     rollback();
                     Log.d(TAG, "JSON parsing failure: " + jsone.getLocalizedMessage());
