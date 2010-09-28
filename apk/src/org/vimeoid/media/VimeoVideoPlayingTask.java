@@ -9,12 +9,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.vimeoid.R;
 import org.vimeoid.connection.FailedToGetVideoStreamException;
 import org.vimeoid.connection.VideoLinkRequestException;
 import org.vimeoid.connection.VimeoVideoStreamer;
 import org.vimeoid.util.Utils;
 
 import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnErrorListener;
 import android.os.AsyncTask;
@@ -57,6 +59,7 @@ public class VimeoVideoPlayingTask extends AsyncTask<Long, Long, FileInputStream
         this.canvas = canvas;
         this.canvas.addCallback(this);
         this.canvas.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        this.canvas.setFixedSize(R.dimen.video_view_width, R.dimen.video_view_height);        
         ensureCleanedUp();
     }
     
@@ -68,9 +71,9 @@ public class VimeoVideoPlayingTask extends AsyncTask<Long, Long, FileInputStream
     	
 		mediaPlayer = new MediaPlayer();
 		if (mediaPlayer == null) throw new IllegalStateException("Failed to create media player");
-		 
-		//mediaPlayer.setDisplay(canvas);		
-		mediaPlayer.setAudioStreamType(2);
+		 	
+		mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+		mediaPlayer.setScreenOnWhilePlaying(true);
 		 
 		mediaPlayer.setOnErrorListener(new OnErrorListener() {
 		    @Override
@@ -141,7 +144,7 @@ public class VimeoVideoPlayingTask extends AsyncTask<Long, Long, FileInputStream
 				return;
 			}
 			
-			mediaPlayer.setDisplay(canvas);
+		    mediaPlayer.setDisplay(canvas);
 			mediaPlayer.setDataSource(dataSource.getFD());		
 			dataSource.close();
 			mediaPlayer.setScreenOnWhilePlaying(true);
@@ -156,6 +159,7 @@ public class VimeoVideoPlayingTask extends AsyncTask<Long, Long, FileInputStream
             //if (mediaPlayer.isPlaying()) mediaPlayer.stop();
             mediaPlayer.reset();
             Log.i(TAG, "Called reset for previous instance");
+            mediaPlayer = null;
         }        
         for (File file: cacheDir.listFiles()) if (file.isFile() && file.exists()) file.delete();
         Log.i(TAG, "Cleared player cache");
@@ -221,9 +225,7 @@ public class VimeoVideoPlayingTask extends AsyncTask<Long, Long, FileInputStream
     
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        // TODO Auto-generated method stub
-        
+        ensureCleanedUp();
     }
-
 
 }

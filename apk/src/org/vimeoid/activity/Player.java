@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.VideoView;
 import android.widget.ViewFlipper;
@@ -30,8 +31,8 @@ public class Player extends Activity {
 		final long videoId = getIntent().getLongExtra(Invoke.Extras.VIDEO_ID, -1);
 		if (videoId == -1) throw new IllegalStateException("Video ID must be passed to player");
 		
-		final ViewFlipper flipper = (ViewFlipper) findViewById(R.id.viewFlipper);
-		final View loadingView = (View) findViewById(R.id.loadingProgress);
+		//final ViewFlipper flipper = (ViewFlipper) findViewById(R.id.viewFlipper);
+		//final View loadingView = (View) findViewById(R.id.loadingProgress);
 		//final View playerView = getLayoutInflater().inflate(R.layout.player, null);
 		//final ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.viewSwitcher);
 		final VideoView videoView = (VideoView) findViewById(R.id.canvas);
@@ -49,11 +50,11 @@ public class Player extends Activity {
 			
 			protected void onPostExecute(FileInputStream dataSource) {
 				//setContentView(playerView);
-				flipper.showNext();
+				//flipper.showNext();
+                //loadingView.setVisibility(View.GONE);			    
 				//videoView.setVisibility(View.VISIBLE);
                 //videoView.bringToFront();
 				//videoView.requestFocus();
-				loadingView.setVisibility(View.INVISIBLE);
 				super.onPostExecute(dataSource);                
 			};
 			
