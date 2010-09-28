@@ -5,10 +5,8 @@ package org.vimeoid.activity.user;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.concurrent.ExecutionException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +21,6 @@ import org.vimeoid.util.Invoke;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.AsyncTask.Status;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -125,12 +122,12 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     
     protected class LoadUserItemTask extends AsyncTask<ApiParams, Void, JSONObject> {
 
-        private final String apiMethod;
-        private final String objectKey;
+    	protected final String apiMethod;
+        protected final String objectKey;
         
-        protected LoadUserItemTask(String apiMethod, String keyParam) {
+        protected LoadUserItemTask(String apiMethod, String objectKey) {
             this.apiMethod = apiMethod;
-            this.objectKey = keyParam;
+            this.objectKey = objectKey;
         }
         
         @Override

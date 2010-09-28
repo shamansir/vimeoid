@@ -90,8 +90,12 @@ public class VimeoApi {
         	   
     }
     
-    public static void forgetCredentials() {
-        // FIXME: implement
+    public static void forgetCredentials(Context context) {
+    	final SharedPreferences storage = context.getSharedPreferences(OAUTH_API_PREFERENCES_ID, Context.MODE_PRIVATE);
+        Editor editor = storage.edit();  
+        editor.remove(OAUTH_TOKEN_PARAM);
+        editor.remove(OAUTH_TOKEN_SECRET_PARAM);
+        editor.commit();
     }
     
     /* ====================== OAuth Helpers ================================= */

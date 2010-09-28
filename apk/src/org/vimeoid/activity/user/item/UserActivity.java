@@ -50,11 +50,11 @@ public class UserActivity extends SingleItemActivity<User> {
         
         userId = getIntent().getExtras().getLong(Invoke.Extras.USER_ID);
         
-        final ApiParams withId = new ApiParams().add("user_id", String.valueOf(userId));
+        final String userIdStr = String.valueOf(userId);
         
-        addSecondaryTask(LOAD_PORTRAITS_TASK, Methods.people.getPortraitUrls, withId, "portraits");
-        addSecondaryTask(LOAD_ALBUMS_TASK, Methods.albums.getAll, withId, "albums");
-        addSecondaryTask(LOAD_CHANNELS_TASK, Methods.channels.getAll, withId, "channels");
+        addSecondaryTask(LOAD_PORTRAITS_TASK, Methods.people.getPortraitUrls, new ApiParams().add("user_id", userIdStr), "portraits");
+        addSecondaryTask(LOAD_ALBUMS_TASK, Methods.albums.getAll, new ApiParams().add("user_id", userIdStr), "albums");
+        addSecondaryTask(LOAD_CHANNELS_TASK, Methods.channels.getAll, new ApiParams().add("user_id", userIdStr), "channels");
         
         super.onCreate(savedInstanceState);
     }
