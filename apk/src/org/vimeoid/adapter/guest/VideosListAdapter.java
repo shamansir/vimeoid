@@ -104,7 +104,7 @@ public class VideosListAdapter extends EasyCursorsAdapter<Video> {
     }
     
     @Override
-    public void finalize() {
+    protected void finalize() {
         super.finalize();
         imageLoader.clearCache();
     }

@@ -101,9 +101,11 @@ public class User implements AdvancedItem {
         user.videosCount = jsonObj.getLong(FieldsKeys.NUM_OF_VIDEOS);
         user.videosLiked = jsonObj.getLong(FieldsKeys.NUM_OF_LIKES);
         user.videosAppearsIn = jsonObj.getLong(FieldsKeys.NUM_OF_APPEARANCES);
-        user.contactsCount = jsonObj.getLong(FieldsKeys.NUM_OF_CONTACTS);        
+        user.contactsCount = jsonObj.getLong(FieldsKeys.NUM_OF_CONTACTS);
         
         return user;
     }
+    
+    public long getId() { return id; }
     
 }

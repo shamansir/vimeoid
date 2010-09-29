@@ -36,6 +36,7 @@ public class PortraitsData {
     
     public static class FieldsKeys {
         public static final String OBJECT_KEY = "portrait";
+        public static final String ARRAY_KEY = "portraits";
         
         public static final String HEIGHT = "height";
         public static final String WIDTH = "width";

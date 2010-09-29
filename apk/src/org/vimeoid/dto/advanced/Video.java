@@ -24,33 +24,32 @@ import org.vimeoid.util.Utils;
  */
 public class Video implements AdvancedItem {
     
+    public static enum Privacy { ANYBODY, CONTACTS }; 
+    
     public long id;
-    public String displayName;
-    public String username;
-    public /*long*/ String createdOn;
-    public boolean fromStaff;
-    public boolean isPlusMember;
     
-    public String profileUrl;
-    public String videosUrl;
+    public Privacy privacy;
     
-    public long uploadsCount;
-    public long videosCount;
-    public long videosAppearsIn;
-    public long videosLiked;
+    public String title;
+    public String description;
+    public String uploaderName;
     
-    public long contactsCount;
-    //public long albumsCount;
-    //public long channelsCount;
+    public /*long */ String uploadedOn;
+    public /*long */ String modifiedOn;
     
-    public String location;
-    public String[] websiteUrls;
-    public String biography; 
+    public long likesCount;
+    public long playsCount;
+    public long commentsCount;
     
-    /* public String smallPortraitUrl;
-    public String mediumPortraitUrl;
-    public String largePortraitUrl; */
-
+    public int width;
+    public int height;
+    public long duration;
+    public boolean isHd;
+    
+    public String[] tags;
+    
+    public ThumbnailsData thumbnails;
+     
     public final static class FieldsKeys {
         
         public static final String OBJECT_KEY = "video";
@@ -58,53 +57,53 @@ public class Video implements AdvancedItem {
         
         public static final String ID = "id";
         
-        public static final String CREATED_ON = "created_on";
-        public static final String IS_STAFF = "is_staff";
-        public static final String IS_PLUS = "is_plus";
+        public static final String PRIVACY = "privacy";
+        public static final String TITLE = "title";
+        public static final String DESCRIPTION = "description";
         
-        public static final String NAME = "display_name";
-        public static final String USERNAME = "username";  
-        public static final String LOCATION = "location";
+        public static final String UPLOADED_ON = "upload_date";
+        public static final String MODIFIED_ON = "modified_date";
         
-        public static final String URL = "url";
-        public static final String BIO = "bio";
-        
-        public static final String PROFILE_URL = "profileurl";
-        public static final String VIDEOS_URL = "videosurl";    
-        
-        public static final String NUM_OF_VIDEOS = "number_of_videos";
-        public static final String NUM_OF_UPLOADS = "number_of_uploads";
         public static final String NUM_OF_LIKES = "number_of_likes";
-        public static final String NUM_OF_APPEARANCES = "number_of_videos_appears_in";
-        public static final String NUM_OF_CONTACTS = "number_of_contacts";
+        public static final String NUM_OF_PLAYS = "number_of_plays";
+        public static final String NUM_OF_COMMENTS = "number_of_comments";
+        
+        public static final String IS_HD = "is_hd";
+        public static final String WIDTH = "width";
+        public static final String HEIGHT= "height";
+        public static final String DURATION = "duration";
         
     }
     
     public static Video collectFromJson(JSONObject jsonObj) throws JSONException {
-        final Video user = new Video();
+        final Video video = new Video();
         
-        user.id = jsonObj.getLong(FieldsKeys.ID);
-        user.createdOn = jsonObj.getString(FieldsKeys.CREATED_ON);
-        user.fromStaff = Utils.adaptBoolean(jsonObj.getInt(FieldsKeys.IS_STAFF));
-        user.isPlusMember = Utils.adaptBoolean(jsonObj.getInt(FieldsKeys.IS_PLUS));
+        video.id = jsonObj.getLong(FieldsKeys.ID);
         
-        user.displayName = jsonObj.getString(FieldsKeys.NAME);
-        user.username = jsonObj.getString(FieldsKeys.USERNAME);
-        user.location = jsonObj.getString(FieldsKeys.LOCATION);
+        video.privacy = Privacy.valueOf(jsonObj.getString(FieldsKeys.PRIVACY));        
+        video.title = jsonObj.getString(FieldsKeys.TITLE);
+        video.description = jsonObj.getString(FieldsKeys.DESCRIPTION);
         
-        user.websiteUrls = Utils.stringArrayFromJson(jsonObj.getJSONArray(FieldsKeys.URL));
-        user.biography = jsonObj.getString(FieldsKeys.BIO);
+        video.uploadedOn = jsonObj.getString(FieldsKeys.UPLOADED_ON);
+        video.modifiedOn = jsonObj.getString(FieldsKeys.MODIFIED_ON);
         
-        user.profileUrl = jsonObj.getString(FieldsKeys.PROFILE_URL);
-        user.videosUrl = jsonObj.getString(FieldsKeys.VIDEOS_URL);
+        video.likesCount = jsonObj.getLong(FieldsKeys.NUM_OF_LIKES);
+        video.playsCount = jsonObj.getLong(FieldsKeys.NUM_OF_PLAYS);
+        video.commentsCount = jsonObj.getLong(FieldsKeys.NUM_OF_COMMENTS);
         
-        user.uploadsCount = jsonObj.getLong(FieldsKeys.NUM_OF_UPLOADS);
-        user.videosCount = jsonObj.getLong(FieldsKeys.NUM_OF_VIDEOS);
-        user.videosLiked = jsonObj.getLong(FieldsKeys.NUM_OF_LIKES);
-        user.videosAppearsIn = jsonObj.getLong(FieldsKeys.NUM_OF_APPEARANCES);
-        user.contactsCount = jsonObj.getLong(FieldsKeys.NUM_OF_CONTACTS);        
+        video.isHd = Utils.adaptBoolean(jsonObj.getInt(FieldsKeys.IS_HD));
+        video.width = jsonObj.getInt(FieldsKeys.WIDTH);
+        video.height = jsonObj.getInt(FieldsKeys.HEIGHT);
+        video.duration = jsonObj.getLong(FieldsKeys.DURATION);
         
-        return user;
+        video.tags = Tag.collectQuickListFromJson(jsonObj);
+        video.thumbnails = ThumbnailsData.collectFromJson(jsonObj.getJSONObject(ThumbnailsData.FieldsKeys.ARRAY_KEY));
+        
+        video.uploaderName = jsonObj.getJSONObject("owner"/*User.FieldsKeys.OBJECT_KEY*/).getString(User.FieldsKeys.NAME);
+        
+        return video;
     }
+    
+    public long getId() { return id; }    
     
 }

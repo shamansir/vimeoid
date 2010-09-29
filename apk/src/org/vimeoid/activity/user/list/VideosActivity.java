@@ -3,6 +3,7 @@ package org.vimeoid.activity.user.list;
 import org.vimeoid.R;
 import org.vimeoid.activity.user.ItemsListActivity;
 import org.vimeoid.adapter.JsonObjectsAdapter;
+import org.vimeoid.adapter.user.VideosListAdapter;
 import org.vimeoid.dto.advanced.Video;
 import org.vimeoid.util.ApiParams;
 import org.vimeoid.util.Invoke.Extras;
@@ -42,7 +43,7 @@ public class VideosActivity extends ItemsListActivity<Video> {
 
     @Override
     protected JsonObjectsAdapter<Video> createAdapter() {
-        return null;
+        return new VideosListAdapter(this, getLayoutInflater());
     }
 
 }
