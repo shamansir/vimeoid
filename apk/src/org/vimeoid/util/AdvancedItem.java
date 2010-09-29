@@ -18,5 +18,7 @@ package org.vimeoid.util;
  *
  */
 public interface AdvancedItem {
+    
+    public int getId();
 
 }

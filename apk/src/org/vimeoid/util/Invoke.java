@@ -6,6 +6,7 @@ package org.vimeoid.util;
 import org.vimeoid.R;
 import org.vimeoid.activity.Player;
 import org.vimeoid.activity.user.item.UserActivity;
+import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.connection.simple.VimeoProvider;
 
 import android.app.Activity;
@@ -32,6 +33,8 @@ public final class Invoke {
     public static final String TAG = "Invoke";
     
     public static class Extras {
+        
+        public static final String API_METHOD = "v_apimethod";
     
         public static final String SUBJ_ICON = "v_subjicon";
         public static final String SUBJ_TITLE = "v_subjtitle";
@@ -208,6 +211,7 @@ public final class Invoke {
         
         public static void showUserPage(Activity parent, long userId, String username) {
             parent.startActivity(new Intent(parent, UserActivity.class)
+                                     .putExtra(Extras.API_METHOD, Methods.people.getInfo)
                                      .putExtra(Extras.USER_ID, userId)
                                      .putExtra(Extras.USERNAME, username)
                                      .putExtra(Extras.SUBJ_ICON, R.drawable.contact)
@@ -219,37 +223,42 @@ public final class Invoke {
             showUserPage(parent, userId, username);
         }
 
-        public static void selectVideosBy(UserActivity userActivity, org.vimeoid.dto.advanced.User user) {
+        public static void selectVideosBy(Activity parent, org.vimeoid.dto.advanced.User user) {
+            parent.startActivity(new Intent(parent, UserActivity.class)
+                                     .putExtra(Extras.API_METHOD, Methods.videos.getAll)
+                                     .putExtra(Extras.USER_ID, user.id)
+                                     .putExtra(Extras.USERNAME, user.username)
+                                     .putExtra(Extras.SUBJ_ICON, R.drawable.contact)
+                                     .putExtra(Extras.SUBJ_TITLE, user.username)
+                                     .putExtra(Extras.RES_ICON, R.drawable.video));
+        }
+
+        public static void selectAlbumsOf(Activity parent, org.vimeoid.dto.advanced.User user) {
             // TODO Auto-generated method stub
             
         }
 
-        public static void selectAlbumsOf(UserActivity userActivity, org.vimeoid.dto.advanced.User user) {
+        public static void selectChannelsOf(Activity parent, org.vimeoid.dto.advanced.User user) {
             // TODO Auto-generated method stub
             
         }
 
-        public static void selectChannelsOf(UserActivity userActivity, org.vimeoid.dto.advanced.User user) {
+        public static void selectContactsOf(Activity parent, org.vimeoid.dto.advanced.User user) {
             // TODO Auto-generated method stub
             
         }
 
-        public static void selectContactsOf(UserActivity userActivity, org.vimeoid.dto.advanced.User user) {
+        public static void selectApperancesOf(Activity parent, org.vimeoid.dto.advanced.User user) {
             // TODO Auto-generated method stub
             
         }
 
-        public static void selectApperancesOf(UserActivity userActivity, org.vimeoid.dto.advanced.User user) {
+        public static void selectLikesOf(Activity parent, org.vimeoid.dto.advanced.User user) {
             // TODO Auto-generated method stub
             
         }
 
-        public static void selectLikesOf(UserActivity userActivity, org.vimeoid.dto.advanced.User user) {
-            // TODO Auto-generated method stub
-            
-        }
-
-        public static void selectSubsriptionsOf(UserActivity userActivity, org.vimeoid.dto.advanced.User user) {
+        public static void selectSubsriptionsOf(Activity parent, org.vimeoid.dto.advanced.User user) {
             // TODO Auto-generated method stub
             
         }

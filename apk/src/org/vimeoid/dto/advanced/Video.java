@@ -53,6 +53,9 @@ public class Video implements AdvancedItem {
 
     public final static class FieldsKeys {
         
+        public static final String OBJECT_KEY = "video";
+        public static final String ARRAY_KEY = "videos";
+        
         public static final String ID = "id";
         
         public static final String CREATED_ON = "created_on";

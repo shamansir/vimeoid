@@ -53,7 +53,7 @@ public class UserActivity extends SingleItemActivity<User> {
     private ActionItem channelAction;
     
     public UserActivity() {
-        super(R.layout.view_single_user, Methods.people.getInfo, "person");
+        super(R.layout.view_single_user, User.FieldsKeys.OBJECT_KEY);
     }
 
     @Override

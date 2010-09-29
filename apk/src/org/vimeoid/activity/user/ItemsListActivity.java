@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.R;
 import org.vimeoid.activity.base.ItemsListActivity_;
-import org.vimeoid.adapter.user.JsonObjectsAdapter;
+import org.vimeoid.adapter.JsonObjectsAdapter;
 import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.VimeoApi.AdvancedApiCallError;
 import org.vimeoid.util.AdvancedItem;
@@ -21,18 +21,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends 
-                      ItemsListActivity_<ItemType, JsonObjectsAdapter> {
+                      ItemsListActivity_<ItemType, JsonObjectsAdapter<ItemType>> {
 	
     public static final String TAG = "ItemsListActivity";
     
-    private final String apiMethod;
+    private String apiMethod;
     private final String dataKey;
     private final String arrayKey;
     private ApiParams params;    
 
-    public ItemsListActivity(int mainView, int contextMenu, String apiMethod, String dataKey, String arrayKey) {
+    public ItemsListActivity(int mainView, int contextMenu, String dataKey, String arrayKey) {
     	super(mainView, contextMenu);
-    	this.apiMethod = apiMethod;
+    	
     	this.dataKey = dataKey;
     	this.arrayKey = arrayKey;
     	
@@ -40,13 +40,14 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     	setItemsPerPage(20);
     }
     
-    public ItemsListActivity(int contextMenu, String apiMethod, String dataKey, String arrayKey) {
-    	this(R.layout.generic_list, contextMenu, apiMethod, dataKey, arrayKey);
+    public ItemsListActivity(int contextMenu, String dataKey, String arrayKey) {
+    	this(R.layout.generic_list, contextMenu, dataKey, arrayKey);
     }
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        params = prepareMethodParams(apiMethod, getIntent().getExtras());
+        apiMethod = getIntent().getStringExtra(Invoke.Extras.API_METHOD);
+        params = prepareMethodParams(apiMethod, getIntent().getExtras());        
         
         super.onCreate(savedInstanceState);
     }
@@ -62,7 +63,7 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     }
     
     @Override
-    protected final void queryMoreItems(JsonObjectsAdapter adapter, int pageNum) {
+    protected final void queryMoreItems(JsonObjectsAdapter<ItemType> adapter, int pageNum) {
         params.add("page", String.valueOf(pageNum));
         params.add("per_page", String.valueOf(getItemsPerPage()));
         // TODO: params.add("sort", "");
@@ -103,12 +104,12 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     
     protected final class LoadUserItemsTask extends LoadItemsTask<ApiParams, Void, JSONObject> {
 
-        private final JsonObjectsAdapter adapter;
+        private final JsonObjectsAdapter<ItemType> adapter;
         private final String apiMethod;
         private final String dataKey;
         private final String arrayKey;
         
-        protected LoadUserItemsTask(JsonObjectsAdapter adapter, String apiMethod, String dataKey, String arrayKey) {
+        protected LoadUserItemsTask(JsonObjectsAdapter<ItemType> adapter, String apiMethod, String dataKey, String arrayKey) {
             this.adapter = adapter;
             this.apiMethod = apiMethod;
             this.dataKey = dataKey;

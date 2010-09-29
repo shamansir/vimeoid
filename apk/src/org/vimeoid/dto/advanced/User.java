@@ -53,6 +53,8 @@ public class User implements AdvancedItem {
 
     public final static class FieldsKeys {
         
+        public static final String OBJECT_KEY = "person";        
+        
         public static final String ID = "id";
         
         public static final String CREATED_ON = "created_on";

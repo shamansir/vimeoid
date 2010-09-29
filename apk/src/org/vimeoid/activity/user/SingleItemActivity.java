@@ -44,21 +44,21 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     
     private static final String TAG = "SingleItemActivity";
     
-    private final String apiMethod;
+    private String apiMethod;
     private final String objectKey;
     private ApiParams params;
     
     private LinkedList<SecondaryTask> secondaryTasks = null;
     private Map<Integer, ApiParams> secondaryTasksParams = null;
     
-    public SingleItemActivity(int mainView, String apiMethod, String objectKey) {
+    public SingleItemActivity(int mainView, String objectKey) {
         super(mainView);
-        this.apiMethod = apiMethod;
         this.objectKey = objectKey;
     }
     
     @Override
-    protected void onCreate(Bundle savedInstanceState) {        
+    protected void onCreate(Bundle savedInstanceState) {
+        apiMethod = getIntent().getStringExtra(Invoke.Extras.API_METHOD);
         params = prepareMethodParams(apiMethod, objectKey, getIntent().getExtras());
         super.onCreate(savedInstanceState);
     }
