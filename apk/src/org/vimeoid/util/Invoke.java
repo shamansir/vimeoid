@@ -6,6 +6,7 @@ package org.vimeoid.util;
 import org.vimeoid.R;
 import org.vimeoid.activity.Player;
 import org.vimeoid.activity.user.item.UserActivity;
+import org.vimeoid.activity.user.list.VideosActivity;
 import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.connection.simple.VimeoProvider;
 
@@ -227,7 +228,7 @@ public final class Invoke {
         }
 
         public static void selectVideosBy(Activity parent, org.vimeoid.dto.advanced.User user) {
-            parent.startActivity(new Intent(parent, UserActivity.class)
+            parent.startActivity(new Intent(parent, VideosActivity.class)
                                      .putExtra(Extras.API_METHOD, Methods.videos.getAll)
                                      .putExtra(Extras.API_PARAMS, new ApiParams().add("user_id", String.valueOf(user.id))
                                                                                  .add("full_response", "1")

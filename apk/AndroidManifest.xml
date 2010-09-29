@@ -125,6 +125,10 @@
         <activity android:label="User"
                   android:name=".activity.user.item.UserActivity"
                   android:theme="@android:style/Theme.Light.NoTitleBar" />
+        <!-- USER: VIDEOS -->
+        <activity android:label="Videos"
+                  android:name=".activity.user.list.VideosActivity"
+                  android:theme="@android:style/Theme.NoTitleBar" />                  
     </application>    
     <uses-sdk android:minSdkVersion="4" />
     <uses-permission android:name="android.permission.INTERNET" />

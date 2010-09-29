@@ -61,9 +61,9 @@ public class ApiParams {
         final String[] names = new String[params.size()];
         final String[] values = new String[params.size()];
         int i = 0;
-        for (NameValuePair nvp: params) {
-            names[i] = nvp.getName();
-            values[i]= nvp.getValue();
+        for (NameValuePair pair: params) {
+            names[i] = pair.getName();
+            values[i]= pair.getValue();
         }
         bundle.putStringArray(BUNDLE_NAMES_ARR, names);
         bundle.putStringArray(BUNDLE_VALUES_ARR, values);
