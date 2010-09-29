@@ -5,10 +5,6 @@ import org.vimeoid.activity.user.ItemsListActivity;
 import org.vimeoid.adapter.JsonObjectsAdapter;
 import org.vimeoid.adapter.user.VideosListAdapter;
 import org.vimeoid.dto.advanced.Video;
-import org.vimeoid.util.ApiParams;
-import org.vimeoid.util.Invoke.Extras;
-
-import android.os.Bundle;
 
 /**
  * 
@@ -31,14 +27,7 @@ import android.os.Bundle;
 public class VideosActivity extends ItemsListActivity<Video> {
     
     public VideosActivity() {
-        super(R.menu.video_context_user_menu,  
-              Video.FieldsKeys.OBJECT_KEY, Video.FieldsKeys.ARRAY_KEY);
-    }
-
-    @Override
-    protected ApiParams prepareMethodParams(String methodName, Bundle extras) {
-        return new ApiParams().add("user_id", extras.getString(Extras.USER_ID))
-                              .add("full_response", "1");
+        super(R.menu.video_context_user_menu);
     }
 
     @Override

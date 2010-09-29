@@ -53,7 +53,7 @@ public class UserActivity extends SingleItemActivity<User> {
     private ActionItem channelAction;
     
     public UserActivity() {
-        super(R.layout.view_single_user, User.FieldsKeys.OBJECT_KEY);
+        super(R.layout.view_single_user);
     }
 
     @Override
@@ -63,9 +63,9 @@ public class UserActivity extends SingleItemActivity<User> {
         
         final String userIdStr = String.valueOf(userId);
         
-        addSecondaryTask(LOAD_PORTRAITS_TASK, Methods.people.getPortraitUrls, new ApiParams().add("user_id", userIdStr), "portraits");
-        addSecondaryTask(LOAD_ALBUMS_TASK, Methods.albums.getAll, new ApiParams().add("user_id", userIdStr), "albums");
-        addSecondaryTask(LOAD_CHANNELS_TASK, Methods.channels.getAll, new ApiParams().add("user_id", userIdStr), "channels");
+        addSecondaryTask(LOAD_PORTRAITS_TASK, Methods.people.getPortraitUrls, new ApiParams().add("user_id", userIdStr));
+        addSecondaryTask(LOAD_ALBUMS_TASK, Methods.albums.getAll, new ApiParams().add("user_id", userIdStr));
+        addSecondaryTask(LOAD_CHANNELS_TASK, Methods.channels.getAll, new ApiParams().add("user_id", userIdStr));
         
         super.onCreate(savedInstanceState);
     }
@@ -73,11 +73,6 @@ public class UserActivity extends SingleItemActivity<User> {
     @Override
     protected User extractFromJson(JSONObject jsonObj) throws JSONException {
         return User.collectFromJson(jsonObj);
-    }
-
-    @Override
-    protected ApiParams prepareMethodParams(String methodName, String objectKey, Bundle extras) {
-        return new ApiParams().add("user_id", String.valueOf(userId));
     }
 
     @Override
@@ -174,19 +169,20 @@ public class UserActivity extends SingleItemActivity<User> {
         switch (taskId) {
             case LOAD_PORTRAITS_TASK: {
                 final ImageView uploaderPortrait = (ImageView)findViewById(R.id.userPortrait);
-                final String mediumPortraitUrl = result.getJSONArray(PortraitsData.FieldsKeys.OBJECT_KEY)
+                final String mediumPortraitUrl = result.getJSONObject(PortraitsData.FieldsKeys.MULTIPLE_KEY)
+                                                       .getJSONArray(PortraitsData.FieldsKeys.SINGLE_KEY)
                                                        .getJSONObject(2).getString(PortraitsData.FieldsKeys.URL);
                 imageLoader.displayImage(mediumPortraitUrl, uploaderPortrait);
             }; break;
             case LOAD_ALBUMS_TASK: {
-                final int albumsCount = result.getInt("total");                
+                final int albumsCount = result.getJSONObject("albums").getInt("total");                
                 Log.d(TAG, "got albums count, its " + albumsCount);
                 albumAction.title = Utils.format(getString(R.string.num_of_albums), "num", String.valueOf(albumsCount));
                 if (albumsCount == 0) albumAction.onClick = null;
                 getActionsList().invalidate();
             }; break;
             case LOAD_CHANNELS_TASK: {
-                final int channelsCount = result.getInt("total");                
+                final int channelsCount = result.getJSONObject("channels").getInt("total");                
                 Log.d(TAG, "got channels count, its " + channelsCount);
                 channelAction.title = Utils.format(getString(R.string.num_of_channels), "num", String.valueOf(channelsCount));
                 if (channelsCount == 0) channelAction.onClick = null;

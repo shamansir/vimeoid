@@ -33,8 +33,8 @@ public class Tag implements AdvancedItem {
     
     public static class FieldsKeys {
         
-        public static final String OBJECT_KEY = "tags";
-        public static final String ARRAY_KEY = "tag";
+        public static final String SINGLE_KEY = "tag";        
+        public static final String MULTIPLE_KEY = "tags";
         
         public static final String ID = "id";
         
@@ -59,8 +59,8 @@ public class Tag implements AdvancedItem {
     }
     
     public static Tag[] collectListFromJson(JSONObject jsonObj) throws JSONException {
-        final JSONArray array = jsonObj.getJSONObject(FieldsKeys.OBJECT_KEY)
-                                       .getJSONArray(FieldsKeys.ARRAY_KEY);
+        final JSONArray array = jsonObj.getJSONObject(FieldsKeys.MULTIPLE_KEY)
+                                       .getJSONArray(FieldsKeys.SINGLE_KEY);
         final Tag[] result = new Tag[array.length()];
         for (int i = 0; i < array.length(); i++) {
             result[i] = collectFromJson(array.getJSONObject(i));
@@ -69,8 +69,8 @@ public class Tag implements AdvancedItem {
     }
     
     public static String[] collectQuickListFromJson(JSONObject jsonObj) throws JSONException {
-        final JSONArray array = jsonObj.getJSONObject(FieldsKeys.OBJECT_KEY)
-                                       .getJSONArray(FieldsKeys.ARRAY_KEY);
+        final JSONArray array = jsonObj.getJSONObject(FieldsKeys.MULTIPLE_KEY)
+                                       .getJSONArray(FieldsKeys.SINGLE_KEY);
         final String[] result = new String[array.length()];
         for (int i = 0; i < array.length(); i++) {
             result[i] = array.getJSONObject(i).getString(FieldsKeys.CONTENT);

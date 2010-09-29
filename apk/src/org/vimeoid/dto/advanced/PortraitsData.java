@@ -35,15 +35,15 @@ public class PortraitsData {
     public Portrait large;
     
     public static class FieldsKeys {
-        public static final String OBJECT_KEY = "portrait";
-        public static final String ARRAY_KEY = "portraits";
+        public static final String SINGLE_KEY = "portrait";
+        public static final String MULTIPLE_KEY = "portraits";
         
         public static final String HEIGHT = "height";
         public static final String WIDTH = "width";
         public static final String URL = "_content";
     }
     
-    private static Portrait portraitFromJson(JSONObject jsonObj) throws JSONException {
+    private static Portrait extractFromJson(JSONObject jsonObj) throws JSONException {
         final Portrait portrait = new Portrait();
         portrait.width = jsonObj.getInt(FieldsKeys.WIDTH);
         portrait.height = jsonObj.getInt(FieldsKeys.HEIGHT);
@@ -52,13 +52,13 @@ public class PortraitsData {
     }
     
     public static PortraitsData collectFromJson(JSONObject jsonObj) throws JSONException {        
-        final JSONArray portraitsArr = jsonObj.getJSONArray(FieldsKeys.OBJECT_KEY);
+        final JSONArray portraitsArr = jsonObj.getJSONObject(FieldsKeys.MULTIPLE_KEY).getJSONArray(FieldsKeys.SINGLE_KEY);
         if (portraitsArr.length() != 4) throw new IllegalStateException("Unknown portraits object");
         final PortraitsData portraitsData = new PortraitsData();
-        portraitsData.nano = portraitFromJson(portraitsArr.getJSONObject(0));
-        portraitsData.small = portraitFromJson(portraitsArr.getJSONObject(1));
-        portraitsData.medium = portraitFromJson(portraitsArr.getJSONObject(2));
-        portraitsData.large = portraitFromJson(portraitsArr.getJSONObject(3));
+        portraitsData.nano = extractFromJson(portraitsArr.getJSONObject(0));
+        portraitsData.small = extractFromJson(portraitsArr.getJSONObject(1));
+        portraitsData.medium = extractFromJson(portraitsArr.getJSONObject(2));
+        portraitsData.large = extractFromJson(portraitsArr.getJSONObject(3));
         return portraitsData;
     }
     

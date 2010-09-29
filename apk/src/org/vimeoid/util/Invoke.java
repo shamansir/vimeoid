@@ -35,6 +35,7 @@ public final class Invoke {
     public static class Extras {
         
         public static final String API_METHOD = "v_apimethod";
+        public static final String API_PARAMS = "v_apiparams";
     
         public static final String SUBJ_ICON = "v_subjicon";
         public static final String SUBJ_TITLE = "v_subjtitle";
@@ -212,8 +213,10 @@ public final class Invoke {
         public static void showUserPage(Activity parent, long userId, String username) {
             parent.startActivity(new Intent(parent, UserActivity.class)
                                      .putExtra(Extras.API_METHOD, Methods.people.getInfo)
+                                     .putExtra(Extras.API_PARAMS, new ApiParams().add("user_id", String.valueOf(userId))
+                                                                                 .toBundle())
                                      .putExtra(Extras.USER_ID, userId)
-                                     .putExtra(Extras.USERNAME, username)
+                                     //.putExtra(Extras.USERNAME, username)
                                      .putExtra(Extras.SUBJ_ICON, R.drawable.contact)
                                      .putExtra(Extras.SUBJ_TITLE, username)
                                      .putExtra(Extras.RES_ICON, R.drawable.info));
@@ -226,8 +229,11 @@ public final class Invoke {
         public static void selectVideosBy(Activity parent, org.vimeoid.dto.advanced.User user) {
             parent.startActivity(new Intent(parent, UserActivity.class)
                                      .putExtra(Extras.API_METHOD, Methods.videos.getAll)
-                                     .putExtra(Extras.USER_ID, user.id)
-                                     .putExtra(Extras.USERNAME, user.username)
+                                     .putExtra(Extras.API_PARAMS, new ApiParams().add("user_id", String.valueOf(user.id))
+                                                                                 .add("full_response", "1")
+                                                                                 .toBundle())                                     
+                                     //.putExtra(Extras.USER_ID, user.id)
+                                     //.putExtra(Extras.USERNAME, user.username)
                                      .putExtra(Extras.SUBJ_ICON, R.drawable.contact)
                                      .putExtra(Extras.SUBJ_TITLE, user.username)
                                      .putExtra(Extras.RES_ICON, R.drawable.video));

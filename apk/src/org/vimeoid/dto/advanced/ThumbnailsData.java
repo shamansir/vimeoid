@@ -35,15 +35,15 @@ public class ThumbnailsData {
     public Thumbnail large;
     
     public static class FieldsKeys {
-        public static final String OBJECT_KEY = "portrait";
-        public static final String ARRAY_KEY = "portraits";
+        public static final String SINGLE_KEY = "portrait";
+        public static final String MULTIPLE_KEY = "portraits";
         
         public static final String HEIGHT = "height";
         public static final String WIDTH = "width";
         public static final String URL = "_content";
     }
     
-    private static Thumbnail thumbnailFromJson(JSONObject jsonObj) throws JSONException {
+    private static Thumbnail extractFromJson(JSONObject jsonObj) throws JSONException {
         final Thumbnail thumbnail = new Thumbnail();
         thumbnail.width = jsonObj.getInt(FieldsKeys.WIDTH);
         thumbnail.height = jsonObj.getInt(FieldsKeys.HEIGHT);
@@ -52,13 +52,13 @@ public class ThumbnailsData {
     }
     
     public static ThumbnailsData collectFromJson(JSONObject jsonObj) throws JSONException {        
-        final JSONArray thumbnailsArr = jsonObj.getJSONArray(FieldsKeys.OBJECT_KEY);
+        final JSONArray thumbnailsArr = jsonObj.getJSONObject(FieldsKeys.MULTIPLE_KEY).getJSONArray(FieldsKeys.SINGLE_KEY);
         if (thumbnailsArr.length() != 4) throw new IllegalStateException("Unknown thumbnails object");
         final ThumbnailsData thumbnailsData = new ThumbnailsData();
-        thumbnailsData.nano = thumbnailFromJson(thumbnailsArr.getJSONObject(0));
-        thumbnailsData.small = thumbnailFromJson(thumbnailsArr.getJSONObject(1));
-        thumbnailsData.medium = thumbnailFromJson(thumbnailsArr.getJSONObject(2));
-        thumbnailsData.large = thumbnailFromJson(thumbnailsArr.getJSONObject(3));
+        thumbnailsData.nano = extractFromJson(thumbnailsArr.getJSONObject(0));
+        thumbnailsData.small = extractFromJson(thumbnailsArr.getJSONObject(1));
+        thumbnailsData.medium = extractFromJson(thumbnailsArr.getJSONObject(2));
+        thumbnailsData.large = extractFromJson(thumbnailsArr.getJSONObject(3));
         return thumbnailsData;
     }
     

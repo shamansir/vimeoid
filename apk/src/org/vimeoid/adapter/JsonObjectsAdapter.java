@@ -6,9 +6,9 @@ package org.vimeoid.adapter;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.vimeoid.dto.advanced.PagingData;
 import org.vimeoid.util.AdvancedItem;
 
 import android.widget.BaseAdapter;
@@ -29,9 +29,13 @@ import android.widget.BaseAdapter;
  */
 public abstract class JsonObjectsAdapter<ItemType extends AdvancedItem> extends BaseAdapter {
     
-    private final List<ItemType> items = new LinkedList<ItemType>();   
+    private final List<ItemType> items = new LinkedList<ItemType>();
+    private final String dataKey;
+    private PagingData lastPagingData;    
     
-    public JsonObjectsAdapter() { }
+    public JsonObjectsAdapter(String dataKey) { 
+        this.dataKey = dataKey;
+    }
 
     @Override
     public int getCount() {
@@ -48,17 +52,27 @@ public abstract class JsonObjectsAdapter<ItemType extends AdvancedItem> extends 
         return items.get(position).getId();
     }
 
-    public void addSource(JSONArray values) throws JSONException {        
-        for (int i = 0; i < values.length(); i++) {
-            items.add(extractItem(values.getJSONObject(i)));
+    public void addPage(JSONObject value) throws JSONException {
+        lastPagingData = PagingData.collectFromJson(value, dataKey);
+        
+        final ItemType[] extracted = extractItems(value);
+        for (int i = 0; i < extracted.length; i++) {
+            items.add(extracted[i]);
         }
     }
     
-    protected void finalize() {
+    public PagingData getLastPagingData() {
+        return lastPagingData;
+    }
+    
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
         items.clear();
     }    
 
-    protected abstract ItemType extractItem(JSONObject jsonObject) throws JSONException;
+    protected abstract ItemType[] extractItems(JSONObject jsonObject) throws JSONException;
+    
     
     @Override
     public boolean isEmpty() {

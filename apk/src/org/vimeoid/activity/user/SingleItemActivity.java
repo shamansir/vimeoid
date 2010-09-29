@@ -45,25 +45,21 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     private static final String TAG = "SingleItemActivity";
     
     private String apiMethod;
-    private final String objectKey;
     private ApiParams params;
     
     private LinkedList<SecondaryTask> secondaryTasks = null;
     private Map<Integer, ApiParams> secondaryTasksParams = null;
     
-    public SingleItemActivity(int mainView, String objectKey) {
+    public SingleItemActivity(int mainView) {
         super(mainView);
-        this.objectKey = objectKey;
     }
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         apiMethod = getIntent().getStringExtra(Invoke.Extras.API_METHOD);
-        params = prepareMethodParams(apiMethod, objectKey, getIntent().getExtras());
+        params = ApiParams.fromBundle(getIntent().getBundleExtra(Invoke.Extras.API_PARAMS));
         super.onCreate(savedInstanceState);
     }
-    
-    protected abstract ApiParams prepareMethodParams(String methodName, String objectKey, Bundle extras);
     
     protected abstract ItemType extractFromJson(JSONObject jsonObj) throws JSONException;
     
@@ -78,7 +74,7 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     @Override 
     protected final void queryItem() {
         try {
-            new LoadUserItemTask(apiMethod, objectKey).execute(params).get();
+            new LoadUserItemTask(apiMethod).execute(params).get();
         } catch (Exception e) {
             Log.e(TAG, "failed to get item");
             e.printStackTrace();
@@ -88,10 +84,10 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     }
     
     @Override
-    public final void addSecondaryTask(int taskId, String apiMethod, ApiParams params, String objectKey) {
+    public final void addSecondaryTask(int taskId, String apiMethod, ApiParams params) {
         if (secondaryTasks == null) secondaryTasks = new LinkedList<SecondaryTask>();
         if (secondaryTasksParams == null) secondaryTasksParams = new HashMap<Integer, ApiParams>();
-        final SecondaryTask newTask = new SecondaryTask(taskId, apiMethod, objectKey);
+        final SecondaryTask newTask = new SecondaryTask(taskId, apiMethod);
         try {
             SecondaryTask last = secondaryTasks.getLast();
             last.setNextTask(newTask);
@@ -123,11 +119,9 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     protected class LoadUserItemTask extends AsyncTask<ApiParams, Void, JSONObject> {
 
     	protected final String apiMethod;
-        protected final String objectKey;
         
-        protected LoadUserItemTask(String apiMethod, String objectKey) {
+        protected LoadUserItemTask(String apiMethod) {
             this.apiMethod = apiMethod;
-            this.objectKey = objectKey;
         }
         
         @Override
@@ -165,7 +159,7 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
             // Log.d(TAG, jsonObj.toString());
             if (jsonObj != null) {
                 try {
-                    onItemReceived(extractFromJson(jsonObj.getJSONObject(objectKey)));
+                    onItemReceived(extractFromJson(jsonObj));
                 } catch (JSONException jsone) {
                     Log.d(TAG, "JSON parsing failure: " + jsone.getLocalizedMessage());
                     jsone.printStackTrace();
@@ -182,8 +176,8 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
         private final int taskId;
         private SecondaryTask nextTask = null;
         
-        public SecondaryTask(int taskId, String apiMethod, String keyParam) {
-            super(apiMethod, keyParam);
+        public SecondaryTask(int taskId, String apiMethod) {
+            super(apiMethod);
             this.taskId = taskId;
         }
         
@@ -192,7 +186,7 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
             // Log.d(TAG, jsonObj.toString());
             if (jsonObj != null) {
                 try {
-                    onSecondaryTaskPerfomed(taskId, jsonObj.getJSONObject(objectKey));
+                    onSecondaryTaskPerfomed(taskId, jsonObj);
                 } catch (JSONException jsone) {
                     Log.d(TAG, "JSON parsing failure: " + jsone.getLocalizedMessage());
                     jsone.printStackTrace();

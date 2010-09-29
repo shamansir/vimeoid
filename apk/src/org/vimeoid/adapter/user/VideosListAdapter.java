@@ -40,6 +40,8 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> {
     private final ImageLoader imageLoader;    
     
     public VideosListAdapter(Context context, LayoutInflater inflater) {
+        super(Video.FieldsKeys.MULTIPLE_KEY);
+        
         this.layoutInflater = inflater;        
         
         this.imageLoader = new ImageLoader(context, R.drawable.thumb_loading_small, R.drawable.video_unknown_item);        
@@ -103,7 +105,7 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> {
     }
     
     @Override
-    protected void finalize() {
+    protected void finalize() throws Throwable {
         super.finalize();
         imageLoader.clearCache();
     }
@@ -123,8 +125,8 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> {
     }    
 
     @Override
-    protected Video extractItem(JSONObject jsonObject) throws JSONException {
-        return Video.collectFromJson(jsonObject);
+    protected Video[] extractItems(JSONObject jsonObject) throws JSONException {
+        return Video.collectListFromJson(jsonObject);
     }
 
 }

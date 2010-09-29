@@ -3,6 +3,7 @@
  */
 package org.vimeoid.dto.advanced;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.util.AdvancedItem;
@@ -52,8 +53,8 @@ public class Video implements AdvancedItem {
      
     public final static class FieldsKeys {
         
-        public static final String OBJECT_KEY = "video";
-        public static final String ARRAY_KEY = "videos";
+        public static final String SINGLE_KEY = "video";
+        public static final String MULTIPLE_KEY = "videos";
         
         public static final String ID = "id";
         
@@ -75,7 +76,7 @@ public class Video implements AdvancedItem {
         
     }
     
-    public static Video collectFromJson(JSONObject jsonObj) throws JSONException {
+    private static Video collectFromJson(JSONObject jsonObj) throws JSONException {
         final Video video = new Video();
         
         video.id = jsonObj.getLong(FieldsKeys.ID);
@@ -97,13 +98,24 @@ public class Video implements AdvancedItem {
         video.duration = jsonObj.getLong(FieldsKeys.DURATION);
         
         video.tags = Tag.collectQuickListFromJson(jsonObj);
-        video.thumbnails = ThumbnailsData.collectFromJson(jsonObj.getJSONObject(ThumbnailsData.FieldsKeys.ARRAY_KEY));
+        video.thumbnails = ThumbnailsData.collectFromJson(jsonObj);
         
-        video.uploaderName = jsonObj.getJSONObject("owner"/*User.FieldsKeys.OBJECT_KEY*/).getString(User.FieldsKeys.NAME);
+        video.uploaderName = jsonObj.getJSONObject(User.FieldsKeys.OWNER_KEY).getString(User.FieldsKeys.NAME);
         
         return video;
     }
     
-    public long getId() { return id; }    
+    public static Video[] collectListFromJson(JSONObject jsonObj) throws JSONException {
+        final JSONArray dataArray = jsonObj.getJSONObject(FieldsKeys.MULTIPLE_KEY)
+                                           .getJSONArray(FieldsKeys.SINGLE_KEY);
+        final Video[] videos = new Video[dataArray.length()];
+        for (int i = 0; i < dataArray.length(); i++) {
+            videos[i] = collectFromJson(dataArray.getJSONObject(i));
+        }
+        return videos;
+    }    
+    
+    
+    public long getId() { return id; }
     
 }

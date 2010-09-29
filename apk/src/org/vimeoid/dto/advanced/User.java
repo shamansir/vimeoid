@@ -53,7 +53,9 @@ public class User implements AdvancedItem {
 
     public final static class FieldsKeys {
         
-        public static final String OBJECT_KEY = "person";        
+        public static final String SINGLE_KEY = "person";
+        public static final String MULTIPLE_KEY = "persons";
+        public static final String OWNER_KEY = "owner";
         
         public static final String ID = "id";
         
@@ -79,7 +81,7 @@ public class User implements AdvancedItem {
         
     }
     
-    public static User collectFromJson(JSONObject jsonObj) throws JSONException {
+    public static User extractFromJson(JSONObject jsonObj) throws JSONException {
         final User user = new User();
         
         user.id = jsonObj.getLong(FieldsKeys.ID);
@@ -104,6 +106,10 @@ public class User implements AdvancedItem {
         user.contactsCount = jsonObj.getLong(FieldsKeys.NUM_OF_CONTACTS);
         
         return user;
+    }
+    
+    public static User collectFromJson(JSONObject jsonObj) throws JSONException {
+        return extractFromJson(jsonObj.getJSONObject(FieldsKeys.SINGLE_KEY));
     }
     
     public long getId() { return id; }

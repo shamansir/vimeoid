@@ -23,7 +23,7 @@ import org.vimeoid.util.ApiParams;
  */
 public interface SecondaryTasksSupport {
 
-    public void addSecondaryTask(int taskId, String apiMethod, ApiParams params, String objectKey);
+    public void addSecondaryTask(int taskId, String apiMethod, ApiParams params);
     public void onSecondaryTaskPerfomed(int taskId, JSONObject result) throws JSONException;    
     public void runSecondaryTasks();    
     
