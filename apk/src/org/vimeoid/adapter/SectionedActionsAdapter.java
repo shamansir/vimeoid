@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.vimeoid.R;
-import org.vimeoid.adapter.ActionItem.ActionsSection;
+import org.vimeoid.adapter.LActionItem.LActionsSection;
 
 import com.fedorvlasov.lazylist.ImageLoader;
 
@@ -49,7 +49,7 @@ public class SectionedActionsAdapter extends BaseAdapter {
     private final int sectionLayout;
     private final int actionLayout;
     
-    private final List<ActionsSection> sections = new LinkedList<ActionsSection>();
+    private final List<LActionsSection> sections = new LinkedList<LActionsSection>();
     private int itemsCount = 0;
     
     public SectionedActionsAdapter(Context context, final LayoutInflater inflater, ImageLoader imagesLoader) {
@@ -82,13 +82,13 @@ public class SectionedActionsAdapter extends BaseAdapter {
         if (position < 0) throw new IllegalArgumentException("position must be greater than zero");
         
         int itemsLeft = position;
-        for (ActionsSection section: sections) {
+        for (LActionsSection section: sections) {
             
             if (itemsLeft == 0) return section;
             itemsLeft--;
             
             if (itemsLeft < section.size()) {
-                for (ActionItem action: section.actions) {
+                for (LActionItem action: section.actions) {
                     if (itemsLeft == 0) return action;
                     itemsLeft--;
                 }
@@ -106,7 +106,7 @@ public class SectionedActionsAdapter extends BaseAdapter {
     @Override
     public int getItemViewType(int position) {
     	int itemsLeft = position;
-    	for (ActionsSection section: sections) {
+    	for (LActionsSection section: sections) {
     		
     		if (itemsLeft == 0) return SECTION_VIEW_TYPE;
     		itemsLeft--;
@@ -139,7 +139,7 @@ public class SectionedActionsAdapter extends BaseAdapter {
         
         if (viewType == SECTION_VIEW_TYPE) {
         	
-            final ActionsSection section = (ActionsSection) getItem(position);
+            final LActionsSection section = (LActionsSection) getItem(position);
             SectionHeaderHolder itemHolder = null;
             
             if (convertView == null) {
@@ -155,7 +155,7 @@ public class SectionedActionsAdapter extends BaseAdapter {
             
         } else if (viewType == ITEM_VIEW_TYPE) {
             
-        	final ActionItem item = (ActionItem) getItem(position);
+        	final LActionItem item = (LActionItem) getItem(position);
             ActionItemHolder itemHolder = null;
             
             if (convertView == null) {
@@ -195,34 +195,34 @@ public class SectionedActionsAdapter extends BaseAdapter {
     }
 
     public int addSection(String title) {
-        final ActionsSection newSection = new ActionsSection(sections.size(), title); 
+        final LActionsSection newSection = new LActionsSection(sections.size(), title); 
         sections.add(newSection);
         itemsCount++;
         return newSection.id;
     }
     
-    private ActionItem addAction(int section, int icon, String iconUrl, String title) {
+    private LActionItem addAction(int section, int icon, String iconUrl, String title) {
         if (section >= sections.size() || (section < 0)) throw new IllegalArgumentException("No section with such id (" + section + ") resgistered");
-        final ActionsSection subjSection = sections.get(section);
-        final ActionItem newAction = (icon != -1) ? new ActionItem(subjSection, icon, title) : new ActionItem(subjSection, iconUrl, title); 
+        final LActionsSection subjSection = sections.get(section);
+        final LActionItem newAction = (icon != -1) ? new LActionItem(subjSection, icon, title) : new LActionItem(subjSection, iconUrl, title); 
         subjSection.addAction(newAction);
         itemsCount++;
         return newAction;        
     }
     
-    public ActionItem addAction(int section, String iconUrl, String title) {
+    public LActionItem addAction(int section, String iconUrl, String title) {
         return addAction(section, -1, iconUrl, title);
     }    
     
-    public ActionItem addAction(int section, String iconUrl, int title) {
+    public LActionItem addAction(int section, String iconUrl, int title) {
         return addAction(section, -1, iconUrl, context.getString(title));
     }
     
-    public ActionItem addAction(int section, int icon, String title) {
+    public LActionItem addAction(int section, int icon, String title) {
         return addAction(section, icon, null, title);
     }
     
-    public ActionItem addAction(int section, int icon, int title) {
+    public LActionItem addAction(int section, int icon, int title) {
         return addAction(section, icon, null, context.getString(title));
     }
     

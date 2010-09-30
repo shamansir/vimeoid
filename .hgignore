@@ -1,8 +1,10 @@
 ^apk/bin/*
 ^test-apk/bin/*
+^lib-qactions/bin/*
 ^mockup/vimeoIMG/*
 ^apk/gen/org/vimeoid/R.java
 ^test-apk/gen/org/vimeoid/test/R.java
+^lib-qactions/gen/net/londatiga/android/R.java
 
 \.settings
 .*\.apk

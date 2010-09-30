@@ -16,7 +16,7 @@ import android.widget.TextView;
  * <dt>Package:</dt> <dd>org.vimeoid.adapter</dd>
  * </dl>
  *
- * <code>ActionItem</code>
+ * <code>LActionItem</code>
  *
  * <p>Description</p>
  *
@@ -24,19 +24,19 @@ import android.widget.TextView;
  * @date Sep 13, 2010 9:32:41 PM 
  *
  */
-public class ActionItem {
+public class LActionItem {
     
-    public static class ActionsSection {
+    public static class LActionsSection {
         
         public final int id;
         public final String title;
-        protected final List<ActionItem> actions = new LinkedList<ActionItem>();
+        protected final List<LActionItem> actions = new LinkedList<LActionItem>();
         
-        void addAction(ActionItem action) {
+        void addAction(LActionItem action) {
             actions.add(action);
         }
         
-        void removeAction(ActionItem action) {
+        void removeAction(LActionItem action) {
             actions.remove(action);
         }
         
@@ -44,36 +44,36 @@ public class ActionItem {
             return actions.size();
         }
         
-        ActionsSection(int id, String title) {
+        LActionsSection(int id, String title) {
             this.id = id;
             this.title = title;
         }
 
-		public boolean contains(ActionItem action) {
+		public boolean contains(LActionItem action) {
 			return actions.contains(action);
 		}
         
     }
     
-    public final ActionsSection section;
+    public final LActionsSection section;
     public int icon = -1;
     public String title = null;
     public OnClickListener onClick = null;
     public final String iconUrl;
     public RenderingAdapter adapter = null;  
     
-    private ActionItem(ActionsSection section, int icon, String iconUrl, String title) {
+    private LActionItem(LActionsSection section, int icon, String iconUrl, String title) {
         this.section = section;
         this.icon = icon;
         this.title = title;
         this.iconUrl = iconUrl;        
     }
     
-    ActionItem(ActionsSection section, int icon, String title) {
+    LActionItem(LActionsSection section, int icon, String title) {
         this(section, icon, null, title);
     }
     
-    ActionItem(ActionsSection section, String iconUrl, String title) {
+    LActionItem(LActionsSection section, String iconUrl, String title) {
         this(section, -1, iconUrl, title);
     }
     

@@ -5,7 +5,7 @@ package org.vimeoid.activity.guest.item;
 
 import org.vimeoid.R;
 import org.vimeoid.activity.guest.SingleItemActivity;
-import org.vimeoid.adapter.ActionItem;
+import org.vimeoid.adapter.LActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.dto.simple.Video;
@@ -120,7 +120,7 @@ public class VideoActivity extends SingleItemActivity<Video> {
     	actionsAdapter.addAction(infoSection, R.drawable.duration,
 			     				 Utils.format(getString(R.string.duration_is), "time", Utils.adaptDuration(video.duration)));    	
     	// uploader
-    	final ActionItem userAction = actionsAdapter.addAction(infoSection, R.drawable.contact, 
+    	final LActionItem userAction = actionsAdapter.addAction(infoSection, R.drawable.contact, 
     			                 Utils.format(getString(R.string.uploaded_by), "name", video.uploaderName));
     	userAction.onClick =  new OnClickListener() {
     		@Override public void onClick(View v) { Invoke.Guest.selectUploader(VideoActivity.this, video); };

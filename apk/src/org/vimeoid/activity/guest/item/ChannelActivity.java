@@ -5,7 +5,7 @@ package org.vimeoid.activity.guest.item;
 
 import org.vimeoid.R;
 import org.vimeoid.activity.guest.SingleItemActivity;
-import org.vimeoid.adapter.ActionItem;
+import org.vimeoid.adapter.LActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.dto.simple.Channel;
 import org.vimeoid.util.Invoke;
@@ -67,7 +67,7 @@ public class ChannelActivity extends SingleItemActivity<Channel> {
         // Statistics section
         int statsSection = actionsAdapter.addSection(getString(R.string.statistics));
         // number of videos
-        final ActionItem videoAction = actionsAdapter.addAction(statsSection, R.drawable.video, 
+        final LActionItem videoAction = actionsAdapter.addAction(statsSection, R.drawable.video, 
                                  Utils.format(getString(R.string.num_of_videos), "num", String.valueOf(channel.videosCount)));
         if (channel.videosCount > 0) {
             videoAction.onClick = new OnClickListener() {
@@ -82,7 +82,7 @@ public class ChannelActivity extends SingleItemActivity<Channel> {
         int infoSection = actionsAdapter.addSection(getString(R.string.information));
         //actionsAdapter.addAction(infoSection, R.drawable.info, channel.logoHeader);
         // creator
-        final ActionItem creatorAction = actionsAdapter.addAction(infoSection, R.drawable.contact,
+        final LActionItem creatorAction = actionsAdapter.addAction(infoSection, R.drawable.contact,
                                  Utils.format(getString(R.string.created_by), "name", channel.creatorDisplayName));
         creatorAction.onClick = new OnClickListener() {
             @Override public void onClick(View v) { Invoke.Guest.selectCreator(ChannelActivity.this, channel); };

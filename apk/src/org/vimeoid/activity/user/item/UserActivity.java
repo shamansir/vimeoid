@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import org.vimeoid.R;
 import org.vimeoid.activity.user.SingleItemActivity;
-import org.vimeoid.adapter.ActionItem;
+import org.vimeoid.adapter.LActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.dto.advanced.PortraitsData;
@@ -49,8 +49,8 @@ public class UserActivity extends SingleItemActivity<User> {
     
     private long userId;
     
-    private ActionItem albumAction;
-    private ActionItem channelAction;
+    private LActionItem albumAction;
+    private LActionItem channelAction;
     
     public UserActivity() {
         super(R.layout.view_single_user);
@@ -81,7 +81,7 @@ public class UserActivity extends SingleItemActivity<User> {
         // Statistics section
         int statsSection = actionsAdapter.addSection(getString(R.string.statistics));
         // number of videos
-        final ActionItem videoAction = actionsAdapter.addAction(statsSection, R.drawable.video, 
+        final LActionItem videoAction = actionsAdapter.addAction(statsSection, R.drawable.video, 
                                  Utils.format(getString(R.string.num_of_videos), "num", String.valueOf(user.videosCount)));
         if (user.videosCount > 0) {
             videoAction.onClick =  new OnClickListener() {
@@ -101,7 +101,7 @@ public class UserActivity extends SingleItemActivity<User> {
                 @Override public void onClick(View v) { Invoke.User_.selectChannelsOf(UserActivity.this, user); };
         };
         // number of contacts
-        final ActionItem contactAction = actionsAdapter.addAction(statsSection, R.drawable.contact, 
+        final LActionItem contactAction = actionsAdapter.addAction(statsSection, R.drawable.contact, 
                         Utils.format(getString(R.string.num_of_contacts), "num", String.valueOf(user.contactsCount)));
         if (user.contactsCount > 0) {
             contactAction.onClick =  new OnClickListener() {
@@ -109,7 +109,7 @@ public class UserActivity extends SingleItemActivity<User> {
             };
         }
         // number of appearances
-        final ActionItem appearanceAction = actionsAdapter.addAction(statsSection, R.drawable.appearance, 
+        final LActionItem appearanceAction = actionsAdapter.addAction(statsSection, R.drawable.appearance, 
                         Utils.format(getString(R.string.num_of_appearances), "num", String.valueOf(user.videosAppearsIn)));
         if (user.videosAppearsIn > 0) {
             appearanceAction.onClick =  new OnClickListener() {
@@ -117,7 +117,7 @@ public class UserActivity extends SingleItemActivity<User> {
             };
         }
         // number of likes
-        final ActionItem likeAction = actionsAdapter.addAction(statsSection, R.drawable.like, 
+        final LActionItem likeAction = actionsAdapter.addAction(statsSection, R.drawable.like, 
                         Utils.format(getString(R.string.num_of_likes), "num", String.valueOf(user.videosLiked)));
         if (user.videosLiked > 0) { 
             likeAction.onClick =  new OnClickListener() {
@@ -125,7 +125,7 @@ public class UserActivity extends SingleItemActivity<User> {
             };
         }
         // subsriptions
-        final ActionItem subscriptionAction = actionsAdapter.addAction(statsSection, R.drawable.subscribe, 
+        final LActionItem subscriptionAction = actionsAdapter.addAction(statsSection, R.drawable.subscribe, 
                                                                                      getString(R.string.subscriptions));
         subscriptionAction.onClick =  new OnClickListener() {
             @Override public void onClick(View v) { Invoke.User_.selectSubsriptionsOf(UserActivity.this, user); };
