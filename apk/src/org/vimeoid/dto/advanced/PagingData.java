@@ -29,7 +29,7 @@ public class PagingData {
     
     public static class FieldsKeys {
         public static final String PER_PAGE = "perpage";
-        public static final String PAGE_NUM = "page_num";
+        public static final String PAGE_NUM = "page";
         public static final String ON_THIS_PAGE = "on_this_page";
         public static final String TOTAL = "total";
     }

@@ -64,6 +64,7 @@ public class ApiParams {
         for (NameValuePair pair: params) {
             names[i] = pair.getName();
             values[i]= pair.getValue();
+            i++;
         }
         bundle.putStringArray(BUNDLE_NAMES_ARR, names);
         bundle.putStringArray(BUNDLE_VALUES_ARR, values);

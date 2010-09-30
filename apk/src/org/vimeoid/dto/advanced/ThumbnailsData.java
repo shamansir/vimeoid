@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 /**
  * <dl>
  * <dt>Project:</dt> <dd>vimeoid</dd>
@@ -29,14 +31,14 @@ public class ThumbnailsData {
         public String url;
     }
     
-    public Thumbnail nano;
     public Thumbnail small;
     public Thumbnail medium;
     public Thumbnail large;
+    public Thumbnail huge;
     
     public static class FieldsKeys {
-        public static final String SINGLE_KEY = "portrait";
-        public static final String MULTIPLE_KEY = "portraits";
+        public static final String SINGLE_KEY = "thumbnail";
+        public static final String MULTIPLE_KEY = "thumbnails";
         
         public static final String HEIGHT = "height";
         public static final String WIDTH = "width";
@@ -53,12 +55,13 @@ public class ThumbnailsData {
     
     public static ThumbnailsData collectFromJson(JSONObject jsonObj) throws JSONException {        
         final JSONArray thumbnailsArr = jsonObj.getJSONObject(FieldsKeys.MULTIPLE_KEY).getJSONArray(FieldsKeys.SINGLE_KEY);
-        if (thumbnailsArr.length() != 4) throw new IllegalStateException("Unknown thumbnails object");
+        Log.d("ThumbnailsData", "(" + thumbnailsArr.length() + ")" + thumbnailsArr.toString());
+        if ((thumbnailsArr.length() != 3) && (thumbnailsArr.length() != 4)) throw new IllegalStateException("Unknown thumbnails object");
         final ThumbnailsData thumbnailsData = new ThumbnailsData();
-        thumbnailsData.nano = extractFromJson(thumbnailsArr.getJSONObject(0));
-        thumbnailsData.small = extractFromJson(thumbnailsArr.getJSONObject(1));
-        thumbnailsData.medium = extractFromJson(thumbnailsArr.getJSONObject(2));
-        thumbnailsData.large = extractFromJson(thumbnailsArr.getJSONObject(3));
+        thumbnailsData.small = extractFromJson(thumbnailsArr.getJSONObject(0));
+        thumbnailsData.medium = extractFromJson(thumbnailsArr.getJSONObject(1));
+        thumbnailsData.large = extractFromJson(thumbnailsArr.getJSONObject(2));
+        if ((thumbnailsArr.length() == 4)) thumbnailsData.huge = extractFromJson(thumbnailsArr.getJSONObject(3)); 
         return thumbnailsData;
     }
     

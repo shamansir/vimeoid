@@ -149,7 +149,7 @@ public class Methods {
     
     public static class videos {
         
-        private static final String PREFIX = "people."; 
+        private static final String PREFIX = "videos."; 
         
         //public static final String addCast = PREFIX + "addCast";
         //public static final String addPhotos = PREFIX + "addPhotos";

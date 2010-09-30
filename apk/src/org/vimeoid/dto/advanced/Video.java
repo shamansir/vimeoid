@@ -25,7 +25,18 @@ import org.vimeoid.util.Utils;
  */
 public class Video implements AdvancedItem {
     
-    public static enum Privacy { ANYBODY, CONTACTS }; 
+    public static enum Privacy { 
+    	
+    	ANYBODY, CONTACTS; 
+    
+    	public static Privacy parse(String value) {
+    		final String toTest = value.trim().toLowerCase();
+    		if (toTest.equals("anybody")) return ANYBODY;
+    		if (toTest.equals("contacts")) return CONTACTS;
+    		return null;
+    	}
+    
+    }; 
     
     public long id;
     
@@ -81,7 +92,7 @@ public class Video implements AdvancedItem {
         
         video.id = jsonObj.getLong(FieldsKeys.ID);
         
-        video.privacy = Privacy.valueOf(jsonObj.getString(FieldsKeys.PRIVACY));        
+        video.privacy = Privacy.parse(jsonObj.getString(FieldsKeys.PRIVACY));        
         video.title = jsonObj.getString(FieldsKeys.TITLE);
         video.description = jsonObj.getString(FieldsKeys.DESCRIPTION);
         
