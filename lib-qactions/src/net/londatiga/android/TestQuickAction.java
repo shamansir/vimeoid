@@ -18,7 +18,7 @@ public class TestQuickAction extends Activity {
 
 		setContentView(R.layout.main);
 
-		final ActionItem first = new ActionItem();
+		final QActionItem first = new QActionItem();
 		
 		first.setTitle("Dashboard");
 		first.setIcon(getResources().getDrawable(R.drawable.dashboard));
@@ -30,7 +30,7 @@ public class TestQuickAction extends Activity {
 		});
 		
 		
-		final ActionItem second = new ActionItem();
+		final QActionItem second = new QActionItem();
 		
 		second.setTitle("Users & Groups");
 		second.setIcon(getResources().getDrawable(R.drawable.kontak));

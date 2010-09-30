@@ -7,6 +7,8 @@ apk/src/org/vimeoid/VimeoConfig.java and then put the values you got
 into the corresponding placeholders. Then, set VimeoConfig.example.java to be 
 ignored in your java source code (in Eclipse there is an option in Project -> 
 Properties -> Java Build Path -> Source -> /src -> Excluded -> Edit...)
-Then you need to copy apk/src/org/vimeoid/connection/VimeoVideoStreamer.example.java to apk/src/org/vimeoid/connection/VimeoVideoStreamer.java and to exlude .examle.java from the build path the same way. Playing video directly will not work in your version because of Vimeo API restrictions.
+Then you need to copy apk/src/org/vimeoid/connection/VimeoVideoStreamer.example.java to apk/src/org/vimeoid/connection/VimeoVideoStreamer.java and to exlude .example.java from the build path the same way. Playing video directly will not work in your version because of Vimeo API restrictions.
 
 Also, do not forget to add libraries from /assets folder to Java Build Path
+
+./lib-qactions is a library project, it must also be included in sources. Mark this project as Library in Project (qactions) -> Properties -> Android and then add it as library in the same window for vimeoid Project. See this: http://developer.android.com/guide/developing/eclipse-adt.html#libraryProject for more info

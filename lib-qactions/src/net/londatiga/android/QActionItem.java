@@ -9,7 +9,7 @@ import android.view.View.OnClickListener;
  * @author Lorensius. W. L. T
  *
  */
-public class ActionItem {
+public class QActionItem {
 	private Drawable icon;
 	private String title;
 	private OnClickListener listener;
@@ -17,14 +17,14 @@ public class ActionItem {
 	/**
 	 * Constructor
 	 */
-	public ActionItem() {}
+	public QActionItem() {}
 	
 	/**
 	 * Constructor
 	 * 
 	 * @param icon {@link Drawable} action icon
 	 */
-	public ActionItem(Drawable icon) {
+	public QActionItem(Drawable icon) {
 		this.icon = icon;
 	}
 	

@@ -40,7 +40,7 @@ public class QuickAction extends CustomPopupWindow {
 	private int animStyle;
 	private ViewGroup mTrack;
 	private ScrollView scroller;
-	private ArrayList<ActionItem> actionList;
+	private ArrayList<QActionItem> actionList;
 	
 	/**
 	 * Constructor
@@ -50,7 +50,7 @@ public class QuickAction extends CustomPopupWindow {
 	public QuickAction(View anchor) {
 		super(anchor);
 		
-		actionList	= new ArrayList<ActionItem>();
+		actionList	= new ArrayList<QActionItem>();
 		context		= anchor.getContext();
 		inflater 	= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
@@ -78,11 +78,37 @@ public class QuickAction extends CustomPopupWindow {
 	/**
 	 * Add action item
 	 * 
-	 * @param action  {@link ActionItem} object
+	 * @param action  {@link QActionItem} object
 	 */
-	public void addActionItem(ActionItem action) {
+	public void addActionItem(QActionItem action) {
 		actionList.add(action); 
 	}
+	
+    /**
+     * Add action item
+     * 
+     * @param title action title
+     * @param drawable action drawable
+     */	
+	public void addActionItem(String title, Drawable drawable) {
+	    addActionItem(title, drawable, null);
+	}
+	
+    /**
+     * Add action item
+     * 
+     * @param title action title
+     * @param drawable action drawable
+     * @param clickListener action on click 
+     */ 
+    public void addActionItem(String title, Drawable drawable, OnClickListener clickListener) {
+        final QActionItem actionItem = new QActionItem();
+        actionItem.setTitle(title);
+        actionItem.setIcon(drawable);
+        actionItem.setOnClickListener(clickListener);
+        addActionItem(actionItem);
+    }
+	
 	
 	/**
 	 * Show popup window. Popup is automatically positioned, on top or bottom of anchor view.

@@ -3,6 +3,8 @@
  */
 package org.vimeoid.activity.user.item;
 
+import net.londatiga.android.QuickAction;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -92,7 +94,13 @@ public class UserActivity extends SingleItemActivity<User> {
         albumAction = actionsAdapter.addAction(statsSection, R.drawable.album, 
                       Utils.format(getString(R.string.num_of_albums), "num", "?"));
         albumAction.onClick =  new OnClickListener() {
-            @Override public void onClick(View v) { Invoke.User_.selectAlbumsOf(UserActivity.this, user); };
+            @Override public void onClick(View v) { 
+                Invoke.User_.selectAlbumsOf(UserActivity.this, user);
+                QuickAction qa = new QuickAction(v);
+                qa.addActionItem("Play", getResources().getDrawable(R.drawable.play));
+                qa.addActionItem("Face", getResources().getDrawable(R.drawable.contact));
+                qa.show();
+            };
         };
         // number of channels
         channelAction = actionsAdapter.addAction(statsSection, R.drawable.channel, 
