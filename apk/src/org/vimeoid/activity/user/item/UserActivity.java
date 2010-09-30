@@ -3,8 +3,6 @@
  */
 package org.vimeoid.activity.user.item;
 
-import net.londatiga.android.QuickAction;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -96,10 +94,6 @@ public class UserActivity extends SingleItemActivity<User> {
         albumAction.onClick =  new OnClickListener() {
             @Override public void onClick(View v) { 
                 Invoke.User_.selectAlbumsOf(UserActivity.this, user);
-                QuickAction qa = new QuickAction(v);
-                qa.addActionItem("Play", getResources().getDrawable(R.drawable.play));
-                qa.addActionItem("Face", getResources().getDrawable(R.drawable.contact));
-                qa.show();
             };
         };
         // number of channels

@@ -1,25 +1,24 @@
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="horizontal"
-	android:layout_width="fill_parent"
-	android:layout_height="wrap_content" 
-	android:clickable="true"
-	android:focusable="true"
-	android:background="@drawable/action_item_btn">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	          android:orientation="vertical"
+	          android:layout_width="wrap_content"
+	          android:layout_height="fill_parent"
+              android:gravity="center_horizontal"
+	          android:clickable="true"
+	          android:focusable="true"
+	          android:background="@drawable/action_item_btn">
         	
-	<ImageView
-		android:id="@+id/icon" 
-		android:layout_width="wrap_content" 
-		android:layout_height="wrap_content"/>
+	<ImageView android:id="@+id/icon" 
+		       android:layout_width="wrap_content" 
+		       android:layout_height="wrap_content"
+               android:layout_margin="1dp"
+		       android:padding="1dp" />
 
-	<TextView 
-		android:id="@+id/title"
-		android:layout_width="fill_parent" 
-		android:layout_height="fill_parent" 
-		android:gravity="center_vertical"
-		android:paddingLeft="5dip"
-		android:paddingRight="10dip"
-		android:text="Chart"
-		android:textColor="#fff"/>
+	<TextView android:id="@+id/title"
+		      android:layout_width="fill_parent" 
+		      android:layout_height="fill_parent" 
+		      android:gravity="center_horizontal"		      
+		      android:padding="1dp"
+		      android:text="Chart"
+		      android:textColor="#eee" />
 									         
-</LinearLayout>         
+</LinearLayout>
