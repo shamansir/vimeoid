@@ -7,8 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 /**
  * <dl>
  * <dt>Project:</dt> <dd>vimeoid</dd>
@@ -55,7 +53,6 @@ public class ThumbnailsData {
     
     public static ThumbnailsData collectFromJson(JSONObject jsonObj) throws JSONException {        
         final JSONArray thumbnailsArr = jsonObj.getJSONObject(FieldsKeys.MULTIPLE_KEY).getJSONArray(FieldsKeys.SINGLE_KEY);
-        Log.d("ThumbnailsData", "(" + thumbnailsArr.length() + ")" + thumbnailsArr.toString());
         if ((thumbnailsArr.length() != 3) && (thumbnailsArr.length() != 4)) throw new IllegalStateException("Unknown thumbnails object");
         final ThumbnailsData thumbnailsData = new ThumbnailsData();
         thumbnailsData.small = extractFromJson(thumbnailsArr.getJSONObject(0));

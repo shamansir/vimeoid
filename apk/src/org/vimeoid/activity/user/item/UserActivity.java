@@ -63,9 +63,9 @@ public class UserActivity extends SingleItemActivity<User> {
         
         final String userIdStr = String.valueOf(userId);
         
-        addSecondaryTask(LOAD_PORTRAITS_TASK, Methods.people.getPortraitUrls, new ApiParams().add("user_id", userIdStr));
-        addSecondaryTask(LOAD_ALBUMS_TASK, Methods.albums.getAll, new ApiParams().add("user_id", userIdStr));
-        addSecondaryTask(LOAD_CHANNELS_TASK, Methods.channels.getAll, new ApiParams().add("user_id", userIdStr));
+        secondaryTasks.add(LOAD_PORTRAITS_TASK, Methods.people.getPortraitUrls, new ApiParams().add("user_id", userIdStr));
+        secondaryTasks.add(LOAD_ALBUMS_TASK, Methods.albums.getAll, new ApiParams().add("user_id", userIdStr));
+        secondaryTasks.add(LOAD_CHANNELS_TASK, Methods.channels.getAll, new ApiParams().add("user_id", userIdStr));
         
         super.onCreate(savedInstanceState);
     }
@@ -181,14 +181,14 @@ public class UserActivity extends SingleItemActivity<User> {
                 Log.d(TAG, "got albums count, its " + albumsCount);
                 albumAction.title = Utils.format(getString(R.string.num_of_albums), "num", String.valueOf(albumsCount));
                 if (albumsCount == 0) albumAction.onClick = null;
-                getActionsList().invalidate();
+                getActionsList().invalidateViews();
             }; break;
             case LOAD_CHANNELS_TASK: {
                 final int channelsCount = result.getJSONObject("channels").getInt("total");                
                 Log.d(TAG, "got channels count, its " + channelsCount);
                 channelAction.title = Utils.format(getString(R.string.num_of_channels), "num", String.valueOf(channelsCount));
                 if (channelsCount == 0) channelAction.onClick = null;
-                getActionsList().invalidate();
+                getActionsList().invalidateViews();
             }; break;            
         }
     }

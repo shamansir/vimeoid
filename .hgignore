@@ -3,7 +3,7 @@
 ^lib-qactions/bin/*
 ^mockup/vimeoIMG/*
 ^apk/gen/org/vimeoid/R.java
-^apk/get/net/londatiga/android/R.java
+^apk/gen/net/londatiga/android/R.java
 ^test-apk/gen/org/vimeoid/test/R.java
 ^lib-qactions/gen/net/londatiga/android/R.java
 

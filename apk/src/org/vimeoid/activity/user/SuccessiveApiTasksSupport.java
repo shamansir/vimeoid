@@ -21,10 +21,11 @@ import org.vimeoid.util.ApiParams;
  * @date Sep 27, 2010 10:52:27 PM 
  *
  */
-public interface SecondaryTasksSupport {
+public interface SuccessiveApiTasksSupport {
 
-    public void addSecondaryTask(int taskId, String apiMethod, ApiParams params);
-    public void onSecondaryTaskPerfomed(int taskId, JSONObject result) throws JSONException;    
-    public void runSecondaryTasks();    
+    public void add(int taskId, String apiMethod, ApiParams params);
+    public void onPerfomed(int taskId, JSONObject result) throws JSONException;    
+    public void run(); // means run first task
+    public void execute(ApiTaskInQueue nextTask);    
     
 }
