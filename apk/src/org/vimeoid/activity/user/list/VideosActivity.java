@@ -1,10 +1,18 @@
 package org.vimeoid.activity.user.list;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.vimeoid.R;
 import org.vimeoid.activity.user.ItemsListActivity;
 import org.vimeoid.adapter.JsonObjectsAdapter;
 import org.vimeoid.adapter.user.VideosListAdapter;
+import org.vimeoid.connection.VimeoApi;
+import org.vimeoid.connection.advanced.Methods;
+import org.vimeoid.dto.advanced.SortType;
 import org.vimeoid.dto.advanced.Video;
+import org.vimeoid.util.ApiParams;
+
+import android.os.Bundle;
 
 /**
  * 
@@ -26,13 +34,41 @@ import org.vimeoid.dto.advanced.Video;
 // TODO: for sync use SyncAdapter on API Level 7
 public class VideosActivity extends ItemsListActivity<Video> {
     
+    private static final int GET_LIKES_TASK = 1;
+    private static final int GET_WATCHSLATER_TASK = 2;
+    
+    private static final int MAX_OF_LAST_VIDEOS_DATA = 50;
+    
+    //private String[] watchLaters;
+    //private String[] likes;
+    
     public VideosActivity() {
         super(R.menu.video_context_user_menu);
+    }
+    
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        
+        final String userIdStr = String.valueOf(VimeoApi.getUserLoginData(this).id);
+        
+        secondaryTasks.add(GET_LIKES_TASK, Methods.videos.getLikes, new ApiParams().add("user_id", userIdStr)
+                                                                                   .add("per_page", String.valueOf(MAX_OF_LAST_VIDEOS_DATA))
+                                                                                   .add("sort", SortType.NEWEST.toString()));
+        secondaryTasks.add(GET_WATCHSLATER_TASK, Methods.albums.getWatchLater, new ApiParams().add("user_id", userIdStr)
+                                                                                              .add("per_page", String.valueOf(MAX_OF_LAST_VIDEOS_DATA))
+                                                                                              .add("sort", SortType.NEWEST.toString()));                                                                                              
+        
+        super.onCreate(savedInstanceState);
     }
 
     @Override
     protected JsonObjectsAdapter<Video> createAdapter() {
         return new VideosListAdapter(this, getLayoutInflater());
+    }
+    
+    @Override
+    public void onSecondaryTaskPerfomed(int id, JSONObject result) throws JSONException {
+        // TODO: pass watchLaters and Likes to adapter
     }
 
 }

@@ -27,13 +27,21 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     public static final String TAG = "ItemsListActivity";
     
     private String apiMethod;
-    private ApiParams params;    
+    private ApiParams params;
+    
+    protected final ApiTasksQueue secondaryTasks;
 
     public ItemsListActivity(int mainView, int contextMenu) {
     	super(mainView, contextMenu);
     	
     	setMaxPagesCount(8);
     	setItemsPerPage(20);
+    	
+    	secondaryTasks = new ApiTasksQueue() {            
+            @Override public void onPerfomed(int taskId, JSONObject result) throws JSONException {
+                onSecondaryTaskPerfomed(taskId, result);
+            }
+        };
     }
     
     public ItemsListActivity(int contextMenu) {
@@ -64,13 +72,15 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
         new LoadUserItemsTask(adapter, apiMethod).execute(params);
     }
     
-   @Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater(); //from activity
         inflater.inflate(R.menu.user_options_menu, menu); 
         
         return true;
     }
+   
+    public void onSecondaryTaskPerfomed(int id, JSONObject result)  throws JSONException { }  
    
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {

@@ -59,8 +59,15 @@ public class VimeoApi {
     
     private static final String OAUTH_TOKEN_PARAM = "user_oauth_public";
     private static final String OAUTH_TOKEN_SECRET_PARAM = "user_oauth_secret";
+    private static final String USER_ID_PARAM = "user_id";
+    private static final String USERNAME_PARAM = "username";
     
     private static final String PLAYER_URL = "http://player.vimeo.com/video/";
+    
+    public static class UserLogin {
+        public long id;
+        public String username;
+    }
     
     private VimeoApi() { };
 
@@ -95,6 +102,8 @@ public class VimeoApi {
         Editor editor = storage.edit();  
         editor.remove(OAUTH_TOKEN_PARAM);
         editor.remove(OAUTH_TOKEN_SECRET_PARAM);
+        editor.remove(USER_ID_PARAM);
+        editor.remove(USERNAME_PARAM);
         editor.commit();
     }
     
@@ -136,11 +145,13 @@ public class VimeoApi {
         if (callbackUri.toString().startsWith(OAUTH_CALLBACK_URL.toString())) {
             final JsonOverHttp joh = JsonOverHttp.use(); 
             joh.retreiveOAuthAccessToken(callbackUri);
+            
             final SharedPreferences storage = context.getSharedPreferences(OAUTH_API_PREFERENCES_ID, Context.MODE_PRIVATE);
             Editor editor = storage.edit();  
             editor.putString(OAUTH_TOKEN_PARAM, joh.getOAuthToken());
             editor.putString(OAUTH_TOKEN_SECRET_PARAM, joh.getOAuthTokenSecret());
             editor.commit();
+            
         } else throw new IllegalCallbackUriException("Illegal callback Uri passed");
     }
     
@@ -168,6 +179,22 @@ public class VimeoApi {
             throw new AdvancedApiCallError(errObj.getInt("code"), errObj.getString("msg"));
         }
         return result;
+    }
+    
+    public static void saveUserLoginData(Context context, UserLogin loginData) {
+        final SharedPreferences storage = context.getSharedPreferences(OAUTH_API_PREFERENCES_ID, Context.MODE_PRIVATE);
+        Editor editor = storage.edit();  
+        editor.putLong(USER_ID_PARAM, loginData.id);
+        editor.putString(USERNAME_PARAM, loginData.username);
+        editor.commit();        
+    }
+    
+    public static UserLogin getUserLoginData(Context context) {
+        final UserLogin login = new UserLogin(); 
+        final SharedPreferences storage = context.getSharedPreferences(OAUTH_API_PREFERENCES_ID, Context.MODE_PRIVATE);
+        login.id = storage.getLong(USER_ID_PARAM, -1);
+        login.username = storage.getString(USERNAME_PARAM, "");
+        return login;        
     }
     
     /* ====================== Advanced Api: Exceptions / Errors ============= */

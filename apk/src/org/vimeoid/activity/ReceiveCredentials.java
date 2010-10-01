@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.VimeoApi.AdvancedApiCallError;
+import org.vimeoid.connection.VimeoApi.UserLogin;
 import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
@@ -49,10 +50,7 @@ public class ReceiveCredentials extends Activity {
                 VimeoApi.ensureOAuthCallbackAndSaveToken(this, uri);
                 Log.i(TAG, "Credential saved");
                 
-                JSONObject user = VimeoApi.advancedApi(Methods.test.login).getJSONObject("user");
-                Log.d(TAG, "got user " + user.getString("id") + " / " + user.get("username"));
-                Invoke.User_.showPersonalPage(this, user.getLong("id"), user.getString("username"));                
-                
+                Welcome.login(this);
                 /* VimeoApi.advancedApi(Methods.activity.happenedToUser, 
                                      Utils.quickApiParams("user_id", "shamansir"), "activity"); */
             } catch (AdvancedApiCallError aace) {

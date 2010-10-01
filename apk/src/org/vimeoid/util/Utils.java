@@ -48,7 +48,7 @@ public class Utils {
 	
 	private static File cacheDir = null;
 	private static boolean cacheDirCreated = false;
-    
+	
     public static ApiParams quickApiParams(String name1, String value1) {        
         return new ApiParams().add(name1, value1);
     }

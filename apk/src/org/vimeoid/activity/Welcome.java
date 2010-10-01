@@ -26,6 +26,7 @@ import org.vimeoid.R;
 import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.VimeoApi.AdvancedApiCallError;
 import org.vimeoid.connection.VimeoApi.ApiError;
+import org.vimeoid.connection.VimeoApi.UserLogin;
 import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
@@ -105,7 +106,7 @@ public class Welcome extends Activity {
         Log.d(TAG, "Starting OAuth login");
         if (!VimeoApi.ensureOAuth(this)) {
             try { 
-                authenticate();
+                authenticate(this);
             } catch (OAuthException oae) {
                 Log.e(TAG, oae.getLocalizedMessage());
                 oae.printStackTrace();
@@ -114,7 +115,7 @@ public class Welcome extends Activity {
         } else {
             Log.d(TAG, "OAuth is ready, loading user name");
             try {
-                login();
+                login(this);
             } catch (AdvancedApiCallError aace) {
                 Log.e(TAG, "Got API error " + aace.code);
                 if ((aace.code == ApiError.INVALID_OR_EXPIRED_TOKEN) ||
@@ -122,7 +123,7 @@ public class Welcome extends Activity {
                     (aace.code == ApiError.INVALID_OAUTH_NONCE)) {                    
                     try {
                         Log.e(TAG, "Token exception, will try to re-authenticate");
-                        authenticate();
+                        authenticate(this);
                     } catch (OAuthException oae) {
                         Log.e(TAG, oae.getLocalizedMessage());
                         oae.printStackTrace();
@@ -138,22 +139,29 @@ public class Welcome extends Activity {
         
     }
     
-    protected void authenticate() throws OAuthMessageSignerException, OAuthNotAuthorizedException, 
-                                         OAuthExpectationFailedException, OAuthCommunicationException {
+    public static void authenticate(Activity activity) throws OAuthMessageSignerException, OAuthNotAuthorizedException, 
+                                                              OAuthExpectationFailedException, OAuthCommunicationException {
         Log.d(TAG, "Requesting OAuth Uri");
         Uri authUri = VimeoApi.requestForOAuthUri();
         Log.d(TAG, "Got OAuth Uri, staring Browser activity");
-        Dialogs.makeToast(this, "Please wait while browser opens");
-        Invoke.User_.authenticate(this, authUri);        
+        Dialogs.makeToast(activity, "Please wait while browser opens");
+        Invoke.User_.authenticate(activity, authUri);        
     }
     
-    protected void login() throws ClientProtocolException, NoSuchAlgorithmException,
-                                  JSONException, IOException, URISyntaxException, AdvancedApiCallError,
-                                  OAuthMessageSignerException, OAuthExpectationFailedException, 
-                                  OAuthCommunicationException {
-        JSONObject user = VimeoApi.advancedApi(Methods.test.login).getJSONObject("user");
-        Log.d(TAG, "got user " + user.getString("id") + " / " + user.get("username"));
-        Invoke.User_.showPersonalPage(this, user.getLong("id"), user.getString("username"));        
+    public static void login(Activity activity) throws ClientProtocolException, NoSuchAlgorithmException,
+                                                       JSONException, IOException, URISyntaxException, AdvancedApiCallError,
+                                                       OAuthMessageSignerException, OAuthExpectationFailedException, 
+                                                       OAuthCommunicationException {
+
+        final JSONObject jsonUser = VimeoApi.advancedApi(Methods.test.login).getJSONObject("user");
+        final UserLogin login = new UserLogin();
+        login.id = jsonUser.getLong("id");
+        login.username = jsonUser.getString("username");
+        VimeoApi.saveUserLoginData(activity, login);                
+        Log.d(TAG, "got user " + login.id + " / " + login.username);
+        
+        Invoke.User_.showPersonalPage(activity, login.id, login.username);
+               
     }     
     
     protected void enterAsGuest() {
