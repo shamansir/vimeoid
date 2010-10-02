@@ -44,6 +44,7 @@ public class Video implements AdvancedItem {
     
     public String title;
     public String description;
+    public long uploaderId;
     public String uploaderName;
     
     public /*long */ String uploadedOn;
@@ -61,6 +62,7 @@ public class Video implements AdvancedItem {
     public String[] tags;
     
     public ThumbnailsData thumbnails;
+    public PortraitsData uploaderPortraits; 
      
     public final static class FieldsKeys {
         
@@ -87,7 +89,7 @@ public class Video implements AdvancedItem {
         
     }
     
-    private static Video collectFromJson(JSONObject jsonObj) throws JSONException {
+    public static Video extractFromJson(JSONObject jsonObj) throws JSONException {
         final Video video = new Video();
         
         video.id = jsonObj.getLong(FieldsKeys.ID);
@@ -110,8 +112,11 @@ public class Video implements AdvancedItem {
         
         video.tags = Tag.collectQuickListFromJson(jsonObj);
         video.thumbnails = ThumbnailsData.collectFromJson(jsonObj);
+        video.thumbnails = ThumbnailsData.collectFromJson(jsonObj);
         
         video.uploaderName = jsonObj.getJSONObject(User.FieldsKeys.OWNER_KEY).getString(User.FieldsKeys.NAME);
+        video.uploaderId = jsonObj.getJSONObject(User.FieldsKeys.OWNER_KEY).getLong(User.FieldsKeys.ID);
+        video.uploaderPortraits = PortraitsData.collectFromJson(jsonObj.getJSONObject(User.FieldsKeys.OWNER_KEY));
         
         return video;
     }
@@ -121,11 +126,14 @@ public class Video implements AdvancedItem {
                                            .getJSONArray(FieldsKeys.SINGLE_KEY);
         final Video[] videos = new Video[dataArray.length()];
         for (int i = 0; i < dataArray.length(); i++) {
-            videos[i] = collectFromJson(dataArray.getJSONObject(i));
+            videos[i] = extractFromJson(dataArray.getJSONObject(i));
         }
         return videos;
     }    
     
+    public static Video collectFromJson(JSONObject jsonObj) throws JSONException {
+        return extractFromJson(jsonObj.getJSONObject(FieldsKeys.SINGLE_KEY));
+    }    
     
     public long getId() { return id; }
     

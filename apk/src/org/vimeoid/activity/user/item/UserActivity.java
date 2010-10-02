@@ -78,6 +78,8 @@ public class UserActivity extends SingleItemActivity<User> {
     @Override
     protected SectionedActionsAdapter fillWithActions(SectionedActionsAdapter actionsAdapter, final User user) {
         
+        // TODO: add "subscribe" and "add contact" if it is not current user
+        
         // Statistics section
         int statsSection = actionsAdapter.addSection(getString(R.string.statistics));
         // number of videos

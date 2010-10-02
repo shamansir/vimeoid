@@ -6,6 +6,7 @@ package org.vimeoid.util;
 import org.vimeoid.R;
 import org.vimeoid.activity.Player;
 import org.vimeoid.activity.user.item.UserActivity;
+import org.vimeoid.activity.user.item.VideoActivity;
 import org.vimeoid.activity.user.list.VideosActivity;
 import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.connection.simple.VimeoProvider;
@@ -239,6 +240,23 @@ public final class Invoke {
                                      .putExtra(Extras.SUBJ_TITLE, user.username)
                                      .putExtra(Extras.RES_ICON, R.drawable.video));
         }
+        
+        public static void selectUploader(Activity parent, org.vimeoid.dto.advanced.Video video) {
+            showUserPage(parent, video.uploaderId, video.uploaderName);
+        }
+        
+
+        public static void selectVideo(Activity parent, org.vimeoid.dto.advanced.Video video) {
+            parent.startActivity(new Intent(parent, VideoActivity.class)
+                                     .putExtra(Extras.API_METHOD, Methods.videos.getInfo)
+                                     .putExtra(Extras.API_PARAMS, new ApiParams().add("video_id", String.valueOf(video.id))
+                                                                                 .toBundle())
+                                     .putExtra(Extras.USER_ID, video.uploaderId)
+                                     //.putExtra(Extras.USERNAME, username)
+                                     .putExtra(Extras.SUBJ_ICON, R.drawable.video)
+                                     .putExtra(Extras.SUBJ_TITLE, video.title)
+                                     .putExtra(Extras.RES_ICON, R.drawable.info));            
+        }        
 
         public static void selectAlbumsOf(Activity parent, org.vimeoid.dto.advanced.User user) {
             // TODO Auto-generated method stub

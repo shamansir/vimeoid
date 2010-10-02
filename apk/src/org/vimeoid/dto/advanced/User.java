@@ -45,11 +45,9 @@ public class User implements AdvancedItem {
     
     public String location;
     public String[] websiteUrls;
-    public String biography; 
+    public String biography;
     
-    /* public String smallPortraitUrl;
-    public String mediumPortraitUrl;
-    public String largePortraitUrl; */
+    public PortraitsData portraits;    
 
     public final static class FieldsKeys {
         
@@ -104,6 +102,9 @@ public class User implements AdvancedItem {
         user.videosLiked = jsonObj.getLong(FieldsKeys.NUM_OF_LIKES);
         user.videosAppearsIn = jsonObj.getLong(FieldsKeys.NUM_OF_APPEARANCES);
         user.contactsCount = jsonObj.getLong(FieldsKeys.NUM_OF_CONTACTS);
+        
+        if (jsonObj.has(PortraitsData.FieldsKeys.MULTIPLE_KEY)) 
+            user.portraits = PortraitsData.collectFromJson(jsonObj);
         
         return user;
     }

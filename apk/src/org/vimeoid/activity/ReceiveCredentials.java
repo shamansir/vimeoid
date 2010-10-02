@@ -8,13 +8,9 @@ import android.net.Uri;
 import android.util.Log;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.VimeoApi.AdvancedApiCallError;
-import org.vimeoid.connection.VimeoApi.UserLogin;
-import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.util.Dialogs;
-import org.vimeoid.util.Invoke;
 
 /**
  * <dl>

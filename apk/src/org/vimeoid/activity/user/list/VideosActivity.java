@@ -11,6 +11,7 @@ import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.dto.advanced.SortType;
 import org.vimeoid.dto.advanced.Video;
 import org.vimeoid.util.ApiParams;
+import org.vimeoid.util.Invoke;
 
 import android.os.Bundle;
 
@@ -56,7 +57,9 @@ public class VideosActivity extends ItemsListActivity<Video> {
                                                                                    .add("sort", SortType.NEWEST.toString()));
         secondaryTasks.add(GET_WATCHSLATER_TASK, Methods.albums.getWatchLater, new ApiParams().add("user_id", userIdStr)
                                                                                               .add("per_page", String.valueOf(MAX_OF_LAST_VIDEOS_DATA))
-                                                                                              .add("sort", SortType.NEWEST.toString()));                                                                                              
+                                                                                              .add("sort", SortType.NEWEST.toString()));
+        
+        // TODO: run this tasks manually, ask more if required
         
         super.onCreate(savedInstanceState);
     }
@@ -70,5 +73,10 @@ public class VideosActivity extends ItemsListActivity<Video> {
     public void onSecondaryTaskPerfomed(int id, JSONObject result) throws JSONException {
         // TODO: pass watchLaters and Likes to adapter
     }
+    
+    @Override
+    protected void onItemSelected(Video video) { 
+        Invoke.User_.selectVideo(this, video);
+    }    
 
 }
