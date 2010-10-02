@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="400"
+   height="400"
+   id="svg7348"
+   version="1.1"
+   inkscape:version="0.47pre4 r22446"
+   sodipodi:docname="watchlater_not.svg"
+   inkscape:export-filename="/home/shamansir/Workspace/vimeoid/mockup/watchlater_not.png"
+   inkscape:export-xdpi="10.8"
+   inkscape:export-ydpi="10.8">
+  <defs
+     id="defs7350">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective7356" />
+    <inkscape:perspective
+       id="perspective7341"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective7382"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.14"
+     inkscape:cx="200"
+     inkscape:cy="202.63157"
+     inkscape:document-units="px"
+     inkscape:current-layer="g7392"
+     showgrid="false"
+     inkscape:window-width="1366"
+     inkscape:window-height="695"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7353">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-652.36218)">
+    <g
+       id="g7392">
+      <path
+         transform="matrix(17.178355,0,0,17.178355,-886.5206,-1951.5595)"
+         d="m 73.388158,162.61061 a 10.011102,10.011102 0 1 1 -20.022204,0 10.011102,10.011102 0 1 1 20.022204,0 z"
+         sodipodi:ry="10.011102"
+         sodipodi:rx="10.011102"
+         sodipodi:cy="162.61061"
+         sodipodi:cx="63.377056"
+         id="path7307"
+         style="fill:none;stroke:#00000f;stroke-width:0.90071076000000005;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         sodipodi:type="arc" />
+      <path
+         id="path7309"
+         d="m 222.42614,854.65822 45.68078,66.95312 -91.63543,-55.58206"
+         style="fill:none;fill-opacity:1;stroke:#00000f;stroke-width:14;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         sodipodi:nodetypes="ccc" />
+      <path
+         id="path7309-5"
+         d="M 174.96927,868.55652 198.2623,724.37549 224.02099,858.84091"
+         style="fill:none;fill-opacity:1;stroke:#00000f;stroke-opacity:1;stroke-width:14;stroke-miterlimit:4;stroke-dasharray:none"
+         sodipodi:nodetypes="ccc" />
+      <path
+         sodipodi:type="arc"
+         style="fill:none;stroke:#00000f;stroke-width:14;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         id="path7372"
+         sodipodi:cx="91.228073"
+         sodipodi:cy="190.35088"
+         sodipodi:rx="136.8421"
+         sodipodi:ry="136.8421"
+         d="m 228.07018,190.35088 a 136.8421,136.8421 0 1 1 -273.684209,0 136.8421,136.8421 0 1 1 273.684209,0 z"
+         transform="matrix(1.0274424,0,0,1.0274424,107.5842,647.57709)" />
+    </g>
+  </g>
+</svg>

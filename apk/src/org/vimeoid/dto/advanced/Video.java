@@ -58,6 +58,7 @@ public class Video implements AdvancedItem {
     public int height;
     public long duration;
     public boolean isHd;
+    public boolean isLike;
     
     public String[] tags;
     
@@ -83,6 +84,10 @@ public class Video implements AdvancedItem {
         public static final String NUM_OF_COMMENTS = "number_of_comments";
         
         public static final String IS_HD = "is_hd";
+        public static final String IS_LIKE = "is_like";
+        // is_transcoding
+        // liked_on
+        
         public static final String WIDTH = "width";
         public static final String HEIGHT= "height";
         public static final String DURATION = "duration";
@@ -106,6 +111,8 @@ public class Video implements AdvancedItem {
         video.commentsCount = jsonObj.getLong(FieldsKeys.NUM_OF_COMMENTS);
         
         video.isHd = Utils.adaptBoolean(jsonObj.getInt(FieldsKeys.IS_HD));
+        video.isHd = Utils.adaptBoolean(jsonObj.getInt(FieldsKeys.IS_LIKE));
+        
         video.width = jsonObj.getInt(FieldsKeys.WIDTH);
         video.height = jsonObj.getInt(FieldsKeys.HEIGHT);
         video.duration = jsonObj.getLong(FieldsKeys.DURATION);
@@ -132,7 +139,7 @@ public class Video implements AdvancedItem {
     }    
     
     public static Video collectFromJson(JSONObject jsonObj) throws JSONException {
-        return extractFromJson(jsonObj.getJSONObject(FieldsKeys.SINGLE_KEY));
+        return extractFromJson(jsonObj.getJSONArray(FieldsKeys.SINGLE_KEY).getJSONObject(0));
     }    
     
     public long getId() { return id; }

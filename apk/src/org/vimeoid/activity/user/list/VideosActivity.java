@@ -50,12 +50,13 @@ public class VideosActivity extends ItemsListActivity<Video> {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         
-        final String userIdStr = String.valueOf(VimeoApi.getUserLoginData(this).id);
+        final String currentUserId = String.valueOf(VimeoApi.getUserLoginData(this).id);
         
-        secondaryTasks.add(GET_LIKES_TASK, Methods.videos.getLikes, new ApiParams().add("user_id", userIdStr)
+        // check if fits period
+        secondaryTasks.add(GET_LIKES_TASK, Methods.videos.getLikes, new ApiParams().add("user_id", currentUserId)
                                                                                    .add("per_page", String.valueOf(MAX_OF_LAST_VIDEOS_DATA))
                                                                                    .add("sort", SortType.NEWEST.toString()));
-        secondaryTasks.add(GET_WATCHSLATER_TASK, Methods.albums.getWatchLater, new ApiParams().add("user_id", userIdStr)
+        secondaryTasks.add(GET_WATCHSLATER_TASK, Methods.albums.getWatchLater, new ApiParams().add("user_id", currentUserId)
                                                                                               .add("per_page", String.valueOf(MAX_OF_LAST_VIDEOS_DATA))
                                                                                               .add("sort", SortType.NEWEST.toString()));
         

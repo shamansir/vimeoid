@@ -64,6 +64,7 @@ public class User implements AdvancedItem {
         public static final String NAME = "display_name";
         public static final String USERNAME = "username";  
         public static final String LOCATION = "location";
+        // realname
         
         public static final String URL = "url";
         public static final String BIO = "bio";

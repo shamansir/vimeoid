@@ -26,6 +26,7 @@ public interface SuccessiveApiTasksSupport {
     public void add(int taskId, String apiMethod, ApiParams params);
     public void onPerfomed(int taskId, JSONObject result) throws JSONException;    
     public void run(); // means run first task
-    public void execute(ApiTaskInQueue nextTask);    
+    public void finish(); // means all tasks done    
+    public void execute(ApiTaskInQueue nextTask);
     
 }

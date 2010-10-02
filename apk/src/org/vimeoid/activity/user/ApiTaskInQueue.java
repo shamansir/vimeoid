@@ -36,6 +36,7 @@ public class ApiTaskInQueue extends ApiTask {
     protected void onPostExecute(JSONObject jsonObj) {
         super.onPostExecute(jsonObj);            
         if (nextTask != null) performer.execute(nextTask);
+        else performer.finish();
     }
     
     @Override

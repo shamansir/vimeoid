@@ -6,6 +6,8 @@ package org.vimeoid.activity.user;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.vimeoid.util.ApiParams;
 
 /**
@@ -27,6 +29,8 @@ public abstract class ApiTasksQueue implements SuccessiveApiTasksSupport {
     private ApiTaskInQueue firstTask = null;
     private ApiTaskInQueue lastTask = null;
     private Map<Integer, ApiParams> tasksParams = null;
+    private int currentTask = -1;
+    private boolean running = false;
     
     @Override
     public void add(int taskId, String apiMethod, ApiParams params) {
@@ -45,11 +49,29 @@ public abstract class ApiTasksQueue implements SuccessiveApiTasksSupport {
     @Override
     public void run() {
         if (!isEmpty()) execute(firstTask);
+        else throw new IllegalStateException("Queue is already running");
+    }
+    
+    @Override
+    public void onPerfomed(int taskId, JSONObject result) throws JSONException {
+        if (taskId != currentTask) throw new IllegalStateException("Tasks queue desynchronized");
+        running = false;
     }
     
     @Override
     public void execute(ApiTaskInQueue task) {
+        if (running) throw new IllegalStateException("Tasks queue desynchronized");
+        currentTask = task.getId();
+        running = true;
         task.execute(tasksParams.get(task.getId()));
+    }
+    
+    public void finish() {
+        firstTask = null;
+        lastTask = null;
+        tasksParams = null;
+        currentTask = -1;
+        running = false;
     }
     
     public boolean isEmpty() {

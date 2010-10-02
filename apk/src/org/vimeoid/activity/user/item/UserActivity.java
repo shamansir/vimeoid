@@ -10,6 +10,7 @@ import org.vimeoid.R;
 import org.vimeoid.activity.user.SingleItemActivity;
 import org.vimeoid.adapter.LActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
+import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.dto.advanced.PortraitsData;
 import org.vimeoid.dto.advanced.User;
@@ -47,8 +48,6 @@ public class UserActivity extends SingleItemActivity<User> {
     private static final int LOAD_ALBUMS_TASK = 2;
     private static final int LOAD_CHANNELS_TASK = 3;
     
-    private long userId;
-    
     private LActionItem albumAction;
     private LActionItem channelAction;
     
@@ -59,13 +58,13 @@ public class UserActivity extends SingleItemActivity<User> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         
-        userId = getIntent().getExtras().getLong(Invoke.Extras.USER_ID);
+        final String subjectUserId = String.valueOf(getIntent().getExtras().getLong(Invoke.Extras.USER_ID));
         
-        final String userIdStr = String.valueOf(userId);
-        
-        secondaryTasks.add(LOAD_PORTRAITS_TASK, Methods.people.getPortraitUrls, new ApiParams().add("user_id", userIdStr));
-        secondaryTasks.add(LOAD_ALBUMS_TASK, Methods.albums.getAll, new ApiParams().add("user_id", userIdStr));
-        secondaryTasks.add(LOAD_CHANNELS_TASK, Methods.channels.getAll, new ApiParams().add("user_id", userIdStr));
+        secondaryTasks.add(LOAD_PORTRAITS_TASK, Methods.people.getPortraitUrls, new ApiParams().add("user_id", subjectUserId));
+        secondaryTasks.add(LOAD_ALBUMS_TASK, Methods.albums.getAll, new ApiParams().add("user_id", subjectUserId));
+        secondaryTasks.add(LOAD_CHANNELS_TASK, Methods.channels.getAll, new ApiParams().add("user_id", subjectUserId));
+        // load subscriptions and check if subscribed // people.getSubscriptions (likes/)
+        // check contacts if friends // contacts.getAll
         
         super.onCreate(savedInstanceState);
     }
@@ -79,6 +78,17 @@ public class UserActivity extends SingleItemActivity<User> {
     protected SectionedActionsAdapter fillWithActions(SectionedActionsAdapter actionsAdapter, final User user) {
         
         // TODO: add "subscribe" and "add contact" if it is not current user
+        // mark if already subscribed or friends 
+        final long currentUserId = VimeoApi.getUserLoginData(this).id;
+        if (currentUserId != user.id) {
+            int operationsSection = actionsAdapter.addSection(getString(R.string.operations));
+            // subscribe
+            final LActionItem subscribeAction = actionsAdapter.addAction(operationsSection, R.drawable.subscribe, 
+                                                                         R.string.subscribe);
+            
+            final LActionItem addContactAction = actionsAdapter.addAction(operationsSection, R.drawable.contact, 
+                                                                          R.string.addContact);
+        }
         
         // Statistics section
         int statsSection = actionsAdapter.addSection(getString(R.string.statistics));

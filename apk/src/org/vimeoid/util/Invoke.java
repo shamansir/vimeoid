@@ -234,7 +234,7 @@ public final class Invoke {
                                      .putExtra(Extras.API_PARAMS, new ApiParams().add("user_id", String.valueOf(user.id))
                                                                                  .add("full_response", "1")
                                                                                  .toBundle())
-                                     //.putExtra(Extras.USER_ID, user.id)
+                                     .putExtra(Extras.USER_ID, user.id)
                                      //.putExtra(Extras.USERNAME, user.username)
                                      .putExtra(Extras.SUBJ_ICON, R.drawable.contact)
                                      .putExtra(Extras.SUBJ_TITLE, user.username)
