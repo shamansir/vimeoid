@@ -1,11 +1,8 @@
 package org.vimeoid.activity.base;
 
 import org.vimeoid.R;
-import org.vimeoid.connection.VimeoApi;
-import org.vimeoid.util.Dialogs;
 
 import android.app.ListActivity;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -72,7 +69,7 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
                      (TextView)titleBar.findViewById(R.id.subjectTitle),
                      (ImageView)titleBar.findViewById(R.id.resultIcon));
         
-        checkConnectionAndQueryMoreItems(adapter, pageNum);
+        loadNextPage(adapter);
         
     }
     
@@ -95,7 +92,7 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
         
         Log.d(TAG, "Opening context menu for item at " + position);
         
-        if (isLoadMoreItem(position)) return; 
+        if (isLoadMoreButton(position)) return; 
         
         menu.setHeaderTitle(getContextMenuTitle(position));
             
@@ -106,18 +103,18 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
     @Override
     protected final void onListItemClick(ListView l, View v, int position, long id) {
 
-        if (!isLoadMoreItem(position)) {
+        if (!isLoadMoreButton(position)) {
             Log.d(TAG, "item at position " + position + " (" + getListView().getCount() + ") with id " + id + ", view id " + v.getId() + " is clicked");
             onItemSelected(getItem(position));        
         } else { 
-            loadNextPage();
+            loadNextPage(adapter);
         }
         
         super.onListItemClick(l, v, position, id);
         
     }
     
-    private void checkConnectionAndQueryMoreItems(AdapterType adapter, int pageNum) {
+    /* private void checkConnectionAndQueryMoreItems(AdapterType adapter, int pageNum) {
         
         if (VimeoApi.connectedToWeb(this) && VimeoApi.vimeoSiteReachable(this)) {
             Log.d(TAG, "Connection test is passed OK");
@@ -127,34 +124,18 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
             Dialogs.makeToast(this, getString(R.string.no_iternet_connection));
         }
         
-    }
+    } */
     
-    private void loadNextPage() {
-        if (!queryRunning) {
+    protected abstract void loadNextPage(AdapterType adapter);
+        
+        /* if (!queryRunning) {
             if (pageNum < maxPages) {
                 Log.d(TAG, "Loading next page...");
                 checkConnectionAndQueryMoreItems(adapter, ++pageNum);
             } else Dialogs.makeToast(this, getString(R.string.no_pages_more));
-        } else Dialogs.makeToast(this, getString(R.string.please_do_not_touch));        
-    }
+        } else Dialogs.makeToast(this, getString(R.string.please_do_not_touch)); */
     
-    protected final int getCurrentPage() {
-        return pageNum;
-    }
-    
-    protected final void setMaxPagesCount(int count) {
-        this.maxPages = count;
-    }
-    
-    protected final void setItemsPerPage(int perPage) {
-        this.perPage = perPage;
-    }
-    
-    protected final int getItemsPerPage() {
-        return perPage;
-    }
-    
-    protected final boolean isLoadMoreItem(int position) {
+    protected final boolean isLoadMoreButton(int position) {
         return (position == (getListView().getCount() - 1));
     }
     
@@ -175,57 +156,79 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
     @SuppressWarnings("unchecked")
     protected final ItemType getItem(int position) {
         return (ItemType)getListView().getItemAtPosition(position);
+    }
+    
+    protected void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
     }    
     
-    protected abstract class LoadItemsTask<Params, Progress, Result> extends AsyncTask<Params, Progress, Result> {
+    protected void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
+    }
+    
+    protected void setToLoadingState() {
+        showProgressBar();
 
-        private final View progressBar;
-        private final TextView footerText;
-        private final TextView emptyText;
-        private final ImageView emptyImage;
+        footerView.setEnabled(false);
         
-        protected LoadItemsTask() {
-            this.progressBar = findViewById(R.id.progressBar);   
-            this.footerText = (TextView) footerView.findViewById(R.id.itemsListFooterText);
-            this.emptyText = (TextView) emptyView.findViewById(R.id.itemsEmptyListView);
-            this.emptyImage = (ImageView) emptyView.findViewById(R.id.itemsEmptyListImage);
-        }
+        final TextView footerText = (TextView) footerView.findViewById(R.id.itemsListFooterText);
+        final TextView emptyText = (TextView) emptyView.findViewById(R.id.itemsEmptyListView);
+        final ImageView emptyImage = (ImageView) emptyView.findViewById(R.id.itemsEmptyListImage);        
+        
+        footerText.setTextColor(getResources().getColor(R.color.load_more_disabled_text));
+        footerText.setBackgroundResource(R.color.load_more_disabled_bg);
+        footerText.setText(R.string.loading);            
+        
+        emptyImage.setImageResource(R.drawable.item_loading_small);            
+        emptyText.setText(R.string.loading);        
+        
+    }
+    
+    protected void setToNoItemsInList() {
+        final TextView emptyText = (TextView) emptyView.findViewById(R.id.itemsEmptyListView);
+        final ImageView emptyImage = (ImageView) emptyView.findViewById(R.id.itemsEmptyListImage);
+        
+        getListView().removeFooterView(footerView);
+        emptyImage.setImageResource(R.drawable.no_more_small);
+        emptyText.setText(R.string.no_items_in_list);
+    }
+    
+    protected void setToNoItemsMore() {
+        footerView.setVisibility(View.GONE);        
+    }
+    
+    protected void setToTheresMoreItems() {
+        final TextView footerText = (TextView) footerView.findViewById(R.id.itemsListFooterText);
+        
+        footerView.setEnabled(true);
+        footerText.setTextColor(getResources().getColor(R.color.load_more_default_text));
+        footerText.setBackgroundResource(R.color.load_more_default_bg); 
+        footerText.setText(R.string.load_more);        
+    }
+    
+    /* protected abstract class LoadItemsTask<Params, Progress, Result> extends AsyncTask<Params, Progress, Result> {
+
+        protected LoadItemsTask() { }
         
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             
-            queryRunning = true;
-            
-            progressBar.setVisibility(View.VISIBLE);
-            
-            footerView.setEnabled(false);
-            footerText.setTextColor(getResources().getColor(R.color.load_more_disabled_text));
-            footerText.setBackgroundResource(R.color.load_more_disabled_bg);
-            footerText.setText(R.string.loading);            
-            
-            emptyImage.setImageResource(R.drawable.item_loading_small);            
-            emptyText.setText(R.string.loading);
-            
+            setToLoadingState();            
         }
         
         protected void onItemsReceived(int howMuch, int total) {
             if ((howMuch == 0) && (pageNum == 1)) {
                 // no items in list at all
-                getListView().removeFooterView(footerView);
-                emptyImage.setImageResource(R.drawable.no_more_small);
-                emptyText.setText(R.string.no_items_in_list);            
+                setToNoItemsInList();
             } else if ((howMuch < perPage) ||     
                        (pageNum == maxPages) ||
                        ((total != -1) && (((perPage * (pageNum - 1)) + howMuch) == total))) {
                 // no items more
-                footerView.setVisibility(View.GONE);
+                setToNoItemsMore();
             } else {
                 // enable 'load more' button
-                footerView.setEnabled(true);
-                footerText.setTextColor(getResources().getColor(R.color.load_more_default_text));
-                footerText.setBackgroundResource(R.color.load_more_default_bg); 
-                footerText.setText(R.string.load_more);
+                setToTheresMoreItems();
             }
             
             Log.d(TAG, "Received " + howMuch + " items");
@@ -240,17 +243,14 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
         }
         
         protected final void rollback() {
-            pageNum--;
-            
-            progressBar.setVisibility(View.GONE);
+            hideProgressBar();
         }
         
         @Override
         protected void onPostExecute(Result result) {
-            progressBar.setVisibility(View.GONE);
-            queryRunning = false;
+            hideProgressBar();
         }
         
-    }
+    } */
     
 }

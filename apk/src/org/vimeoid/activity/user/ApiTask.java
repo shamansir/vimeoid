@@ -40,7 +40,7 @@ public abstract class ApiTask extends AsyncTask<ApiParams, Void, JSONObject> {
     
     @Override
     protected JSONObject doInBackground(ApiParams... paramsList) {
-        final ApiParams params = extractParams(paramsList);
+        final ApiParams params = prepareParams(paramsList);
         try {
             ensureConnected();
             queryRunning = true;
@@ -55,7 +55,7 @@ public abstract class ApiTask extends AsyncTask<ApiParams, Void, JSONObject> {
         return null;
     }
     
-    protected ApiParams extractParams(ApiParams... paramsList) {
+    protected ApiParams prepareParams(ApiParams... paramsList) {
         if (paramsList.length <= 0) return null;
         if (paramsList.length > 1) throw new UnsupportedOperationException("This task do not supports several params lists");
         
@@ -75,28 +75,28 @@ public abstract class ApiTask extends AsyncTask<ApiParams, Void, JSONObject> {
         } else { onNullReturned(); }
     }
     
-    protected void onAnyError(String message, Exception e) {
+    protected void onAnyError(Exception e, String message) {
         Log.e(TAG, message);
     }
     
     protected void onApiError(AdvancedApiCallError error) {
-        onAnyError("API Error " + error.code + " / " + error.message, error);
+        onAnyError(error, "API Error " + error.code + " / " + error.message);
     }
     
     protected void onNullReturned() {
-        onAnyError("Failed to receive object " + apiMethod, null);        
+        onAnyError(null, "Failed to receive object " + apiMethod);
     }
     
     protected void onJsonParsingError(JSONException jsone) {
-        onAnyError("JSON parsing failure: " + jsone.getLocalizedMessage(), jsone);
+        onAnyError(jsone, "JSON parsing failure: " + jsone.getLocalizedMessage());
     }
     
     protected void onException(ApiParams params, Exception e) {
-        onAnyError("Error while calling " + apiMethod + " " + params + " " + e.getLocalizedMessage(), e);        
+        onAnyError(e, "Error while calling " + apiMethod + " " + params + " " + e.getLocalizedMessage());        
     }
     
-    protected void ensureConnected() { // TODO: make abstract
-        return; 
+    protected void ensureConnected() {
+        return; // FIXME: not used
     }
     
     /* protected boolean checkConnection() {

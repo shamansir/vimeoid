@@ -4,17 +4,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.R;
 import org.vimeoid.activity.base.ItemsListActivity_;
+import org.vimeoid.activity.user.ListApiTask.Reactor;
 import org.vimeoid.adapter.JsonObjectsAdapter;
-import org.vimeoid.connection.VimeoApi;
-import org.vimeoid.connection.VimeoApi.AdvancedApiCallError;
-import org.vimeoid.dto.advanced.PagingData;
 import org.vimeoid.util.AdvancedItem;
 import org.vimeoid.util.ApiParams;
 import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,13 +26,12 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     private String apiMethod;
     private ApiParams params;
     
+    private ListApiTask mainTask = null;
+    
     protected final ApiTasksQueue secondaryTasks;
 
     public ItemsListActivity(int mainView, int contextMenu) {
     	super(mainView, contextMenu);
-    	
-    	setMaxPagesCount(8);
-    	setItemsPerPage(20);
     	
     	secondaryTasks = new ApiTasksQueue() {            
             @Override public void onPerfomed(int taskId, JSONObject result) throws JSONException {
@@ -65,13 +61,51 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     }
     
     @Override
-    protected final void queryMoreItems(JsonObjectsAdapter<ItemType> adapter, int pageNum) {
-        params.add("page", String.valueOf(pageNum));
-        params.add("per_page", String.valueOf(getItemsPerPage()));
-        // TODO: params.add("sort", "");
-        new LoadUserItemsTask(adapter, apiMethod).execute(params);
+    protected final void loadNextPage(JsonObjectsAdapter<ItemType> adapter) {
+        if (mainTask == null) {
+            mainTask = new ListApiTask(new Reactor() {
+                
+                @Override public void beforeRequest() {
+                    setToLoadingState();
+                }
+
+                @Override public boolean afterRequest(ApiObjectsReceiver receiver,
+                                                      int received, ListApiTask nextPageTask) {
+                    mainTask = nextPageTask;
+                    
+                    onContentChanged();
+                    
+                    // TODO: scroll to the first received item (smoothScrollToPosition in API 8)
+                    final int newPos = getListView().getCount() - received - 2; // - 'load more' and one position before
+                    if (newPos >= 0) setSelection(newPos);
+                    else setSelection(0);
+                    
+                    return false; 
+                }
+
+                @Override public void onNextPageExists() {
+                    setToTheresMoreItems();                    
+                }
+
+                @Override public void onNoItems() {
+                    setToNoItemsInList();
+                }
+
+                @Override public void onNoMoreItems() {
+                    setToNoItemsMore();
+                }
+
+                @Override public void onError(Exception e, String message) {
+                    hideProgressBar();
+                }
+                
+            }, adapter, apiMethod);
+            mainTask.setMaxPages(10);
+            mainTask.setPerPage(20);
+        }
+        mainTask.execute(params);
     }
-    
+        
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater(); //from activity
@@ -103,64 +137,6 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
             default: Dialogs.makeToast(this, getString(R.string.unknown_item));
         }         
         return super.onOptionsItemSelected(item);
-        
-    }
-    
-    protected final class LoadUserItemsTask extends LoadItemsTask<ApiParams, Void, JSONObject> {
-
-        private final JsonObjectsAdapter<ItemType> adapter;
-        private final String apiMethod;
-        
-        protected LoadUserItemsTask(JsonObjectsAdapter<ItemType> adapter, String apiMethod) {
-            this.adapter = adapter;
-            this.apiMethod = apiMethod;
-        }
-        
-        @Override
-        protected JSONObject doInBackground(ApiParams... paramsLists) {
-            if (paramsLists.length <= 0) return null;
-            if (paramsLists.length > 1) throw new UnsupportedOperationException("This task do not supports several params lists");
-            
-            try {
-                final ApiParams params = paramsLists[0];
-                if (params == null || params.isEmpty()) {
-                    return VimeoApi.advancedApi(apiMethod);
-                } else {
-                    return VimeoApi.advancedApi(apiMethod, params);
-                }
-            } catch(AdvancedApiCallError aace) {
-                VimeoApi.handleApiError(ItemsListActivity.this, aace);
-            } catch(Exception e) {
-                Log.e(TAG, "Error while calling " + apiMethod + ": " + e.getLocalizedMessage());
-                e.printStackTrace();
-                Dialogs.makeExceptionToast(ItemsListActivity.this, "Error while calling " + apiMethod, e);
-            }
-            
-            return null;
-        }
-        
-        @Override
-        protected void onPostExecute(JSONObject object) {
-        	if (object == null) {
-        	    Log.e(TAG, "Failed to receive next page");
-        		rollback();
-        	} else {
-                try {
-                    adapter.addPage(object);
-                    PagingData pd = adapter.getLastPagingData();
-                    if (pd.pageNum != getCurrentPage()) throw new IllegalStateException("Received page number do not matches actual");
-                    if (pd.perPage != getItemsPerPage()) throw new IllegalStateException("Received number of items per page do not matches actual");                    
-                    onItemsReceived(pd.onThisPage, pd.total);
-                } catch (JSONException jsone) {
-                    rollback();
-                    Log.d(TAG, "JSON parsing failure: " + jsone.getLocalizedMessage());
-                    jsone.printStackTrace();
-                    Dialogs.makeExceptionToast(ItemsListActivity.this, "JSON parsing failure", jsone);                    
-                }
-            }
-        	
-            super.onPostExecute(object);
-        }
         
     }
     

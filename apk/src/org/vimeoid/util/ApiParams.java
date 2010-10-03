@@ -35,6 +35,9 @@ public class ApiParams {
     public ApiParams() { }
     
     public ApiParams add(String name, String value) {
+        for (NameValuePair param: params) {
+            if (name.equals(param.getName())) params.remove(param);
+        }
         params.add(new BasicNameValuePair(name, value));
         return this;
     }

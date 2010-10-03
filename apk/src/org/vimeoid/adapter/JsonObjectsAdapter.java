@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.vimeoid.activity.user.ApiObjectsReceiver;
 import org.vimeoid.dto.advanced.PagingData;
 import org.vimeoid.util.AdvancedItem;
 
@@ -27,7 +28,7 @@ import android.widget.BaseAdapter;
  * @date Sep 27, 2010 7:29:03 PM 
  *
  */
-public abstract class JsonObjectsAdapter<ItemType extends AdvancedItem> extends BaseAdapter {
+public abstract class JsonObjectsAdapter<ItemType extends AdvancedItem> extends BaseAdapter implements ApiObjectsReceiver {
     
     private final List<ItemType> items = new LinkedList<ItemType>();
     private final String dataKey;

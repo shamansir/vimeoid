@@ -26,8 +26,21 @@ import android.util.Log;
  */
 public class ListApiTask extends ApiTask {
     
+    public static interface Reactor {
+        
+        public void onNoItems();
+        public void onNoMoreItems();
+        public void onNextPageExists();
+        
+        public void beforeRequest();        
+        public boolean afterRequest(ApiObjectsReceiver receiver, int received, ListApiTask nextPageTask);
+
+        public void onError(Exception e, String message);
+    }
+    
     private static final String TAG = "ListApiTask"; 
     
+    private final Reactor reactor;
     private final ApiObjectsReceiver receiver;
     
     private int maxPages = 3;
@@ -36,19 +49,26 @@ public class ListApiTask extends ApiTask {
     
     private ApiParams curParams;
     
-    public ListApiTask(ApiObjectsReceiver receiver, String apiMethod) {
+    public ListApiTask(Reactor reactor, ApiObjectsReceiver receiver, String apiMethod) {
         super(apiMethod);
+        this.reactor = reactor;
         this.receiver = receiver;
     }
     
-    private ListApiTask(int curPage, ApiObjectsReceiver receiver, String apiMethod) {
-        this(receiver, apiMethod);
+    private ListApiTask(int curPage, Reactor reactor, ApiObjectsReceiver receiver, String apiMethod) {
+        this(reactor, receiver, apiMethod);
         this.curPage = curPage;
     }
     
     @Override
-    protected ApiParams extractParams(ApiParams... paramsList) {
-        final ApiParams curParams = super.extractParams(paramsList);
+    protected void onPreExecute() {
+        super.onPreExecute();
+        reactor.beforeRequest();
+    }
+    
+    @Override
+    protected ApiParams prepareParams(ApiParams... paramsList) {
+        final ApiParams curParams = super.prepareParams(paramsList);
         return curParams.add("page", String.valueOf(curPage))
                         .add("per_page", String.valueOf(perPage));
                       // TODO: params.add("sort", "");
@@ -68,31 +88,28 @@ public class ListApiTask extends ApiTask {
         
         if ((received == 0) && (curPage == 1)) {
             // no items in list at all
-            onNoItems();
-            /* getListView().removeFooterView(footerView);
-            emptyImage.setImageResource(R.drawable.no_more_small);
-            emptyText.setText(R.string.no_items_in_list); */            
+            reactor.onNoItems();      
         } else if ((received < perPage) ||     
                    (curPage == maxPages) ||
                    ((total != -1) && (((perPage * (curPage - 1)) + received) == total))) {
             // no items more
-            onNoMoreItems();
-            //footerView.setVisibility(View.GONE);
+            reactor.onNoMoreItems();
         } else {
             // enable 'load more' button
-            onNextPageExists();
-            /* footerView.setEnabled(true);            
-            footerText.setTextColor(getResources().getColor(R.color.load_more_default_text));
-            footerText.setBackgroundResource(R.color.load_more_default_bg); 
-            footerText.setText(R.string.load_more); */
+            reactor.onNextPageExists();
         }
         
         Log.d(TAG, "Received " + received + " items");
         
-        afterRequest(received);
+        final ListApiTask nextPageTask = new ListApiTask(++curPage, reactor, receiver, apiMethod);
+        nextPageTask.setPerPage(perPage);
+        nextPageTask.setMaxPages(maxPages);
         
-        // TODO: allow to load next page manually, also check if we received all
-        if (curPage < maxPages) new ListApiTask(++curPage, receiver, apiMethod).execute(curParams);        
+        if ((curPage < maxPages) && 
+            (receiver.getCount() < total) &&
+            reactor.afterRequest(receiver, received, nextPageTask)) {
+            nextPageTask.execute(curParams);        
+        }
         
         /*onContentChanged();
         
@@ -108,6 +125,12 @@ public class ListApiTask extends ApiTask {
         
     }
     
+    @Override
+    protected void onAnyError(Exception e, String message) {
+        super.onAnyError(e, message);
+        reactor.onError(e, message);
+    }
+    
     public void setMaxPages(int maxPages) {
         this.maxPages = maxPages; 
     }
@@ -115,13 +138,5 @@ public class ListApiTask extends ApiTask {
     public void setPerPage(int perPage) {
         this.perPage = perPage; 
     }
-    
-    private void onNoMoreItems() { }
-
-    private void onNextPageExists() { }
-
-    private void afterRequest(int received) { }
-
-    protected void onNoItems() { }
-    
+        
 }
