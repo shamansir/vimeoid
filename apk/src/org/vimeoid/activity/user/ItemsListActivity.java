@@ -12,6 +12,7 @@ import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -68,17 +69,25 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
                 @Override public void beforeRequest() {
                     setToLoadingState();
                 }
-
-                @Override public boolean afterRequest(ApiObjectsReceiver receiver,
-                                                      int received, ListApiTask nextPageTask) {
-                    mainTask = nextPageTask;
+                
+                @Override public void onError(Exception e, String message) {
+                    hideProgressBar();
+                    Log.e(TAG, message);
                     
+                    Dialogs.makeExceptionToast(ItemsListActivity.this, message, e);
+                }
+                
+                @Override public boolean afterRequest(ApiPagesReceiver receiver,
+                                                      int received, ListApiTask nextPageTask) {
+
                     onContentChanged();
                     
                     // TODO: scroll to the first received item (smoothScrollToPosition in API 8)
                     final int newPos = getListView().getCount() - received - 2; // - 'load more' and one position before
                     if (newPos >= 0) setSelection(newPos);
                     else setSelection(0);
+                    
+                    mainTask = nextPageTask;
                     
                     return false; 
                 }
@@ -93,10 +102,6 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
 
                 @Override public void onNoMoreItems() {
                     setToNoItemsMore();
-                }
-
-                @Override public void onError(Exception e, String message) {
-                    hideProgressBar();
                 }
                 
             }, adapter, apiMethod);

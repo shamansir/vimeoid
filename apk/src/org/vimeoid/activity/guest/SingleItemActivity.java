@@ -8,13 +8,13 @@ import org.vimeoid.activity.base.SingleItemActivity_;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.connection.ApiCallInfo;
 import org.vimeoid.connection.simple.VimeoProvider;
+import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
 import org.vimeoid.util.SimpleItem;
 import org.vimeoid.util.Utils;
 
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -68,48 +68,29 @@ public abstract class SingleItemActivity<ItemType extends SimpleItem> extends Si
     
     @Override
     protected void queryItem() {
-        new LoadItemTask(projection).execute(contentUri);
-    }
-    
-    protected class LoadItemTask extends AsyncTask<Uri, Void, Cursor> {
+        new ApiTask(getContentResolver(), projection) {
 
-        private final String[] projection;
-        
-        protected LoadItemTask(String[] projection) {
-            this.projection = projection;
-        }
-        
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            
-            showProgressBar();            
-        }
-
-        @Override
-        protected Cursor doInBackground(Uri... uris) {
-            if (uris.length <= 0) return null;
-            if (uris.length > 1) throw new UnsupportedOperationException("This task do not supports several params");
-            return getContentResolver().query(uris[0], projection, null, null, null);
-        }
-        
-        @Override
-        protected void onPostExecute(Cursor cursor) {
-            
-            if (cursor != null) {
-                
-                if (cursor.getCount() > 1) throw new IllegalStateException("There must be the only one item returned");
-                
-                cursor.moveToFirst();
-                onItemReceived(extractFromCursor(cursor, 0));
-                //onVideoDataReceived(Video.fullFromCursor(cursor, 0));
-                cursor.close();
+            @Override protected void onPreExecute() {
+                super.onPreExecute();                
+                showProgressBar();            
             }
             
-            hideProgressBar();
+            @Override protected void onAnswerReceived(Cursor cursor) {
+                onItemReceived(extractFromCursor(cursor, 0));
+            }
             
-        }
-
+            @Override protected void onPostExecute(Cursor cursor) {
+                super.onPostExecute(cursor);
+                hideProgressBar();
+            }
+            
+            @Override
+            protected void onAnyError(Exception e, String message) {
+                Dialogs.makeExceptionToast(SingleItemActivity.this, message, e);
+                super.onAnyError(e, message);
+            }
+            
+        };
     }
 
 }

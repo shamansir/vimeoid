@@ -13,7 +13,7 @@ import org.vimeoid.dto.advanced.PagingData;
  * <dt>Package:</dt> <dd>org.vimeoid.activity.user</dd>
  * </dl>
  *
- * <code>ApiObjectsReceiver</code>
+ * <code>ApiPagesReceiver</code>
  *
  * <p>Description</p>
  *
@@ -21,7 +21,7 @@ import org.vimeoid.dto.advanced.PagingData;
  * @date Oct 3, 2010 12:33:58 PM 
  *
  */
-public interface ApiObjectsReceiver {
+public interface ApiPagesReceiver {
     
     public void addPage(JSONObject pageObj) throws JSONException;
     public PagingData getLastPagingData() throws JSONException;

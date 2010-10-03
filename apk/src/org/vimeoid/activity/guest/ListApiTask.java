@@ -1,13 +1,13 @@
 /**
  * 
  */
-package org.vimeoid.activity.user;
+package org.vimeoid.activity.guest;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.vimeoid.dto.advanced.PagingData;
-import org.vimeoid.util.ApiParams;
+import org.vimeoid.connection.simple.VimeoProvider;
 
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.net.Uri;
 import android.util.Log;
 
 /**
@@ -33,7 +33,7 @@ public class ListApiTask extends ApiTask {
         public void onNextPageExists();
         
         public void beforeRequest();        
-        public boolean afterRequest(ApiPagesReceiver receiver, int received, ListApiTask nextPageTask);
+        public boolean afterRequest(Cursor cursor, int received, ListApiTask nextPageTask);
 
         public void onError(Exception e, String message);
     }
@@ -47,16 +47,20 @@ public class ListApiTask extends ApiTask {
     private int curPage = 1;
     private int perPage = 20;
     
-    private ApiParams curParams;
+    private final ContentResolver resolver;
+    private final String[] projection;
+    private Uri currentUri;
     
-    public ListApiTask(Reactor reactor, ApiPagesReceiver receiver, String apiMethod) {
-        super(apiMethod);
+    public ListApiTask(ContentResolver resolver, Reactor reactor, ApiPagesReceiver receiver, String[] projection) {
+        super(resolver, projection);
+        this.resolver = resolver;
         this.reactor = reactor;
         this.receiver = receiver;
+        this.projection = projection;
     }
     
-    private ListApiTask(int curPage, Reactor reactor, ApiPagesReceiver receiver, String apiMethod) {
-        this(reactor, receiver, apiMethod);
+    private ListApiTask(ContentResolver resolver, int curPage, Reactor reactor, ApiPagesReceiver receiver, String[] projection) {
+        this(resolver, reactor, receiver, projection);
         this.curPage = curPage;
     }
     
@@ -67,29 +71,29 @@ public class ListApiTask extends ApiTask {
     }
     
     @Override
-    protected ApiParams prepareParams(ApiParams... paramsList) {
-        curParams = super.prepareParams(paramsList);
-        return curParams.add("page", String.valueOf(curPage))
-                        .add("per_page", String.valueOf(perPage));
-                        // TODO: params.add("sort", "");
+    protected Uri prepareUri(Uri... uris) {
+        currentUri = (curPage == 1) 
+                     ? super.prepareUri(uris)
+                     : Uri.parse(VimeoProvider.BASE_URI 
+                       + super.prepareUri(uris).getPath() + "?page=" + curPage);
+        return currentUri;
     }
     
     @Override
-    public void onAnswerReceived(JSONObject jsonObj) throws JSONException {
+    public void onAnswerReceived(Cursor cursor) {
         
-        receiver.addPage(jsonObj);
-        PagingData pd = receiver.getLastPagingData();
+        //startManagingCursor(cursor);
+        //onItemsReceived(cursor.getCount(), -1);
+        receiver.addPage(cursor);
+        cursor.close();        
         
-        if (pd.pageNum != curPage) throw new IllegalStateException("Received page number do not matches actual");
-        if (pd.perPage != perPage) throw new IllegalStateException("Received number of items per page do not matches actual");
-        
-        final int received = pd.onThisPage;
-        final int total = pd.total;
+        final int received = cursor.getCount();
+        final int total = perPage * maxPages;
         
         if ((received == 0) && (curPage == 1)) {
             // no items in list at all
             reactor.onNoItems();      
-        } else if ((received < perPage) ||     
+        } else if ((received < perPage) ||
                    (curPage == maxPages) ||
                    ((total != -1) && (((perPage * (curPage - 1)) + received) == total))) {
             // no items more
@@ -101,14 +105,14 @@ public class ListApiTask extends ApiTask {
         
         Log.d(TAG, "Received " + received + " items");
         
-        final ListApiTask nextPageTask = new ListApiTask(++curPage, reactor, receiver, apiMethod);
+        final ListApiTask nextPageTask = new ListApiTask(resolver, ++curPage, reactor, receiver, projection);
         nextPageTask.setPerPage(perPage);
         nextPageTask.setMaxPages(maxPages);
         
         if ((curPage < maxPages) && 
             (receiver.getCount() < total) &&
-            reactor.afterRequest(receiver, received, nextPageTask)) {
-            nextPageTask.execute(curParams);        
+            reactor.afterRequest(cursor, received, nextPageTask)) {
+            nextPageTask.execute(currentUri);        
         }
         
         /* 

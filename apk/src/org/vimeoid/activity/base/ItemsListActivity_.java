@@ -77,7 +77,7 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
     
     protected abstract void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon);
     
-    protected abstract void queryMoreItems(AdapterType adapter, int pageNum);
+    //protected abstract void queryMoreItems(AdapterType adapter, int pageNum);
     
     protected void onItemSelected(ItemType item) { }
     

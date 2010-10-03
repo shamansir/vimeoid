@@ -2,6 +2,7 @@ package org.vimeoid.activity.guest;
 
 import org.vimeoid.R;
 import org.vimeoid.activity.base.ItemsListActivity_;
+import org.vimeoid.activity.guest.ListApiTask.Reactor;
 import org.vimeoid.adapter.EasyCursorsAdapter;
 import org.vimeoid.connection.ApiCallInfo;
 import org.vimeoid.connection.VimeoApi;
@@ -14,7 +15,6 @@ import org.vimeoid.util.Utils;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,12 +31,11 @@ public abstract class ItemsListActivity<ItemType extends SimpleItem> extends
     protected Uri contentUri;
     protected ApiCallInfo callInfo;
     
+    private ListApiTask mainTask;
+    
     public ItemsListActivity(int mainView, String[] projection, int contextMenu) {
     	super(mainView, contextMenu);
     	this.projection = projection;
-    	
-    	setMaxPagesCount(VimeoApi.MAX_NUMBER_OF_PAGES);
-    	setItemsPerPage(VimeoApi.ITEMS_PER_PAGE);
     }
     
     public ItemsListActivity(String[] projection, int contextMenu) {
@@ -59,13 +58,62 @@ public abstract class ItemsListActivity<ItemType extends SimpleItem> extends
     }
     
     @Override
+    protected void loadNextPage(EasyCursorsAdapter<ItemType> adapter) {
+        if (mainTask == null) {
+            mainTask = new ListApiTask(getContentResolver(), new Reactor() {
+                
+                @Override public void beforeRequest() {
+                    setToLoadingState();
+                }
+
+                @Override public boolean afterRequest(Cursor cursor, int received, 
+                                                      ListApiTask nextPageTask) {
+                    startManagingCursor(cursor);
+                    
+                    onContentChanged();
+                    
+                    // TODO: scroll to the first received item (smoothScrollToPosition in API 8)
+                    final int newPos = getListView().getCount() - received - 2; // - 'load more' and one position before
+                    if (newPos >= 0) setSelection(newPos);
+                    else setSelection(0);
+                    
+                    mainTask = nextPageTask;
+                    
+                    return false; 
+                }
+
+                @Override public void onNextPageExists() {
+                    setToTheresMoreItems();                    
+                }
+
+                @Override public void onNoItems() {
+                    setToNoItemsInList();
+                }
+
+                @Override public void onNoMoreItems() {
+                    setToNoItemsMore();
+                }
+
+                @Override public void onError(Exception e, String message) {
+                    hideProgressBar();
+                }
+                
+                }, adapter, projection);
+            mainTask.setMaxPages(VimeoApi.MAX_NUMBER_OF_PAGES);
+            mainTask.setPerPage(VimeoApi.ITEMS_PER_PAGE);
+        } 
+        
+        mainTask.execute(contentUri);
+        
+    }
+    /* @Override
     protected final void queryMoreItems(EasyCursorsAdapter<ItemType> adapter, int pageNum) {
         final Uri nextPageUri = (pageNum == 1) 
                                 ? contentUri 
                                 : Uri.parse(VimeoProvider.BASE_URI + contentUri.getPath() + "?page=" + pageNum);
         Log.d(TAG, "Next page Uri: " + nextPageUri);        
         new LoadGuestItemsTask(adapter, projection).execute(nextPageUri);
-    }
+    } */
     
    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -99,6 +147,7 @@ public abstract class ItemsListActivity<ItemType extends SimpleItem> extends
         
     }
     
+    /*
     protected final class LoadGuestItemsTask extends LoadItemsTask<Uri, Void, Cursor> {
 
         // TODO: show progress as a dialog
@@ -133,6 +182,6 @@ public abstract class ItemsListActivity<ItemType extends SimpleItem> extends
             super.onPostExecute(cursor);
         }
         
-    }
+    } */
     
 }

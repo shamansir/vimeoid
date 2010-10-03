@@ -85,9 +85,10 @@ public class UserActivity extends SingleItemActivity<User> {
             // subscribe
             final LActionItem subscribeAction = actionsAdapter.addAction(operationsSection, R.drawable.subscribe, 
                                                                          R.string.subscribe);
-            
+            // get is subscribed from extras
             final LActionItem addContactAction = actionsAdapter.addAction(operationsSection, R.drawable.contact, 
                                                                           R.string.addContact);
+            // get is already a friend from extras 
         }
         
         // Statistics section

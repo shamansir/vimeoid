@@ -6,6 +6,7 @@ package org.vimeoid.adapter;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.vimeoid.activity.guest.ApiPagesReceiver;
 import org.vimeoid.util.SimpleItem;
 
 import android.database.Cursor;
@@ -25,7 +26,8 @@ import android.widget.BaseAdapter;
  * @date Sep 5, 2010 10:07:35 PM 
  *
  */
-public abstract class EasyCursorsAdapter<ItemType extends SimpleItem> extends BaseAdapter {
+public abstract class EasyCursorsAdapter<ItemType extends SimpleItem> 
+                              extends BaseAdapter implements ApiPagesReceiver {
     
     private static final int MAX_CURSORS_COUNT = 6;
     
