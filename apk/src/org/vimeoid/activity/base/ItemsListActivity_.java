@@ -23,13 +23,6 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
 	
     public static final String TAG = "ItemsListActivity_";
     
-    private int pageNum = 1;
-    
-    private int maxPages = 3;
-    private int perPage = 20;    
-    
-    private boolean queryRunning = false;
-    
     private View emptyView;    
     private View titleBar;
     private View progressBar;

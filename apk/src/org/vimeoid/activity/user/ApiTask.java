@@ -32,17 +32,18 @@ public abstract class ApiTask extends AsyncTask<ApiParams, Void, JSONObject> {
     
     protected final String apiMethod;
     
+    protected boolean queryRunning;
+    
     protected ApiTask(String apiMethod) {
         this.apiMethod = apiMethod;
     }
     
     @Override
-    protected JSONObject doInBackground(ApiParams... paramsLists) {
-        if (paramsLists.length <= 0) return null;
-        if (paramsLists.length > 1) throw new UnsupportedOperationException("This task do not supports several params lists");
-        
-        final ApiParams params = paramsLists[0];
-        try {            
+    protected JSONObject doInBackground(ApiParams... paramsList) {
+        final ApiParams params = extractParams(paramsList);
+        try {
+            ensureConnected();
+            queryRunning = true;
             if (params == null || params.isEmpty()) {
                 return VimeoApi.advancedApi(apiMethod);
             } else {
@@ -54,11 +55,19 @@ public abstract class ApiTask extends AsyncTask<ApiParams, Void, JSONObject> {
         return null;
     }
     
+    protected ApiParams extractParams(ApiParams... paramsList) {
+        if (paramsList.length <= 0) return null;
+        if (paramsList.length > 1) throw new UnsupportedOperationException("This task do not supports several params lists");
+        
+        return paramsList[0];
+    }
+    
     @Override
     protected void onPostExecute(JSONObject jsonObj) {
         // Log.d(TAG, jsonObj.toString());
         if (jsonObj != null) {
             try {
+                queryRunning = false;                
                 onAnswerReceived(jsonObj);
             } catch (JSONException jsone) {
                 onJsonParsingError(jsone);
@@ -86,6 +95,22 @@ public abstract class ApiTask extends AsyncTask<ApiParams, Void, JSONObject> {
         onAnyError("Error while calling " + apiMethod + " " + params + " " + e.getLocalizedMessage(), e);        
     }
     
+    protected void ensureConnected() { // TODO: make abstract
+        return; 
+    }
+    
+    /* protected boolean checkConnection() {
+        if (VimeoApi.connectedToWeb(this) && VimeoApi.vimeoSiteReachable(this)) {
+            Log.d(TAG, "Connection test is passed OK");
+            queryMoreItems(adapter, pageNum);
+        } else {
+            Log.d(TAG, "Connection test failed");            
+            Dialogs.makeToast(this, getString(R.string.no_iternet_connection));
+        }
+    } */
+    
     public abstract void onAnswerReceived(JSONObject jsonObj) throws JSONException;
+    
+    public boolean queryRunning() { return queryRunning; } 
 
 }
