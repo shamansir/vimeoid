@@ -72,7 +72,7 @@ public abstract class SingleItemActivity<ItemType extends SimpleItem> extends Si
 
             @Override protected void onPreExecute() {
                 super.onPreExecute();                
-                showProgressBar();            
+                showProgressBar();
             }
             
             @Override protected void onAnswerReceived(Cursor cursor) {
@@ -93,7 +93,7 @@ public abstract class SingleItemActivity<ItemType extends SimpleItem> extends Si
                 hideProgressBar();                
             }
             
-        };
+        }.execute(contentUri);
     }
 
 }
