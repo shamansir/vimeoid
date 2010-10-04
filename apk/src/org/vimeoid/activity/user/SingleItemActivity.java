@@ -72,7 +72,7 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     @Override 
     protected final void queryItem() {
         try {
-            new LongApiTask(apiMethod).execute(params).get();
+            new ItemApiTask(apiMethod).execute(params).get();
         } catch (Exception e) {
             Log.e(TAG, "failed to get item");
             e.printStackTrace();
@@ -83,9 +83,9 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     
     public void onSecondaryTaskPerfomed(int id, JSONObject result)  throws JSONException { }
     
-    protected class LongApiTask extends ApiTask {
+    protected class ItemApiTask extends ApiTask {
 
-        protected LongApiTask(String apiMethod) {
+        protected ItemApiTask(String apiMethod) {
             super(apiMethod);
         }
         

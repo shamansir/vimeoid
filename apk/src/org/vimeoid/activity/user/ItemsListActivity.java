@@ -31,6 +31,8 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     private boolean needMorePages = true;
     
     protected final ApiTasksQueue secondaryTasks;
+    
+    private final Reactor mainReactor;
 
     public ItemsListActivity(int mainView, int contextMenu) {
     	super(mainView, contextMenu);
@@ -38,6 +40,19 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     	secondaryTasks = new ApiTasksQueue() {            
             @Override public void onPerfomed(int taskId, JSONObject result) throws JSONException {
                 onSecondaryTaskPerfomed(taskId, result);
+            }
+        };
+        
+        mainReactor = new ListReactor() {
+            @Override public boolean afterRequest(int received, boolean needMore, 
+                                                  ListApiTask nextPageTask) {
+            	
+                onContentChanged();
+                
+                needMorePages = needMore;
+                mainTask = nextPageTask;                
+                
+                return super.afterRequest(received, needMore, nextPageTask);
             }
         };
     }
@@ -66,51 +81,7 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     protected final void loadNextPage(JsonObjectsAdapter<ItemType> adapter) {
     	if (!needMorePages) return;
         if (mainTask == null) {
-            mainTask = new ListApiTask(new Reactor() {
-                
-                @Override public void beforeRequest() {
-                    setToLoadingState();
-                }
-                
-                @Override public boolean afterRequest(ApiPagesReceiver receiver,
-                                                      int received, boolean needMore, 
-                                                      ListApiTask nextPageTask) {
-                	
-                	hideProgressBar();
-
-                    onContentChanged();
-                    
-                    // TODO: scroll to the first received item (smoothScrollToPosition in API 8)
-                    final int newPos = getListView().getCount() - received - 2; // - 'load more' and one position before
-                    if (newPos >= 0) setSelection(newPos);
-                    else setSelection(0);
-                    
-                    needMorePages = needMore;
-                    mainTask = nextPageTask;
-                    
-                    return false; 
-                }
-
-                @Override public void onNextPageExists() {
-                    setToTheresMoreItems();                    
-                }
-
-                @Override public void onNoItems() {
-                    setToNoItemsInList();
-                }
-
-                @Override public void onNoMoreItems() {
-                    setToNoItemsMore();
-                }
-                
-                @Override public void onError(Exception e, String message) {
-                    hideProgressBar();
-                    Log.e(TAG, message);
-                    
-                    Dialogs.makeExceptionToast(ItemsListActivity.this, message, e);
-                }
-                
-            }, adapter, apiMethod);
+            mainTask = new ListApiTask(mainReactor, adapter, apiMethod);
             mainTask.setMaxPages(10);
             mainTask.setPerPage(20);
         }
@@ -150,5 +121,46 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
         return super.onOptionsItemSelected(item);
         
     }
+        
+    protected class ListReactor implements Reactor {
+    	
+        @Override public void beforeRequest() {
+            setToLoadingState();
+        }
+        
+        @Override public boolean afterRequest(int received, boolean needMore, 
+                                              ListApiTask nextPageTask) {
+        	
+        	hideProgressBar();
+
+            // TODO: scroll to the first received item (smoothScrollToPosition in API 8)
+            final int newPos = getListView().getCount() - received - 2; // - 'load more' and one position before
+            if (newPos >= 0) setSelection(newPos);
+            else setSelection(0);
+            
+            return false; 
+        }
+
+        @Override public void onNextPageExists() {
+            setToTheresMoreItems();                    
+        }
+
+        @Override public void onNoItems() {
+            setToNoItemsInList();
+        }
+
+        @Override public void onNoMoreItems() {
+            setToNoItemsMore();
+        }
+        
+        @Override public void onError(Exception e, String message) {
+            hideProgressBar();
+            Log.e(TAG, message);
+            
+            Dialogs.makeExceptionToast(ItemsListActivity.this, message, e);
+        }
+    	
+    }
+    
     
 }

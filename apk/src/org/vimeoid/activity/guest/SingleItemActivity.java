@@ -13,6 +13,7 @@ import org.vimeoid.util.Invoke;
 import org.vimeoid.util.SimpleItem;
 import org.vimeoid.util.Utils;
 
+import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -68,32 +69,39 @@ public abstract class SingleItemActivity<ItemType extends SimpleItem> extends Si
     
     @Override
     protected void queryItem() {
-        new ApiTask(getContentResolver(), projection) {
+        new ItemApiTask(getContentResolver(), projection).execute(contentUri);
+    }
+    
+    protected class ItemApiTask extends ApiTask {
 
-            @Override protected void onPreExecute() {
-                super.onPreExecute();                
-                showProgressBar();
-            }
-            
-            @Override protected void onAnswerReceived(Cursor cursor) {
-            	if (cursor.getCount() > 1) throw new IllegalStateException("There must be the only one item returned");
-                onItemReceived(extractFromCursor(cursor, 0));
-                hideProgressBar();
-            }
-            
-            @Override protected void onPostExecute(Cursor cursor) {
-                super.onPostExecute(cursor);
-                hideProgressBar();
-            }
-            
-            @Override
-            protected void onAnyError(Exception e, String message) {
-                super.onAnyError(e, message);
-                Dialogs.makeExceptionToast(SingleItemActivity.this, message, e);
-                hideProgressBar();                
-            }
-            
-        }.execute(contentUri);
+		protected ItemApiTask(ContentResolver contentResolver,
+				String[] projection) {
+			super(contentResolver, projection);
+		}
+		
+        @Override protected void onPreExecute() {
+            super.onPreExecute();                
+            showProgressBar();
+        }
+        
+        @Override protected void onAnswerReceived(Cursor cursor) {
+        	if (cursor.getCount() > 1) throw new IllegalStateException("There must be the only one item returned");
+            onItemReceived(extractFromCursor(cursor, 0));
+            hideProgressBar();
+        }
+        
+        @Override protected void onPostExecute(Cursor cursor) {
+            super.onPostExecute(cursor);
+            hideProgressBar();
+        }
+        
+        @Override
+        protected void onAnyError(Exception e, String message) {
+            super.onAnyError(e, message);
+            Dialogs.makeExceptionToast(SingleItemActivity.this, message, e);
+            hideProgressBar();                
+        }		
+    	
     }
 
 }

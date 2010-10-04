@@ -25,18 +25,18 @@ import android.util.Log;
  *
  */
 public class ListApiTask extends ApiTask {
-    
-    public static interface Reactor {
-        
-        public void onNoItems();
-        public void onNoMoreItems();
-        public void onNextPageExists();
-        
-        public void beforeRequest();        
-        public boolean afterRequest(ApiPagesReceiver receiver, int received, boolean needMore, ListApiTask nextPageTask);
+	
+	public static interface Reactor {
+	    
+	    public void onNoItems();
+	    public void onNoMoreItems();
+	    public void onNextPageExists();
+	    
+	    public void beforeRequest();        
+	    public boolean afterRequest(int received, boolean needMore, ListApiTask nextPageTask);
 
-        public void onError(Exception e, String message);
-    }
+	    public void onError(Exception e, String message);
+	}	
     
     private static final String TAG = "ListApiTask"; 
     
@@ -110,7 +110,7 @@ public class ListApiTask extends ApiTask {
             nextPageTask.setMaxPages(maxPages);        	
         }
         
-        if (reactor.afterRequest(receiver, received, needMore, nextPageTask)
+        if (reactor.afterRequest(received, needMore, nextPageTask)
         	&& needMore) {
             nextPageTask.execute(curParams);
         }
