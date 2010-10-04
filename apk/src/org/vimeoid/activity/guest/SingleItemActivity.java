@@ -17,6 +17,7 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,7 +37,7 @@ import android.widget.TextView;
  */
 public abstract class SingleItemActivity<ItemType extends SimpleItem> extends SingleItemActivity_<ItemType> {
     
-    // private static final String TAG = "SingleItemActivity";
+    private static final String TAG = "SingleItemActivity";
     
     protected final String[] projection;
     
@@ -97,7 +98,7 @@ public abstract class SingleItemActivity<ItemType extends SimpleItem> extends Si
         
         @Override
         protected void onAnyError(Exception e, String message) {
-            super.onAnyError(e, message);
+            Log.e(TAG, message + " / " + e.getLocalizedMessage());
             Dialogs.makeExceptionToast(SingleItemActivity.this, message, e);
             hideProgressBar();                
         }		

@@ -3,10 +3,12 @@
  */
 package org.vimeoid.activity.guest;
 
+import org.json.JSONException;
+import org.vimeoid.activity.base.ApiTask_;
+
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.util.Log;
 
 /**
@@ -23,7 +25,7 @@ import android.util.Log;
  * @date Oct 1, 2010 8:55:58 PM 
  *
  */
-public abstract class ApiTask extends AsyncTask<Uri, Void, Cursor> {
+public abstract class ApiTask extends ApiTask_<Uri, Cursor> {
     
     private static final String TAG = "ApiTask";
     
@@ -38,25 +40,22 @@ public abstract class ApiTask extends AsyncTask<Uri, Void, Cursor> {
         
     @Override
     protected Cursor doInBackground(Uri... uris) {
-        return contentResolver.query(prepareUri(uris), 
+        return contentResolver.query(prepareParams(uris), 
                                      projection, null, null, null);
-    }
-    
-    protected Uri prepareUri(Uri... uris) {
-        if (uris.length <= 0) return null;
-        if (uris.length > 1) throw new UnsupportedOperationException("This task do not supports several params");
-        return uris[0];
     }
         
     @Override
     protected void onPostExecute(Cursor cursor) {
             
         if (cursor != null) {
-                
-            cursor.moveToFirst();
-            onAnswerReceived(cursor);
-            //onItemReceived(extractor.fromCursor(cursor, 0));
-            cursor.close();
+            try {                
+                cursor.moveToFirst();
+                onAnswerReceived(cursor);
+                //onItemReceived(extractor.fromCursor(cursor, 0));
+                cursor.close();
+            } catch (Exception e) {
+                onAnyError(e, "Failed while receiving answer: " + e.getLocalizedMessage());
+            }
         } else {
             Log.e(TAG, "Failed to receive next page");
             onAnyError(null, "Failed to receive next page");            
@@ -64,10 +63,6 @@ public abstract class ApiTask extends AsyncTask<Uri, Void, Cursor> {
             
     }
     
-    protected void onAnyError(Exception e, String message) {
-        Log.e(TAG, message);
-    }
+    @Override protected abstract void onAnswerReceived(Cursor cursor) throws JSONException;
     
-    protected abstract void onAnswerReceived(Cursor cursor);
-
 }

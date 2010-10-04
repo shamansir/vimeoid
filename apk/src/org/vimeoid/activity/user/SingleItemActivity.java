@@ -49,6 +49,11 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
             	super.onPerfomed(taskId, result);
                 onSecondaryTaskPerfomed(taskId, result);
             }
+
+            @Override public void onError(Exception e, String message) {
+                Log.e(TAG, message + " / " + e.getLocalizedMessage());
+                Dialogs.makeExceptionToast(SingleItemActivity.this, message, e);
+            }
         };
     }
     
@@ -104,6 +109,12 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
         @Override
         public void onAnswerReceived(JSONObject jsonObj) throws JSONException {
             onItemReceived(extractFromJson(jsonObj));
+        }
+
+        @Override
+        protected void onAnyError(Exception e, String message) {
+            Log.e(TAG, message + " / " + e.getLocalizedMessage());
+            Dialogs.makeExceptionToast(SingleItemActivity.this, message, e);
         }
 
     }

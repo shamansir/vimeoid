@@ -6,7 +6,8 @@ package org.vimeoid.adapter;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.vimeoid.activity.guest.ApiPagesReceiver;
+import org.vimeoid.activity.base.ApiPagesReceiver;
+import org.vimeoid.util.PagingData_;
 import org.vimeoid.util.SimpleItem;
 
 import android.database.Cursor;
@@ -27,7 +28,7 @@ import android.widget.BaseAdapter;
  *
  */
 public abstract class EasyCursorsAdapter<ItemType extends SimpleItem> 
-                              extends BaseAdapter implements ApiPagesReceiver {
+                              extends BaseAdapter implements ApiPagesReceiver<Cursor> {
     
     private static final int MAX_CURSORS_COUNT = 6;
     
@@ -108,7 +109,17 @@ public abstract class EasyCursorsAdapter<ItemType extends SimpleItem>
         itemsCount += cursor.getCount();
         
         cursor.moveToFirst();
-    }    
+    }
+    
+    @Override
+    public PagingData_ getCurrentPagingData(Cursor lastCursor) {
+        final PagingData_ pd = new PagingData_();
+        pd.onThisPage = lastCursor.getCount();
+        pd.pageNum = cursors.length;
+        pd.total = -1;
+        pd.perPage = -1;
+        return pd;
+    }
         
     protected void finalize() {
         for (int i = 0; i < cursorsCount; i++) {

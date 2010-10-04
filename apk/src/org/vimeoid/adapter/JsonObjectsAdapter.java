@@ -8,9 +8,10 @@ import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.vimeoid.activity.user.ApiPagesReceiver;
+import org.vimeoid.activity.base.ApiPagesReceiver;
 import org.vimeoid.dto.advanced.PagingData;
 import org.vimeoid.util.AdvancedItem;
+import org.vimeoid.util.PagingData_;
 
 import android.widget.BaseAdapter;
 
@@ -28,7 +29,8 @@ import android.widget.BaseAdapter;
  * @date Sep 27, 2010 7:29:03 PM 
  *
  */
-public abstract class JsonObjectsAdapter<ItemType extends AdvancedItem> extends BaseAdapter implements ApiPagesReceiver {
+public abstract class JsonObjectsAdapter<ItemType extends AdvancedItem> extends BaseAdapter 
+                                                                        implements ApiPagesReceiver<JSONObject> {
     
     private final List<ItemType> items = new LinkedList<ItemType>();
     private final String dataKey;
@@ -63,7 +65,8 @@ public abstract class JsonObjectsAdapter<ItemType extends AdvancedItem> extends 
         }
     }
     
-    public PagingData getLastPagingData() {
+    @Override
+    public PagingData_ getCurrentPagingData(JSONObject lastPage) {
         return lastPagingData;
     }
     

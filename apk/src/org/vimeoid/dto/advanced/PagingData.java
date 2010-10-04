@@ -5,6 +5,7 @@ package org.vimeoid.dto.advanced;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.vimeoid.util.PagingData_;
 
 /**
  * <dl>
@@ -20,12 +21,7 @@ import org.json.JSONObject;
  * @date Sep 29, 2010 11:30:20 PM 
  *
  */
-public class PagingData {
-    
-    public int perPage;
-    public int pageNum;
-    public int total;
-    public int onThisPage;
+public class PagingData extends PagingData_ {
     
     public static class FieldsKeys {
         public static final String PER_PAGE = "perpage";

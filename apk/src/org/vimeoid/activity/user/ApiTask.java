@@ -5,12 +5,10 @@ package org.vimeoid.activity.user;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.vimeoid.activity.base.ApiTask_;
 import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.VimeoApi.AdvancedApiCallError;
 import org.vimeoid.util.ApiParams;
-
-import android.os.AsyncTask;
-import android.util.Log;
 
 /**
  * <dl>
@@ -26,13 +24,11 @@ import android.util.Log;
  * @date Oct 1, 2010 8:55:58 PM 
  *
  */
-public abstract class ApiTask extends AsyncTask<ApiParams, Void, JSONObject> {
+public abstract class ApiTask extends ApiTask_<ApiParams, JSONObject> {
     
-    private static final String TAG = "ApiTask";
+    //private static final String TAG = "ApiTask";
     
     protected final String apiMethod;
-    
-    protected boolean queryRunning;
     
     protected ApiTask(String apiMethod) {
         this.apiMethod = apiMethod;
@@ -43,7 +39,6 @@ public abstract class ApiTask extends AsyncTask<ApiParams, Void, JSONObject> {
         final ApiParams params = prepareParams(paramsList);
         try {
             ensureConnected();
-            queryRunning = true;
             if (params == null || params.isEmpty()) {
                 return VimeoApi.advancedApi(apiMethod);
             } else {
@@ -68,16 +63,11 @@ public abstract class ApiTask extends AsyncTask<ApiParams, Void, JSONObject> {
         // Log.d(TAG, jsonObj.toString());
         if (jsonObj != null) {
             try {
-                queryRunning = false;
                 onAnswerReceived(jsonObj);
             } catch (JSONException jsone) {
                 onJsonParsingError(jsone);
             }
         } else { onNullReturned(); }
-    }
-    
-    protected void onAnyError(Exception e, String message) {
-        Log.e(TAG, message);
     }
     
     protected void onApiError(AdvancedApiCallError error) {
@@ -98,20 +88,9 @@ public abstract class ApiTask extends AsyncTask<ApiParams, Void, JSONObject> {
     
     protected void ensureConnected() {
         return; // FIXME: not used
+        // return (VimeoApi.connectedToWeb(this) && VimeoApi.vimeoSiteReachable(this));
     }
     
-    /* protected boolean checkConnection() {
-        if (VimeoApi.connectedToWeb(this) && VimeoApi.vimeoSiteReachable(this)) {
-            Log.d(TAG, "Connection test is passed OK");
-            queryMoreItems(adapter, pageNum);
-        } else {
-            Log.d(TAG, "Connection test failed");            
-            Dialogs.makeToast(this, getString(R.string.no_iternet_connection));
-        }
-    } */
+    @Override public abstract void onAnswerReceived(JSONObject jsonObj) throws JSONException;
     
-    public abstract void onAnswerReceived(JSONObject jsonObj) throws JSONException;
-    
-    public boolean queryRunning() { return queryRunning; } 
-
 }
