@@ -23,7 +23,7 @@ import org.vimeoid.dto.advanced.PagingData;
  */
 public interface ApiPagesReceiver {
     
-    public void addPage(JSONObject pageObj) throws JSONException;
+    public void addSource(JSONObject pageObj) throws JSONException;
     public PagingData getLastPagingData() throws JSONException;
     public int getCount();
 

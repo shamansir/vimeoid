@@ -111,7 +111,9 @@ public class Video implements AdvancedItem {
         video.commentsCount = jsonObj.getLong(FieldsKeys.NUM_OF_COMMENTS);
         
         video.isHd = Utils.adaptBoolean(jsonObj.getInt(FieldsKeys.IS_HD));
-        video.isHd = Utils.adaptBoolean(jsonObj.getInt(FieldsKeys.IS_LIKE));
+        if (jsonObj.has(FieldsKeys.IS_LIKE)) {
+        	video.isLike = Utils.adaptBoolean(jsonObj.getInt(FieldsKeys.IS_LIKE));
+        }
         
         video.width = jsonObj.getInt(FieldsKeys.WIDTH);
         video.height = jsonObj.getInt(FieldsKeys.HEIGHT);

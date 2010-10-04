@@ -97,6 +97,7 @@ public abstract class EasyCursorsAdapter<ItemType extends SimpleItem>
         return -1;
     }
     
+    @Override
     public void addSource(Cursor cursor) {
         if (cursorsCount == MAX_CURSORS_COUNT) 
             throw new IllegalArgumentException("Max number of cursors for this adapter reached");

@@ -64,10 +64,11 @@ public abstract class ApiTask extends AsyncTask<ApiParams, Void, JSONObject> {
     
     @Override
     protected void onPostExecute(JSONObject jsonObj) {
+    	super.onPostExecute(jsonObj);
         // Log.d(TAG, jsonObj.toString());
         if (jsonObj != null) {
             try {
-                queryRunning = false;                
+                queryRunning = false;
                 onAnswerReceived(jsonObj);
             } catch (JSONException jsone) {
                 onJsonParsingError(jsone);

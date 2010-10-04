@@ -53,7 +53,8 @@ public abstract class JsonObjectsAdapter<ItemType extends AdvancedItem> extends 
         return items.get(position).getId();
     }
 
-    public void addPage(JSONObject value) throws JSONException {
+    @Override
+    public void addSource(JSONObject value) throws JSONException {
         lastPagingData = PagingData.collectFromJson(value, dataKey);
         
         final ItemType[] extracted = extractItems(value);

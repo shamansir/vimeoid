@@ -33,7 +33,7 @@ public class ListApiTask extends ApiTask {
         public void onNextPageExists();
         
         public void beforeRequest();        
-        public boolean afterRequest(ApiPagesReceiver receiver, int received, ListApiTask nextPageTask);
+        public boolean afterRequest(ApiPagesReceiver receiver, int received, boolean needMore, ListApiTask nextPageTask);
 
         public void onError(Exception e, String message);
     }
@@ -77,7 +77,7 @@ public class ListApiTask extends ApiTask {
     @Override
     public void onAnswerReceived(JSONObject jsonObj) throws JSONException {
         
-        receiver.addPage(jsonObj);
+        receiver.addSource(jsonObj);
         PagingData pd = receiver.getLastPagingData();
         
         if (pd.pageNum != curPage) throw new IllegalStateException("Received page number do not matches actual");
@@ -101,14 +101,18 @@ public class ListApiTask extends ApiTask {
         
         Log.d(TAG, "Received " + received + " items");
         
-        final ListApiTask nextPageTask = new ListApiTask(++curPage, reactor, receiver, apiMethod);
-        nextPageTask.setPerPage(perPage);
-        nextPageTask.setMaxPages(maxPages);
+        final boolean needMore = (curPage < maxPages) && (receiver.getCount() < total);        
         
-        if ((curPage < maxPages) && 
-            (receiver.getCount() < total) &&
-            reactor.afterRequest(receiver, received, nextPageTask)) {
-            nextPageTask.execute(curParams);        
+        ListApiTask nextPageTask = null;
+        if (needMore) {
+        	nextPageTask = new ListApiTask(++curPage, reactor, receiver, apiMethod);
+            nextPageTask.setPerPage(perPage);
+            nextPageTask.setMaxPages(maxPages);        	
+        }
+        
+        if (reactor.afterRequest(receiver, received, needMore, nextPageTask)
+        	&& needMore) {
+            nextPageTask.execute(curParams);
         }
         
         /* 

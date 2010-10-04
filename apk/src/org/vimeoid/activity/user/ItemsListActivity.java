@@ -28,6 +28,7 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     private ApiParams params;
     
     private ListApiTask mainTask = null;
+    private boolean needMorePages = true;
     
     protected final ApiTasksQueue secondaryTasks;
 
@@ -63,6 +64,7 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     
     @Override
     protected final void loadNextPage(JsonObjectsAdapter<ItemType> adapter) {
+    	if (!needMorePages) return;
         if (mainTask == null) {
             mainTask = new ListApiTask(new Reactor() {
                 
@@ -78,7 +80,10 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
                 }
                 
                 @Override public boolean afterRequest(ApiPagesReceiver receiver,
-                                                      int received, ListApiTask nextPageTask) {
+                                                      int received, boolean needMore, 
+                                                      ListApiTask nextPageTask) {
+                	
+                	hideProgressBar();
 
                     onContentChanged();
                     
@@ -87,6 +92,7 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
                     if (newPos >= 0) setSelection(newPos);
                     else setSelection(0);
                     
+                    needMorePages = needMore;
                     mainTask = nextPageTask;
                     
                     return false; 

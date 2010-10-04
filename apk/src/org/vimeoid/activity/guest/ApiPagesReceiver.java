@@ -21,7 +21,7 @@ import android.database.Cursor;
  */
 public interface ApiPagesReceiver {
     
-    public void addPage(Cursor cursor);
+    public void addSource(Cursor cursor);
     //public PagingData getLastPagingData() throws JSONException;
     public int getCount();
 

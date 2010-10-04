@@ -84,7 +84,7 @@ public class ListApiTask extends ApiTask {
         
         //startManagingCursor(cursor);
         //onItemsReceived(cursor.getCount(), -1);
-        receiver.addPage(cursor);
+        receiver.addSource(cursor);
         cursor.close();        
         
         final int received = cursor.getCount();

@@ -10,6 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.util.ApiParams;
 
+import android.util.Log;
+
 /**
  * <dl>
  * <dt>Project:</dt> <dd>vimeoid</dd>
@@ -25,6 +27,8 @@ import org.vimeoid.util.ApiParams;
  *
  */
 public abstract class ApiTasksQueue implements SuccessiveApiTasksSupport {
+	
+	public static final String TAG = "ApiTasksQueue";   
 
     private ApiTaskInQueue firstTask = null;
     private ApiTaskInQueue lastTask = null;
@@ -34,6 +38,7 @@ public abstract class ApiTasksQueue implements SuccessiveApiTasksSupport {
     
     @Override
     public void add(int taskId, String apiMethod, ApiParams params) {
+    	Log.d(TAG, "Adding task " + taskId + " " + apiMethod + " : " + params);
         final ApiTaskInQueue newTask = new ApiTaskInQueue(this, taskId, apiMethod); 
         if (isEmpty()) {
             firstTask = newTask;
@@ -48,21 +53,25 @@ public abstract class ApiTasksQueue implements SuccessiveApiTasksSupport {
 
     @Override
     public void run() {
+    	Log.d(TAG, "Running first task");
         if (!isEmpty()) execute(firstTask);
         else throw new IllegalStateException("Queue is already running");
     }
     
     @Override
     public void onPerfomed(int taskId, JSONObject result) throws JSONException {
+    	Log.d(TAG, "Task " + taskId + " performed");
         if (taskId != currentTask) throw new IllegalStateException("Tasks queue desynchronized");
         running = false;
     }
     
     @Override
     public void execute(ApiTaskInQueue task) {
+    	Log.d(TAG, "Trying to run task " + task.getId());
         if (running) throw new IllegalStateException("Tasks queue desynchronized");
         currentTask = task.getId();
         running = true;
+        Log.d(TAG, "Running task " + task.getId() + " with params " + tasksParams.get(task.getId()));
         task.execute(tasksParams.get(task.getId()));
     }
     

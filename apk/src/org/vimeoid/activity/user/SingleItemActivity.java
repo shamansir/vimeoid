@@ -46,6 +46,7 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
         secondaryTasks = new ApiTasksQueue() {
             @Override public void onPerfomed(int taskId, JSONObject result)
                     throws JSONException {
+            	super.onPerfomed(taskId, result);
                 onSecondaryTaskPerfomed(taskId, result);
             }
         };
