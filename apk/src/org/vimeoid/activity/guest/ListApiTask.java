@@ -33,7 +33,7 @@ public class ListApiTask extends ApiTask {
         public void onNextPageExists();
         
         public void beforeRequest();        
-        public boolean afterRequest(Cursor cursor, int received, ListApiTask nextPageTask);
+        public boolean afterRequest(Cursor cursor, int received, boolean needMore, ListApiTask nextPageTask);
 
         public void onError(Exception e, String message);
     }
@@ -51,7 +51,7 @@ public class ListApiTask extends ApiTask {
     private final String[] projection;
     private Uri currentUri;
     
-    public ListApiTask(ContentResolver resolver, Reactor reactor, ApiPagesReceiver receiver, String[] projection) {
+    protected ListApiTask(ContentResolver resolver, Reactor reactor, ApiPagesReceiver receiver, String[] projection) {
         super(resolver, projection);
         this.resolver = resolver;
         this.reactor = reactor;
@@ -105,15 +105,19 @@ public class ListApiTask extends ApiTask {
         
         Log.d(TAG, "Received " + received + " items");
         
-        final ListApiTask nextPageTask = new ListApiTask(resolver, ++curPage, reactor, receiver, projection);
-        nextPageTask.setPerPage(perPage);
-        nextPageTask.setMaxPages(maxPages);
+        final boolean needMore = (curPage < maxPages) && (receiver.getCount() < total);        
         
-        if ((curPage < maxPages) && 
-            (receiver.getCount() < total) &&
-            reactor.afterRequest(cursor, received, nextPageTask)) {
-            nextPageTask.execute(currentUri);        
+        ListApiTask nextPageTask = null;
+        if (needMore) {
+        	nextPageTask = new ListApiTask(resolver, ++curPage, reactor, receiver, projection);
+            nextPageTask.setPerPage(perPage);
+            nextPageTask.setMaxPages(maxPages);        	
         }
+        
+        if (reactor.afterRequest(cursor, received, needMore, nextPageTask)
+        	&& needMore) {
+            nextPageTask.execute(currentUri);
+        }        
         
         /* 
          * 

@@ -15,6 +15,7 @@ import org.vimeoid.util.Utils;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,6 +33,7 @@ public abstract class ItemsListActivity<ItemType extends SimpleItem> extends
     protected ApiCallInfo callInfo;
     
     private ListApiTask mainTask;
+    private boolean needMorePages = true;
     
     public ItemsListActivity(int mainView, String[] projection, int contextMenu) {
     	super(mainView, contextMenu);
@@ -59,6 +61,7 @@ public abstract class ItemsListActivity<ItemType extends SimpleItem> extends
     
     @Override
     protected void loadNextPage(EasyCursorsAdapter<ItemType> adapter) {
+    	if (!needMorePages) return;
         if (mainTask == null) {
             mainTask = new ListApiTask(getContentResolver(), new Reactor() {
                 
@@ -66,9 +69,11 @@ public abstract class ItemsListActivity<ItemType extends SimpleItem> extends
                     setToLoadingState();
                 }
 
-                @Override public boolean afterRequest(Cursor cursor, int received, 
-                                                      ListApiTask nextPageTask) {
+                @Override public boolean afterRequest(Cursor cursor, int received, boolean needMore, 
+                		                              ListApiTask nextPageTask) {
                     startManagingCursor(cursor);
+                    
+                    hideProgressBar();
                     
                     onContentChanged();
                     
@@ -77,6 +82,7 @@ public abstract class ItemsListActivity<ItemType extends SimpleItem> extends
                     if (newPos >= 0) setSelection(newPos);
                     else setSelection(0);
                     
+                    needMorePages = needMore;
                     mainTask = nextPageTask;
                     
                     return false; 
@@ -96,6 +102,9 @@ public abstract class ItemsListActivity<ItemType extends SimpleItem> extends
 
                 @Override public void onError(Exception e, String message) {
                     hideProgressBar();
+                    Log.e(TAG, message);
+                    
+                    Dialogs.makeExceptionToast(ItemsListActivity.this, message, e);
                 }
                 
                 }, adapter, projection);

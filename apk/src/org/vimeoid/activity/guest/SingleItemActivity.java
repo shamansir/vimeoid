@@ -76,7 +76,9 @@ public abstract class SingleItemActivity<ItemType extends SimpleItem> extends Si
             }
             
             @Override protected void onAnswerReceived(Cursor cursor) {
+            	if (cursor.getCount() > 1) throw new IllegalStateException("There must be the only one item returned");
                 onItemReceived(extractFromCursor(cursor, 0));
+                hideProgressBar();
             }
             
             @Override protected void onPostExecute(Cursor cursor) {
@@ -86,8 +88,9 @@ public abstract class SingleItemActivity<ItemType extends SimpleItem> extends Si
             
             @Override
             protected void onAnyError(Exception e, String message) {
-                Dialogs.makeExceptionToast(SingleItemActivity.this, message, e);
                 super.onAnyError(e, message);
+                Dialogs.makeExceptionToast(SingleItemActivity.this, message, e);
+                hideProgressBar();                
             }
             
         };

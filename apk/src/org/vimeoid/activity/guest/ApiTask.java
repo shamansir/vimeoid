@@ -32,9 +32,9 @@ public abstract class ApiTask extends AsyncTask<Uri, Void, Cursor> {
         
     protected ApiTask(ContentResolver contentResolver, 
                       String[] projection) {
-        this.projection = projection;
-        this.contentResolver = contentResolver;
-    }
+		this.contentResolver = contentResolver;
+		this.projection = projection;		
+	}
         
     @Override
     protected Cursor doInBackground(Uri... uris) {
@@ -52,8 +52,6 @@ public abstract class ApiTask extends AsyncTask<Uri, Void, Cursor> {
     protected void onPostExecute(Cursor cursor) {
             
         if (cursor != null) {
-                
-            if (cursor.getCount() > 1) throw new IllegalStateException("There must be the only one item returned");
                 
             cursor.moveToFirst();
             onAnswerReceived(cursor);

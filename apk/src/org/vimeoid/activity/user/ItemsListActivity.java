@@ -72,13 +72,6 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
                     setToLoadingState();
                 }
                 
-                @Override public void onError(Exception e, String message) {
-                    hideProgressBar();
-                    Log.e(TAG, message);
-                    
-                    Dialogs.makeExceptionToast(ItemsListActivity.this, message, e);
-                }
-                
                 @Override public boolean afterRequest(ApiPagesReceiver receiver,
                                                       int received, boolean needMore, 
                                                       ListApiTask nextPageTask) {
@@ -108,6 +101,13 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
 
                 @Override public void onNoMoreItems() {
                     setToNoItemsMore();
+                }
+                
+                @Override public void onError(Exception e, String message) {
+                    hideProgressBar();
+                    Log.e(TAG, message);
+                    
+                    Dialogs.makeExceptionToast(ItemsListActivity.this, message, e);
                 }
                 
             }, adapter, apiMethod);
