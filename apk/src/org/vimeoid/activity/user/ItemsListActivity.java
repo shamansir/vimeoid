@@ -3,8 +3,9 @@ package org.vimeoid.activity.user;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.R;
+import org.vimeoid.activity.base.ApiTask_;
 import org.vimeoid.activity.base.ItemsListActivity_;
-import org.vimeoid.activity.user.ListApiTask.Reactor;
+import org.vimeoid.activity.base.ListApiTask_.Reactor;
 import org.vimeoid.adapter.JsonObjectsAdapter;
 import org.vimeoid.util.AdvancedItem;
 import org.vimeoid.util.ApiParams;
@@ -32,7 +33,7 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     
     protected final ApiTasksQueue secondaryTasks;
     
-    private final Reactor mainReactor;
+    private final Reactor<JSONObject> mainReactor;
 
     public ItemsListActivity(int mainView, int contextMenu) {
     	super(mainView, contextMenu);
@@ -41,19 +42,28 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
             @Override public void onPerfomed(int taskId, JSONObject result) throws JSONException {
                 onSecondaryTaskPerfomed(taskId, result);
             }
+
+            @Override public void onError(Exception e, String message) {
+                Log.e(TAG, message + " / " + e.getLocalizedMessage());
+                Dialogs.makeExceptionToast(ItemsListActivity.this, message, e);
+            }
         };
         
-        mainReactor = new ListReactor() {
-            @Override public boolean afterRequest(int received, boolean needMore, 
-                                                  ListApiTask nextPageTask) {
-            	
+        mainReactor = new ListReactor<JSONObject>() {
+            
+            @Override
+            public boolean afterRequest(JSONObject result, int received,
+                    boolean needMore, ApiTask_<?, JSONObject> nextPageTask) {
+                
                 onContentChanged();
                 
                 needMorePages = needMore;
-                mainTask = nextPageTask;                
+                mainTask = (ListApiTask)nextPageTask;                
                 
-                return super.afterRequest(received, needMore, nextPageTask);
+                return super.afterRequest(result, received, needMore, nextPageTask);
+
             }
+            
         };
     }
     
@@ -121,46 +131,5 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
         return super.onOptionsItemSelected(item);
         
     }
-        
-    protected class ListReactor implements Reactor {
-    	
-        @Override public void beforeRequest() {
-            setToLoadingState();
-        }
-        
-        @Override public boolean afterRequest(int received, boolean needMore, 
-                                              ListApiTask nextPageTask) {
-        	
-        	hideProgressBar();
-
-            // TODO: scroll to the first received item (smoothScrollToPosition in API 8)
-            final int newPos = getListView().getCount() - received - 2; // - 'load more' and one position before
-            if (newPos >= 0) setSelection(newPos);
-            else setSelection(0);
             
-            return false; 
-        }
-
-        @Override public void onNextPageExists() {
-            setToTheresMoreItems();                    
-        }
-
-        @Override public void onNoItems() {
-            setToNoItemsInList();
-        }
-
-        @Override public void onNoMoreItems() {
-            setToNoItemsMore();
-        }
-        
-        @Override public void onError(Exception e, String message) {
-            hideProgressBar();
-            Log.e(TAG, message);
-            
-            Dialogs.makeExceptionToast(ItemsListActivity.this, message, e);
-        }
-    	
-    }
-    
-    
 }

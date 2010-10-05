@@ -3,12 +3,12 @@
  */
 package org.vimeoid.activity.user;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.vimeoid.dto.advanced.PagingData;
+import org.vimeoid.activity.base.ApiPagesReceiver;
+import org.vimeoid.activity.base.ListApiTask_;
+import org.vimeoid.connection.VimeoApi;
+import org.vimeoid.connection.VimeoApi.AdvancedApiCallError;
 import org.vimeoid.util.ApiParams;
-
-import android.util.Log;
 
 /**
  * <dl>
@@ -24,116 +24,85 @@ import android.util.Log;
  * @date Oct 3, 2010 12:22:41 PM 
  *
  */
-public class ListApiTask extends ApiTask {
+public class ListApiTask extends ListApiTask_<ApiParams, JSONObject> {
 	
-	public static interface Reactor {
-	    
-	    public void onNoItems();
-	    public void onNoMoreItems();
-	    public void onNextPageExists();
-	    
-	    public void beforeRequest();        
-	    public boolean afterRequest(int received, boolean needMore, ListApiTask nextPageTask);
-
-	    public void onError(Exception e, String message);
-	}	
+    //private static final String TAG = "ListApiTask";
     
-    private static final String TAG = "ListApiTask"; 
-    
-    private final Reactor reactor;
-    private final ApiPagesReceiver receiver;
-    
-    private int maxPages = 3;
-    private int curPage = 1;
-    private int perPage = 20;
-    
-    private ApiParams curParams;
-    
-    public ListApiTask(Reactor reactor, ApiPagesReceiver receiver, String apiMethod) {
-        super(apiMethod);
-        this.reactor = reactor;
-        this.receiver = receiver;
+    private final String apiMethod;
+        
+    public ListApiTask(Reactor<JSONObject> reactor, ApiPagesReceiver<JSONObject> receiver, String apiMethod) {
+        this(1, reactor, receiver, apiMethod);
     }
     
-    private ListApiTask(int curPage, Reactor reactor, ApiPagesReceiver receiver, String apiMethod) {
-        this(reactor, receiver, apiMethod);
-        this.curPage = curPage;
+    private ListApiTask(int curPage, Reactor<JSONObject> reactor, ApiPagesReceiver<JSONObject> receiver, String apiMethod) {
+        super(curPage, reactor, receiver);
+        this.apiMethod = apiMethod;
     }
     
     @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        reactor.beforeRequest();
-    }
-    
-    @Override
-    protected ApiParams prepareParams(ApiParams... paramsList) {
-        curParams = super.prepareParams(paramsList);
-        return curParams.add("page", String.valueOf(curPage))
+    protected ApiParams paramsForPage(ApiParams curParams, int pageNum, int perPage) {
+        return curParams.add("page", String.valueOf(pageNum))
                         .add("per_page", String.valueOf(perPage));
-                        // TODO: params.add("sort", "");
     }
     
     @Override
-    public void onAnswerReceived(JSONObject jsonObj) throws JSONException {
+    protected ListApiTask_<ApiParams, JSONObject> makeNextPageTask(int nextPage,
+                         Reactor<JSONObject> reactor, ApiPagesReceiver<JSONObject> receiver) {
+        return new ListApiTask(nextPage, reactor, receiver, apiMethod);
+    }
+
+    @Override
+    protected JSONObject doInBackground(ApiParams... paramsList) {
+        final ApiParams params = prepareParams(paramsList);
+        try {
+            ensureConnected();
+            if (params == null || params.isEmpty()) {
+                return VimeoApi.advancedApi(apiMethod);
+            } else {
+                return VimeoApi.advancedApi(apiMethod, params);
+            }
+        } catch (AdvancedApiCallError aace) { onApiError(aace); } 
+          catch (Exception e) { onException(params, e); }
         
-        receiver.addSource(jsonObj);
-        PagingData pd = receiver.getLastPagingData();
-        
-        if (pd.pageNum != curPage) throw new IllegalStateException("Received page number do not matches actual");
-        if (pd.perPage != perPage) throw new IllegalStateException("Received number of items per page do not matches actual");
-        
-        final int received = pd.onThisPage;
-        final int total = pd.total;
-        
-        if ((received == 0) && (curPage == 1)) {
-            // no items in list at all
-            reactor.onNoItems();      
-        } else if ((received < perPage) ||     
-                   (curPage == maxPages) ||
-                   ((total != -1) && (((perPage * (curPage - 1)) + received) == total))) {
-            // no items more
-            reactor.onNoMoreItems();
-        } else {
-            // enable 'load more' button
-            reactor.onNextPageExists();
-        }
-        
-        Log.d(TAG, "Received " + received + " items");
-        
-        final boolean needMore = (curPage < maxPages) && (receiver.getCount() < total);        
-        
-        ListApiTask nextPageTask = null;
-        if (needMore) {
-        	nextPageTask = new ListApiTask(++curPage, reactor, receiver, apiMethod);
-            nextPageTask.setPerPage(perPage);
-            nextPageTask.setMaxPages(maxPages);        	
-        }
-        
-        if (reactor.afterRequest(received, needMore, nextPageTask)
-        	&& needMore) {
-            nextPageTask.execute(curParams);
-        }
-        
-        /* 
-         * 
-         * } else Dialogs.makeToast(this, getString(R.string.no_pages_more));
-        } else Dialogs.makeToast(this, getString(R.string.please_do_not_touch)); */
-        
+        return null;
     }
     
     @Override
-    protected void onAnyError(Exception e, String message) {
-        super.onAnyError(e, message);
-        reactor.onError(e, message);
+    protected void onPostExecute(JSONObject jsonObj) {
+        super.onPostExecute(jsonObj);
+        // Log.d(TAG, jsonObj.toString());
+        if (jsonObj != null) {
+            try {
+                onAnswerReceived(jsonObj);
+            } catch (Exception e) {
+                onAnyError(e, "Failed to receive answer");
+            }
+        } else { onNullReturned(); }
     }
     
-    public void setMaxPages(int maxPages) {
-        this.maxPages = maxPages; 
+    protected void onApiError(AdvancedApiCallError error) {
+        onAnyError(error, "API Error " + error.code + " / " + error.message);
     }
     
-    public void setPerPage(int perPage) {
-        this.perPage = perPage; 
-    }
-        
+    protected void onException(ApiParams params, Exception e) {
+        onAnyError(e, "Error while calling " + apiMethod + " " + params + " " + e.getLocalizedMessage());        
+    }    
+
+    protected void ensureConnected() {
+        return; // FIXME: not used
+    }    
+
+    protected void onNullReturned() {
+        onAnyError(null, "Failed to parse answer");
+    }    
+    
+//  receiver.addSource(jsonObj);
+//  PagingData pd = receiver.getLastPagingData();    
+    
+    //  if (pd.pageNum != curPage) throw new IllegalStateException("Received page number do not matches actual");
+    //  if (pd.perPage != perPage) throw new IllegalStateException("Received number of items per page do not matches actual");
+    
+//    final int received = pd.onThisPage;
+//    final int total = pd.total;
+    
 }

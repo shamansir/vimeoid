@@ -1,9 +1,9 @@
 /**
  * 
  */
-package org.vimeoid.activity.guest;
+package org.vimeoid.activity.base;
 
-import android.database.Cursor;
+import org.vimeoid.util.PagingData_;
 
 /**
  * <dl>
@@ -19,10 +19,10 @@ import android.database.Cursor;
  * @date Oct 3, 2010 12:33:58 PM 
  *
  */
-public interface ApiPagesReceiver {
+public interface ApiPagesReceiver<PageObject> {
     
-    public void addSource(Cursor cursor);
-    //public PagingData getLastPagingData() throws JSONException;
+    public void addSource(PageObject object) throws Exception;
+    public PagingData_ getCurrentPagingData(PageObject lastPage);
     public int getCount();
 
 }

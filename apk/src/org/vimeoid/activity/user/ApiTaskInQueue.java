@@ -49,6 +49,10 @@ public class ApiTaskInQueue extends ApiTask {
     public void setNextTask(ApiTaskInQueue nextTask) {
         if (this.nextTask != null) throw new IllegalStateException("Next task is already set");
         this.nextTask = nextTask;
+    }
+
+    @Override protected void onAnyError(Exception e, String message) {
+        performer.onError(e, message);
     }    
     
 }

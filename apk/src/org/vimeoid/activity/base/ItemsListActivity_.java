@@ -1,6 +1,8 @@
 package org.vimeoid.activity.base;
 
 import org.vimeoid.R;
+import org.vimeoid.activity.base.ListApiTask_.Reactor;
+import org.vimeoid.util.Dialogs;
 
 import android.app.ListActivity;
 import android.os.Bundle;
@@ -28,7 +30,7 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
     private final int mainView;
     private final int contextMenu;
     
-    private AdapterType adapter;    
+    private AdapterType adapter;
     
     public ItemsListActivity_(int mainView, int contextMenu) {
     	this.mainView = mainView;
@@ -205,5 +207,49 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
         footerText.setBackgroundResource(R.color.load_more_default_bg); 
         footerText.setText(R.string.load_more);        
     }
+    
+    protected class ListReactor<Result> implements Reactor<Result> {
+        
+        @Override public void beforeRequest() {
+            setToLoadingState();
+        }
+
+        @Override public void onNextPageExists() {
+            setToTheresMoreItems();                    
+        }
+
+        @Override public void onNoItems() {
+            setToNoItemsInList();
+        }
+
+        @Override public void onNoMoreItems() {
+            setToNoItemsMore();
+        }
+
+        @Override public void onError(Exception e, String message) {
+            hideProgressBar();
+            Log.e(TAG, message);
+            
+            Dialogs.makeExceptionToast(ItemsListActivity_.this, message, e);
+        }
+
+        @Override
+        public boolean afterRequest(Result result, int received,
+                boolean needMore, ApiTask_<?, Result> nextPageTask) {
+            
+            hideProgressBar();
+            
+            onContentChanged();
+            
+            // TODO: scroll to the first received item (smoothScrollToPosition in API 8)
+            final int newPos = getListView().getCount() - received - 2; // - 'load more' and one position before
+            if (newPos >= 0) setSelection(newPos);
+            else setSelection(0);
+            
+            return false;
+        }
+        
+    }
+    
     
 }

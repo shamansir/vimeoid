@@ -1,8 +1,9 @@
 package org.vimeoid.activity.guest;
 
 import org.vimeoid.R;
+import org.vimeoid.activity.base.ApiTask_;
 import org.vimeoid.activity.base.ItemsListActivity_;
-import org.vimeoid.activity.guest.ListApiTask.Reactor;
+import org.vimeoid.activity.base.ListApiTask_.Reactor;
 import org.vimeoid.activity.guest.ListApiTask;
 import org.vimeoid.adapter.EasyCursorsAdapter;
 import org.vimeoid.connection.ApiCallInfo;
@@ -16,7 +17,6 @@ import org.vimeoid.util.Utils;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -34,23 +34,26 @@ public abstract class ItemsListActivity<ItemType extends SimpleItem> extends
     protected ApiCallInfo callInfo;
     
     private ListApiTask mainTask;
-    private final Reactor mainReactor;
+    private final Reactor<Cursor> mainReactor;
     private boolean needMorePages = true;
     
     public ItemsListActivity(int mainView, String[] projection, int contextMenu) {
     	super(mainView, contextMenu);
     	this.projection = projection;
     	
-        mainReactor = new ListReactor() {
-            @Override public boolean afterRequest(Cursor cursor, int received, boolean needMore, 
-                    							  ListApiTask nextPageTask) {
-                startManagingCursor(cursor);
+        mainReactor = new ListReactor<Cursor>() {
+            
+            @Override public boolean afterRequest(Cursor result, int received,
+                                        boolean needMore, ApiTask_<?, Cursor> nextPageTask) {
+                
+                startManagingCursor(result);
                 
                 needMorePages = needMore;
-                mainTask = nextPageTask;                
+                mainTask = (ListApiTask)nextPageTask;                
                 
-                return super.afterRequest(cursor, received, needMore, nextPageTask);
+                return super.afterRequest(result, received, needMore, nextPageTask);
             }
+            
         };    	
     }
     
@@ -85,14 +88,6 @@ public abstract class ItemsListActivity<ItemType extends SimpleItem> extends
         mainTask.execute(contentUri);
         
     }
-    /* @Override
-    protected final void queryMoreItems(EasyCursorsAdapter<ItemType> adapter, int pageNum) {
-        final Uri nextPageUri = (pageNum == 1) 
-                                ? contentUri 
-                                : Uri.parse(VimeoProvider.BASE_URI + contentUri.getPath() + "?page=" + pageNum);
-        Log.d(TAG, "Next page Uri: " + nextPageUri);        
-        new LoadGuestItemsTask(adapter, projection).execute(nextPageUri);
-    } */
     
    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -125,51 +120,5 @@ public abstract class ItemsListActivity<ItemType extends SimpleItem> extends
         return super.onOptionsItemSelected(item);
         
     }
-    
-    protected class ListReactor implements Reactor {
         
-        @Override public void beforeRequest() {
-            setToLoadingState();
-        }
-
-		@Override public boolean afterRequest(Cursor cursor, int received, boolean needMore, 
-        		                              ListApiTask nextPageTask) {
-            startManagingCursor(cursor);
-            
-            hideProgressBar();
-            
-            onContentChanged();
-            
-            // TODO: scroll to the first received item (smoothScrollToPosition in API 8)
-            final int newPos = getListView().getCount() - received - 2; // - 'load more' and one position before
-            if (newPos >= 0) setSelection(newPos);
-            else setSelection(0);
-            
-            needMorePages = needMore;
-            mainTask = nextPageTask;
-            
-            return false; 
-        }
-
-        @Override public void onNextPageExists() {
-            setToTheresMoreItems();                    
-        }
-
-        @Override public void onNoItems() {
-            setToNoItemsInList();
-        }
-
-        @Override public void onNoMoreItems() {
-            setToNoItemsMore();
-        }
-
-        @Override public void onError(Exception e, String message) {
-            hideProgressBar();
-            Log.e(TAG, message);
-            
-            Dialogs.makeExceptionToast(ItemsListActivity.this, message, e);
-        }
-        
-    }
-    
 }

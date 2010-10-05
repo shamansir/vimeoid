@@ -28,5 +28,6 @@ public interface SuccessiveApiTasksSupport {
     public void run(); // means run first task
     public void finish(); // means all tasks done    
     public void execute(ApiTaskInQueue nextTask);
+    public void onError(Exception e, String message);
     
 }
