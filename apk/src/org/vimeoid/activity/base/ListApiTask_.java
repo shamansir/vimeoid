@@ -23,35 +23,40 @@ import android.util.Log;
  */
 public abstract class ListApiTask_<Params, Result> extends ApiTask_<Params, Result> {
     
-    public static interface Reactor<Result> {
+    public static interface Reactor<Params, Result> {
         
         public void onNoItems();
         public void onNoMoreItems();
         public void onNextPageExists();
         
         public void beforeRequest();        
-        public boolean afterRequest(Result result, int received, boolean needMore, ApiTask_<?, Result> nextPageTask);
+        public void afterRequest(Result result, int received, boolean receivedAll, ListApiTask_<Params, Result> nextPageTask);
 
         public void onError(Exception e, String message);
     }
     
+    public static interface Judge<Result> {
+        public boolean doContinue(Result result, ApiPagesReceiver<Result> receiver);
+    }
+    
     private static final String TAG = "ListApiTask"; 
     
-    private final Reactor<Result> reactor;
+    private final Reactor<Params, Result> reactor;
     private final ApiPagesReceiver<Result> receiver;
+    private Judge<Result> filter = null;
     
     private int maxPages = 3;
     private int curPage = 1;
     private int perPage = 20;
     
-    private Params curParams; 
+    private Params curParams;
     
-    protected ListApiTask_(Reactor<Result> reactor, ApiPagesReceiver<Result> receiver) {
+    protected ListApiTask_(Reactor<Params, Result> reactor, ApiPagesReceiver<Result> receiver) {
         this.reactor = reactor;
         this.receiver = receiver;
     }
     
-    protected ListApiTask_(int curPage, Reactor<Result> reactor, ApiPagesReceiver<Result> receiver) {
+    protected ListApiTask_(int curPage, Reactor<Params, Result> reactor, ApiPagesReceiver<Result> receiver) {
         this(reactor, receiver);
         this.curPage = curPage; 
     }
@@ -62,7 +67,7 @@ public abstract class ListApiTask_<Params, Result> extends ApiTask_<Params, Resu
         this.curPage = curPage;
     } */
     
-    protected abstract ListApiTask_<Params, Result> makeNextPageTask(int nextPage, Reactor<Result> reactor, ApiPagesReceiver<Result> receiver);
+    protected abstract ListApiTask_<Params, Result> makeNextPageTask(int nextPage, Reactor<Params, Result> reactor, ApiPagesReceiver<Result> receiver);
     
     @Override
     protected void onPreExecute() {
@@ -104,19 +109,20 @@ public abstract class ListApiTask_<Params, Result> extends ApiTask_<Params, Resu
             
             Log.d(TAG, "Received " + received + " items");
             
-            final boolean needMore = (curPage < maxPages) && (receiver.getCount() < total);        
+            final boolean receivedAll = (curPage >= maxPages) || (receiver.getCount() >= total);
+            final boolean needMore = !receivedAll
+                                     && ((filter == null) || (filter.doContinue(result, receiver)));                        
             
             ListApiTask_<Params, Result> nextPageTask = null;
-            if (needMore) {
+            if (!receivedAll) {
                 nextPageTask = makeNextPageTask(++curPage, reactor, receiver);
                 nextPageTask.setPerPage(perPage);
                 nextPageTask.setMaxPages(maxPages);
+                nextPageTask.setFilter(filter);
             }
+            reactor.afterRequest(result, received, receivedAll, nextPageTask);            
             
-            if (reactor.afterRequest(result, received, needMore, nextPageTask)
-                && needMore) {
-                nextPageTask.execute(curParams);
-            }
+            if (needMore) nextPageTask.execute(curParams);
             
         } catch (Exception e) {
             onAnyError(e, "Failed to add source");
@@ -142,6 +148,20 @@ public abstract class ListApiTask_<Params, Result> extends ApiTask_<Params, Resu
     
     public void setPerPage(int perPage) {
         this.perPage = perPage; 
+    }
+    
+    public void setFilter(Judge<Result> filter) {
+        this.filter = filter;  
+    }
+    
+    public Judge<Result> getResult() {
+        return filter;
+    }
+    
+    public static class FalseFilter<Result> implements Judge<Result> {
+        public boolean doContinue(Result result, ApiPagesReceiver<Result> receiver) {
+            return false;
+        }
     }
 
 }

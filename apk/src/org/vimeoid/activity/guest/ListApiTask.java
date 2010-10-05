@@ -33,11 +33,11 @@ public class ListApiTask extends ListApiTask_<Uri, Cursor> {
     private final ContentResolver resolver;
     private final String[] projection;
     
-    protected ListApiTask(ContentResolver resolver, Reactor<Cursor> reactor, ApiPagesReceiver<Cursor> receiver, String[] projection) {
+    protected ListApiTask(ContentResolver resolver, Reactor<Uri, Cursor> reactor, ApiPagesReceiver<Cursor> receiver, String[] projection) {
         this(resolver, 1, reactor, receiver, projection);
     }
     
-    private ListApiTask(ContentResolver resolver, int curPage, Reactor<Cursor> reactor, ApiPagesReceiver<Cursor> receiver, String[] projection) {
+    private ListApiTask(ContentResolver resolver, int curPage, Reactor<Uri, Cursor> reactor, ApiPagesReceiver<Cursor> receiver, String[] projection) {
         super(curPage, reactor, receiver);
         this.resolver = resolver;
         this.projection = projection;        
@@ -53,7 +53,7 @@ public class ListApiTask extends ListApiTask_<Uri, Cursor> {
 
     @Override
     protected ListApiTask_<Uri, Cursor> makeNextPageTask(int nextPage,
-            Reactor<Cursor> reactor, ApiPagesReceiver<Cursor> receiver) {
+            Reactor<Uri, Cursor> reactor, ApiPagesReceiver<Cursor> receiver) {
         return new ListApiTask(resolver, nextPage, reactor, receiver, projection);
     }
 

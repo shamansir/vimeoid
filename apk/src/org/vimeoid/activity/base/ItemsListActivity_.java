@@ -6,6 +6,7 @@ import org.vimeoid.util.Dialogs;
 
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.os.AsyncTask.Status;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -18,8 +19,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapter> extends ListActivity {
-	
+public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapter, Params, Result> extends ListActivity {
+    
     public static final String TAG = "ItemsListActivity_";
     
     private View emptyView;    
@@ -32,9 +33,16 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
     
     private AdapterType adapter;
     
+    private ListApiTask_<Params, Result> mainTask;
+    private final Reactor<Params, Result> mainReactor;
+    private boolean needMorePages = true;
+    private Params taskParams = null;
+    
     public ItemsListActivity_(int mainView, int contextMenu) {
     	this.mainView = mainView;
     	this.contextMenu = contextMenu;
+    	
+    	mainReactor = new ListReactor();
     }
     
     public ItemsListActivity_(int contextMenu) {
@@ -66,22 +74,16 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
         this.adapter = createAdapter();
         setListAdapter(adapter);
         
+        taskParams = collectTaskParams(getIntent().getExtras());        
+        
         titleBar = findViewById(R.id.titleBar);
         initTitleBar((ImageView)titleBar.findViewById(R.id.subjectIcon),
                      (TextView)titleBar.findViewById(R.id.subjectTitle),
-                     (ImageView)titleBar.findViewById(R.id.resultIcon));
+                     (ImageView)titleBar.findViewById(R.id.resultIcon));        
         
         loadNextPage(adapter);
         
-    }
-    
-    protected abstract AdapterType createAdapter();
-    
-    protected abstract void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon);
-    
-    //protected abstract void queryMoreItems(AdapterType adapter, int pageNum);
-    
-    protected void onItemSelected(ItemType item) { }
+    }   
     
     protected String getContextMenuTitle(int position) { 
         return getString(R.string.context_menu); 
@@ -108,8 +110,12 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
         if (!isLoadMoreButton(position)) {
             Log.d(TAG, "item at position " + position + " (" + getListView().getCount() + ") with id " + id + ", view id " + v.getId() + " is clicked");
             onItemSelected(getItem(position));        
-        } else { 
-            loadNextPage(adapter);
+        } else {
+            if ((mainTask != null) && Status.RUNNING.equals(mainTask.getStatus())) {
+                Dialogs.makeLongToast(this, getString(R.string.please_do_not_touch));
+            } else {
+                loadNextPage(adapter);
+            }
         }
         
         super.onListItemClick(l, v, position, id);
@@ -128,14 +134,15 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
         
     } */
     
-    protected abstract void loadNextPage(AdapterType adapter);
+    protected void loadNextPage(AdapterType adapter) {
+        if (!needMorePages) return;
+        if (mainTask == null) {
+            mainTask = prepareListTask(mainReactor, adapter);
+            mainTask.setFilter(new ListApiTask_.FalseFilter<Result>());
+        }
         
-        /* if (!queryRunning) {
-            if (pageNum < maxPages) {
-                Log.d(TAG, "Loading next page...");
-                checkConnectionAndQueryMoreItems(adapter, ++pageNum);
-            } else Dialogs.makeToast(this, getString(R.string.no_pages_more));
-        } else Dialogs.makeToast(this, getString(R.string.please_do_not_touch)); */
+        executeTask(mainTask, taskParams);
+    }
     
     protected final boolean isLoadMoreButton(int position) {
         return (position == (getListView().getCount() - 1));
@@ -159,6 +166,17 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
     protected final ItemType getItem(int position) {
         return (ItemType)getListView().getItemAtPosition(position);
     }
+    
+    protected abstract AdapterType createAdapter();    
+    protected abstract void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon);
+    
+    protected abstract Params collectTaskParams(Bundle extras);
+    protected abstract ListApiTask_<Params, Result> prepareListTask(Reactor<Params, Result> reactor, AdapterType adapter);
+    protected abstract void executeTask(ListApiTask_<Params, Result> task, Params params); // get rid of
+    
+    protected void onItemSelected(ItemType item) { }    
+    
+    protected void whenPageReceived(Result page) { };     
     
     protected void showProgressBar() {
         progressBar.setVisibility(View.VISIBLE);
@@ -208,7 +226,7 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
         footerText.setText(R.string.load_more);        
     }
     
-    protected class ListReactor<Result> implements Reactor<Result> {
+    protected class ListReactor implements Reactor<Params, Result> {
         
         @Override public void beforeRequest() {
             setToLoadingState();
@@ -234,10 +252,15 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
         }
 
         @Override
-        public boolean afterRequest(Result result, int received,
-                boolean needMore, ApiTask_<?, Result> nextPageTask) {
+        public void afterRequest(Result result, int received, boolean receivedAll, 
+                                 ListApiTask_<Params, Result> nextPageTask) {
             
             hideProgressBar();
+            
+            whenPageReceived(result);            
+            
+            needMorePages = !receivedAll;
+            mainTask = nextPageTask;                
             
             onContentChanged();
             
@@ -246,7 +269,6 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
             if (newPos >= 0) setSelection(newPos);
             else setSelection(0);
             
-            return false;
         }
         
     }

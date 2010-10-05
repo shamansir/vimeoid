@@ -1,8 +1,8 @@
 package org.vimeoid.activity.guest;
 
 import org.vimeoid.R;
-import org.vimeoid.activity.base.ApiTask_;
 import org.vimeoid.activity.base.ItemsListActivity_;
+import org.vimeoid.activity.base.ListApiTask_;
 import org.vimeoid.activity.base.ListApiTask_.Reactor;
 import org.vimeoid.activity.guest.ListApiTask;
 import org.vimeoid.adapter.EasyCursorsAdapter;
@@ -24,7 +24,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public abstract class ItemsListActivity<ItemType extends SimpleItem> extends 
-                      ItemsListActivity_<ItemType, EasyCursorsAdapter<ItemType>> {
+                      ItemsListActivity_<ItemType, EasyCursorsAdapter<ItemType>,
+                                         Uri, Cursor> {
 	
     public static final String TAG = "ItemsListActivity";	
 
@@ -33,28 +34,9 @@ public abstract class ItemsListActivity<ItemType extends SimpleItem> extends
     protected Uri contentUri;
     protected ApiCallInfo callInfo;
     
-    private ListApiTask mainTask;
-    private final Reactor<Cursor> mainReactor;
-    private boolean needMorePages = true;
-    
     public ItemsListActivity(int mainView, String[] projection, int contextMenu) {
     	super(mainView, contextMenu);
     	this.projection = projection;
-    	
-        mainReactor = new ListReactor<Cursor>() {
-            
-            @Override public boolean afterRequest(Cursor result, int received,
-                                        boolean needMore, ApiTask_<?, Cursor> nextPageTask) {
-                
-                startManagingCursor(result);
-                
-                needMorePages = needMore;
-                mainTask = (ListApiTask)nextPageTask;                
-                
-                return super.afterRequest(result, received, needMore, nextPageTask);
-            }
-            
-        };    	
     }
     
     public ItemsListActivity(String[] projection, int contextMenu) {
@@ -62,31 +44,31 @@ public abstract class ItemsListActivity<ItemType extends SimpleItem> extends
     }
     
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected Uri collectTaskParams(Bundle extras) {
         contentUri = getIntent().getData();
-        
-        super.onCreate(savedInstanceState);
+        return contentUri;
+    }    
+
+    @Override
+    protected ListApiTask_<Uri, Cursor> prepareListTask(
+            Reactor<Uri, Cursor> reactor, EasyCursorsAdapter<ItemType> adapter) {
+        final ListApiTask listTask = new ListApiTask(getContentResolver(), reactor, adapter, projection);
+        listTask.setMaxPages(VimeoApi.MAX_NUMBER_OF_PAGES);
+        listTask.setPerPage(VimeoApi.ITEMS_PER_PAGE);        
+        return listTask;
     }
     
+    @Override
+    protected void executeTask(ListApiTask_<Uri, Cursor> task, Uri params) {
+        task.execute(params);
+    }
+
     protected void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon) {
         callInfo = VimeoProvider.collectCallInfo(contentUri);        
         
         subjectIcon.setImageResource(Utils.drawableByContent(callInfo.subjectType));
         subjectTitle.setText(getIntent().hasExtra(Invoke.Extras.SUBJ_TITLE) ? getIntent().getStringExtra(Invoke.Extras.SUBJ_TITLE) : callInfo.subject);
         resultIcon.setImageResource(getIntent().getIntExtra(Invoke.Extras.RES_ICON, R.drawable.info));
-    }
-    
-    @Override
-    protected void loadNextPage(EasyCursorsAdapter<ItemType> adapter) {
-    	if (!needMorePages) return;
-        if (mainTask == null) {
-            mainTask = new ListApiTask(getContentResolver(), mainReactor, adapter, projection);
-            mainTask.setMaxPages(VimeoApi.MAX_NUMBER_OF_PAGES);
-            mainTask.setPerPage(VimeoApi.ITEMS_PER_PAGE);
-        } 
-        
-        mainTask.execute(contentUri);
-        
     }
     
    @Override

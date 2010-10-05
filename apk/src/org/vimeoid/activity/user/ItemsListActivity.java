@@ -3,8 +3,8 @@ package org.vimeoid.activity.user;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.R;
-import org.vimeoid.activity.base.ApiTask_;
 import org.vimeoid.activity.base.ItemsListActivity_;
+import org.vimeoid.activity.base.ListApiTask_;
 import org.vimeoid.activity.base.ListApiTask_.Reactor;
 import org.vimeoid.adapter.JsonObjectsAdapter;
 import org.vimeoid.util.AdvancedItem;
@@ -21,20 +21,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends 
-                      ItemsListActivity_<ItemType, JsonObjectsAdapter<ItemType>> {
+                      ItemsListActivity_<ItemType, JsonObjectsAdapter<ItemType>,
+                                         ApiParams, JSONObject> {
 	
     public static final String TAG = "ItemsListActivity";
     
     private String apiMethod;
     private ApiParams params;
     
-    private ListApiTask mainTask = null;
-    private boolean needMorePages = true;
-    
     protected final ApiTasksQueue secondaryTasks;
     
-    private final Reactor<JSONObject> mainReactor;
-
     public ItemsListActivity(int mainView, int contextMenu) {
     	super(mainView, contextMenu);
     	
@@ -48,23 +44,6 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
                 Dialogs.makeExceptionToast(ItemsListActivity.this, message, e);
             }
         };
-        
-        mainReactor = new ListReactor<JSONObject>() {
-            
-            @Override
-            public boolean afterRequest(JSONObject result, int received,
-                    boolean needMore, ApiTask_<?, JSONObject> nextPageTask) {
-                
-                onContentChanged();
-                
-                needMorePages = needMore;
-                mainTask = (ListApiTask)nextPageTask;                
-                
-                return super.afterRequest(result, received, needMore, nextPageTask);
-
-            }
-            
-        };
     }
     
     public ItemsListActivity(int contextMenu) {
@@ -72,11 +51,29 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     }
     
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        apiMethod = getIntent().getStringExtra(Invoke.Extras.API_METHOD);
-        params = ApiParams.fromBundle(getIntent().getBundleExtra(Invoke.Extras.API_PARAMS));        
-        
-        super.onCreate(savedInstanceState);
+    protected ApiParams collectTaskParams(Bundle extras) {
+        apiMethod = extras.getString(Invoke.Extras.API_METHOD);
+        params = ApiParams.fromBundle(extras.getBundle(Invoke.Extras.API_PARAMS));        
+
+        return params;
+    }
+    
+    /* (non-Javadoc)
+     * @see org.vimeoid.activity.base.ItemsListActivity_#executeTask(org.vimeoid.activity.base.ListApiTask_, java.lang.Object)
+     */
+    @Override
+    protected void executeTask(ListApiTask_<ApiParams, JSONObject> task, ApiParams params) {
+        task.execute(params);
+    }
+    
+    @Override
+    protected ListApiTask_<ApiParams, JSONObject> prepareListTask(
+            Reactor<ApiParams, JSONObject> reactor,
+            JsonObjectsAdapter<ItemType> adapter) {
+        final ListApiTask listTask = new ListApiTask(reactor, adapter, apiMethod);
+        listTask.setMaxPages(10);
+        listTask.setPerPage(20);
+        return listTask;
     }
     
     protected void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon) {
@@ -87,17 +84,6 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
         resultIcon.setImageResource(getIntent().getIntExtra(Invoke.Extras.RES_ICON, R.drawable.info));
     }
     
-    @Override
-    protected final void loadNextPage(JsonObjectsAdapter<ItemType> adapter) {
-    	if (!needMorePages) return;
-        if (mainTask == null) {
-            mainTask = new ListApiTask(mainReactor, adapter, apiMethod);
-            mainTask.setMaxPages(10);
-            mainTask.setPerPage(20);
-        }
-        mainTask.execute(params);
-    }
-        
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater(); //from activity

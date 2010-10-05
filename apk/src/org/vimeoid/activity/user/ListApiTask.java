@@ -30,11 +30,11 @@ public class ListApiTask extends ListApiTask_<ApiParams, JSONObject> {
     
     private final String apiMethod;
         
-    public ListApiTask(Reactor<JSONObject> reactor, ApiPagesReceiver<JSONObject> receiver, String apiMethod) {
+    public ListApiTask(Reactor<ApiParams, JSONObject> reactor, ApiPagesReceiver<JSONObject> receiver, String apiMethod) {
         this(1, reactor, receiver, apiMethod);
     }
     
-    private ListApiTask(int curPage, Reactor<JSONObject> reactor, ApiPagesReceiver<JSONObject> receiver, String apiMethod) {
+    private ListApiTask(int curPage, Reactor<ApiParams, JSONObject> reactor, ApiPagesReceiver<JSONObject> receiver, String apiMethod) {
         super(curPage, reactor, receiver);
         this.apiMethod = apiMethod;
     }
@@ -47,7 +47,7 @@ public class ListApiTask extends ListApiTask_<ApiParams, JSONObject> {
     
     @Override
     protected ListApiTask_<ApiParams, JSONObject> makeNextPageTask(int nextPage,
-                         Reactor<JSONObject> reactor, ApiPagesReceiver<JSONObject> receiver) {
+                         Reactor<ApiParams, JSONObject> reactor, ApiPagesReceiver<JSONObject> receiver) {
         return new ListApiTask(nextPage, reactor, receiver, apiMethod);
     }
 
