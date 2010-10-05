@@ -133,4 +133,6 @@ public abstract class EasyCursorsAdapter<ItemType extends SimpleItem>
         return itemsCount == 0;
     }
 
+    @Override public void onComplete() { }    
+    
 }

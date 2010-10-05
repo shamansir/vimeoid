@@ -31,10 +31,12 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     
     protected final ApiTasksQueue secondaryTasks;
     
+    private boolean secondaryTasksStarted = false;
+    
     public ItemsListActivity(int mainView, int contextMenu) {
     	super(mainView, contextMenu);
     	
-    	secondaryTasks = new ApiTasksQueue() {            
+    	secondaryTasks = new ApiTasksQueue() {
             @Override public void onPerfomed(int taskId, JSONObject result) throws JSONException {
                 onSecondaryTaskPerfomed(taskId, result);
             }
@@ -58,9 +60,6 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
         return params;
     }
     
-    /* (non-Javadoc)
-     * @see org.vimeoid.activity.base.ItemsListActivity_#executeTask(org.vimeoid.activity.base.ListApiTask_, java.lang.Object)
-     */
     @Override
     protected void executeTask(ListApiTask_<ApiParams, JSONObject> task, ApiParams params) {
         task.execute(params);
@@ -70,7 +69,7 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     protected ListApiTask_<ApiParams, JSONObject> prepareListTask(
             Reactor<ApiParams, JSONObject> reactor,
             JsonObjectsAdapter<ItemType> adapter) {
-        final ListApiTask listTask = new ListApiTask(reactor, adapter, apiMethod);
+        final ListApiTask listTask = new ListApiTask(apiMethod, reactor, adapter);
         listTask.setMaxPages(10);
         listTask.setPerPage(20);
         return listTask;
@@ -85,13 +84,21 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     }
     
     @Override
+    protected void whenPageReceived(JSONObject page) {
+        if (!secondaryTasksStarted) {
+            secondaryTasksStarted = true;
+            secondaryTasks.run();
+        }
+    }
+    
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater(); //from activity
         inflater.inflate(R.menu.user_options_menu, menu); 
         
         return true;
     }
-   
+       
     public void onSecondaryTaskPerfomed(int id, JSONObject result)  throws JSONException { }  
    
     @Override

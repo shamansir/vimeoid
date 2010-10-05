@@ -5,6 +5,8 @@ package org.vimeoid.activity.user;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.vimeoid.activity.base.ApiPagesReceiver;
+import org.vimeoid.activity.base.ListApiTask_.Judge;
 import org.vimeoid.util.ApiParams;
 
 /**
@@ -23,11 +25,14 @@ import org.vimeoid.util.ApiParams;
  */
 public interface SuccessiveApiTasksSupport {
 
-    public void add(int taskId, String apiMethod, ApiParams params);
+    public ApiTask add(int taskId, String apiMethod, ApiParams params);
+    public ListApiTask addListTask(int taskId, String apiMethod, ApiParams params, ApiPagesReceiver<JSONObject> receiver);
+    public ListApiTask addListTask(int taskId, String apiMethod, ApiParams params, ApiPagesReceiver<JSONObject> receiver, Judge<JSONObject> filter);
+    
     public void onPerfomed(int taskId, JSONObject result) throws JSONException;    
     public void run(); // means run first task
     public void finish(); // means all tasks done    
-    public void execute(ApiTaskInQueue nextTask);
+    public void execute(IApiTaskWithNextTask nextTask);
     public void onError(Exception e, String message);
     
 }

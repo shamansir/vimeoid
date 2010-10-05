@@ -78,10 +78,11 @@ public abstract class JsonObjectsAdapter<ItemType extends AdvancedItem> extends 
 
     protected abstract ItemType[] extractItems(JSONObject jsonObject) throws JSONException;
     
-    
     @Override
     public boolean isEmpty() {
         return items.isEmpty();
-    }    
+    }
+
+    @Override public void onComplete() { }    
 
 }

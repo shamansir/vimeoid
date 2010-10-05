@@ -77,7 +77,7 @@ public class UserActivity extends SingleItemActivity<User> {
     @Override
     protected SectionedActionsAdapter fillWithActions(SectionedActionsAdapter actionsAdapter, final User user) {
         
-        // TODO: add "subscribe" and "add contact" if it is not current user
+        // TODO: add "subscribe" and "add contact" if it is not current user, using extras
         // mark if already subscribed or friends 
         final long currentUserId = VimeoApi.getUserLoginData(this).id;
         if (currentUserId != user.id) {

@@ -3,6 +3,7 @@
  */
 package org.vimeoid.activity.base;
 
+import org.json.JSONException;
 import org.vimeoid.util.PagingData_;
 
 /**
@@ -22,7 +23,8 @@ import org.vimeoid.util.PagingData_;
 public interface ApiPagesReceiver<PageObject> {
     
     public void addSource(PageObject object) throws Exception;
-    public PagingData_ getCurrentPagingData(PageObject lastPage);
+    public PagingData_ getCurrentPagingData(PageObject lastPage) throws JSONException;
     public int getCount();
+    public void onComplete();
 
 }

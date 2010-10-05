@@ -29,12 +29,18 @@ public class ListApiTask extends ListApiTask_<ApiParams, JSONObject> {
     //private static final String TAG = "ListApiTask";
     
     private final String apiMethod;
-        
-    public ListApiTask(Reactor<ApiParams, JSONObject> reactor, ApiPagesReceiver<JSONObject> receiver, String apiMethod) {
-        this(1, reactor, receiver, apiMethod);
+
+    public ListApiTask(String apiMethod, ApiPagesReceiver<JSONObject> receiver) {
+        super(receiver);
+        this.apiMethod = apiMethod;
     }
     
-    private ListApiTask(int curPage, Reactor<ApiParams, JSONObject> reactor, ApiPagesReceiver<JSONObject> receiver, String apiMethod) {
+    public ListApiTask(String apiMethod, Reactor<ApiParams, JSONObject> reactor, ApiPagesReceiver<JSONObject> receiver) {
+        super(reactor, receiver);
+        this.apiMethod = apiMethod;
+    }
+    
+    private ListApiTask(int curPage, String apiMethod, Reactor<ApiParams, JSONObject> reactor, ApiPagesReceiver<JSONObject> receiver) {
         super(curPage, reactor, receiver);
         this.apiMethod = apiMethod;
     }
@@ -48,7 +54,7 @@ public class ListApiTask extends ListApiTask_<ApiParams, JSONObject> {
     @Override
     protected ListApiTask_<ApiParams, JSONObject> makeNextPageTask(int nextPage,
                          Reactor<ApiParams, JSONObject> reactor, ApiPagesReceiver<JSONObject> receiver) {
-        return new ListApiTask(nextPage, reactor, receiver, apiMethod);
+        return new ListApiTask(nextPage, apiMethod, reactor, receiver);
     }
 
     @Override

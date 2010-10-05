@@ -174,9 +174,10 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
     protected abstract ListApiTask_<Params, Result> prepareListTask(Reactor<Params, Result> reactor, AdapterType adapter);
     protected abstract void executeTask(ListApiTask_<Params, Result> task, Params params); // get rid of
     
-    protected void onItemSelected(ItemType item) { }    
+    protected void onItemSelected(ItemType item) { };    
+    protected void whenPageReceived(Result page) { };
+    protected void onListTaskComplete() { };
     
-    protected void whenPageReceived(Result page) { };     
     
     protected void showProgressBar() {
         progressBar.setVisibility(View.VISIBLE);
@@ -229,18 +230,22 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
     protected class ListReactor implements Reactor<Params, Result> {
         
         @Override public void beforeRequest() {
+            Log.d(TAG + " reactor", "before request");
             setToLoadingState();
         }
 
         @Override public void onNextPageExists() {
+            Log.d(TAG + " reactor", "next page exists");
             setToTheresMoreItems();                    
         }
 
         @Override public void onNoItems() {
+            Log.d(TAG + " reactor", "no items in list");
             setToNoItemsInList();
         }
 
         @Override public void onNoMoreItems() {
+            Log.d(TAG + " reactor", "no items mpore");
             setToNoItemsMore();
         }
 
@@ -255,6 +260,8 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
         public void afterRequest(Result result, int received, boolean receivedAll, 
                                  ListApiTask_<Params, Result> nextPageTask) {
             
+            Log.d(TAG + " reactor", "received " + received + "; received all : " + receivedAll);            
+            
             hideProgressBar();
             
             whenPageReceived(result);            
@@ -268,6 +275,8 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
             final int newPos = getListView().getCount() - received - 2; // - 'load more' and one position before
             if (newPos >= 0) setSelection(newPos);
             else setSelection(0);
+            
+            if (receivedAll) onListTaskComplete();
             
         }
         

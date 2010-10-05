@@ -5,6 +5,7 @@ package org.vimeoid.activity.user;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.vimeoid.activity.base.ApiPagesReceiver;
 
 /**
  * <dl>
@@ -20,14 +21,14 @@ import org.json.JSONObject;
  * @date Oct 1, 2010 9:25:33 PM 
  *
  */
-public class ApiTaskInQueue extends ApiTask implements IApiTaskWithNextTask {
+public class ListApiTaskInQueue extends ListApiTask implements IApiTaskWithNextTask {
 
     private final int taskId;
     private IApiTaskWithNextTask nextTask = null;
     private final SuccessiveApiTasksSupport performer;
     
-    public ApiTaskInQueue(SuccessiveApiTasksSupport performer, int taskId, String apiMethod) {
-        super(apiMethod);
+    public ListApiTaskInQueue(SuccessiveApiTasksSupport performer, int taskId, String apiMethod, ApiPagesReceiver<JSONObject> receiver) {
+        super(apiMethod, receiver);
         this.taskId = taskId;
         this.performer = performer;
     }
@@ -40,8 +41,13 @@ public class ApiTaskInQueue extends ApiTask implements IApiTaskWithNextTask {
     }
     
     @Override
-    public void onAnswerReceived(JSONObject jsonObj) throws JSONException {
-        performer.onPerfomed(taskId, jsonObj);
+    public void onAnswerReceived(JSONObject jsonObj) {
+        super.onAnswerReceived(jsonObj);
+        try {
+            performer.onPerfomed(taskId, jsonObj);
+        } catch (JSONException jsone) {
+            onException(getParams(), jsone);
+        }
     }
     
     public int getId() { return taskId; }
@@ -52,6 +58,7 @@ public class ApiTaskInQueue extends ApiTask implements IApiTaskWithNextTask {
     }
 
     @Override protected void onAnyError(Exception e, String message) {
+        super.onAnyError(e, message);
         performer.onError(e, message);
     }    
     

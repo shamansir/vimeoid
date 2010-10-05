@@ -8,6 +8,8 @@ import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.vimeoid.activity.base.ApiPagesReceiver;
+import org.vimeoid.activity.base.ListApiTask_.Judge;
 import org.vimeoid.util.ApiParams;
 
 import android.util.Log;
@@ -30,25 +32,43 @@ public abstract class ApiTasksQueue implements SuccessiveApiTasksSupport {
 	
 	public static final String TAG = "ApiTasksQueue";   
 
-    private ApiTaskInQueue firstTask = null;
-    private ApiTaskInQueue lastTask = null;
+    private IApiTaskWithNextTask firstTask = null;
+    private IApiTaskWithNextTask lastTask = null;
     private Map<Integer, ApiParams> tasksParams = null;
     private int currentTask = -1;
     private boolean running = false;
     
     @Override
-    public void add(int taskId, String apiMethod, ApiParams params) {
+    public ApiTask add(int taskId, String apiMethod, ApiParams params) {
     	Log.d(TAG, "Adding task " + taskId + " " + apiMethod + " : " + params);
-        final ApiTaskInQueue newTask = new ApiTaskInQueue(this, taskId, apiMethod); 
+        return (ApiTask)addTask(new ApiTaskInQueue(this, taskId, apiMethod), params); 
+    }
+    
+    public ListApiTask addListTask(int taskId, String apiMethod, ApiParams params, ApiPagesReceiver<JSONObject> receiver) {
+        return addListTask(taskId, apiMethod, params, receiver, null);        
+    }
+    
+    public ListApiTask addListTask(int taskId, String apiMethod, ApiParams params, ApiPagesReceiver<JSONObject> receiver, Judge<JSONObject> filter) {
+        Log.d(TAG, "Adding list task " + taskId + " " + apiMethod + " : " + params);
+        final ListApiTaskInQueue newTask = new ListApiTaskInQueue(this, taskId, apiMethod, receiver);
+        newTask.setMaxPages(5);
+        newTask.setPerPage(25);
+        newTask.setFilter(filter);
+        addTask(newTask, params);
+        return newTask;
+    }    
+    
+    private IApiTaskWithNextTask addTask(IApiTaskWithNextTask task, ApiParams params) {
         if (isEmpty()) {
-            firstTask = newTask;
-            lastTask = newTask;
+            firstTask = task;
+            lastTask = task;
             tasksParams = new HashMap<Integer, ApiParams>();
         } else {
-            lastTask.setNextTask(newTask);
-            lastTask = newTask;
+            lastTask.setNextTask(task);
+            lastTask = task;
         }
-        tasksParams.put(taskId, params);
+        tasksParams.put(task.getId(), params);
+        return task;
     }
 
     @Override
@@ -66,7 +86,7 @@ public abstract class ApiTasksQueue implements SuccessiveApiTasksSupport {
     }
     
     @Override
-    public void execute(ApiTaskInQueue task) {
+    public void execute(IApiTaskWithNextTask task) {
     	Log.d(TAG, "Trying to run task " + task.getId());
         if (running) throw new IllegalStateException("Tasks queue desynchronized");
         currentTask = task.getId();

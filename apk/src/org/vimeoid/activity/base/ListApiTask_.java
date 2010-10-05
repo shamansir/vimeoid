@@ -51,6 +51,10 @@ public abstract class ListApiTask_<Params, Result> extends ApiTask_<Params, Resu
     
     private Params curParams;
     
+    protected ListApiTask_(ApiPagesReceiver<Result> receiver) {
+        this(null, receiver);
+    }
+    
     protected ListApiTask_(Reactor<Params, Result> reactor, ApiPagesReceiver<Result> receiver) {
         this.reactor = reactor;
         this.receiver = receiver;
@@ -72,7 +76,7 @@ public abstract class ListApiTask_<Params, Result> extends ApiTask_<Params, Resu
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        reactor.beforeRequest();
+        if (reactor != null) reactor.beforeRequest();
     }
     
     protected final Params prepareParams(Params... params) {
@@ -84,7 +88,7 @@ public abstract class ListApiTask_<Params, Result> extends ApiTask_<Params, Resu
     
     @SuppressWarnings("unchecked")
     @Override
-    public void onAnswerReceived(Result result) throws Exception {
+    public void onAnswerReceived(Result result) {
         
         try {
             receiver.addSource(result);
@@ -94,24 +98,28 @@ public abstract class ListApiTask_<Params, Result> extends ApiTask_<Params, Resu
             final int received = pd.onThisPage;
             final int total = (pd.total != -1) ? pd.total : (perPage * maxPages);
             
-            if ((received == 0) && (curPage == 1)) {
-                // no items in list at all
-                reactor.onNoItems();      
-            } else if ((received < perPage) ||
-                       (curPage == maxPages) ||
-                       ((total != -1) && (((perPage * (curPage - 1)) + received) == total))) {
-                // no items more
-                reactor.onNoMoreItems();
-            } else {
-                // enable 'load more' button
-                reactor.onNextPageExists();
+            if (reactor != null) {
+                if ((received == 0) && (curPage == 1)) {
+                    // no items in list at all
+                    reactor.onNoItems();      
+                } else if ((received < perPage) ||
+                           (curPage == maxPages) ||
+                           ((total != -1) && (((perPage * (curPage - 1)) + received) == total))) {
+                    // no items more
+                    reactor.onNoMoreItems();
+                } else {
+                    // enable 'load more' button
+                    reactor.onNextPageExists();
+                }
             }
             
             Log.d(TAG, "Received " + received + " items");
             
             final boolean receivedAll = (curPage >= maxPages) || (receiver.getCount() >= total);
             final boolean needMore = !receivedAll
-                                     && ((filter == null) || (filter.doContinue(result, receiver)));                        
+                                     && ((filter == null) || (filter.doContinue(result, receiver)));
+            
+            if (receivedAll) receiver.onComplete();
             
             ListApiTask_<Params, Result> nextPageTask = null;
             if (!receivedAll) {
@@ -120,7 +128,7 @@ public abstract class ListApiTask_<Params, Result> extends ApiTask_<Params, Resu
                 nextPageTask.setMaxPages(maxPages);
                 nextPageTask.setFilter(filter);
             }
-            reactor.afterRequest(result, received, receivedAll, nextPageTask);            
+            if (reactor != null) reactor.afterRequest(result, received, receivedAll, nextPageTask);            
             
             if (needMore) nextPageTask.execute(curParams);
             
@@ -154,8 +162,12 @@ public abstract class ListApiTask_<Params, Result> extends ApiTask_<Params, Resu
         this.filter = filter;  
     }
     
-    public Judge<Result> getResult() {
+    public Judge<Result> getFilter() {
         return filter;
+    }
+    
+    public Params getParams() {
+        return curParams;
     }
     
     public static class FalseFilter<Result> implements Judge<Result> {

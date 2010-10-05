@@ -71,6 +71,12 @@ public abstract class ItemsListActivity<ItemType extends SimpleItem> extends
         resultIcon.setImageResource(getIntent().getIntExtra(Invoke.Extras.RES_ICON, R.drawable.info));
     }
     
+    /* 
+    @Override
+    protected void whenPageReceived(Cursor page) {
+        startManagingCursor(page);
+    } */
+    
    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater(); //from activity

@@ -25,6 +25,8 @@ import org.vimeoid.util.Utils;
  */
 public class Video implements AdvancedItem {
     
+    public static enum SortType { NEWEST, OLDEST, MOST_PLAYED, MOST_COMMENTED, MOST_LIKED }; 
+    
     public static enum Privacy { 
     	
     	ANYBODY, CONTACTS; 
@@ -142,8 +144,18 @@ public class Video implements AdvancedItem {
     
     public static Video collectFromJson(JSONObject jsonObj) throws JSONException {
         return extractFromJson(jsonObj.getJSONArray(FieldsKeys.SINGLE_KEY).getJSONObject(0));
-    }    
+    }
+    
+    public static String[] extractIdsList(JSONObject page) throws JSONException {
+        final JSONArray dataArray = page.getJSONObject(FieldsKeys.MULTIPLE_KEY)
+                                        .getJSONArray(FieldsKeys.SINGLE_KEY);
+        final String[] ids = new String[dataArray.length()];
+        for (int i = 0; i < dataArray.length(); i++) {
+            ids[i] = dataArray.getJSONObject(i).getString(FieldsKeys.ID);
+        }
+        return ids;    
+    }
     
     public long getId() { return id; }
-    
+
 }
