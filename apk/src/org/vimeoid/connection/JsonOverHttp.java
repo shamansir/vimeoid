@@ -212,7 +212,7 @@ public class JsonOverHttp {
         Log.d(TAG, "executing Uri " + uri + " : " + params.toString() + " with OAuth");
         HttpPost post = new HttpPost(uri);
         
-        post.setEntity(new UrlEncodedFormEntity(params.getValue(), HTTP.UTF_8));
+        post.setEntity(new UrlEncodedFormEntity(params.toList(), HTTP.UTF_8));
         post.getParams().setBooleanParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false);
         
         Log.d(TAG, "Signing consumer");

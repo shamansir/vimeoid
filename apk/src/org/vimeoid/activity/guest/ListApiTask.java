@@ -65,7 +65,6 @@ public class ListApiTask extends ListApiTask_<Uri, Cursor> {
     
     @Override
     protected void onPostExecute(Cursor cursor) {
-            
         if (cursor != null) {
             try {                
                 cursor.moveToFirst();
@@ -84,6 +83,11 @@ public class ListApiTask extends ListApiTask_<Uri, Cursor> {
     protected void onNullReturned() {
         Log.e(TAG, "Failed to receive next page");
         onAnyError(null, "Failed to receive next page");
+    }
+
+    @Override
+    protected void executeTask(ListApiTask_<Uri, Cursor> task, Uri params) {
+        task.execute(params);
     }    
     
 }

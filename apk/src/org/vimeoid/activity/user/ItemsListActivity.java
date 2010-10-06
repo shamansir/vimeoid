@@ -31,13 +31,14 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     
     protected final ApiTasksQueue secondaryTasks;
     
-    private boolean secondaryTasksStarted = false;
+    private boolean ranSecondaryTasks = false;
     
     public ItemsListActivity(int mainView, int contextMenu) {
     	super(mainView, contextMenu);
     	
     	secondaryTasks = new ApiTasksQueue() {
             @Override public void onPerfomed(int taskId, JSONObject result) throws JSONException {
+                super.onPerfomed(taskId, result);
                 onSecondaryTaskPerfomed(taskId, result);
             }
 
@@ -85,8 +86,8 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     
     @Override
     protected void whenPageReceived(JSONObject page) {
-        if (!secondaryTasksStarted) {
-            secondaryTasksStarted = true;
+        if (!ranSecondaryTasks) {
+            ranSecondaryTasks = true;
             secondaryTasks.run();
         }
     }

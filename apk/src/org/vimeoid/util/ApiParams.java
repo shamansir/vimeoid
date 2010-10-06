@@ -3,8 +3,10 @@
  */
 package org.vimeoid.util;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -30,7 +32,7 @@ public class ApiParams {
     public static final String BUNDLE_NAMES_ARR = "ap__names";
     public static final String BUNDLE_VALUES_ARR = "ap__values";
     
-    private final List<NameValuePair> params = new LinkedList<NameValuePair>();
+    private final BlockingQueue<NameValuePair> params = new LinkedBlockingQueue<NameValuePair>();
     
     public ApiParams() { }
     
@@ -42,8 +44,17 @@ public class ApiParams {
         return this;
     }
     
-    public List<NameValuePair> getValue() {
-        return params;
+    public ApiParams add(ApiParams toAppend) {
+        for (NameValuePair pair: toAppend.params) {
+            add(pair.getName(), pair.getValue());
+        }
+        return this;
+    }
+    
+    public List<NameValuePair> toList() {
+        final List<NameValuePair> result = new ArrayList<NameValuePair>();
+        for (NameValuePair pair: params) result.add(pair);
+        return result;
     }
 
     public boolean isEmpty() {

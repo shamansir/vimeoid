@@ -47,8 +47,8 @@ public class ListApiTask extends ListApiTask_<ApiParams, JSONObject> {
     
     @Override
     protected ApiParams paramsForPage(ApiParams curParams, int pageNum, int perPage) {
-        return curParams.add("page", String.valueOf(pageNum))
-                        .add("per_page", String.valueOf(perPage));
+        return new ApiParams().add(curParams).add("page", String.valueOf(pageNum))
+                                             .add("per_page", String.valueOf(perPage));
     }
     
     @Override
@@ -100,7 +100,13 @@ public class ListApiTask extends ListApiTask_<ApiParams, JSONObject> {
 
     protected void onNullReturned() {
         onAnyError(null, "Failed to parse answer");
-    }    
+    }
+
+    @Override
+    protected void executeTask(ListApiTask_<ApiParams, JSONObject> task,
+            ApiParams params) {
+        task.execute(params);
+    }
     
 //  receiver.addSource(jsonObj);
 //  PagingData pd = receiver.getLastPagingData();    

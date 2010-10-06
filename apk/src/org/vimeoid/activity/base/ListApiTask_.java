@@ -86,7 +86,6 @@ public abstract class ListApiTask_<Params, Result> extends ApiTask_<Params, Resu
     
     protected abstract Params paramsForPage(Params curParams, int pageNum, int perPage);
     
-    @SuppressWarnings("unchecked")
     @Override
     public void onAnswerReceived(Result result) {
         
@@ -113,11 +112,14 @@ public abstract class ListApiTask_<Params, Result> extends ApiTask_<Params, Resu
                 }
             }
             
-            Log.d(TAG, "Received " + received + " items");
+            Log.d(TAG, "Received " + received + " items. Total " + total);
             
             final boolean receivedAll = (curPage >= maxPages) || (receiver.getCount() >= total);
             final boolean needMore = !receivedAll
                                      && ((filter == null) || (filter.doContinue(result, receiver)));
+            
+            Log.d(TAG, "Cur page " + curPage + ". Max pages: " + maxPages);
+            Log.d(TAG, "Need more: " + needMore + ". Received all: " + receivedAll);
             
             if (receivedAll) receiver.onComplete();
             
@@ -130,7 +132,7 @@ public abstract class ListApiTask_<Params, Result> extends ApiTask_<Params, Resu
             }
             if (reactor != null) reactor.afterRequest(result, received, receivedAll, nextPageTask);            
             
-            if (needMore) nextPageTask.execute(curParams);
+            if (needMore) executeTask(nextPageTask, curParams);
             
         } catch (Exception e) {
             onAnyError(e, "Failed to add source");
@@ -144,10 +146,12 @@ public abstract class ListApiTask_<Params, Result> extends ApiTask_<Params, Resu
         
     }
     
+    protected abstract void executeTask(ListApiTask_<Params, Result> task, Params params);
+    
     @Override
     protected void onAnyError(Exception e, String message) {
-        Log.e(TAG, message + " / " + e.getLocalizedMessage());
-        reactor.onError(e, message);
+        Log.e(TAG, message + " / " + ((e != null) ? e.getLocalizedMessage() : "?"));
+        if (reactor != null) reactor.onError(e, message);
     }
     
     public void setMaxPages(int maxPages) {

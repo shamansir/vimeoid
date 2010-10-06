@@ -88,7 +88,7 @@ public class VideosActivity extends ItemsListActivity<Video> {
         public void addSource(JSONObject page) throws Exception {
             final String[] videosIdsArr = Video.extractIdsList(page); 
             for (String videoId: videosIdsArr) {
-                Log.d("ADDING", videoId + " as w/l or like");
+                //Log.d("ADDING", videoId + " as w/l or like");
                 videosIds.add(videoId);
             }
         }
