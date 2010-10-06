@@ -146,7 +146,7 @@ public abstract class ListApiTask_<Params, Result> extends ApiTask_<Params, Resu
         
     }
     
-    protected abstract void executeTask(ListApiTask_<Params, Result> task, Params params);
+    protected abstract void executeTask(ListApiTask_<Params, Result> task, Params params) throws Exception;
     
     @Override
     protected void onAnyError(Exception e, String message) {

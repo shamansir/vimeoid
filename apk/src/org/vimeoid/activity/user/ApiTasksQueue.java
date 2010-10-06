@@ -74,7 +74,12 @@ public abstract class ApiTasksQueue implements SuccessiveApiTasksSupport {
     @Override
     public void run() {
     	Log.d(TAG, "Running first task");
-        if (!isEmpty()) execute(firstTask);
+        if (!isEmpty())
+            try {
+                execute(firstTask);
+            } catch (Exception e) {
+                onError(e, e.getLocalizedMessage());
+            }
         else throw new IllegalStateException("Queue is already running");
     }
     
@@ -86,13 +91,13 @@ public abstract class ApiTasksQueue implements SuccessiveApiTasksSupport {
     }
     
     @Override
-    public void execute(IApiTaskWithNextTask task) {
+    public void execute(IApiTaskWithNextTask task) throws Exception {
     	Log.d(TAG, "Trying to run task " + task.getId());
         if (running) throw new IllegalStateException("Tasks queue desynchronized");
         currentTask = task.getId();
         running = true;
         Log.d(TAG, "Running task " + task.getId() + " with params " + tasksParams.get(task.getId()));
-        task.execute(tasksParams.get(task.getId()));
+        task.execute(tasksParams.get(task.getId())).get();
     }
     
     public void finish() {

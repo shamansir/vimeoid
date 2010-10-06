@@ -104,7 +104,7 @@ public class ListApiTask extends ListApiTask_<ApiParams, JSONObject> {
 
     @Override
     protected void executeTask(ListApiTask_<ApiParams, JSONObject> task,
-            ApiParams params) {
+            ApiParams params) throws Exception {
         task.execute(params);
     }
     

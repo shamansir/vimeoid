@@ -32,7 +32,7 @@ public interface SuccessiveApiTasksSupport {
     public void onPerfomed(int taskId, JSONObject result) throws JSONException;    
     public void run(); // means run first task
     public void finish(); // means all tasks done    
-    public void execute(IApiTaskWithNextTask nextTask);
+    public void execute(IApiTaskWithNextTask nextTask) throws Exception;
     public void onError(Exception e, String message);
     
 }

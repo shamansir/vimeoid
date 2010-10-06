@@ -6,6 +6,8 @@ package org.vimeoid.activity.user;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.activity.base.ApiPagesReceiver;
+import org.vimeoid.activity.base.ListApiTask_;
+import org.vimeoid.util.ApiParams;
 
 /**
  * <dl>
@@ -36,7 +38,12 @@ public class ListApiTaskInQueue extends ListApiTask implements IApiTaskWithNextT
     @Override
     protected void onPostExecute(JSONObject jsonObj) {
         super.onPostExecute(jsonObj);            
-        if (nextTask != null) performer.execute(nextTask);
+        if (nextTask != null)
+            try {
+                performer.execute(nextTask);
+            } catch (Exception e) {
+                onAnyError(e, "Error while executing task " + nextTask.getId());
+            }
         else performer.finish();
     }
     
@@ -56,6 +63,12 @@ public class ListApiTaskInQueue extends ListApiTask implements IApiTaskWithNextT
         if (this.nextTask != null) throw new IllegalStateException("Next task is already set");
         this.nextTask = nextTask;
     }
+    
+    @Override
+    protected void executeTask(ListApiTask_<ApiParams, JSONObject> task,
+            ApiParams params) throws Exception {
+        task.execute(params).get();
+    }    
 
     @Override protected void onAnyError(Exception e, String message) {
         super.onAnyError(e, message);

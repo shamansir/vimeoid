@@ -35,7 +35,12 @@ public class ApiTaskInQueue extends ApiTask implements IApiTaskWithNextTask {
     @Override
     protected void onPostExecute(JSONObject jsonObj) {
         super.onPostExecute(jsonObj);            
-        if (nextTask != null) performer.execute(nextTask);
+        if (nextTask != null)
+            try {
+                performer.execute(nextTask);
+            } catch (Exception e) {
+                onAnyError(e, "Error while executing task " + nextTask.getId());
+            }
         else performer.finish();
     }
     
