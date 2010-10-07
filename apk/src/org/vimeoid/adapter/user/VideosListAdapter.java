@@ -92,6 +92,7 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> {
         
         if (video.isLike) convertView.setBackgroundResource(R.drawable.liked_bg_gradient);
         else if (video.isWatchLater) convertView.setBackgroundResource(R.drawable.watchlater_bg_gradient);
+        else convertView.setBackgroundResource(0);
         
         return convertView;
     }
