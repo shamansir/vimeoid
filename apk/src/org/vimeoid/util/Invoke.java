@@ -10,6 +10,7 @@ import org.vimeoid.activity.user.item.VideoActivity;
 import org.vimeoid.activity.user.list.VideosActivity;
 import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.connection.simple.VimeoProvider;
+import org.vimeoid.dto.advanced.Video;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -38,6 +39,7 @@ public final class Invoke {
         
         public static final String API_METHOD = "v_apimethod";
         public static final String API_PARAMS = "v_apiparams";
+        public static final String API_SORT_TYPE = "v_sorttype";
     
         public static final String SUBJ_ICON = "v_subjicon";
         public static final String SUBJ_TITLE = "v_subjtitle";
@@ -234,6 +236,7 @@ public final class Invoke {
                                      .putExtra(Extras.API_PARAMS, new ApiParams().add("user_id", String.valueOf(user.id))
                                                                                  .add("full_response", "1")
                                                                                  .toBundle())
+                                     .putExtra(Extras.API_SORT_TYPE, Video.SortType.NEWEST)                                                                                 
                                      .putExtra(Extras.USER_ID, user.id)
                                      //.putExtra(Extras.USERNAME, user.username)
                                      .putExtra(Extras.SUBJ_ICON, R.drawable.contact)

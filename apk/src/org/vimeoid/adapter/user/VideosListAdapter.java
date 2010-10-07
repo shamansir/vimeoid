@@ -3,6 +3,9 @@
  */
 package org.vimeoid.adapter.user;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.R;
@@ -87,6 +90,9 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> {
         itemHolder.tvPlays.setText(String.valueOf(video.playsCount));
         itemHolder.tvComments.setText(String.valueOf(video.commentsCount));
         
+        if (video.isLike) convertView.setBackgroundResource(R.drawable.liked_bg_gradient);
+        else if (video.isWatchLater) convertView.setBackgroundResource(R.drawable.watchlater_bg_gradient);
+        
         return convertView;
     }
     
@@ -127,6 +133,22 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> {
     @Override
     protected Video[] extractItems(JSONObject jsonObject) throws JSONException {
         return Video.collectListFromJson(jsonObject);
+    }
+
+    public void updateLikes(Set<Long> videosIds) {
+        final Set<Long> videosList = new HashSet<Long>();
+        videosList.add(Long.valueOf(15166258));
+        for (Video video: getItems()) {
+            if (videosList.contains(video.getId())) video.isLike = true;
+        }
+    }
+
+    public void updateWatchLaters(Set<Long> videosIds) {
+        final Set<Long> videosList = new HashSet<Long>();
+        videosList.add(Long.valueOf(14011251));
+        for (Video video: getItems()) {
+            if (videosList.contains(video.getId())) video.isWatchLater = true;
+        }
     }
 
 }

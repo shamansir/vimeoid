@@ -13,7 +13,9 @@
 	          android:layout_weight="1"
 	          android:transcriptMode="normal"
 	          android:divider="#333"
-	          android:dividerHeight="1dp" />
+	          android:dividerHeight="1dp"
+	          android:drawSelectorOnTop="false"
+	          android:listSelector="@drawable/selection_bg_gradient" />
     <include android:id="@+id/emptyView"
              layout="@layout/item_list_empty" />	      
 </LinearLayout>

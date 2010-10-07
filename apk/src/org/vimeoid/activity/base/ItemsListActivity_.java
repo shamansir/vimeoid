@@ -230,6 +230,8 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
         footerText.setText(R.string.load_more);        
     }
     
+    protected AdapterType getAdapter() { return adapter; }
+    
     protected class ListReactor implements Reactor<Params, Result> {
         
         @Override public void beforeRequest() {

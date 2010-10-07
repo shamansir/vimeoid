@@ -30,15 +30,10 @@
                        android:linksClickable="true" />
          </ScrollView>
     </LinearLayout>
-    <ListView android:id="@+id/actionsList"
-              android:layout_width="fill_parent"
-              android:layout_height="20dp"
-              android:layout_weight="1"
-              android:transcriptMode="disabled"              
-              android:divider="#ccc"
-              android:dividerHeight="1dp" />
-     <ImageView android:id="@+id/channelHeader"
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/channel_logo_height"
-                android:background="#fff" />
+    <include android:id="@+id/actionsList"
+             layout="@layout/actions_list" />
+    <ImageView android:id="@+id/channelHeader"
+               android:layout_width="fill_parent"
+               android:layout_height="@dimen/channel_logo_height"
+               android:background="#fff" />             
 </LinearLayout>

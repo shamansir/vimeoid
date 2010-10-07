@@ -19,7 +19,6 @@ import org.vimeoid.util.Invoke;
 import org.vimeoid.util.PagingData_;
 
 import android.os.Bundle;
-import android.util.Log;
 
 /**
  * 
@@ -44,23 +43,43 @@ public class VideosActivity extends ItemsListActivity<Video> {
     private static final int GET_LIKES_TASK = 1;
     private static final int GET_WATCHSLATER_TASK = 2;
     
+    private final VideosIdsReceiver likesReceiver;
+    private final VideosIdsReceiver watchLatersReceiver;
+    
     //private String[] watchLaters;
     //private String[] likes;
     
     public VideosActivity() {
         super(R.menu.video_context_user_menu);
+        
+        likesReceiver = new VideosIdsReceiver() {
+            @Override public void onComplete() {
+                ((VideosListAdapter)getAdapter()).updateLikes(videosIds);
+                onContentChanged();
+            }            
+        };
+        
+        watchLatersReceiver = new VideosIdsReceiver() {
+            @Override public void onComplete() {
+                ((VideosListAdapter)getAdapter()).updateWatchLaters(videosIds);
+                onContentChanged();
+            }            
+        };
     }
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         
         final String currentUserId = String.valueOf(VimeoApi.getUserLoginData(this).id);
+        final Video.SortType currentSortType = (Video.SortType) getIntent().getExtras().get(Invoke.Extras.API_SORT_TYPE);
         
         // check if fits period
         secondaryTasks.addListTask(GET_LIKES_TASK, Methods.videos.getLikes, new ApiParams().add("user_id", currentUserId)
-        		                                                                           .add("sort", Video.SortType.NEWEST.toString()), 
-        		                                                            new VideosIdsReceiver(), 3, 25);
-        secondaryTasks.addListTask(GET_WATCHSLATER_TASK, Methods.albums.getWatchLater, new ApiParams().add("user_id", currentUserId), new VideosIdsReceiver(), 3, 25);
+        		                                                                           .add("sort", currentSortType.toString()), 
+        		                                                            likesReceiver, 3, 25);
+        secondaryTasks.addListTask(GET_WATCHSLATER_TASK, Methods.albums.getWatchLater, new ApiParams().add("user_id", currentUserId)
+                                                                                                      .add("sort", currentSortType.toString()), 
+                                                                            watchLatersReceiver, 3, 25);
         
         // TODO: run this tasks manually, ask more if required
         
@@ -82,16 +101,16 @@ public class VideosActivity extends ItemsListActivity<Video> {
         Invoke.User_.selectVideo(this, video);
     }
     
-    protected static final class VideosIdsReceiver implements ApiPagesReceiver<JSONObject> {
+    protected abstract static class VideosIdsReceiver implements ApiPagesReceiver<JSONObject> {
         
-        final Set<String> videosIds = new HashSet<String>();
+        protected final Set<Long> videosIds = new HashSet<Long>();
 
         @Override
         public void addSource(JSONObject page) throws Exception {
             final String[] videosIdsArr = Video.extractIdsList(page); 
             for (String videoId: videosIdsArr) {
                 //Log.d("ADDING", videoId + " as w/l or like");
-                videosIds.add(videoId);
+                videosIds.add(Long.valueOf(videoId));
             }
         }
 
@@ -104,13 +123,7 @@ public class VideosActivity extends ItemsListActivity<Video> {
         public PagingData_ getCurrentPagingData(JSONObject lastPage) throws JSONException {
             return PagingData.collectFromJson(lastPage, Video.FieldsKeys.MULTIPLE_KEY);
         }
-
-        @Override
-        public void onComplete() {
-            Log.d("ADDING", "complete");
-        }
         
     };
     
-
 }

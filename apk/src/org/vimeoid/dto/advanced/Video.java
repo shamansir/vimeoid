@@ -67,6 +67,7 @@ public class Video implements AdvancedItem {
     public long duration;
     public boolean isHd;
     public boolean isLike;
+    public boolean isWatchLater;
     
     public String[] tags;
     

@@ -83,6 +83,10 @@ public abstract class JsonObjectsAdapter<ItemType extends AdvancedItem> extends 
         return items.isEmpty();
     }
 
-    @Override public void onComplete() { }    
+    @Override public void onComplete() { }
+    
+    protected List<ItemType> getItems() { 
+        return items;
+    }
 
 }
