@@ -56,6 +56,8 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
         Log.d(TAG, "Starting items view");
         
         setContentView(mainView);
+        
+        collectExtras(getIntent().getExtras());
 
         final ListView listView = getListView();
         listView.setTextFilterEnabled(true);
@@ -174,6 +176,7 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
     protected abstract ListApiTask_<Params, Result> prepareListTask(Reactor<Params, Result> reactor, AdapterType adapter);
     protected abstract void executeTask(ListApiTask_<Params, Result> task, Params params); // get rid of
     
+    protected void collectExtras(Bundle extras) { };
     protected void onItemSelected(ItemType item) { };    
     protected void whenPageReceived(Result page) { };
     protected void onListTaskComplete() { };

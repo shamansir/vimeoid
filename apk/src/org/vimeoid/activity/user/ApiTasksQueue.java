@@ -45,19 +45,27 @@ public abstract class ApiTasksQueue implements SuccessiveApiTasksSupport {
     }
     
     public ListApiTask addListTask(int taskId, String apiMethod, ApiParams params, ApiPagesReceiver<JSONObject> receiver) {
-        return addListTask(taskId, apiMethod, params, receiver, null);        
+        return addListTask(taskId, apiMethod, params, receiver, 5, 25, null);
     }
     
     public ListApiTask addListTask(int taskId, String apiMethod, ApiParams params, ApiPagesReceiver<JSONObject> receiver, Judge<JSONObject> filter) {
+    	return addListTask(taskId, apiMethod, params, receiver, 5, 25, filter);
+    }
+    
+    public ListApiTask addListTask(int taskId, String apiMethod, ApiParams params, ApiPagesReceiver<JSONObject> receiver, int maxPages, int perPage) {
+    	return addListTask(taskId, apiMethod, params, receiver, maxPages, perPage, null);
+    }    
+    
+    public ListApiTask addListTask(int taskId, String apiMethod, ApiParams params, ApiPagesReceiver<JSONObject> receiver, int maxPages, int perPage, Judge<JSONObject> filter) {
         Log.d(TAG, "Adding list task " + taskId + " " + apiMethod + " : " + params);
         final ListApiTaskInQueue newTask = new ListApiTaskInQueue(this, taskId, apiMethod, receiver);
-        newTask.setMaxPages(5);
-        newTask.setPerPage(25);
+        newTask.setMaxPages(maxPages);
+        newTask.setPerPage(perPage);
         newTask.setFilter(filter);
         addTask(newTask, params);
         return newTask;
-    }    
-    
+    }
+
     private IApiTaskWithNextTask addTask(IApiTaskWithNextTask task, ApiParams params) {
         if (isEmpty()) {
             firstTask = task;

@@ -25,7 +25,13 @@ import org.vimeoid.util.Utils;
  */
 public class Video implements AdvancedItem {
     
-    public static enum SortType { NEWEST, OLDEST, MOST_PLAYED, MOST_COMMENTED, MOST_LIKED }; 
+    public static enum SortType implements ISortType { 
+    	
+    	NEWEST, OLDEST, MOST_PLAYED, MOST_COMMENTED, MOST_LIKED;
+    	
+    	public String toString() { return name().toLowerCase(); };
+    	
+    }; 
     
     public static enum Privacy { 
     	

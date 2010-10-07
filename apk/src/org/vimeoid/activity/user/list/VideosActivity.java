@@ -57,8 +57,10 @@ public class VideosActivity extends ItemsListActivity<Video> {
         final String currentUserId = String.valueOf(VimeoApi.getUserLoginData(this).id);
         
         // check if fits period
-        secondaryTasks.addListTask(GET_LIKES_TASK, Methods.videos.getLikes, new ApiParams().add("user_id", currentUserId), new VideosIdsReceiver());
-        secondaryTasks.addListTask(GET_WATCHSLATER_TASK, Methods.albums.getWatchLater, new ApiParams().add("user_id", currentUserId), new VideosIdsReceiver());
+        secondaryTasks.addListTask(GET_LIKES_TASK, Methods.videos.getLikes, new ApiParams().add("user_id", currentUserId)
+        		                                                                           .add("sort", Video.SortType.NEWEST.toString()), 
+        		                                                            new VideosIdsReceiver(), 3, 25);
+        secondaryTasks.addListTask(GET_WATCHSLATER_TASK, Methods.albums.getWatchLater, new ApiParams().add("user_id", currentUserId), new VideosIdsReceiver(), 3, 25);
         
         // TODO: run this tasks manually, ask more if required
         
