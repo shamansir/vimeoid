@@ -125,5 +125,5 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
         return super.onOptionsItemSelected(item);
         
     }
-            
+
 }

@@ -70,6 +70,8 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> {
             itemHolder.tvLikes = (TextView) convertView.findViewById(R.id.videoItemNumOfLikes);
             itemHolder.tvPlays = (TextView) convertView.findViewById(R.id.videoItemNumOfPlays);
             itemHolder.tvComments = (TextView) convertView.findViewById(R.id.videoItemNumOfComments);
+            
+            itemHolder.vgMarkers = (ViewGroup) convertView.findViewById(R.id.markersArea);
                 
             convertView.setTag(itemHolder);
             
@@ -84,11 +86,13 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> {
         itemHolder.tvTitle.setText(video.title);
         itemHolder.tvAuthor.setText(video.uploaderName);
         itemHolder.tvDuration.setText(Utils.adaptDuration(video.duration));
-        injectTags(video.tags, itemHolder.llTags, position);
+        injectTags(itemHolder.llTags, position, video.tags);
         
         itemHolder.tvLikes.setText(String.valueOf(video.likesCount));
         itemHolder.tvPlays.setText(String.valueOf(video.playsCount));
         itemHolder.tvComments.setText(String.valueOf(video.commentsCount));
+        
+        MarkersSupport.injectMarkers(layoutInflater, itemHolder.vgMarkers, getRequiredMarkers(video));
         
         /* if (video.isLike) convertView.setBackgroundResource(R.drawable.like_marker);
         else if (video.isWatchLater) convertView.setBackgroundResource(R.drawable.watchlater_marker);
@@ -97,17 +101,24 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> {
         return convertView;
     }
     
-    protected void injectTags(final String[] tags, final ViewGroup group, final int curPosition) {
-        group.removeAllViews();
+    protected int[] getRequiredMarkers(Video video) {
+        if (video.isLike && !video.isWatchLater) { int[] result = { R.drawable.like_marker }; return result; };
+        if (!video.isLike && video.isWatchLater) { int[] result = { R.drawable.watchlater_marker }; return result; };
+        if (video.isLike && video.isWatchLater) { int[] result = { R.drawable.like_marker, R.drawable.watchlater_marker }; return result; };
+        return new int[0];
+    }
+    
+    protected void injectTags(final ViewGroup holder, final int curPosition, final String[] tags) {
+        holder.removeAllViews();
         if (tags.length == 0) {
-            group.addView(layoutInflater.inflate(R.layout.no_tags_for_item, null));
+            holder.addView(layoutInflater.inflate(R.layout.no_tags_for_item, null));
             return;
         }
         
         for (final String tag: tags) {
             final View tagStruct = layoutInflater.inflate(R.layout.tag_for_the_item, null);
             ((TextView)tagStruct.findViewById(R.id.tagItem)).setText(tag);
-            group.addView(tagStruct);
+            holder.addView(tagStruct);
         }
     }
     
@@ -117,20 +128,6 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> {
         imageLoader.clearCache();
     }
     
-    private class VideoItemViewHolder {
-        
-        ImageView ivThumb;
-        
-        TextView tvTitle;
-        TextView tvAuthor;
-        TextView tvDuration;
-        LinearLayout llTags;
-        
-        TextView tvLikes;
-        TextView tvPlays;
-        TextView tvComments;
-    }    
-
     @Override
     protected Video[] extractItems(JSONObject jsonObject) throws JSONException {
         return Video.collectListFromJson(jsonObject);
@@ -151,5 +148,21 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> {
             if (videosList.contains(video.getId())) video.isWatchLater = true;
         }
     }
+    
+    private class VideoItemViewHolder {
+        
+        ImageView ivThumb;
+        
+        TextView tvTitle;
+        TextView tvAuthor;
+        TextView tvDuration;
+        LinearLayout llTags;
+        
+        TextView tvLikes;
+        TextView tvPlays;
+        TextView tvComments;
+        
+        ViewGroup vgMarkers;
+    }    
 
 }

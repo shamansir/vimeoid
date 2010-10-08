@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android" 
+           android:layout_width="@dimen/marker_side"
+           android:layout_height="@dimen/marker_side"
+           android:layout_margin="1dp" />
