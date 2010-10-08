@@ -90,9 +90,9 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> {
         itemHolder.tvPlays.setText(String.valueOf(video.playsCount));
         itemHolder.tvComments.setText(String.valueOf(video.commentsCount));
         
-        if (video.isLike) convertView.setBackgroundResource(R.drawable.liked_bg_gradient);
-        else if (video.isWatchLater) convertView.setBackgroundResource(R.drawable.watchlater_bg_gradient);
-        else convertView.setBackgroundResource(0);
+        /* if (video.isLike) convertView.setBackgroundResource(R.drawable.like_marker);
+        else if (video.isWatchLater) convertView.setBackgroundResource(R.drawable.watchlater_marker);
+        else convertView.setBackgroundResource(0); */
         
         return convertView;
     }

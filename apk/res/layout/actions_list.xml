@@ -4,7 +4,7 @@
           android:layout_width="fill_parent"
           android:layout_height="20dp"
           android:layout_weight="1"
-          android:listSelector="@drawable/selection_bg_gradient"
+          android:listSelector="@drawable/selection"
           android:transcriptMode="disabled"              
           android:divider="#ccc"
           android:dividerHeight="1dp" />
