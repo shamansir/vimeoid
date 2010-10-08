@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
+<nine-patch xmlns:android="http://schemas.android.com/apk/res/android"
+            android:src="@drawable/select"
+            android:dither="true" />
+<!-- <shape xmlns:android="http://schemas.android.com/apk/res/android"
        android:shape="rectangle">
-  <gradient android:startColor="#ff000d19"
-            android:endColor="#ff00263c"
+  <gradient android:startColor="#64141f31"
+            android:centerColor="#ff141f31"
+            android:endColor="#ff1f3345"
+            android:type="linear"
             android:angle="90" />       
-</shape>
+</shape> -->

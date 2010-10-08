@@ -2,12 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="fill_parent"
-              android:layout_height="fill_parent">
-    <ImageView android:id="@+id/videoItemImage"
-               android:layout_width="@dimen/item_thumb_width"
-               android:layout_height="@dimen/item_thumb_height"
-               android:layout_gravity="left"
-               android:background="@color/item_thumb_bg" />
+              android:layout_height="fill_parent">    
+    <FrameLayout android:layout_width="@dimen/item_thumb_width"
+                 android:layout_height="@dimen/item_thumb_height"
+                 android:layout_gravity="left">
+	    <ImageView android:id="@+id/videoItemImage"
+	               android:layout_width="@dimen/item_thumb_width"
+	               android:layout_height="@dimen/item_thumb_height"
+	               android:background="@color/item_thumb_bg" />
+        <ImageView android:id="@+id/playVideo"
+                   android:src="@drawable/play_button"
+                   android:layout_width="@dimen/item_thumb_width"
+                   android:layout_height="@dimen/item_thumb_height" />	    
+    </FrameLayout>               
     <LinearLayout android:orientation="vertical"
                   android:layout_width="fill_parent"
                   android:layout_height="@dimen/item_thumb_height"

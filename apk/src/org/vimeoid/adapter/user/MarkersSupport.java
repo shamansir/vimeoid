@@ -27,6 +27,7 @@ import android.widget.ImageView;
 public final class MarkersSupport {
     
     public static void injectMarkers(LayoutInflater inflater, ViewGroup markersHolder, int[] markers) {
+        markersHolder.removeAllViews();
         final Resources resources = markersHolder.getContext().getResources();
         for (int marker: markers) {
             final ImageView markerView = (ImageView)inflater.inflate(R.layout.marker_for_the_item, null); 
