@@ -29,13 +29,7 @@ public class Player extends Activity {
 		final long videoId = getIntent().getLongExtra(Invoke.Extras.VIDEO_ID, -1);
 		if (videoId == -1) throw new IllegalStateException("Video ID must be passed to player");
 		
-		//final ViewFlipper flipper = (ViewFlipper) findViewById(R.id.viewFlipper);
-		//final View loadingView = (View) findViewById(R.id.loadingProgress);
-		//final View playerView = getLayoutInflater().inflate(R.layout.player, null);
-		//final ViewSwitcher switcher = (ViewSwitcher) findViewById(R.id.viewSwitcher);
 		final VideoView videoView = (VideoView) findViewById(R.id.canvas);
-		//videoView.setVisibility(View.INVISIBLE);
-		//switcher.showNext();
 		
 		Log.d(TAG, "Running video player for video " + videoId);
 		
@@ -44,18 +38,11 @@ public class Player extends Activity {
 		    private ProgressDialog progressDialog;
 			
 			protected void onPreExecute() {
-				//setContentView(loadingView);
 			    progressDialog = ProgressDialog.show(Player.this, "", getString(R.string.caching_video), true);
 				super.onPreExecute();
 			};
 			
 			protected void onPostExecute(FileInputStream dataSource) {
-				//setContentView(playerView);
-				//flipper.showNext();
-                //loadingView.setVisibility(View.GONE);			    
-				//videoView.setVisibility(View.VISIBLE);
-                //videoView.bringToFront();
-				//videoView.requestFocus();
 			    progressDialog.dismiss();
 				super.onPostExecute(dataSource);                
 			};

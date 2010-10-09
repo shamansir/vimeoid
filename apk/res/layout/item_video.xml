@@ -14,7 +14,8 @@
         <ImageView android:id="@+id/playVideo"
                    android:src="@drawable/play_button"
                    android:layout_width="@dimen/item_thumb_width"
-                   android:layout_height="@dimen/item_thumb_height" />	    
+                   android:layout_height="@dimen/item_thumb_height"
+                   android:visibility="invisible" />
     </FrameLayout>               
     <LinearLayout android:orientation="vertical"
                   android:layout_width="fill_parent"

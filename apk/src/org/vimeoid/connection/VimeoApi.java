@@ -97,8 +97,15 @@ public class VimeoApi {
         	   
     }
     
+    /* ====================== OAuth Helpers ================================= */
+    
+    public static boolean weKnowUser(Context context) {
+        final SharedPreferences storage = context.getSharedPreferences(OAUTH_API_PREFERENCES_ID, Context.MODE_PRIVATE);
+        return storage.contains(OAUTH_TOKEN_PARAM) && storage.contains(OAUTH_TOKEN_SECRET_PARAM);
+    }
+    
     public static void forgetCredentials(Context context) {
-    	final SharedPreferences storage = context.getSharedPreferences(OAUTH_API_PREFERENCES_ID, Context.MODE_PRIVATE);
+        final SharedPreferences storage = context.getSharedPreferences(OAUTH_API_PREFERENCES_ID, Context.MODE_PRIVATE);
         Editor editor = storage.edit();  
         editor.remove(OAUTH_TOKEN_PARAM);
         editor.remove(OAUTH_TOKEN_SECRET_PARAM);
@@ -106,13 +113,6 @@ public class VimeoApi {
         editor.remove(USERNAME_PARAM);
         editor.commit();
     }
-    
-    /* ====================== OAuth Helpers ================================= */
-    
-    public static boolean userLoggedIn() {
-        // FIXME: implement
-        return true;
-    }    
     
     public static boolean ensureOAuth(Context context) {
         if (!JsonOverHttp.use().isOAuthInitialized()) {
@@ -260,5 +260,5 @@ public class VimeoApi {
         Log.d(TAG, "Construction player URL for video " + videoId);
         return PLAYER_URL + videoId + "?title=0&byline=0&portrait=0&js_api=1&fp_version=10&height=" + height;
     }
-    
+
 }
