@@ -16,7 +16,6 @@ import org.vimeoid.util.Utils;
 import com.fedorvlasov.lazylist.ImageLoader;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,15 +43,15 @@ import android.widget.AdapterView.OnItemSelectedListener;
  */
 public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnItemSelectedListener {
 	
-	public static interface PlayButtonClickedListener {
-		public void playButtonClicked(Video forVideo);
+	public static interface ThumbClickListener {
+		public void thumbClicked(Video video);
 	}
     
     private final LayoutInflater layoutInflater;
     private final ImageLoader imageLoader;
     
     private View lastSelected; 
-    private PlayButtonClickedListener playButtonListener;
+    private ThumbClickListener thumbClickListener;
     
     public VideosListAdapter(Context context, LayoutInflater inflater, ListView listView) {
         super(Video.FieldsKeys.MULTIPLE_KEY);
@@ -107,10 +106,10 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnIt
 			}
 			
 		}); */
-        itemHolder.ivPlay.setOnClickListener(new OnClickListener() {
+        itemHolder.ivThumb.setOnClickListener(new OnClickListener() {
 			@Override public void onClick(View v) {
-				Log.d("VLA", "Thumb at " + position + " is clicked");
-				if (playButtonListener != null) playButtonListener.playButtonClicked(video);
+				//Log.d("VLA", "Thumb at " + position + " is clicked");
+				if (thumbClickListener != null) thumbClickListener.thumbClicked(video);
 			}
 		});
         
@@ -134,7 +133,7 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnIt
     
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-		Log.d("VLA", "Thumb at " + position + " is selected");
+		//Log.d("VLA", "Thumb at " + position + " is selected");
 		if (lastSelected != null) lastSelected.findViewById(R.id.playVideo).setVisibility(View.INVISIBLE); 
 		view.findViewById(R.id.playVideo).setVisibility(View.VISIBLE);
 		lastSelected = view;
@@ -142,7 +141,7 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnIt
 
 	@Override
 	public void onNothingSelected(AdapterView<?> parent) {
-		Log.d("VLA", "Nothing selected");
+		//Log.d("VLA", "Nothing selected");
 		if (lastSelected != null) lastSelected.findViewById(R.id.playVideo).setVisibility(View.INVISIBLE);		
 	}    
     
@@ -194,8 +193,8 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnIt
         }
     }
     
-    public void setPlayButtonListener(PlayButtonClickedListener listener) {
-    	this.playButtonListener = listener;
+    public void setThumbClickListener(ThumbClickListener listener) {
+    	this.thumbClickListener = listener;
     }
     
     private class VideoItemViewHolder {

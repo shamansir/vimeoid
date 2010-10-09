@@ -9,6 +9,7 @@ import org.vimeoid.util.Invoke;
 import org.vimeoid.util.Utils;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,11 +40,14 @@ public class Player extends Activity {
 		Log.d(TAG, "Running video player for video " + videoId);
 		
 		new VimeoVideoPlayingTask(this, videoView.getHolder()) {
+		    
+		    private ProgressDialog progressDialog;
 			
-			/* protected void onPreExecute() {
-				setContentView(loadingView);
+			protected void onPreExecute() {
+				//setContentView(loadingView);
+			    progressDialog = ProgressDialog.show(Player.this, "", getString(R.string.caching_video), true);
 				super.onPreExecute();
-			}; */
+			};
 			
 			protected void onPostExecute(FileInputStream dataSource) {
 				//setContentView(playerView);
@@ -52,6 +56,7 @@ public class Player extends Activity {
 				//videoView.setVisibility(View.VISIBLE);
                 //videoView.bringToFront();
 				//videoView.requestFocus();
+			    progressDialog.dismiss();
 				super.onPostExecute(dataSource);                
 			};
 			

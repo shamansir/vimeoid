@@ -9,13 +9,12 @@
 	    <ImageView android:id="@+id/videoItemImage"
 	               android:layout_width="@dimen/item_thumb_width"
 	               android:layout_height="@dimen/item_thumb_height"
-	               android:background="@color/item_thumb_bg" />
+	               android:background="@color/item_thumb_bg"
+	               android:clickable="true" />
         <ImageView android:id="@+id/playVideo"
                    android:src="@drawable/play_button"
                    android:layout_width="@dimen/item_thumb_width"
-                   android:layout_height="@dimen/item_thumb_height"
-                   android:focusable="true"
-                   android:clickable="true" />	    
+                   android:layout_height="@dimen/item_thumb_height" />	    
     </FrameLayout>               
     <LinearLayout android:orientation="vertical"
                   android:layout_width="fill_parent"

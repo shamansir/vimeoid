@@ -10,6 +10,7 @@ import org.vimeoid.activity.base.ApiPagesReceiver;
 import org.vimeoid.activity.user.ItemsListActivity;
 import org.vimeoid.adapter.JsonObjectsAdapter;
 import org.vimeoid.adapter.user.VideosListAdapter;
+import org.vimeoid.adapter.user.VideosListAdapter.ThumbClickListener;
 import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.dto.advanced.PagingData;
@@ -88,7 +89,13 @@ public class VideosActivity extends ItemsListActivity<Video> {
 
     @Override
     protected JsonObjectsAdapter<Video> createAdapter() {
-        return new VideosListAdapter(this, getLayoutInflater(), getListView());
+        final VideosListAdapter adapter = new VideosListAdapter(this, getLayoutInflater(), getListView());
+        adapter.setThumbClickListener(new ThumbClickListener() {
+            @Override public void thumbClicked(Video video) {
+                Invoke.User_.playVideo(VideosActivity.this, video);
+            }
+        });
+        return adapter;
     }
     
     @Override

@@ -259,7 +259,13 @@ public final class Invoke {
                                      .putExtra(Extras.SUBJ_ICON, R.drawable.video)
                                      .putExtra(Extras.SUBJ_TITLE, video.title)
                                      .putExtra(Extras.RES_ICON, R.drawable.info));            
-        }        
+        }
+        
+        public static void playVideo(Activity parent, org.vimeoid.dto.advanced.Video video) {
+            Log.d(TAG, "Trying to play video " + video.id);
+            parent.startActivity(new Intent(parent, Player.class)
+                                 .putExtra(Extras.VIDEO_ID, video.id));
+        }
 
         public static void selectAlbumsOf(Activity parent, org.vimeoid.dto.advanced.User user) {
             // TODO Auto-generated method stub
@@ -290,7 +296,7 @@ public final class Invoke {
             // TODO Auto-generated method stub
             
         }
-        
+
     }
     
 }
