@@ -7,7 +7,7 @@
 	         layout="@layout/item_subject_titlebar" />
     <include android:id="@+id/progressBar"
              layout="@layout/progress_bar_line" />
-    <LinearLayout android:orientation="horizontal"
+    <FrameLayout android:orientation="horizontal"
                   android:layout_width="fill_parent"
                   android:layout_height="@dimen/vimeo_player_height">
 	    <WebView android:id="@+id/videoPlayer"         
@@ -16,7 +16,11 @@
 	             android:layout_width="fill_parent"
 	             android:layout_height="fill_parent"
 	             android:layout_marginLeft="4dp" />
-    </LinearLayout>
+	    <View android:id="@+id/playOverlay"
+	          android:background="#0000"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent" />	                   
+    </FrameLayout>
     <LinearLayout android:orientation="horizontal"
                   android:layout_width="fill_parent"
                   android:layout_height="@dimen/description_line_height"

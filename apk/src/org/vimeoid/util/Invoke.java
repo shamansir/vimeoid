@@ -255,7 +255,7 @@ public final class Invoke {
                                      .putExtra(Extras.API_PARAMS, new ApiParams().add("video_id", String.valueOf(video.id))
                                                                                  .toBundle())
                                      .putExtra(Extras.USER_ID, video.uploaderId)
-                                     //.putExtra(Extras.USERNAME, username)
+                                     .putExtra(Extras.VIDEO_ID, video.id)
                                      .putExtra(Extras.SUBJ_ICON, R.drawable.video)
                                      .putExtra(Extras.SUBJ_TITLE, video.title)
                                      .putExtra(Extras.RES_ICON, R.drawable.info));            

@@ -8,14 +8,19 @@ import org.json.JSONObject;
 
 import org.vimeoid.R;
 import org.vimeoid.activity.user.SingleItemActivity;
+import org.vimeoid.adapter.LActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.dto.advanced.Video;
 import org.vimeoid.util.Invoke;
+import org.vimeoid.util.PlayerWebView;
+import org.vimeoid.util.Utils;
 
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,29 +42,30 @@ public class VideoActivity extends SingleItemActivity<Video> {
     
     public static final String TAG = "VideoActivity";
     
-    //private static final int LOAD_PORTRAITS_TASK = 1;
-    //private static final int LOAD_ALBUMS_TASK = 2;
-    //private static final int LOAD_CHANNELS_TASK = 3;
-    
-    //private LActionItem albumAction;
-    //private LActionItem channelAction;
+    private final OnClickListener clickDisabler;
     
     public VideoActivity() {
         super(R.layout.view_single_video);
+        setLoadManually(true);
+        
+        this.clickDisabler = new OnClickListener() {
+            @Override public void onClick(View v) { Log.d(TAG, "clicking is disabled"); }
+        };
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        
-        //userId = getIntent().getExtras().getLong(Invoke.Extras.USER_ID);
-        
-        //final String userIdStr = String.valueOf(userId);
-        
-        //secondaryTasks.add(LOAD_PORTRAITS_TASK, Methods.people.getPortraitUrls, new ApiParams().add("user_id", userIdStr));
-        //secondaryTasks.add(LOAD_ALBUMS_TASK, Methods.albums.getAll, new ApiParams().add("user_id", userIdStr));
-        //secondaryTasks.add(LOAD_CHANNELS_TASK, Methods.channels.getAll, new ApiParams().add("user_id", userIdStr));                
-        
         super.onCreate(savedInstanceState);
+        
+        final long videoId = Long.valueOf(getIntent().getExtras().getLong(Invoke.Extras.VIDEO_ID));
+        
+        final WebView playerView = 
+            PlayerWebView.projectPlayer(videoId, this);
+        playerView.setOnClickListener(clickDisabler);
+         
+        findViewById(R.id.playOverlay).setOnClickListener(clickDisabler);
+        
+        queryItem();
     }
 
     @Override
@@ -70,14 +76,61 @@ public class VideoActivity extends SingleItemActivity<Video> {
     @Override
     protected SectionedActionsAdapter fillWithActions(SectionedActionsAdapter actionsAdapter, final Video video) {
         
-        // TODO: add "watch later" and "like" if it is not owner video
+        // TODO: video tags
+        // TODO: video likers
+        // TODO: video comments
         
+        // TODO: add "watch later" and "like" if it is not owner video
+        // Statistics section
+        int statsSection = actionsAdapter.addSection(getString(R.string.statistics));
+        // tags
+        if (video.tags.length > 0) actionsAdapter.addAction(statsSection, R.drawable.tag, 
+                                 Utils.format(getString(R.string.tags_are), "list",
+                                             Utils.adaptTags(video.tags, getString(R.string.none_of_tags))));
+        // number of plays
+        actionsAdapter.addAction(statsSection, R.drawable.play, 
+                                 Utils.format(getString(R.string.num_of_plays), "num", String.valueOf(video.playsCount)));
+        // number of likes
+        actionsAdapter.addAction(statsSection, R.drawable.like, 
+                                 Utils.format(getString(R.string.num_of_likes), "num", String.valueOf(video.likesCount)));        
+        // number of comments
+        actionsAdapter.addAction(statsSection, R.drawable.comment_video, 
+                                 Utils.format(getString(R.string.num_of_comments), "num", String.valueOf(video.commentsCount)));
+        
+        
+        // Information section
+        int infoSection = actionsAdapter.addSection(getString(R.string.information));
+        // duration
+        actionsAdapter.addAction(infoSection, R.drawable.duration,
+                                 Utils.format(getString(R.string.duration_is), "time", Utils.adaptDuration(video.duration)));       
+        // uploader
+        final LActionItem userAction = actionsAdapter.addAction(infoSection, R.drawable.contact, 
+                                 Utils.format(getString(R.string.uploaded_by), "name", video.uploaderName));
+        userAction.onClick =  new OnClickListener() {
+            @Override public void onClick(View v) { Invoke.User_.selectUploader(VideoActivity.this, video); };
+        };
+        // uploaded on
+        actionsAdapter.addAction(infoSection, R.drawable.upload,
+                                 Utils.format(getString(R.string.uploaded_on), "time", video.uploadedOn));
+        // dimensions
+        actionsAdapter.addAction(infoSection, R.drawable.dimensions,
+                                 Utils.format(getString(R.string.dimensions_are), "width", String.valueOf(video.width),
+                                                                                  "height", String.valueOf(video.height)));
         
         return actionsAdapter;
     }
     
     @Override
     protected void onItemReceived(final Video video) {
+        
+        // enabling overlay
+        findViewById(R.id.playOverlay).setOnClickListener(new OnClickListener() {
+            @Override public void onClick(View v) {
+                Invoke.User_.playVideo(VideoActivity.this, video);
+            }
+        });
+        
+        
         // description
         ((TextView)findViewById(R.id.videoDescription)).setText((video.description.length() > 0) 
                                                                  ? Html.fromHtml(video.description)
@@ -89,6 +142,8 @@ public class VideoActivity extends SingleItemActivity<Video> {
             @Override public void onClick(View v) { Invoke.User_.selectUploader(VideoActivity.this, video); };
         });
         imageLoader.displayImage(video.uploaderPortraits.medium.url, uploaderPortrait);
+        
+        super.onItemReceived(video);
     }
     
     /* @Override

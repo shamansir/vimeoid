@@ -9,13 +9,12 @@
              layout="@layout/progress_bar_line" />
 	<ListView android:id="@android:id/list"
 	          android:layout_width="fill_parent"
-	          android:layout_height="0dp"
+	          android:layout_height="wrap_content"
 	          android:layout_weight="1"
 	          android:transcriptMode="normal"
-	          android:divider="#333"
+	          android:divider="#f333"
 	          android:dividerHeight="1dp"
-	          android:drawSelectorOnTop="false"
-	          android:listSelector="@drawable/selection" />
+	          android:listSelector="@drawable/selector_bg" />
     <include android:id="@+id/emptyView"
              layout="@layout/item_list_empty" />	      
 </LinearLayout>

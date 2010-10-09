@@ -92,7 +92,7 @@ public abstract class SingleItemActivity_<ItemType> extends Activity {
         progressBar.setVisibility(View.GONE);
     }
     
-    protected final void setProgressBarVisibile(boolean value) {
+    public final void setProgressBarVisibile(boolean value) {
         progressBar.setVisibility(value ? View.VISIBLE : View.GONE);
     }    
     

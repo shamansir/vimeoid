@@ -7,21 +7,17 @@ import org.vimeoid.R;
 import org.vimeoid.activity.guest.SingleItemActivity;
 import org.vimeoid.adapter.LActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
-import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.dto.simple.Video;
 import org.vimeoid.util.Invoke;
+import org.vimeoid.util.PlayerWebView;
 import org.vimeoid.util.Utils;
 
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 
@@ -50,29 +46,9 @@ public class VideoActivity extends SingleItemActivity<Video> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        
-        WebView playerView = (WebView)findViewById(R.id.videoPlayer);
-        playerView.getSettings().setJavaScriptEnabled(true);
-        //playerView.getSettings().setLoadsImagesAutomatically(true);
-        playerView.getSettings().setUserAgentString(VimeoApi.WEBVIEW_USER_AGENT);
-        
-        final long videoId = Long.valueOf(callInfo.subject);
-        final int playerHeight = getResources().getDimensionPixelSize((R.dimen.vimeo_player_height));        
-        
-        playerView.setWebChromeClient(new WebChromeClient() {
-            @Override public void onProgressChanged(WebView view, int newProgress) {
-                setProgressBarVisibile((newProgress != 0) && (newProgress != 100));
-                if (newProgress == 100) ((ListView)findViewById(R.id.actionsList)).setSelectionAfterHeaderView();
-                super.onProgressChanged(view, newProgress);
-            }
-        });
-        
-        Log.d(TAG, "Loading player: " + VimeoApi.getPlayerUrl(videoId, playerHeight));
-        playerView.loadUrl(VimeoApi.getPlayerUrl(videoId, playerHeight));
-        
+        super.onCreate(savedInstanceState);        
+        PlayerWebView.projectPlayer(Long.valueOf(callInfo.subject), this);        
         queryItem();
-        
     }
     
     @Override
@@ -132,7 +108,6 @@ public class VideoActivity extends SingleItemActivity<Video> {
     	actionsAdapter.addAction(infoSection, R.drawable.dimensions,
     						     Utils.format(getString(R.string.dimensions_are), "width", String.valueOf(video.width),
     						    		                                          "height", String.valueOf(video.height)));
-    	
     	return actionsAdapter;
     	
     }

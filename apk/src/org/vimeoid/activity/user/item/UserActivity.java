@@ -76,6 +76,10 @@ public class UserActivity extends SingleItemActivity<User> {
 
     @Override
     protected SectionedActionsAdapter fillWithActions(SectionedActionsAdapter actionsAdapter, final User user) {
+
+        // TODO: user activity (did / happened)
+        // TODO: user groups
+        // TODO: add search somewhere
         
         // TODO: add "subscribe" and "add contact" if it is not current user, using extras
         // mark if already subscribed or friends 
