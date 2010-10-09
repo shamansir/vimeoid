@@ -13,7 +13,9 @@
         <ImageView android:id="@+id/playVideo"
                    android:src="@drawable/play_button"
                    android:layout_width="@dimen/item_thumb_width"
-                   android:layout_height="@dimen/item_thumb_height" />	    
+                   android:layout_height="@dimen/item_thumb_height"
+                   android:focusable="true"
+                   android:clickable="true" />	    
     </FrameLayout>               
     <LinearLayout android:orientation="vertical"
                   android:layout_width="fill_parent"
@@ -30,8 +32,7 @@
 	              android:textColor="@color/item_title"
 	              android:lines="1"
 	              android:ellipsize="marquee"	              
-	              android:scrollHorizontally="true"	              
-                  android:text="TestTestTest Oh Test My Dear Test" />
+	              android:scrollHorizontally="true" />
         <LinearLayout android:orientation="horizontal"
                       android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
@@ -41,8 +42,7 @@
 	                  android:layout_height="wrap_content"
 	                  android:layout_weight="0.9" 
 	                  android:textSize="@dimen/item_subtitle_font_size"
-	                  android:textColor="@color/item_subtitle"
-	                  android:text="TestTesTestTest" />
+	                  android:textColor="@color/item_subtitle" />
                  <!-- android:lines="1"
                       android:ellipsize="marquee"
                       android:scrollHorizontally="true" -->

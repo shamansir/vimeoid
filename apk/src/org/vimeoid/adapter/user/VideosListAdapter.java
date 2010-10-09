@@ -16,12 +16,17 @@ import org.vimeoid.util.Utils;
 import com.fedorvlasov.lazylist.ImageLoader;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 /**
  * <dl>
@@ -37,21 +42,29 @@ import android.widget.TextView;
  * @date Sep 29, 2010 8:31:27 PM 
  *
  */
-public class VideosListAdapter extends JsonObjectsAdapter<Video> {
+public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnItemSelectedListener {
+	
+	public static interface PlayButtonClickedListener {
+		public void playButtonClicked(Video forVideo);
+	}
     
     private final LayoutInflater layoutInflater;
-    private final ImageLoader imageLoader;    
+    private final ImageLoader imageLoader;
     
-    public VideosListAdapter(Context context, LayoutInflater inflater) {
+    private View lastSelected; 
+    private PlayButtonClickedListener playButtonListener;
+    
+    public VideosListAdapter(Context context, LayoutInflater inflater, ListView listView) {
         super(Video.FieldsKeys.MULTIPLE_KEY);
         
         this.layoutInflater = inflater;        
+        this.imageLoader = new ImageLoader(context, R.drawable.thumb_loading_small, R.drawable.video_unknown_item);
         
-        this.imageLoader = new ImageLoader(context, R.drawable.thumb_loading_small, R.drawable.video_unknown_item);        
+        listView.setOnItemSelectedListener(this);
     }
     
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         VideoItemViewHolder itemHolder = null;
         
         final Video video = (Video)getItem(position); 
@@ -62,6 +75,7 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> {
             itemHolder = new VideoItemViewHolder();
                 
             itemHolder.ivThumb = (ImageView) convertView.findViewById(R.id.videoItemImage);
+            itemHolder.ivPlay = (ImageView) convertView.findViewById(R.id.playVideo);
             itemHolder.tvTitle = (TextView) convertView.findViewById(R.id.videoItemTitle);
             itemHolder.tvAuthor = (TextView) convertView.findViewById(R.id.videoItemAuthor);
             itemHolder.tvDuration = (TextView) convertView.findViewById(R.id.videoItemDuration);
@@ -82,6 +96,23 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> {
         }
         
         imageLoader.displayImage(video.thumbnails.small.url, itemHolder.ivThumb);
+              
+        itemHolder.ivPlay.setVisibility(View.INVISIBLE);
+        /* itemHolder.ivPlay.setOnFocusChangeListener(new OnFocusChangeListener() {
+			@Override public void onFocusChange(View v, boolean hasFocus) {
+				Log.d("VLA", "Thumb at " + position + " is focused: " + hasFocus);
+				//ivPlay.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
+				ImageView iv = (ImageView)v.findViewById(R.id.playVideo);
+				iv.setVisibility(hasFocus ? View.VISIBLE : View.INVISIBLE);
+			}
+			
+		}); */
+        itemHolder.ivPlay.setOnClickListener(new OnClickListener() {
+			@Override public void onClick(View v) {
+				Log.d("VLA", "Thumb at " + position + " is clicked");
+				if (playButtonListener != null) playButtonListener.playButtonClicked(video);
+			}
+		});
         
         itemHolder.tvTitle.setText(video.title);
         itemHolder.tvAuthor.setText(video.uploaderName);
@@ -101,10 +132,24 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> {
         return convertView;
     }
     
+	@Override
+	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+		Log.d("VLA", "Thumb at " + position + " is selected");
+		if (lastSelected != null) lastSelected.findViewById(R.id.playVideo).setVisibility(View.INVISIBLE); 
+		view.findViewById(R.id.playVideo).setVisibility(View.VISIBLE);
+		lastSelected = view;
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> parent) {
+		Log.d("VLA", "Nothing selected");
+		if (lastSelected != null) lastSelected.findViewById(R.id.playVideo).setVisibility(View.INVISIBLE);		
+	}    
+    
     protected int[] getRequiredMarkers(Video video) {
-        if (video.isLike && !video.isWatchLater) { int[] result = { R.drawable.like_marker }; return result; };
-        if (!video.isLike && video.isWatchLater) { int[] result = { R.drawable.watchlater_marker }; return result; };
-        if (video.isLike && video.isWatchLater) { int[] result = { R.drawable.like_marker, R.drawable.watchlater_marker }; return result; };
+        if (video.isLike && !video.isWatchLater) { return new int[] { R.drawable.like_marker }; };
+        if (!video.isLike && video.isWatchLater) { return new int[] { R.drawable.watchlater_marker }; };
+        if (video.isLike && video.isWatchLater) { return new int[] { R.drawable.like_marker, R.drawable.watchlater_marker }; };
         return new int[0];
     }
     
@@ -149,9 +194,14 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> {
         }
     }
     
+    public void setPlayButtonListener(PlayButtonClickedListener listener) {
+    	this.playButtonListener = listener;
+    }
+    
     private class VideoItemViewHolder {
         
         ImageView ivThumb;
+        ImageView ivPlay;
         
         TextView tvTitle;
         TextView tvAuthor;
@@ -163,6 +213,6 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> {
         TextView tvComments;
         
         ViewGroup vgMarkers;
-    }    
+    }
 
 }

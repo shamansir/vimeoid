@@ -88,7 +88,7 @@ public class VideosActivity extends ItemsListActivity<Video> {
 
     @Override
     protected JsonObjectsAdapter<Video> createAdapter() {
-        return new VideosListAdapter(this, getLayoutInflater());
+        return new VideosListAdapter(this, getLayoutInflater(), getListView());
     }
     
     @Override
