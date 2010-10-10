@@ -1,5 +1,7 @@
 package org.vimeoid.activity.user;
 
+import net.londatiga.android.QuickAction;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.R;
@@ -14,9 +16,13 @@ import org.vimeoid.util.Invoke;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,8 +39,8 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     
     private boolean ranSecondaryTasks = false;
     
-    public ItemsListActivity(int mainView, int contextMenu) {
-    	super(mainView, contextMenu);
+    public ItemsListActivity(int mainView) {
+    	super(mainView, 0);
     	
     	secondaryTasks = new ApiTasksQueue() {
             @Override public void onPerfomed(int taskId, JSONObject result) throws JSONException {
@@ -49,8 +55,8 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
         };
     }
     
-    public ItemsListActivity(int contextMenu) {
-    	this(R.layout.generic_list, contextMenu);
+    public ItemsListActivity() {
+    	this(R.layout.generic_list);
     }
     
     @Override
@@ -93,20 +99,31 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     }
     
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
+    }
+    
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater(); //from activity
         inflater.inflate(R.menu.user_options_menu, menu); 
         
         return true;
     }
-       
-    public void onSecondaryTaskPerfomed(int id, JSONObject result)  throws JSONException { }  
-   
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return super.onPrepareOptionsMenu(menu);
-    }
     
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+            ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        
+        final AdapterView.AdapterContextMenuInfo info = extractMenuInfo(menuInfo);
+        createQuickActions(getItem(info.position), info.targetView).show();
+    }    
+       
+    public void onSecondaryTaskPerfomed(int id, JSONObject result)  throws JSONException { }
+
+    protected abstract QuickAction createQuickActions(ItemType item, View v);
+   
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         
@@ -124,6 +141,6 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
         }         
         return super.onOptionsItemSelected(item);
         
-    }
+    }   
 
 }

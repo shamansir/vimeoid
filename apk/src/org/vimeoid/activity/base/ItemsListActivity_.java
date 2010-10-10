@@ -163,7 +163,10 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
             Log.e(TAG, "incorrect menu info", cce);
             return -1;
         }
-        
+    }
+    
+    protected final AdapterView.AdapterContextMenuInfo extractMenuInfo(ContextMenuInfo info) {
+        return ((AdapterView.AdapterContextMenuInfo) info);
     }
     
     @SuppressWarnings("unchecked")

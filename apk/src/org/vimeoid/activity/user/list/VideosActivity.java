@@ -3,6 +3,8 @@ package org.vimeoid.activity.user.list;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.londatiga.android.QuickAction;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.R;
@@ -20,6 +22,7 @@ import org.vimeoid.util.Invoke;
 import org.vimeoid.util.PagingData_;
 
 import android.os.Bundle;
+import android.view.View;
 
 /**
  * 
@@ -51,7 +54,7 @@ public class VideosActivity extends ItemsListActivity<Video> {
     //private String[] likes;
     
     public VideosActivity() {
-        super(R.menu.video_context_user_menu);
+        super();
         
         likesReceiver = new VideosIdsReceiver() {
             @Override public void onComplete() {
@@ -108,6 +111,24 @@ public class VideosActivity extends ItemsListActivity<Video> {
         Invoke.User_.selectVideo(this, video);
     }
     
+    @Override
+    protected QuickAction createQuickActions(Video item, View v) {
+        QuickAction qa = new QuickAction(v);
+        qa.addActionItem("Play", getResources().getDrawable(R.drawable.play));
+        qa.addActionItem("Face", getResources().getDrawable(R.drawable.contact));
+        qa.addActionItem("Jagagaga", getResources().getDrawable(R.drawable.video));
+        qa.addActionItem("Trace", getResources().getDrawable(R.drawable.album));
+        qa.addActionItem("Author", getResources().getDrawable(R.drawable.channel));
+        qa.addActionItem("Later", getResources().getDrawable(R.drawable.watchlater));
+        /*qa.addActionItem("Video", getResources().getDrawable(R.drawable.video));
+        qa.addActionItem("Info", getResources().getDrawable(R.drawable.info));
+        qa.addActionItem("Later", getResources().getDrawable(R.drawable.watchlater));
+        qa.addActionItem("Gegegegegege", getResources().getDrawable(R.drawable.channel));
+        qa.addActionItem("Two words", getResources().getDrawable(R.drawable.channel)); */
+        /*qa.show();*/
+        return qa;
+    };
+    
     protected abstract static class VideosIdsReceiver implements ApiPagesReceiver<JSONObject> {
         
         protected final Set<Long> videosIds = new HashSet<Long>();
@@ -131,6 +152,7 @@ public class VideosActivity extends ItemsListActivity<Video> {
             return PagingData.collectFromJson(lastPage, Video.FieldsKeys.MULTIPLE_KEY);
         }
         
-    };
+    }
+
     
 }
