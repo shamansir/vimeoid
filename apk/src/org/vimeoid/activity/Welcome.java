@@ -12,6 +12,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import net.londatiga.android.QActionItem;
+import net.londatiga.android.QuickAction;
+import net.londatiga.android.QActionItem.QActionClickListener;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
@@ -73,7 +76,25 @@ public class Welcome extends Activity {
             final Button guestButton = (Button) findViewById(R.id.guestButton);
             guestButton.setOnClickListener(new OnClickListener() {
                 @Override public void onClick(View v) {
-                    enterAsGuest();
+                    
+                    QuickAction qa = new QuickAction(v);
+                    qa.addActionItem("Play", getResources().getDrawable(R.drawable.play));                    
+                    qa.addActionItem("Face", getResources().getDrawable(R.drawable.contact));                    
+                    qa.addActionItem("Jagagaga", getResources().getDrawable(R.drawable.video));
+                    qa.addActionItem("Trace", getResources().getDrawable(R.drawable.album));
+                    qa.addActionItem("Author", getResources().getDrawable(R.drawable.channel));
+                    qa.addActionItem("Later", getResources().getDrawable(R.drawable.watchlater_white_not), 
+                            new QActionClickListener() {                                
+                                @Override public void onClick(View v, QActionItem item) {
+                                    Log.d(TAG, "watchlater clicked");
+                                    item.setIcon(getResources().getDrawable(R.drawable.watchlater_white));
+                                    item.setTitle("aaaa");
+                                    item.invalidate();
+                                }
+                            });
+                    qa.show();
+                    
+                    // enterAsGuest();
                 }
                 
             });

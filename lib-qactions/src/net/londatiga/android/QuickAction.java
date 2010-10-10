@@ -6,18 +6,17 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+
+import net.londatiga.android.QActionItem.QActionClickListener;
 
 /**
  * Popup window, shows action list as icon and text like the one in Gallery3D app. 
@@ -90,8 +89,8 @@ public class QuickAction extends CustomPopupWindow {
      * @param title action title
      * @param drawable action drawable
      */	
-	public void addActionItem(String title, Drawable drawable) {
-	    addActionItem(title, drawable, null);
+	public QActionItem addActionItem(String title, Drawable drawable) {
+	    return addActionItem(title, drawable, null);
 	}
 	
     /**
@@ -101,12 +100,13 @@ public class QuickAction extends CustomPopupWindow {
      * @param drawable action drawable
      * @param clickListener action on click 
      */ 
-    public void addActionItem(String title, Drawable drawable, OnClickListener clickListener) {
+    public QActionItem addActionItem(String title, Drawable drawable, QActionClickListener clickListener) {
         final QActionItem actionItem = new QActionItem();
         actionItem.setTitle(title);
         actionItem.setIcon(drawable);
         actionItem.setOnClickListener(clickListener);
         addActionItem(actionItem);
+        return actionItem;
     }
 	
 	
@@ -223,51 +223,34 @@ public class QuickAction extends CustomPopupWindow {
 	 */
 	private void createActionList() {
 		View view;
-		String title;
-		Drawable icon;
-		OnClickListener listener;
-	
+		
 		for (int i = 0; i < actionList.size(); i++) {
-			title 		= actionList.get(i).getTitle();
-			icon 		= actionList.get(i).getIcon();
-			listener	= actionList.get(i).getListener();
-	
-			view 		= getActionItem(title, icon, listener);
+		    
+		    QActionItem item = actionList.get(i);
+			
+		    view 		= createActionView(item);
 		
 			view.setFocusable(true);
 			view.setClickable(true);
 			 
 			mTrack.addView(view);
+			
+			item.setView(view);
 		}
 	}
 	
 	/**
 	 * Get action item {@link View}
 	 * 
-	 * @param title action item title
-	 * @param icon {@link Drawable} action item icon
-	 * @param listener {@link View.OnClickListener} action item listener
+	 * @param item {@link QActionItem} action item 
 	 * @return action item {@link View}
 	 */
-	private View getActionItem(String title, Drawable icon, OnClickListener listener) {
-		LinearLayout container	= (LinearLayout) inflater.inflate(R.layout.action_item, null);
-		
-		ImageView img			= (ImageView) container.findViewById(R.id.icon);
-		TextView text			= (TextView) container.findViewById(R.id.title);
-		
-		if (icon != null) {
-			img.setImageDrawable(icon);
-		}
-		
-		if (title != null) {			
-			text.setText(title);
-		}
-		
-		if (listener != null) {
-			container.setOnClickListener(listener);
-		}
-
+	private View createActionView(final QActionItem item) {
+	    
+		View container = inflater.inflate(R.layout.action_item, null);		
+		item.inject(container);
 		return container;
+		
 	}
 	
 	/**

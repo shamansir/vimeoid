@@ -1,7 +1,10 @@
 package net.londatiga.android;
 
 import android.graphics.drawable.Drawable;
+import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * Action item, displayed as menu with icon and text.
@@ -10,9 +13,15 @@ import android.view.View.OnClickListener;
  *
  */
 public class QActionItem {
+    
+    public interface QActionClickListener {
+        public void onClick(View v, QActionItem item);
+    }
+    
 	private Drawable icon;
 	private String title;
-	private OnClickListener listener;
+	private QActionClickListener listener;
+	private View view;
 	
 	/**
 	 * Constructor
@@ -68,7 +77,7 @@ public class QActionItem {
 	 * 
 	 * @param listener on click listener {@link View.OnClickListener}
 	 */
-	public void setOnClickListener(OnClickListener listener) {
+	public void setOnClickListener(QActionClickListener listener) {
 		this.listener = listener;
 	}
 	
@@ -77,7 +86,44 @@ public class QActionItem {
 	 * 
 	 * @return on click listener {@link View.OnClickListener}
 	 */
-	public OnClickListener getListener() {
+	public QActionClickListener getListener() {
 		return this.listener;
 	}
+
+    protected void setView(View view) {
+        this.view = view;
+    }
+    
+    public View getView() {
+        return this.view;
+    }
+    
+    public void invalidate() {
+        inject(view);
+        view.invalidate();
+    }
+    
+    protected void inject(View parent) {
+        
+        ImageView img           = (ImageView) parent.findViewById(R.id.icon);
+        TextView text           = (TextView) parent.findViewById(R.id.title);
+        
+        if (icon != null) {
+            img.setImageDrawable(icon);
+        }
+        
+        if (title != null) {            
+            text.setText(title);
+        }
+        
+        if (listener != null) {
+            parent.setOnClickListener(new OnClickListener() {                
+                @Override public void onClick(View v) {
+                    listener.onClick(v, QActionItem.this);
+                }
+            });
+        }
+        
+    }
+	
 }
