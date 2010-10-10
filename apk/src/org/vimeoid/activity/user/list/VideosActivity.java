@@ -27,6 +27,7 @@ import org.vimeoid.util.PagingData_;
 
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -55,6 +56,8 @@ public class VideosActivity extends ItemsListActivity<Video> {
     private final VideosIdsReceiver likesReceiver;
     private final VideosIdsReceiver watchLatersReceiver;
     
+    private long currentUserId;
+    
     public VideosActivity() {
         super();
         
@@ -71,19 +74,21 @@ public class VideosActivity extends ItemsListActivity<Video> {
                 //onContentChanged();
             }            
         };
+        
     }
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         
-        final String currentUserId = String.valueOf(VimeoApi.getUserLoginData(this).id);
+        currentUserId = VimeoApi.getUserLoginData(this).id;
+        
         final Video.SortType currentSortType = (Video.SortType) getIntent().getExtras().get(Invoke.Extras.API_SORT_TYPE);
         
         // check if fits period
-        secondaryTasks.addListTask(GET_LIKES_TASK, Methods.videos.getLikes, new ApiParams().add("user_id", currentUserId)
+        secondaryTasks.addListTask(GET_LIKES_TASK, Methods.videos.getLikes, new ApiParams().add("user_id", String.valueOf(currentUserId))
         		                                                                           .add("sort", currentSortType.toString()), 
         		                                                            likesReceiver, 3, 30);
-        secondaryTasks.addListTask(GET_WATCHSLATER_TASK, Methods.albums.getWatchLater, new ApiParams().add("user_id", currentUserId)
+        secondaryTasks.addListTask(GET_WATCHSLATER_TASK, Methods.albums.getWatchLater, new ApiParams().add("user_id", String.valueOf(currentUserId))
                                                                                                       .add("sort", currentSortType.toString()), 
                                                                             watchLatersReceiver, 3, 30);
         
@@ -113,36 +118,43 @@ public class VideosActivity extends ItemsListActivity<Video> {
         final VideosListAdapter adapter = ((VideosListAdapter)getAdapter());
         
         QuickAction qa = new QuickAction(view);
-        qa.addActionItem(getString(R.string.qa_later), resources.getDrawable(video.isWatchLater 
-                                                                             ? R.drawable.watchlater_white 
-                                                                             : R.drawable.watchlater_white_not), 
-            new QActionClickListener() {            
-                @Override public void onClick(View v, final QActionItem item) {
-                    new ApiTask(video.isWatchLater 
-                                ? Methods.albums.removeFromWatchLater 
-                                : Methods.albums.addToWatchLater) {
-                        
-                        @Override
-                        public void onAnswerReceived(JSONObject jsonObj) throws JSONException {
-                            video.isWatchLater = !video.isWatchLater;
-                            final Video changedVideo = adapter.switchWatchLater(position);
-                            Dialogs.makeToast(VideosActivity.this, getString(changedVideo.isWatchLater 
-                                                                             ? R.string.added_to_watchlater
-                                                                             : R.string.removed_from_watchlater));
-                            item.setIcon(resources.getDrawable(changedVideo.isWatchLater 
-                                                               ? R.drawable.watchlater_white 
-                                                               : R.drawable.watchlater_white_not));
-                            item.invalidate();
-                        }
-                        
-                        @Override
-                        protected void onAnyError(Exception e, String message) {
-                            Dialogs.makeToast(VideosActivity.this, R.string.failed_to_add_watch_later + " : " + message);
-                        }
-                        
-                    };
-                }
-            });
+        if (video.uploaderId != currentUserId) {
+            qa.addActionItem(getString(R.string.qa_later), resources.getDrawable(video.isWatchLater 
+                                                                                 ? R.drawable.watchlater_white 
+                                                                                 : R.drawable.watchlater_white_not), 
+                new QActionClickListener() {            
+                    @Override public void onClick(View v, final QActionItem item) {
+                        new ApiTask(video.isWatchLater 
+                                    ? Methods.albums.removeFromWatchLater 
+                                    : Methods.albums.addToWatchLater) {
+                            
+                            @Override
+                            public void onAnswerReceived(JSONObject jsonObj) throws JSONException {
+                                video.isWatchLater = !video.isWatchLater;
+                                final Video changedVideo = adapter.switchWatchLater(position);
+                                Dialogs.makeToast(VideosActivity.this, getString(changedVideo.isWatchLater 
+                                                                                 ? R.string.added_to_watchlater
+                                                                                 : R.string.removed_from_watchlater));
+                                item.setIcon(resources.getDrawable(changedVideo.isWatchLater 
+                                                                   ? R.drawable.watchlater_white 
+                                                                   : R.drawable.watchlater_white_not));
+                                item.invalidate();
+                            }
+                            
+                            @Override
+                            protected void onAnyError(Exception e, final String message) {
+                                runOnUiThread(new Runnable() {
+                                    @Override public void run() {
+                                        Log.e(TAG, message);
+                                        Dialogs.makeLongToast(VideosActivity.this, R.string.failed_to_add_watch_later + " : " + message);                                    
+                                    }
+                                });
+                            }
+                            
+                        }.execute(new ApiParams().add("video_id", String.valueOf(video.id)));
+                    }
+                });
+        }
         qa.addActionItem(getString(R.string.qa_info), getResources().getDrawable(R.drawable.info), 
                 new QActionClickListener() {            
                     @Override public void onClick(View v, QActionItem item) {

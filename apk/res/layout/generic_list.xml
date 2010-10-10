@@ -11,11 +11,10 @@
 	          android:layout_width="fill_parent"
 	          android:layout_height="wrap_content"
 	          android:layout_weight="1"
-	          android:transcriptMode="normal"
+	          android:transcriptMode="disabled"
 	          android:divider="#f333"
 	          android:dividerHeight="1dp"
-	          android:listSelector="@drawable/selector_bg"
-	          android:descendantFocusability="beforeDescendants" />
+	          android:listSelector="@drawable/selector_bg" />
     <include android:id="@+id/emptyView"
              layout="@layout/item_list_empty" />	      
 </LinearLayout>
