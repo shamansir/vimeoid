@@ -19,7 +19,7 @@
               android:singleLine="true"
               android:ellipsize="marquee"
               android:scrollHorizontally="true"
-              android:background="@drawable/action_item_shape" />
+              android:background="@drawable/action_item" />
     <ImageView android:id="@+id/forwardIcon"
                android:src="@drawable/forward"
                android:layout_width="@dimen/fwdbck_icon_width"

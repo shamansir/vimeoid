@@ -7,15 +7,16 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="120"
+   width="100"
    height="120"
    id="svg2916"
    version="1.1"
    inkscape:version="0.47pre4 r22446"
    sodipodi:docname="selection_button.svg"
-   inkscape:export-filename="/home/shamansir/Workspace/vimeoid/apk/res/drawable/select.9.png"
+   inkscape:export-filename="/home/shamansir/Workspace/vimeoid/apk/res/drawable/button.9.png"
    inkscape:export-xdpi="36"
    inkscape:export-ydpi="36">
   <defs
@@ -34,6 +35,13 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective2834"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -42,9 +50,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.85434857"
+     inkscape:zoom="3.8"
      inkscape:cx="60"
-     inkscape:cy="266.86999"
+     inkscape:cy="58.222377"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -75,28 +83,12 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-932.36218)">
-    <rect
-       style="fill:#80a5b1;fill-opacity:1;fill-rule:nonzero;stroke:none"
-       id="rect2928"
-       width="120"
-       height="478.79041"
-       x="0"
-       y="573.57178" />
-    <rect
-       style="fill:#2f618b;fill-opacity:1;fill-rule:nonzero;stroke:none"
-       id="rect2930"
-       width="120"
-       height="498.73999"
-       x="0"
-       y="538.62219"
-       ry="28.606037" />
-    <rect
-       style="fill:#2c487c;fill-opacity:1;fill-rule:nonzero;stroke:none"
-       id="rect2930-2"
-       width="110"
-       height="498.73999"
-       x="5"
-       y="518.62219"
-       ry="28.606037" />
+    <image
+       y="922.36218"
+       x="-3.9473684"
+       id="image2836"
+       height="130"
+       width="106.78571"
+       xlink:href="file:///home/shamansir/Workspace/vimeoid/lib-qactions/res/drawable/popup.9.png" />
   </g>
 </svg>

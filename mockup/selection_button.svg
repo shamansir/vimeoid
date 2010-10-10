@@ -15,7 +15,7 @@
    version="1.1"
    inkscape:version="0.47pre4 r22446"
    sodipodi:docname="selection_button.svg"
-   inkscape:export-filename="/home/shamansir/Workspace/vimeoid/apk/res/drawable/select.9.png"
+   inkscape:export-filename="/home/shamansir/Workspace/vimeoid/apk/res/drawable/button.9.png"
    inkscape:export-xdpi="36"
    inkscape:export-ydpi="36">
   <defs
@@ -42,9 +42,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.85434857"
+     inkscape:zoom="3.8"
      inkscape:cx="60"
-     inkscape:cy="266.86999"
+     inkscape:cy="60"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -66,7 +66,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -79,24 +79,24 @@
        style="fill:#80a5b1;fill-opacity:1;fill-rule:nonzero;stroke:none"
        id="rect2928"
        width="120"
-       height="478.79041"
+       height="120"
        x="0"
-       y="573.57178" />
+       y="932.36218" />
     <rect
        style="fill:#2f618b;fill-opacity:1;fill-rule:nonzero;stroke:none"
        id="rect2930"
        width="120"
-       height="498.73999"
+       height="110"
        x="0"
-       y="538.62219"
-       ry="28.606037" />
+       y="932.36218"
+       ry="6.309227" />
     <rect
        style="fill:#2c487c;fill-opacity:1;fill-rule:nonzero;stroke:none"
        id="rect2930-2"
        width="110"
-       height="498.73999"
+       height="80"
        x="5"
-       y="518.62219"
-       ry="28.606037" />
+       y="937.36218"
+       ry="4.5885296" />
   </g>
 </svg>
