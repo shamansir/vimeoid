@@ -297,6 +297,11 @@ public final class Invoke {
             
         }
 
+        public static void selectCommentsOf(Activity parent, org.vimeoid.dto.advanced.Video video) {
+            // TODO Auto-generated method stub
+            
+        }
+
     }
     
 }

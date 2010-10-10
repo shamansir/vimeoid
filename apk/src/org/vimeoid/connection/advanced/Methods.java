@@ -164,6 +164,7 @@ public class Methods {
         public static final String getContactsUploaded = PREFIX + "getContactsUploaded";
         public static final String getInfo = PREFIX + "getInfo";
         public static final String getLikes = PREFIX + "getLikes";
+        public static final String getLikers = PREFIX + "getLikers";        
         public static final String getSubscriptions = PREFIX + "getSubscriptions";
         public static final String getThumbnailUrls = PREFIX + "getThumbnailUrls";
         public static final String getUploaded = PREFIX + "getUploaded";

@@ -40,6 +40,15 @@
     <!-- welcome page -->
     <string name="enter">Enter</string>
     <string name="guest">Guest</string>
+    <!-- quick actions -->
+    <string name="qa_later">Later</string>
+    <string name="qa_info">Info</string>
+    <string name="qa_author">Author</string>
+    <string name="qa_comments">Comments</string>    
+    <string name="failed_to_add_watch_later">Failed to add to watch later</string>
+    <string name="added_to_watchlater">Added to Watch later</string>
+    <string name="removed_from_watchlater">Removed from Watch Later</string>
+        
     <!-- video page -->
     <string name="num_of_plays">{num} plays</string>
     <string name="num_of_likes">{num} likes</string>
@@ -49,7 +58,7 @@
     <string name="tags_are">{list}</string>
     <string name="none_of_tags">[none]</string>
     <string name="dimensions_are">{width}x{height}</string>
-    <string name="duration_is">{time}</string>
+    <string name="duration_is">{time}</string>    
     <string name="no_description_supplied">[No description supplied]</string>    
     <!-- user page -->
     <string name="num_of_videos">{num} videos</string>

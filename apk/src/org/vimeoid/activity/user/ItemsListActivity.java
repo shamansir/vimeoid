@@ -117,12 +117,12 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
         super.onCreateContextMenu(menu, v, menuInfo);
         
         final AdapterView.AdapterContextMenuInfo info = extractMenuInfo(menuInfo);
-        createQuickActions(getItem(info.position), info.targetView).show();
+        createQuickActions(info.position, getItem(info.position), info.targetView).show();
     }    
        
     public void onSecondaryTaskPerfomed(int id, JSONObject result)  throws JSONException { }
 
-    protected abstract QuickAction createQuickActions(ItemType item, View v);
+    protected abstract QuickAction createQuickActions(int position, ItemType item, View v);
    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -14,7 +14,8 @@
 	          android:transcriptMode="normal"
 	          android:divider="#f333"
 	          android:dividerHeight="1dp"
-	          android:listSelector="@drawable/selector_bg" />
+	          android:listSelector="@drawable/selector_bg"
+	          android:descendantFocusability="beforeDescendants" />
     <include android:id="@+id/emptyView"
              layout="@layout/item_list_empty" />	      
 </LinearLayout>

@@ -53,13 +53,16 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnIt
     private View lastSelected; 
     private ThumbClickListener thumbClickListener;
     
+    private final ListView listView;
+    
     public VideosListAdapter(Context context, LayoutInflater inflater, ListView listView) {
         super(Video.FieldsKeys.MULTIPLE_KEY);
         
         this.layoutInflater = inflater;        
         this.imageLoader = new ImageLoader(context, R.drawable.thumb_loading_small, R.drawable.video_unknown_item);
         
-        listView.setOnItemSelectedListener(this);
+        this.listView = listView;        
+        this.listView.setOnItemSelectedListener(this);
     }
     
     @Override
@@ -97,15 +100,6 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnIt
         imageLoader.displayImage(video.thumbnails.small.url, itemHolder.ivThumb);
               
         itemHolder.ivPlay.setVisibility(View.INVISIBLE);
-        /* itemHolder.ivPlay.setOnFocusChangeListener(new OnFocusChangeListener() {
-			@Override public void onFocusChange(View v, boolean hasFocus) {
-				Log.d("VLA", "Thumb at " + position + " is focused: " + hasFocus);
-				//ivPlay.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
-				ImageView iv = (ImageView)v.findViewById(R.id.playVideo);
-				iv.setVisibility(hasFocus ? View.VISIBLE : View.INVISIBLE);
-			}
-			
-		}); */
         itemHolder.ivThumb.setOnClickListener(new OnClickListener() {
 			@Override public void onClick(View v) {
 				//Log.d("VLA", "Thumb at " + position + " is clicked");
@@ -183,6 +177,7 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnIt
         for (Video video: getItems()) {
             if (videosList.contains(video.getId())) video.isLike = true;
         }
+        listView.invalidateViews();        
     }
 
     public void updateWatchLaters(Set<Long> videosIds) {
@@ -191,6 +186,14 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnIt
         for (Video video: getItems()) {
             if (videosList.contains(video.getId())) video.isWatchLater = true;
         }
+        listView.invalidateViews();
+    }
+    
+    public Video switchWatchLater(int position) {
+        final Video subject = (Video)getItem(position);
+        subject.isWatchLater = !subject.isWatchLater;
+        listView.getChildAt(position).invalidate();
+        return subject;
     }
     
     public void setThumbClickListener(ThumbClickListener listener) {
@@ -213,5 +216,6 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnIt
         
         ViewGroup vgMarkers;
     }
+
 
 }

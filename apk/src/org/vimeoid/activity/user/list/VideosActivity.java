@@ -3,12 +3,15 @@ package org.vimeoid.activity.user.list;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.londatiga.android.QActionItem;
 import net.londatiga.android.QuickAction;
+import net.londatiga.android.QActionItem.QActionClickListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.R;
 import org.vimeoid.activity.base.ApiPagesReceiver;
+import org.vimeoid.activity.user.ApiTask;
 import org.vimeoid.activity.user.ItemsListActivity;
 import org.vimeoid.adapter.JsonObjectsAdapter;
 import org.vimeoid.adapter.user.VideosListAdapter;
@@ -18,9 +21,11 @@ import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.dto.advanced.PagingData;
 import org.vimeoid.dto.advanced.Video;
 import org.vimeoid.util.ApiParams;
+import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
 import org.vimeoid.util.PagingData_;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 
@@ -50,23 +55,20 @@ public class VideosActivity extends ItemsListActivity<Video> {
     private final VideosIdsReceiver likesReceiver;
     private final VideosIdsReceiver watchLatersReceiver;
     
-    //private String[] watchLaters;
-    //private String[] likes;
-    
     public VideosActivity() {
         super();
         
         likesReceiver = new VideosIdsReceiver() {
             @Override public void onComplete() {
                 ((VideosListAdapter)getAdapter()).updateLikes(videosIds);
-                onContentChanged();
+                //onContentChanged();
             }            
         };
         
         watchLatersReceiver = new VideosIdsReceiver() {
             @Override public void onComplete() {
                 ((VideosListAdapter)getAdapter()).updateWatchLaters(videosIds);
-                onContentChanged();
+                //onContentChanged();
             }            
         };
     }
@@ -80,12 +82,10 @@ public class VideosActivity extends ItemsListActivity<Video> {
         // check if fits period
         secondaryTasks.addListTask(GET_LIKES_TASK, Methods.videos.getLikes, new ApiParams().add("user_id", currentUserId)
         		                                                                           .add("sort", currentSortType.toString()), 
-        		                                                            likesReceiver, 3, 25);
+        		                                                            likesReceiver, 3, 30);
         secondaryTasks.addListTask(GET_WATCHSLATER_TASK, Methods.albums.getWatchLater, new ApiParams().add("user_id", currentUserId)
                                                                                                       .add("sort", currentSortType.toString()), 
-                                                                            watchLatersReceiver, 3, 25);
-        
-        // TODO: run this tasks manually, ask more if required
+                                                                            watchLatersReceiver, 3, 30);
         
         super.onCreate(savedInstanceState);
     }
@@ -102,30 +102,65 @@ public class VideosActivity extends ItemsListActivity<Video> {
     }
     
     @Override
-    public void onSecondaryTaskPerfomed(int id, JSONObject result) throws JSONException {
-        // TODO: pass watchLaters and Likes to adapter
-    }
-    
-    @Override
     protected void onItemSelected(Video video) { 
         Invoke.User_.selectVideo(this, video);
     }
     
     @Override
-    protected QuickAction createQuickActions(Video item, View v) {
-        QuickAction qa = new QuickAction(v);
-        qa.addActionItem("Play", getResources().getDrawable(R.drawable.play));
-        qa.addActionItem("Face", getResources().getDrawable(R.drawable.contact));
-        qa.addActionItem("Jagagaga", getResources().getDrawable(R.drawable.video));
-        qa.addActionItem("Trace", getResources().getDrawable(R.drawable.album));
-        qa.addActionItem("Author", getResources().getDrawable(R.drawable.channel));
-        qa.addActionItem("Later", getResources().getDrawable(R.drawable.watchlater));
-        /*qa.addActionItem("Video", getResources().getDrawable(R.drawable.video));
-        qa.addActionItem("Info", getResources().getDrawable(R.drawable.info));
-        qa.addActionItem("Later", getResources().getDrawable(R.drawable.watchlater));
-        qa.addActionItem("Gegegegegege", getResources().getDrawable(R.drawable.channel));
-        qa.addActionItem("Two words", getResources().getDrawable(R.drawable.channel)); */
-        /*qa.show();*/
+    protected QuickAction createQuickActions(final int position, final Video video, View view) {
+        // TODO: add ability to watch albums / channels where video located
+        final Resources resources = getResources();
+        final VideosListAdapter adapter = ((VideosListAdapter)getAdapter());
+        
+        QuickAction qa = new QuickAction(view);
+        qa.addActionItem(getString(R.string.qa_later), resources.getDrawable(video.isWatchLater 
+                                                                             ? R.drawable.watchlater_white 
+                                                                             : R.drawable.watchlater_white_not), 
+            new QActionClickListener() {            
+                @Override public void onClick(View v, final QActionItem item) {
+                    new ApiTask(video.isWatchLater 
+                                ? Methods.albums.removeFromWatchLater 
+                                : Methods.albums.addToWatchLater) {
+                        
+                        @Override
+                        public void onAnswerReceived(JSONObject jsonObj) throws JSONException {
+                            video.isWatchLater = !video.isWatchLater;
+                            final Video changedVideo = adapter.switchWatchLater(position);
+                            Dialogs.makeToast(VideosActivity.this, getString(changedVideo.isWatchLater 
+                                                                             ? R.string.added_to_watchlater
+                                                                             : R.string.removed_from_watchlater));
+                            item.setIcon(resources.getDrawable(changedVideo.isWatchLater 
+                                                               ? R.drawable.watchlater_white 
+                                                               : R.drawable.watchlater_white_not));
+                            item.invalidate();
+                        }
+                        
+                        @Override
+                        protected void onAnyError(Exception e, String message) {
+                            Dialogs.makeToast(VideosActivity.this, R.string.failed_to_add_watch_later + " : " + message);
+                        }
+                        
+                    };
+                }
+            });
+        qa.addActionItem(getString(R.string.qa_info), getResources().getDrawable(R.drawable.info), 
+                new QActionClickListener() {            
+                    @Override public void onClick(View v, QActionItem item) {
+                        Invoke.User_.selectVideo(VideosActivity.this, video);
+                    }
+                });
+        qa.addActionItem(getString(R.string.qa_author), getResources().getDrawable(R.drawable.contact), 
+                new QActionClickListener() {            
+                    @Override public void onClick(View v, QActionItem item) {
+                        Invoke.User_.selectUploader(VideosActivity.this, video);
+                    }
+                });
+        qa.addActionItem(getString(R.string.qa_comments), getResources().getDrawable(R.drawable.comment), 
+                new QActionClickListener() {            
+                    @Override public void onClick(View v, QActionItem item) {
+                        Invoke.User_.selectCommentsOf(VideosActivity.this, video);
+                    }
+                });
         return qa;
     };
     

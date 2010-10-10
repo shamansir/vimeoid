@@ -21,7 +21,7 @@ import android.os.AsyncTask;
  */
 public abstract class ApiTask_<Params, Result> extends AsyncTask<Params, Void, Result> {
     
-    protected abstract void onAnyError(Exception e, String message);
+    protected void onAnyError(Exception e, String message) {};
     protected abstract void onAnswerReceived(Result result) throws Exception;
     // protected void ensureConnected(); // TODO: use this method
     
