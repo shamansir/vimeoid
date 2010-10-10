@@ -55,7 +55,8 @@ public class VideoActivity extends SingleItemActivity<Video> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        
+        super.onCreate(savedInstanceState);        
         
         final long videoId = Long.valueOf(getIntent().getExtras().getLong(Invoke.Extras.VIDEO_ID));
         

@@ -5,6 +5,6 @@
           android:layout_height="wrap_content"
           android:layout_weight="1"
           android:listSelector="@drawable/selector_bg"
-          android:transcriptMode="normal"              
+          android:transcriptMode="disabled"              
           android:divider="#ccc"
           android:dividerHeight="1dp" />

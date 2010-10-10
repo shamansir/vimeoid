@@ -100,10 +100,12 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
         
         if (isLoadMoreButton(position)) return; 
         
-        menu.setHeaderTitle(getContextMenuTitle(position));
+        if (contextMenu != 0) {        
+            menu.setHeaderTitle(getContextMenuTitle(position));
             
-        MenuInflater inflater = getMenuInflater(); //from activity
-        inflater.inflate(contextMenu, menu);
+            MenuInflater inflater = getMenuInflater(); //from activity
+            inflater.inflate(contextMenu, menu);            
+        }
     }
     
     @Override
