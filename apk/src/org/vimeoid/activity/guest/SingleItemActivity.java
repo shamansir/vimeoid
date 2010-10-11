@@ -5,7 +5,6 @@ package org.vimeoid.activity.guest;
 
 import org.vimeoid.R;
 import org.vimeoid.activity.base.SingleItemActivity_;
-import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.connection.ApiCallInfo;
 import org.vimeoid.connection.simple.VimeoProvider;
 import org.vimeoid.util.Dialogs;
@@ -55,8 +54,6 @@ public abstract class SingleItemActivity<ItemType extends SimpleItem> extends Si
         
         super.onCreate(savedInstanceState);
     }
-    
-    protected abstract SectionedActionsAdapter fillWithActions(final SectionedActionsAdapter actionsAdapter, final ItemType item);
     
     protected abstract ItemType extractFromCursor(Cursor cursor, int position);    
     

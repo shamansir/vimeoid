@@ -16,9 +16,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 /**
  * <dl>
@@ -34,7 +36,7 @@ import android.widget.TextView;
  * @date Sep 13, 2010 9:47:43 PM 
  *
  */
-public class SectionedActionsAdapter extends BaseAdapter {
+public class SectionedActionsAdapter extends BaseAdapter implements OnItemClickListener {
 	
 	public static final String TAG = "SectionedActionsAdapter";
     
@@ -183,7 +185,7 @@ public class SectionedActionsAdapter extends BaseAdapter {
            }
            
            itemHolder.ivFwd.setVisibility((item.onClick == null) ? View.GONE : View.VISIBLE);
-           if (item.onClick != null) convertView.setOnClickListener(item.onClick);           
+           //if (item.onClick != null) convertView.setOnClickListener(item.onClick);           
             
         }
         
@@ -240,5 +242,13 @@ public class SectionedActionsAdapter extends BaseAdapter {
         TextView tvTitle;
         ImageView ivFwd;
     }
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		if (getItemViewType(position) == ITEM_VIEW_TYPE) {
+			final LActionItem item = (LActionItem) getItem(position);
+			if (item.onClick != null) item.onClick(view);
+		}
+	}
 
 }

@@ -63,14 +63,14 @@ public class VideosActivity extends ItemsListActivity<Video> {
         
         likesReceiver = new VideosIdsReceiver() {
             @Override public void onComplete() {
-                ((VideosListAdapter)getAdapter()).updateLikes(videosIds);
+                ((VideosListAdapter)getAdapter()).updateLikes(getListView(), videosIds);
                 //onContentChanged();
             }            
         };
         
         watchLatersReceiver = new VideosIdsReceiver() {
             @Override public void onComplete() {
-                ((VideosListAdapter)getAdapter()).updateWatchLaters(videosIds);
+                ((VideosListAdapter)getAdapter()).updateWatchLaters(getListView(), videosIds);
                 //onContentChanged();
             }            
         };
@@ -97,7 +97,8 @@ public class VideosActivity extends ItemsListActivity<Video> {
 
     @Override
     protected JsonObjectsAdapter<Video> createAdapter() {
-        final VideosListAdapter adapter = new VideosListAdapter(this, getLayoutInflater(), getListView());
+        final VideosListAdapter adapter = new VideosListAdapter(this, getLayoutInflater());
+        getListView().setOnItemSelectedListener(adapter);
         adapter.setThumbClickListener(new ThumbClickListener() {
             @Override public void thumbClicked(Video video) {
                 Invoke.User_.playVideo(VideosActivity.this, video);
@@ -131,7 +132,7 @@ public class VideosActivity extends ItemsListActivity<Video> {
                             @Override
                             public void onAnswerReceived(JSONObject jsonObj) throws JSONException {
                                 video.isWatchLater = !video.isWatchLater;
-                                final Video changedVideo = adapter.switchWatchLater(position);
+                                final Video changedVideo = adapter.switchWatchLater(getListView(), position);
                                 Dialogs.makeToast(VideosActivity.this, getString(changedVideo.isWatchLater 
                                                                                  ? R.string.added_to_watchlater
                                                                                  : R.string.removed_from_watchlater));

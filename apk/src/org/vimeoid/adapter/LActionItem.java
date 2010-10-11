@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
@@ -77,8 +78,8 @@ public class LActionItem {
         this(section, -1, iconUrl, title);
     }
     
-    public void onClick() {
-        
+    public void onClick(View view) {
+        if (onClick != null) onClick.onClick(view);
     }
     
     public static interface RenderingAdapter {

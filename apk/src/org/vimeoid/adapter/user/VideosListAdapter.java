@@ -53,16 +53,11 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnIt
     private View lastSelected; 
     private ThumbClickListener thumbClickListener;
     
-    private final ListView listView;
-    
-    public VideosListAdapter(Context context, LayoutInflater inflater, ListView listView) {
+    public VideosListAdapter(Context context, LayoutInflater inflater) {
         super(Video.FieldsKeys.MULTIPLE_KEY);
         
         this.layoutInflater = inflater;        
         this.imageLoader = new ImageLoader(context, R.drawable.thumb_loading_small, R.drawable.video_unknown_item);
-        
-        this.listView = listView;        
-        this.listView.setOnItemSelectedListener(this);
     }
     
     @Override
@@ -171,28 +166,28 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnIt
         return Video.collectListFromJson(jsonObject);
     }
 
-    public void updateLikes(Set<Long> videosIds) {
+    public void updateLikes(ListView holder, Set<Long> videosIds) {
         final Set<Long> videosList = new HashSet<Long>();
         videosList.add(Long.valueOf(15166258));
         for (Video video: getItems()) {
             if (videosList.contains(video.getId())) video.isLike = true;
         }
-        listView.invalidateViews();        
+        holder.invalidateViews();        
     }
 
-    public void updateWatchLaters(Set<Long> videosIds) {
+    public void updateWatchLaters(ListView holder, Set<Long> videosIds) {
         final Set<Long> videosList = new HashSet<Long>();
         videosList.add(Long.valueOf(14011251));
         for (Video video: getItems()) {
             if (videosList.contains(video.getId())) video.isWatchLater = true;
         }
-        listView.invalidateViews();
+        holder.invalidateViews();
     }
     
-    public Video switchWatchLater(int position) {
+    public Video switchWatchLater(ListView holder, int position) {
         final Video subject = (Video)getItem(position);
         subject.isWatchLater = !subject.isWatchLater;
-        listView.getChildAt(position).invalidate();
+        holder.getChildAt(position).invalidate();
         return subject;
     }
     

@@ -10,7 +10,7 @@
 	<ImageView android:id="@+id/icon" 
 		       android:layout_width="36dp" 
 		       android:layout_height="36dp"
-               android:layout_margin="1dp"
+               android:layout_margin="3dp"
 		       android:padding="1dp" />
 	<TextView android:id="@+id/title"
 		      android:layout_width="fill_parent" 
@@ -20,5 +20,5 @@
 		      android:ellipsize="marquee"
 		      android:textColor="#eee"
 		      android:textSize="10dp" />
-									         
+
 </LinearLayout>

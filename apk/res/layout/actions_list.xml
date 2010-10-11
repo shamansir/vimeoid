@@ -4,7 +4,8 @@
           android:layout_width="fill_parent"
           android:layout_height="wrap_content"
           android:layout_weight="1"
-          android:listSelector="@drawable/selector_bg"
-          android:transcriptMode="disabled"              
-          android:divider="#ccc"
-          android:dividerHeight="1dp" />
+          android:transcriptMode="disabled"
+          android:divider="#fccc"
+          android:dividerHeight="1dp"
+          android:descendantFocusability="beforeDescendants"
+          android:listSelector="@drawable/selector_bg" />

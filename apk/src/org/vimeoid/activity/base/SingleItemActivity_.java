@@ -76,7 +76,9 @@ public abstract class SingleItemActivity_<ItemType> extends Activity {
     
     protected void onItemReceived(final ItemType item) {
         final ListView actionsList = getActionsList();
-        actionsList.setAdapter(fillWithActions(new SectionedActionsAdapter(this, getLayoutInflater(), imageLoader), item));
+        final SectionedActionsAdapter actionsAdapter = new SectionedActionsAdapter(this, getLayoutInflater(), imageLoader);
+        actionsList.setAdapter(fillWithActions(actionsAdapter, item));
+        actionsList.setOnItemClickListener(actionsAdapter);
         actionsList.invalidate();        
     }
     

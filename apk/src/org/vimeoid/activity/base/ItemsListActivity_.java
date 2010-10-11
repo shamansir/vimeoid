@@ -259,11 +259,15 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
             setToNoItemsMore();
         }
 
-        @Override public void onError(Exception e, String message) {
-            hideProgressBar();
+        @Override public void onError(final Exception e, final String message) {
             Log.e(TAG, message);
             
-            Dialogs.makeExceptionToast(ItemsListActivity_.this, message, e);
+            runOnUiThread(new Runnable() {
+				@Override public void run() {
+		            hideProgressBar();					
+					Dialogs.makeExceptionToast(ItemsListActivity_.this, message, e);
+				}
+            });
         }
 
         @Override

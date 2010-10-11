@@ -50,9 +50,14 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
                 onSecondaryTaskPerfomed(taskId, result);
             }
 
-            @Override public void onError(Exception e, String message) {
-                Log.e(TAG, message + " / " + e.getLocalizedMessage());
-                Dialogs.makeExceptionToast(SingleItemActivity.this, message, e);
+            @Override public void onError(final Exception e, final String message) {
+            	runOnUiThread(new Runnable() {
+					@Override public void run() {
+		                Log.e(TAG, message + " / " + e.getLocalizedMessage());
+		                Dialogs.makeExceptionToast(SingleItemActivity.this, message, e);
+					}
+				});
+
             }
         };
     }
