@@ -49,6 +49,9 @@ public final class Invoke {
         public static final String USERNAME = "v_username";
         public static final String USER_ID = "v_user_id";
         
+        public static final String SUBSCRIPTIONS_STATUS = "v_subscr_status";
+        public static final String IS_CONTACT = "v_is_contact";
+        
     }    
 
     public static class Guest {

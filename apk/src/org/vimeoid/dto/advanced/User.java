@@ -24,6 +24,21 @@ import org.vimeoid.util.Utils;
  */
 public class User implements AdvancedItem {
     
+    public enum SubscriptionType { LIKES, UPLOADS, APPEARS;
+
+        public static SubscriptionType fromString(String value) {
+            if ("likes".equals(value)) return LIKES;
+            if ("uploads".equals(value)) return UPLOADS;
+            if ("appears".equals(value)) return APPEARS;
+            return null;
+        } 
+        
+        public String toString() {
+            return super.name().toLowerCase();
+        }
+    
+    };
+    
     public long id;
     public String displayName;
     public String username;

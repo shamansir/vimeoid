@@ -3,6 +3,9 @@
  */
 package org.vimeoid.activity.user.item;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,6 +17,7 @@ import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.dto.advanced.PortraitsData;
 import org.vimeoid.dto.advanced.User;
+import org.vimeoid.dto.advanced.User.SubscriptionType;
 import org.vimeoid.util.ApiParams;
 import org.vimeoid.util.Invoke;
 import org.vimeoid.util.Utils;
@@ -50,6 +54,15 @@ public class UserActivity extends SingleItemActivity<User> {
     
     private LActionItem albumAction;
     private LActionItem channelAction;
+    private LActionItem subscribeLikesAction;
+    private LActionItem subscribeUploadsAction;
+    private LActionItem subscribeAppearsAction;
+    
+    private long currentUserId;
+    private long subjectUserId;
+    
+    private Set<SubscriptionType> subscriptionsStatus; // Likes / Uploads / Appears / Channels / Groups
+    private Boolean isContact;
     
     public UserActivity() {
         super(R.layout.view_single_user);
@@ -58,13 +71,34 @@ public class UserActivity extends SingleItemActivity<User> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         
-        final String subjectUserId = String.valueOf(getIntent().getExtras().getLong(Invoke.Extras.USER_ID));
+        final Bundle extras = getIntent().getExtras(); 
         
-        secondaryTasks.add(LOAD_PORTRAITS_TASK, Methods.people.getPortraitUrls, new ApiParams().add("user_id", subjectUserId));
-        secondaryTasks.add(LOAD_ALBUMS_TASK, Methods.albums.getAll, new ApiParams().add("user_id", subjectUserId));
-        secondaryTasks.add(LOAD_CHANNELS_TASK, Methods.channels.getAll, new ApiParams().add("user_id", subjectUserId));
-        // load subscriptions and check if subscribed // people.getSubscriptions (likes/)
-        // check contacts if friends // contacts.getAll
+        currentUserId = VimeoApi.getUserLoginData(this).id;
+        subjectUserId = extras.getLong(Invoke.Extras.USER_ID);        
+        
+        secondaryTasks.add(LOAD_PORTRAITS_TASK, Methods.people.getPortraitUrls, new ApiParams().add("user_id", String.valueOf(subjectUserId)));
+        secondaryTasks.add(LOAD_ALBUMS_TASK, Methods.albums.getAll, new ApiParams().add("user_id", String.valueOf(subjectUserId)));
+        secondaryTasks.add(LOAD_CHANNELS_TASK, Methods.channels.getAll, new ApiParams().add("user_id", String.valueOf(subjectUserId)));
+        
+        if (currentUserId != subjectUserId) {
+            
+            if (extras.containsKey(Invoke.Extras.SUBSCRIPTIONS_STATUS)) {
+                String[] types = extras.getStringArray(Invoke.Extras.SUBSCRIPTIONS_STATUS);
+                subscriptionsStatus = new HashSet<SubscriptionType>();
+                for (int i = 0; i < types.length; i++) {
+                    subscriptionsStatus.add(SubscriptionType.fromString(types[i]));
+                }
+            } else {
+                // TODO: secondaryTasks.add(taskId, apiMethod, params); (infinite task)
+            }
+            
+            if (extras.containsKey(Invoke.Extras.IS_CONTACT)) {
+                isContact = extras.getBoolean(Invoke.Extras.IS_CONTACT);
+            } else {
+             // TODO: secondaryTasks.add(taskId, apiMethod, params); (infinite task)
+            }
+            
+        }
         
         super.onCreate(savedInstanceState);
     }
@@ -77,24 +111,6 @@ public class UserActivity extends SingleItemActivity<User> {
     @Override
     protected SectionedActionsAdapter fillWithActions(SectionedActionsAdapter actionsAdapter, final User user) {
 
-        // TODO: user activity (did / happened)
-        // TODO: user groups
-        // TODO: add search somewhere
-        
-        // TODO: add "subscribe" and "add contact" if it is not current user, using extras
-        // mark if already subscribed or friends 
-        final long currentUserId = VimeoApi.getUserLoginData(this).id;
-        if (currentUserId != user.id) {
-            int operationsSection = actionsAdapter.addSection(getString(R.string.operations));
-            // subscribe
-            final LActionItem subscribeAction = actionsAdapter.addAction(operationsSection, R.drawable.subscribe, 
-                                                                         R.string.subscribe);
-            // get is subscribed from extras
-            final LActionItem addContactAction = actionsAdapter.addAction(operationsSection, R.drawable.contact, 
-                                                                          R.string.addContact);
-            // get is already a friend from extras 
-        }
-        
         // Statistics section
         int statsSection = actionsAdapter.addSection(getString(R.string.statistics));
         // number of videos
@@ -170,6 +186,43 @@ public class UserActivity extends SingleItemActivity<User> {
         }
         
         // TODO: add websites URLs
+        
+        // TODO: add "subscribe" and "add contact" if it is not current user, using extras
+        // mark if already subscribed or friends 
+        if (currentUserId != subjectUserId) {
+            int operationsSection = actionsAdapter.addSection(getString(R.string.operations));
+            
+            // subscribe
+            if (subscriptionsStatus != null) {
+                
+                subscribeLikesAction = actionsAdapter.addAction(operationsSection, 
+                        subscriptionsStatus.contains(SubscriptionType.LIKES) ? R.drawable.subscribe
+                                                                             : R.drawable.subscribe_not, 
+                                                                             R.string.subscribe);
+                subscribeLikesAction.onClick = null; // TODO
+                
+                // TODO: updates
+                
+                // TODO: likes
+                
+            } else {
+                // just create actions and postpone them for secondary task
+            }
+            
+            // is contact
+            final LActionItem addContactAction = actionsAdapter.addAction(operationsSection, R.drawable.contact, 
+                                                                                             R.string.addContact);
+            if (isContact != null) {
+                // TODO
+            } else {
+                // just create action and postpone it for secondary task
+            } 
+        }
+        
+        // TODO: user activity (did / happened)
+        // TODO: user groups
+        // TODO: add search somewhere
+        // TODO: mutual contacts
         
         return actionsAdapter;
     }
