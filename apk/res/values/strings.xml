@@ -32,6 +32,9 @@
     <string name="view_channel_videos">View videos in channel</string>
     <string name="view_album_videos">View videos in album</string>
     <string name="subscribe">Subscribe</string>
+    <string name="subscribe_likes">Subscribe likes</string>
+    <string name="subscribe_updates">Subscribe updates</string>
+    <string name="subscribe_appearences">Subscribe appearances</string>    
     <string name="addContact">Add contact</string>    
     <!-- actions groups -->
     <string name="operations">Operations</string>
@@ -48,7 +51,6 @@
     <string name="failed_to_add_watch_later">Failed to add to watch later</string>
     <string name="added_to_watchlater">Added to Watch later</string>
     <string name="removed_from_watchlater">Removed from Watch Later</string>
-        
     <!-- video page -->
     <string name="num_of_plays">{num} plays</string>
     <string name="num_of_likes">{num} likes</string>

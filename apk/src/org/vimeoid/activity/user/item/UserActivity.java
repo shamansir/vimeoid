@@ -111,7 +111,7 @@ public class UserActivity extends SingleItemActivity<User> {
     @Override
     protected SectionedActionsAdapter fillWithActions(SectionedActionsAdapter actionsAdapter, final User user) {
 
-        // Statistics section
+    	// ========================= STATISTICS ================================
         int statsSection = actionsAdapter.addSection(getString(R.string.statistics));
         // number of videos
         final LActionItem videoAction = actionsAdapter.addAction(statsSection, R.drawable.video, 
@@ -159,14 +159,14 @@ public class UserActivity extends SingleItemActivity<User> {
                 @Override public void onClick(View v) { Invoke.User_.selectLikesOf(UserActivity.this, user); };
             };
         }
-        // subsriptions
+        // subscriptions
         final LActionItem subscriptionAction = actionsAdapter.addAction(statsSection, R.drawable.subscribe, 
                                                                                      getString(R.string.subscriptions));
         subscriptionAction.onClick =  new OnClickListener() {
             @Override public void onClick(View v) { Invoke.User_.selectSubsriptionsOf(UserActivity.this, user); };
         };        
         
-        // Information section
+        // ========================= INFORMATION ===============================
         int infoSection = actionsAdapter.addSection(getString(R.string.information));
         // location
         if (user.location.length() > 0) {
@@ -187,6 +187,7 @@ public class UserActivity extends SingleItemActivity<User> {
         
         // TODO: add websites URLs
         
+        // ========================= OPERATIONS ================================
         // TODO: add "subscribe" and "add contact" if it is not current user, using extras
         // mark if already subscribed or friends 
         if (currentUserId != subjectUserId) {
@@ -198,8 +199,12 @@ public class UserActivity extends SingleItemActivity<User> {
                 subscribeLikesAction = actionsAdapter.addAction(operationsSection, 
                         subscriptionsStatus.contains(SubscriptionType.LIKES) ? R.drawable.subscribe
                                                                              : R.drawable.subscribe_not, 
-                                                                             R.string.subscribe);
-                subscribeLikesAction.onClick = null; // TODO
+                                                                             R.string.subscribe_likes);
+                subscribeLikesAction.onClick = new OnClickListener() {
+					@Override public void onClick(View v) {
+						// TODO: new QuickApiTask
+					}
+				};
                 
                 // TODO: updates
                 

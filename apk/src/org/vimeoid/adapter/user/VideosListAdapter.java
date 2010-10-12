@@ -184,7 +184,7 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnIt
         holder.invalidateViews();
     }
     
-    public Video switchWatchLater(ListView holder, int position) {
+    public Video switchWatchLater(AdapterView<?> holder, int position) {
         final Video subject = (Video)getItem(position);
         subject.isWatchLater = !subject.isWatchLater;
         holder.getChildAt(position).invalidate();

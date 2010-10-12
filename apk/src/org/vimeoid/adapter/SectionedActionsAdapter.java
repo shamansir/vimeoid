@@ -248,6 +248,7 @@ public class SectionedActionsAdapter extends BaseAdapter implements OnItemClickL
 		if (getItemViewType(position) == ITEM_VIEW_TYPE) {
 			final LActionItem item = (LActionItem) getItem(position);
 			if (item.onClick != null) item.onClick(view);
+			parent.getChildAt(position).invalidate();
 		}
 	}
 

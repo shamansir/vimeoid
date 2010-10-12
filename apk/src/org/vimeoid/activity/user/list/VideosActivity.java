@@ -11,7 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.R;
 import org.vimeoid.activity.base.ApiPagesReceiver;
-import org.vimeoid.activity.user.ApiTask;
+import org.vimeoid.activity.user.QuickApiTask;
 import org.vimeoid.activity.user.ItemsListActivity;
 import org.vimeoid.adapter.JsonObjectsAdapter;
 import org.vimeoid.adapter.user.VideosListAdapter;
@@ -27,7 +27,6 @@ import org.vimeoid.util.PagingData_;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 /**
@@ -125,12 +124,12 @@ public class VideosActivity extends ItemsListActivity<Video> {
                                                                                  : R.drawable.watchlater_white_not), 
                 new QActionClickListener() {            
                     @Override public void onClick(View v, final QActionItem item) {
-                        new ApiTask(video.isWatchLater 
-                                    ? Methods.albums.removeFromWatchLater 
-                                    : Methods.albums.addToWatchLater) {
+                        new QuickApiTask(VideosActivity.this, video.isWatchLater 
+                                                              ? Methods.albums.removeFromWatchLater 
+                                                              : Methods.albums.addToWatchLater) {
                             
                             @Override
-                            public void onAnswerReceived(JSONObject jsonObj) throws JSONException {
+                            public void onOk() {
                                 video.isWatchLater = !video.isWatchLater;
                                 final Video changedVideo = adapter.switchWatchLater(getListView(), position);
                                 Dialogs.makeToast(VideosActivity.this, getString(changedVideo.isWatchLater 
@@ -143,13 +142,8 @@ public class VideosActivity extends ItemsListActivity<Video> {
                             }
                             
                             @Override
-                            protected void onAnyError(Exception e, final String message) {
-                                runOnUiThread(new Runnable() {
-                                    @Override public void run() {
-                                        Log.e(TAG, message);
-                                        Dialogs.makeLongToast(VideosActivity.this, R.string.failed_to_add_watch_later + " : " + message);                                    
-                                    }
-                                });
+                            protected int onError() {
+                            	return R.string.failed_to_add_watch_later;
                             }
                             
                         }.execute(new ApiParams().add("video_id", String.valueOf(video.id)));
