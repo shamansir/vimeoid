@@ -26,15 +26,15 @@ public class Contact extends User {
     public boolean isMutual;
     
     public static final class FieldsKeys {
-        public static final String CONTACTS_MULTIPLE_KEY = "contacts";
-        public static final String CONTACTS_SINGLE_KEY = "contact";
+        public static final String MULTIPLE_KEY = "contacts";
+        public static final String SINGLE_KEY = "contact";
         
         public static final String IS_MUTUAL = "mutual";
     }
     
     public static boolean contactWithIdExist(JSONObject page, long testUserId) throws JSONException {
-        final JSONArray array = page.getJSONObject(FieldsKeys.CONTACTS_MULTIPLE_KEY)
-                                    .getJSONArray(FieldsKeys.CONTACTS_SINGLE_KEY);
+        final JSONArray array = page.getJSONObject(FieldsKeys.MULTIPLE_KEY)
+                                    .getJSONArray(FieldsKeys.SINGLE_KEY);
         for (int i = 0; i < array.length(); i++) {
             if (array.getJSONObject(i).getLong(User.FieldsKeys.ID) == testUserId) return true;
         }
@@ -42,8 +42,8 @@ public class Contact extends User {
     }
 
     public static boolean checkIsMutualById(JSONObject page, long testUserId) throws JSONException {
-        final JSONArray array = page.getJSONObject(FieldsKeys.CONTACTS_MULTIPLE_KEY)
-                                    .getJSONArray(FieldsKeys.CONTACTS_SINGLE_KEY);
+        final JSONArray array = page.getJSONObject(FieldsKeys.MULTIPLE_KEY)
+                                    .getJSONArray(FieldsKeys.SINGLE_KEY);
         for (int i = 0; i < array.length(); i++) {
             final JSONObject userObj = array.getJSONObject(i); 
             if (userObj.getLong(User.FieldsKeys.ID) == testUserId) {

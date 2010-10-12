@@ -1,0 +1,89 @@
+/**
+ * 
+ */
+package org.vimeoid.dto.advanced;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+/**
+ * <dl>
+ * <dt>Project:</dt> <dd>vimeoid</dd>
+ * <dt>Package:</dt> <dd>org.vimeoid.dto.advanced</dd>
+ * </dl>
+ *
+ * <code>SubscriptionData</code>
+ *
+ * <p>Description</p>
+ *
+ * @author Ulric Wilfred <shaman.sir@gmail.com>
+ * @date Oct 12, 2010 11:57:04 PM 
+ *
+ */
+public class SubscriptionData {
+    
+    public Map<SubscriptionType, Set<Long>> data;    
+    
+    public enum SubscriptionType { LIKES, UPLOADS, APPEARS, CHANNEL, ;
+
+        public static SubscriptionType fromString(String value) {
+            if ("likes".equals(value)) return LIKES;
+            if ("uploads".equals(value)) return UPLOADS;
+            if ("appears".equals(value)) return APPEARS;
+            return null;
+        } 
+        
+        public String toString() {
+            return super.name().toLowerCase();
+        }
+        
+        public static String list(SubscriptionType[] types) {
+            final StringBuffer buffer = new StringBuffer();
+            for (SubscriptionType type: types) {
+                buffer.append(type.toString()).append(',');
+            }
+            return buffer.toString();
+        }
+    
+    };    
+    
+    public static final class FieldsKeys {
+        
+        public static final String MULTIPLE_KEY = "subscriptions";
+        public static final String SINGLE_KEY = "subscription";
+        
+        public static final String SUBJECT_ID = "subject_id";
+        public static final String TYPE = "type";
+        
+    }
+    
+    public SubscriptionData() {
+        for (SubscriptionType type: SubscriptionType.values()) {
+            data.put(type, new HashSet<Long>());
+        }
+    }
+    
+    public static SubscriptionData collectFromJson(JSONObject page) throws JSONException {
+        final SubscriptionData data = new SubscriptionData();
+        passTo(page, data);
+        return data;
+    }
+    
+    public static void passTo(JSONObject source, SubscriptionData destination) throws JSONException {
+        JSONArray array = source.getJSONObject(FieldsKeys.MULTIPLE_KEY)
+                                .getJSONArray(FieldsKeys.SINGLE_KEY);
+        for (int i = 0; i < array.length(); i++) {
+            final SubscriptionType type = SubscriptionType.fromString(
+                    array.getJSONObject(i).getString(FieldsKeys.TYPE));
+            final long subjectId = 
+                    array.getJSONObject(i).getLong(FieldsKeys.SUBJECT_ID);            
+            destination.data.get(type).add(subjectId);
+        }
+    }
+
+}

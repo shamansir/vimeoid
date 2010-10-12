@@ -20,6 +20,7 @@ import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.dto.advanced.Contact;
 import org.vimeoid.dto.advanced.PagingData;
 import org.vimeoid.dto.advanced.PortraitsData;
+import org.vimeoid.dto.advanced.SubscriptionData;
 import org.vimeoid.dto.advanced.User;
 import org.vimeoid.dto.advanced.SubscriptionData.SubscriptionType;
 import org.vimeoid.util.ApiParams;
@@ -84,15 +85,28 @@ public class UserActivity extends SingleItemActivity<User> {
         
         subscriptionsReceiver = new SubscriptionsReceiver() {
             @Override public void onComplete() {
-                
+                subscriptionsStatus = new HashSet<SubscriptionType>();
+                if (subscriptions.data.get(SubscriptionType.LIKES).contains(subjectUserId)) { 
+                    subscriptionsStatus.add(SubscriptionType.LIKES);
+                }
+                if (subscriptions.data.get(SubscriptionType.UPLOADS).contains(subjectUserId)) { 
+                    subscriptionsStatus.add(SubscriptionType.UPLOADS);
+                }
+                if (subscriptions.data.get(SubscriptionType.APPEARS).contains(subjectUserId)) { 
+                    subscriptionsStatus.add(SubscriptionType.APPEARS);
+                }
+                initSubscriptionAction(subscribeLikesAction, SubscriptionType.LIKES);
+                initSubscriptionAction(subscribeUploadsAction, SubscriptionType.UPLOADS);
+                initSubscriptionAction(subscribeAppearsAction, SubscriptionType.APPEARS);
             }
         };
         
         contactsReceiver = new ContactsReceiver() {
             @Override public void onComplete() {
-                // TODO Auto-generated method stub
-                // init addcontactaction
-                // init ismutual
+                UserActivity.this.isContact = this.isContact;
+                UserActivity.this.isMutual = this.isMutual;
+                initAddContactAction(addContactAction);
+                // TODO: init ismutual
             }
         };
     }
@@ -379,19 +393,22 @@ public class UserActivity extends SingleItemActivity<User> {
     
     protected abstract static class SubscriptionsReceiver implements ApiPagesReceiver<JSONObject> {
         
-        protected Set<SubscriptionType> subscriptionsStatus = new HashSet<SubscriptionType>();
+        protected SubscriptionData subscriptions = new SubscriptionData();
         protected int received = 0;
 
         @Override
         public void addSource(JSONObject page) throws Exception {
-            // TODO:
+            received += 
+                page.getJSONObject(Contact.FieldsKeys.MULTIPLE_KEY)
+                    .getInt(PagingData.FieldsKeys.ON_THIS_PAGE);
+            SubscriptionData.passTo(page, subscriptions);
         }
 
         @Override public int getCount() { return received; }
 
         @Override
         public PagingData_ getCurrentPagingData(JSONObject lastPage) throws JSONException {
-            return null; // TODO: PagingData.collectFromJson(lastPage, Contact.FieldsKeys.CONTACTS_MULTIPLE_KEY);
+            return PagingData.collectFromJson(lastPage, SubscriptionData.FieldsKeys.MULTIPLE_KEY);
         }
         
     }  
@@ -405,7 +422,7 @@ public class UserActivity extends SingleItemActivity<User> {
         @Override
         public void addSource(JSONObject page) throws Exception {
             received += 
-                page.getJSONObject(Contact.FieldsKeys.CONTACTS_MULTIPLE_KEY)
+                page.getJSONObject(Contact.FieldsKeys.MULTIPLE_KEY)
                     .getInt(PagingData.FieldsKeys.ON_THIS_PAGE);
             if (Contact.contactWithIdExist(page, subjectUserId)) {
                 isContact = true;
@@ -417,7 +434,7 @@ public class UserActivity extends SingleItemActivity<User> {
 
         @Override
         public PagingData_ getCurrentPagingData(JSONObject lastPage) throws JSONException {
-            return PagingData.collectFromJson(lastPage, Contact.FieldsKeys.CONTACTS_MULTIPLE_KEY);
+            return PagingData.collectFromJson(lastPage, Contact.FieldsKeys.MULTIPLE_KEY);
         }
         
     }     
