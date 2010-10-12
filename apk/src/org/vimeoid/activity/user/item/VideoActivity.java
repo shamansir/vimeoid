@@ -147,31 +147,4 @@ public class VideoActivity extends SingleItemActivity<Video> {
         super.onItemReceived(video);
     }
     
-    /* @Override
-    public void onSecondaryTaskPerfomed(int taskId, JSONObject result) throws JSONException {
-        switch (taskId) {
-            case LOAD_PORTRAITS_TASK: {
-                final ImageView uploaderPortrait = (ImageView)findViewById(R.id.userPortrait);
-                final String mediumPortraitUrl = result.getJSONObject(PortraitsData.FieldsKeys.MULTIPLE_KEY)
-                                                       .getJSONArray(PortraitsData.FieldsKeys.SINGLE_KEY)
-                                                       .getJSONObject(2).getString(PortraitsData.FieldsKeys.URL);
-                imageLoader.displayImage(mediumPortraitUrl, uploaderPortrait);
-            }; break;
-            case LOAD_ALBUMS_TASK: {
-                final int albumsCount = result.getJSONObject("albums").getInt("total");                
-                Log.d(TAG, "got albums count, its " + albumsCount);
-                albumAction.title = Utils.format(getString(R.string.num_of_albums), "num", String.valueOf(albumsCount));
-                if (albumsCount == 0) albumAction.onClick = null;
-                getActionsList().invalidateViews();
-            }; break;
-            case LOAD_CHANNELS_TASK: {
-                final int channelsCount = result.getJSONObject("channels").getInt("total");                
-                Log.d(TAG, "got channels count, its " + channelsCount);
-                channelAction.title = Utils.format(getString(R.string.num_of_channels), "num", String.valueOf(channelsCount));
-                if (channelsCount == 0) channelAction.onClick = null;
-                getActionsList().invalidateViews();
-            }; break;            
-        }
-    } */
-
 }

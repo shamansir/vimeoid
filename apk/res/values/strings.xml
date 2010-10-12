@@ -31,11 +31,6 @@
     <string name="view_author_videos">View videos by author</string>
     <string name="view_channel_videos">View videos in channel</string>
     <string name="view_album_videos">View videos in album</string>
-    <string name="subscribe">Subscribe</string>
-    <string name="subscribe_likes">Subscribe likes</string>
-    <string name="subscribe_updates">Subscribe updates</string>
-    <string name="subscribe_appearences">Subscribe appearances</string>    
-    <string name="addContact">Add contact</string>    
     <!-- actions groups -->
     <string name="operations">Operations</string>
     <string name="information">Information</string>
@@ -48,9 +43,20 @@
     <string name="qa_info">Info</string>
     <string name="qa_author">Author</string>
     <string name="qa_comments">Comments</string>    
+    <!-- lactions/qactions lines -->
     <string name="failed_to_add_watch_later">Failed to add to watch later</string>
     <string name="added_to_watchlater">Added to Watch later</string>
-    <string name="removed_from_watchlater">Removed from Watch Later</string>
+    <string name="removed_from_watchlater">Removed from Watch Later</string>    
+    <string name="subscribe">Subscribe</string>
+    <string name="subscribed">Subscribed</string>
+    <string name="unsubscribed">Unsubscribed</string>
+    <string name="failed_to_subscribe">Failed to subscribe</string>
+    <string name="subscribe_likes">Subscribe likes</string>
+    <string name="subscribe_uploads">Subscribe uploads</string>
+    <string name="subscribe_appearences">Subscribe appearances</string>
+    <string name="add_contact">Add contact</string>
+    <string name="added_contact">Added contact</string>
+    <string name="removed_contact">Removed contact</string>
     <!-- video page -->
     <string name="num_of_plays">{num} plays</string>
     <string name="num_of_likes">{num} likes</string>

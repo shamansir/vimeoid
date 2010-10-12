@@ -36,8 +36,18 @@ public class User implements AdvancedItem {
         public String toString() {
             return super.name().toLowerCase();
         }
+
+        public static String list(SubscriptionType[] types) {
+            final StringBuffer buffer = new StringBuffer();
+            for (SubscriptionType type: types) {
+                buffer.append(type.toString()).append(',');
+            }
+            return buffer.toString();
+        }
     
     };
+    
+    public enum SortType { NEWEST, OLDEST, ALPHABETICAL, MOST_CREDITED };
     
     public long id;
     public String displayName;

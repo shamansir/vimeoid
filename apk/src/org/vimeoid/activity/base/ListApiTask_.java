@@ -102,7 +102,7 @@ public abstract class ListApiTask_<Params, Result> extends ApiTask_<Params, Resu
                     // no items in list at all
                     reactor.onNoItems();      
                 } else if ((received < perPage) ||
-                           (curPage == maxPages) ||
+                           ((maxPages > 0) && (curPage == maxPages)) ||
                            ((total != -1) && (((perPage * (curPage - 1)) + received) == total))) {
                     // no items more
                     reactor.onNoMoreItems();
@@ -114,7 +114,7 @@ public abstract class ListApiTask_<Params, Result> extends ApiTask_<Params, Resu
             
             Log.d(TAG, "Received " + received + " items. Total " + total);
             
-            final boolean receivedAll = (curPage >= maxPages) || (receiver.getCount() >= total);
+            final boolean receivedAll = ((maxPages > 0) && (curPage >= maxPages)) || (receiver.getCount() >= total);
             final boolean needMore = !receivedAll
                                      && ((filter == null) || (filter.doContinue(result, receiver)));
             

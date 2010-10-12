@@ -51,6 +51,7 @@ public final class Invoke {
         
         public static final String SUBSCRIPTIONS_STATUS = "v_subscr_status";
         public static final String IS_CONTACT = "v_is_contact";
+        public static final String IS_MUTUAL = "v_is_mutual";
         
     }    
 

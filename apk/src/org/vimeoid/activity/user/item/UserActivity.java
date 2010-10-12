@@ -10,16 +10,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import org.vimeoid.R;
+import org.vimeoid.activity.base.ApiPagesReceiver;
+import org.vimeoid.activity.user.QuickApiTask;
 import org.vimeoid.activity.user.SingleItemActivity;
 import org.vimeoid.adapter.LActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.advanced.Methods;
+import org.vimeoid.dto.advanced.PagingData;
 import org.vimeoid.dto.advanced.PortraitsData;
 import org.vimeoid.dto.advanced.User;
+import org.vimeoid.dto.advanced.Video;
 import org.vimeoid.dto.advanced.User.SubscriptionType;
 import org.vimeoid.util.ApiParams;
+import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
+import org.vimeoid.util.PagingData_;
 import org.vimeoid.util.Utils;
 
 import android.os.Bundle;
@@ -52,20 +58,44 @@ public class UserActivity extends SingleItemActivity<User> {
     private static final int LOAD_ALBUMS_TASK = 2;
     private static final int LOAD_CHANNELS_TASK = 3;
     
+    private static final int LOAD_SUBSCRIPTIONS_TASK = 4;
+    private static final int LOAD_CONTACTS_TASK = 5;
+    
     private LActionItem albumAction;
     private LActionItem channelAction;
     private LActionItem subscribeLikesAction;
     private LActionItem subscribeUploadsAction;
     private LActionItem subscribeAppearsAction;
+    private LActionItem addContactAction;
     
     private long currentUserId;
     private long subjectUserId;
     
-    private Set<SubscriptionType> subscriptionsStatus; // Likes / Uploads / Appears / Channels / Groups
+    private Set<SubscriptionType> subscriptionsStatus; // Likes / Uploads / Appears
     private Boolean isContact;
+    @SuppressWarnings("unused")
+    private Boolean isMutual;
+    
+    private final ApiPagesReceiver<JSONObject> subscriptionsReceiver;
+    private final ApiPagesReceiver<JSONObject> contactsReceiver;
     
     public UserActivity() {
         super(R.layout.view_single_user);
+        
+        subscriptionsReceiver = new SubscriptionsReceiver() {
+            @Override public void onComplete() {
+                // TODO Auto-generated method stub
+                // init subscriptions actions
+            }
+        };
+        
+        contactsReceiver = new ContactsReceiver() {
+            @Override public void onComplete() {
+                // TODO Auto-generated method stub
+                // init addcontactaction
+                // init ismutual
+            }
+        };
     }
 
     @Override
@@ -89,13 +119,27 @@ public class UserActivity extends SingleItemActivity<User> {
                     subscriptionsStatus.add(SubscriptionType.fromString(types[i]));
                 }
             } else {
+                secondaryTasks.addListTask(LOAD_SUBSCRIPTIONS_TASK, Methods.people.getSubscriptions, 
+                                                                    new ApiParams().add("types", 
+                                                    SubscriptionType.list(new SubscriptionType[] { SubscriptionType.LIKES, 
+                                                                                                   SubscriptionType.UPLOADS, 
+                                                                                                   SubscriptionType.APPEARS })), 
+                                           subscriptionsReceiver, -1, 50);
                 // TODO: secondaryTasks.add(taskId, apiMethod, params); (infinite task)
             }
+            
+            
+            if (extras.containsKey(Invoke.Extras.IS_MUTUAL)) {
+                isMutual = extras.getBoolean(Invoke.Extras.IS_MUTUAL);
+            }            
             
             if (extras.containsKey(Invoke.Extras.IS_CONTACT)) {
                 isContact = extras.getBoolean(Invoke.Extras.IS_CONTACT);
             } else {
-             // TODO: secondaryTasks.add(taskId, apiMethod, params); (infinite task)
+                // TODO: secondaryTasks.add(taskId, apiMethod, params); (infinite task)
+                secondaryTasks.addListTask(LOAD_CONTACTS_TASK, Methods.contacts.getAll, 
+                                                               new ApiParams().add("user_id", String.valueOf(subjectUserId)), 
+                                           contactsReceiver, -1, 50);
             }
             
         }
@@ -183,45 +227,34 @@ public class UserActivity extends SingleItemActivity<User> {
         // plus member
         if (user.isPlusMember) {
             actionsAdapter.addAction(infoSection, R.drawable.plus, getString(R.string.user_is_plus_member));    
-        }
-        
+        }        
         // TODO: add websites URLs
+        // TODO: is online
+        // TODO: is mutual, is added
         
         // ========================= OPERATIONS ================================
-        // TODO: add "subscribe" and "add contact" if it is not current user, using extras
-        // mark if already subscribed or friends 
+         
         if (currentUserId != subjectUserId) {
             int operationsSection = actionsAdapter.addSection(getString(R.string.operations));
             
             // subscribe
-            if (subscriptionsStatus != null) {
-                
-                subscribeLikesAction = actionsAdapter.addAction(operationsSection, 
-                        subscriptionsStatus.contains(SubscriptionType.LIKES) ? R.drawable.subscribe
-                                                                             : R.drawable.subscribe_not, 
-                                                                             R.string.subscribe_likes);
-                subscribeLikesAction.onClick = new OnClickListener() {
-					@Override public void onClick(View v) {
-						// TODO: new QuickApiTask
-					}
-				};
-                
-                // TODO: updates
-                
-                // TODO: likes
-                
-            } else {
-                // just create actions and postpone them for secondary task
-            }
+            subscribeLikesAction = actionsAdapter.addAction(operationsSection, R.drawable.unknown_status, R.string.subscribe_likes);            
+            subscribeUploadsAction = actionsAdapter.addAction(operationsSection, R.drawable.unknown_status, R.string.subscribe_uploads);
+            subscribeAppearsAction = actionsAdapter.addAction(operationsSection, R.drawable.unknown_status, R.string.subscribe_appearences);
             
-            // is contact
-            final LActionItem addContactAction = actionsAdapter.addAction(operationsSection, R.drawable.contact, 
-                                                                                             R.string.addContact);
-            if (isContact != null) {
-                // TODO
-            } else {
-                // just create action and postpone it for secondary task
+            if (subscriptionsStatus != null) {
+                  
+                initSubscriptionAction(subscribeLikesAction, SubscriptionType.LIKES);
+                initSubscriptionAction(subscribeUploadsAction, SubscriptionType.UPLOADS);
+                initSubscriptionAction(subscribeAppearsAction, SubscriptionType.APPEARS);
+                
             } 
+
+            // add contact            
+            addContactAction = actionsAdapter.addAction(operationsSection, R.drawable.unknown_status, R.string.add_contact);            
+
+            if (isContact != null) initAddContactAction(addContactAction);
+            
         }
         
         // TODO: user activity (did / happened)
@@ -267,5 +300,132 @@ public class UserActivity extends SingleItemActivity<User> {
             }; break;            
         }
     }
+    
+    private LActionItem initSubscriptionAction(final LActionItem actionItem, final SubscriptionType type) {
+        
+        actionItem.icon = subscriptionsStatus.contains(type) ? R.drawable.subscribe : R.drawable.subscribe_not; 
+
+        actionItem.onClick = new OnClickListener() {
+            @Override public void onClick(View v) {
+                new QuickApiTask(UserActivity.this, subscriptionsStatus.contains(type) 
+                                                    ? Methods.people.removeSubscription
+                                                    : Methods.people.addSubscription) {
+
+                    @Override
+                    protected void onOk() {
+                        if (subscriptionsStatus.contains(type))
+                           { subscriptionsStatus.remove(type); }
+                        else { subscriptionsStatus.add(type); };
+                        
+                        // TODO: add icon to toast
+                        
+                        Dialogs.makeToast(UserActivity.this, getString(
+                                subscriptionsStatus.contains(type) 
+                                ? R.string.subscribed
+                                : R.string.unsubscribed));
+                        
+                        actionItem.icon = subscriptionsStatus.contains(type) 
+                                          ? R.drawable.subscribe
+                                          : R.drawable.subscribe_not;
+                        
+                    }
+
+                    @Override
+                    protected int onError() { return R.string.failed_to_subscribe; }                            
+                    
+                }.execute(new ApiParams().add("user_id", String.valueOf(subjectUserId)).add("types", type.toString()));
+            }
+        };
+        
+        return actionItem;
+        
+    }
+    
+    private LActionItem initAddContactAction(final LActionItem actionItem) {
+        
+        actionItem.icon = isContact ? R.drawable.contact : R.drawable.contact_not; 
+
+        actionItem.onClick = new OnClickListener() {
+            @Override public void onClick(View v) {
+                new QuickApiTask(UserActivity.this, isContact 
+                                                    ? Methods.people.removeContact
+                                                    : Methods.people.addContact) {
+
+                    @Override
+                    protected void onOk() {
+                        isContact = !isContact;
+                        
+                        // TODO: add icon to toast
+                        
+                        Dialogs.makeToast(UserActivity.this, getString(
+                                isContact ? R.string.added_contact
+                                          : R.string.removed_contact));
+                        
+                        actionItem.icon =  
+                                isContact ? R.drawable.contact
+                                          : R.drawable.contact_not;
+                        
+                    }
+
+                    @Override
+                    protected int onError() { return R.string.failed_to_subscribe; }                            
+                    
+                }.execute(new ApiParams().add("user_id", String.valueOf(subjectUserId)));
+            }
+        };
+        
+        return actionItem;
+        
+    }   
+    
+    protected abstract static class SubscriptionsReceiver implements ApiPagesReceiver<JSONObject> {
+        
+        protected final Set<Long> videosIds = new HashSet<Long>();
+
+        @Override
+        public void addSource(JSONObject page) throws Exception {
+            final String[] videosIdsArr = Video.extractIdsList(page); 
+            for (String videoId: videosIdsArr) {
+                //Log.d("ADDING", videoId + " as w/l or like");
+                videosIds.add(Long.valueOf(videoId));
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return videosIds.size();
+        }
+
+        @Override
+        public PagingData_ getCurrentPagingData(JSONObject lastPage) throws JSONException {
+            return PagingData.collectFromJson(lastPage, Video.FieldsKeys.MULTIPLE_KEY);
+        }
+        
+    }  
+    
+    protected abstract static class ContactsReceiver implements ApiPagesReceiver<JSONObject> {
+        
+        protected final Set<Long> videosIds = new HashSet<Long>();
+
+        @Override
+        public void addSource(JSONObject page) throws Exception {
+            final String[] videosIdsArr = Video.extractIdsList(page); 
+            for (String videoId: videosIdsArr) {
+                //Log.d("ADDING", videoId + " as w/l or like");
+                videosIds.add(Long.valueOf(videoId));
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return videosIds.size();
+        }
+
+        @Override
+        public PagingData_ getCurrentPagingData(JSONObject lastPage) throws JSONException {
+            return PagingData.collectFromJson(lastPage, Video.FieldsKeys.MULTIPLE_KEY);
+        }
+        
+    }     
 
 }

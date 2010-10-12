@@ -115,7 +115,6 @@ public class VideosActivity extends ItemsListActivity<Video> {
     protected QuickAction createQuickActions(final int position, final Video video, View view) {
         // TODO: add ability to watch albums / channels where video located
         final Resources resources = getResources();
-        final VideosListAdapter adapter = ((VideosListAdapter)getAdapter());
         
         QuickAction qa = new QuickAction(view);
         if (video.uploaderId != currentUserId) {
@@ -124,29 +123,7 @@ public class VideosActivity extends ItemsListActivity<Video> {
                                                                                  : R.drawable.watchlater_white_not), 
                 new QActionClickListener() {            
                     @Override public void onClick(View v, final QActionItem item) {
-                        new QuickApiTask(VideosActivity.this, video.isWatchLater 
-                                                              ? Methods.albums.removeFromWatchLater 
-                                                              : Methods.albums.addToWatchLater) {
-                            
-                            @Override
-                            public void onOk() {
-                                video.isWatchLater = !video.isWatchLater;
-                                final Video changedVideo = adapter.switchWatchLater(getListView(), position);
-                                Dialogs.makeToast(VideosActivity.this, getString(changedVideo.isWatchLater 
-                                                                                 ? R.string.added_to_watchlater
-                                                                                 : R.string.removed_from_watchlater));
-                                item.setIcon(resources.getDrawable(changedVideo.isWatchLater 
-                                                                   ? R.drawable.watchlater_white 
-                                                                   : R.drawable.watchlater_white_not));
-                                item.invalidate();
-                            }
-                            
-                            @Override
-                            protected int onError() {
-                            	return R.string.failed_to_add_watch_later;
-                            }
-                            
-                        }.execute(new ApiParams().add("video_id", String.valueOf(video.id)));
+                        switchWatchLaterStatus(position, video, item);
                     }
                 });
         }
@@ -170,6 +147,34 @@ public class VideosActivity extends ItemsListActivity<Video> {
                 });
         return qa;
     };
+        
+    private void switchWatchLaterStatus(final int position, final Video video, final QActionItem item) {
+        final Resources resources = getResources();
+        final VideosListAdapter adapter = ((VideosListAdapter)getAdapter());
+        
+        new QuickApiTask(VideosActivity.this, video.isWatchLater 
+                ? Methods.albums.removeFromWatchLater 
+                : Methods.albums.addToWatchLater) {
+
+            @Override
+            public void onOk() {
+                video.isWatchLater = !video.isWatchLater;
+                final Video changedVideo = adapter.switchWatchLater(getListView(), position);
+                Dialogs.makeToast(VideosActivity.this, getString(changedVideo.isWatchLater 
+                                                   ? R.string.added_to_watchlater
+                                                   : R.string.removed_from_watchlater));
+                item.setIcon(resources.getDrawable(changedVideo.isWatchLater 
+                                     ? R.drawable.watchlater_white 
+                                     : R.drawable.watchlater_white_not));
+                item.invalidate();
+            }
+
+            @Override
+            protected int onError() { return R.string.failed_to_add_watch_later; }
+
+        }.execute(new ApiParams().add("video_id", String.valueOf(video.id)));
+        
+    }
     
     protected abstract static class VideosIdsReceiver implements ApiPagesReceiver<JSONObject> {
         
@@ -194,7 +199,6 @@ public class VideosActivity extends ItemsListActivity<Video> {
             return PagingData.collectFromJson(lastPage, Video.FieldsKeys.MULTIPLE_KEY);
         }
         
-    }
-
+    }    
     
 }
