@@ -29,7 +29,7 @@ public class Video implements AdvancedItem {
     	
     	NEWEST, OLDEST, MOST_PLAYED, MOST_COMMENTED, MOST_LIKED;
     	
-    	public String toString() { return name().toLowerCase(); };
+    	@Override public String toString() { return name().toLowerCase(); };
     	
     }; 
     
@@ -132,9 +132,9 @@ public class Video implements AdvancedItem {
         video.thumbnails = ThumbnailsData.collectFromJson(jsonObj);
         video.thumbnails = ThumbnailsData.collectFromJson(jsonObj);
         
-        video.uploaderName = jsonObj.getJSONObject(User.FieldsKeys.OWNER_KEY).getString(User.FieldsKeys.NAME);
-        video.uploaderId = jsonObj.getJSONObject(User.FieldsKeys.OWNER_KEY).getLong(User.FieldsKeys.ID);
-        video.uploaderPortraits = PortraitsData.collectFromJson(jsonObj.getJSONObject(User.FieldsKeys.OWNER_KEY));
+        video.uploaderName = jsonObj.getJSONObject(User.FieldsKeys.OWNER_SINGLE_KEY).getString(User.FieldsKeys.NAME);
+        video.uploaderId = jsonObj.getJSONObject(User.FieldsKeys.OWNER_SINGLE_KEY).getLong(User.FieldsKeys.ID);
+        video.uploaderPortraits = PortraitsData.collectFromJson(jsonObj.getJSONObject(User.FieldsKeys.OWNER_SINGLE_KEY));
         
         return video;
     }

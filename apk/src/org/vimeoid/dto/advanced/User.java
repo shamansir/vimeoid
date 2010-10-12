@@ -47,7 +47,13 @@ public class User implements AdvancedItem {
     
     };
     
-    public enum SortType { NEWEST, OLDEST, ALPHABETICAL, MOST_CREDITED };
+    public enum SortType implements ISortType { 
+        
+        NEWEST, OLDEST, ALPHABETICAL, MOST_CREDITED;
+        
+        @Override public String toString() { return name().toLowerCase(); };
+        
+    };
     
     public long id;
     public String displayName;
@@ -78,7 +84,7 @@ public class User implements AdvancedItem {
         
         public static final String SINGLE_KEY = "person";
         public static final String MULTIPLE_KEY = "persons";
-        public static final String OWNER_KEY = "owner";
+        public static final String OWNER_SINGLE_KEY = "owner";
         
         public static final String ID = "id";
         
@@ -140,5 +146,5 @@ public class User implements AdvancedItem {
     }
     
     public long getId() { return id; }
-    
+
 }

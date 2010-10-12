@@ -17,10 +17,12 @@ import org.vimeoid.adapter.LActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.advanced.Methods;
+import org.vimeoid.dto.advanced.Contact;
 import org.vimeoid.dto.advanced.PagingData;
 import org.vimeoid.dto.advanced.PortraitsData;
 import org.vimeoid.dto.advanced.User;
 import org.vimeoid.dto.advanced.Video;
+import org.vimeoid.dto.advanced.PagingData.FieldsKeys;
 import org.vimeoid.dto.advanced.User.SubscriptionType;
 import org.vimeoid.util.ApiParams;
 import org.vimeoid.util.Dialogs;
@@ -84,8 +86,7 @@ public class UserActivity extends SingleItemActivity<User> {
         
         subscriptionsReceiver = new SubscriptionsReceiver() {
             @Override public void onComplete() {
-                // TODO Auto-generated method stub
-                // init subscriptions actions
+                
             }
         };
         
@@ -380,50 +381,45 @@ public class UserActivity extends SingleItemActivity<User> {
     
     protected abstract static class SubscriptionsReceiver implements ApiPagesReceiver<JSONObject> {
         
-        protected final Set<Long> videosIds = new HashSet<Long>();
+        protected Set<SubscriptionType> subscriptionsStatus = new HashSet<SubscriptionType>();
+        protected int received = 0;
 
         @Override
         public void addSource(JSONObject page) throws Exception {
-            final String[] videosIdsArr = Video.extractIdsList(page); 
-            for (String videoId: videosIdsArr) {
-                //Log.d("ADDING", videoId + " as w/l or like");
-                videosIds.add(Long.valueOf(videoId));
-            }
+            // TODO:
         }
 
-        @Override
-        public int getCount() {
-            return videosIds.size();
-        }
+        @Override public int getCount() { return received; }
 
         @Override
         public PagingData_ getCurrentPagingData(JSONObject lastPage) throws JSONException {
-            return PagingData.collectFromJson(lastPage, Video.FieldsKeys.MULTIPLE_KEY);
+            return null; // TODO: PagingData.collectFromJson(lastPage, Contact.FieldsKeys.CONTACTS_MULTIPLE_KEY);
         }
         
     }  
     
-    protected abstract static class ContactsReceiver implements ApiPagesReceiver<JSONObject> {
+    protected abstract class ContactsReceiver implements ApiPagesReceiver<JSONObject> {
         
-        protected final Set<Long> videosIds = new HashSet<Long>();
+        protected boolean isContact = false;
+        protected boolean isMutual = false;
+        protected int received = 0;
 
         @Override
         public void addSource(JSONObject page) throws Exception {
-            final String[] videosIdsArr = Video.extractIdsList(page); 
-            for (String videoId: videosIdsArr) {
-                //Log.d("ADDING", videoId + " as w/l or like");
-                videosIds.add(Long.valueOf(videoId));
-            }
+            received += 
+                page.getJSONObject(Contact.FieldsKeys.CONTACTS_MULTIPLE_KEY)
+                    .getInt(PagingData.FieldsKeys.ON_THIS_PAGE);
+            if (Contact.contactWithIdExist(page, subjectUserId)) {
+                isContact = true;
+                if (Contact.checkIsMutualById(page, subjectUserId)) isMutual = true;                
+            }            
         }
 
-        @Override
-        public int getCount() {
-            return videosIds.size();
-        }
+        @Override public int getCount() { return received; }
 
         @Override
         public PagingData_ getCurrentPagingData(JSONObject lastPage) throws JSONException {
-            return PagingData.collectFromJson(lastPage, Video.FieldsKeys.MULTIPLE_KEY);
+            return PagingData.collectFromJson(lastPage, Contact.FieldsKeys.CONTACTS_MULTIPLE_KEY);
         }
         
     }     
