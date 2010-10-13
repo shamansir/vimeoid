@@ -77,7 +77,7 @@ public class VideoActivity extends SingleItemActivity<Video> {
     @Override
     protected SectionedActionsAdapter fillWithActions(SectionedActionsAdapter actionsAdapter, final Video video) {
         
-        // TODO: video tags
+        // TODO: video tags activity
         // TODO: video likers
         // TODO: video comments
         

@@ -62,7 +62,7 @@ public class SectionedActionsAdapter extends BaseAdapter implements OnItemClickL
         this.imagesLoader = (imagesLoader != null) ? imagesLoader : 
                                 ((context != null) ? new ImageLoader(context, 
                                                          R.drawable.item_loading_small, 
-                                                         R.drawable.item_failed_small)
+                                                         R.drawable.item_failed)
                                                    : null);
     }
     

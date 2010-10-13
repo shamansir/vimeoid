@@ -68,13 +68,13 @@ public class UserActivity extends SingleItemActivity<User> {
     private LActionItem subscribeUploadsAction;
     private LActionItem subscribeAppearsAction;
     private LActionItem addContactAction;
+    private LActionItem isMutualAction;
     
     private long currentUserId;
     private long subjectUserId;
     
     private Set<SubscriptionType> subscriptionsStatus; // Likes / Uploads / Appears
     private Boolean isContact;
-    @SuppressWarnings("unused")
     private Boolean isMutual;
     
     private final ApiPagesReceiver<JSONObject> subscriptionsReceiver;
@@ -106,7 +106,7 @@ public class UserActivity extends SingleItemActivity<User> {
                 UserActivity.this.isContact = this.isContact;
                 UserActivity.this.isMutual = this.isMutual;
                 initAddContactAction(addContactAction);
-                // TODO: init ismutual
+                initIsMutualAction(isMutualAction);
             }
         };
     }
@@ -245,9 +245,19 @@ public class UserActivity extends SingleItemActivity<User> {
         // TODO: is online
         // TODO: is mutual, is added
         
+        if (currentUserId != subjectUserId) {
+        	
+            // is mutual
+            isMutualAction = actionsAdapter.addAction(infoSection, R.drawable.unknown_status, R.string.mutual);            
+
+            if (isMutual != null) initIsMutualAction(isMutualAction);
+        }
+        
         // ========================= OPERATIONS ================================
          
         if (currentUserId != subjectUserId) {
+        	
+        	
             int operationsSection = actionsAdapter.addSection(getString(R.string.operations));
             
             // subscribe
@@ -389,7 +399,14 @@ public class UserActivity extends SingleItemActivity<User> {
         
         return actionItem;
         
-    }   
+    }
+    
+    private LActionItem initIsMutualAction(final LActionItem actionItem) {
+        actionItem.icon = isMutual ? R.drawable.mutual : R.drawable.mutual_not; 
+        actionItem.title = getString(isMutual ? R.string.mutual : R.string.not_mutual);
+        return actionItem;
+        
+    }      
     
     protected abstract static class SubscriptionsReceiver implements ApiPagesReceiver<JSONObject> {
         

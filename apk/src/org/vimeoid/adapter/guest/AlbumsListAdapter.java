@@ -41,7 +41,7 @@ public class AlbumsListAdapter extends EasyCursorsAdapter<Album> {
 
         this.layoutInflater = inflater;        
         
-        this.imageLoader = new ImageLoader(context, R.drawable.thumb_loading_small, R.drawable.item_failed_small);
+        this.imageLoader = new ImageLoader(context, R.drawable.thumb_loading_small, R.drawable.item_failed);
     }
     
     @Override
