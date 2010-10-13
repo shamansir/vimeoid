@@ -3,8 +3,11 @@
  */
 package org.vimeoid.dto.advanced;
 
+import java.util.Set;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.vimeoid.dto.advanced.SubscriptionData.SubscriptionType;
 import org.vimeoid.util.AdvancedItem;
 import org.vimeoid.util.Utils;
 
@@ -55,7 +58,11 @@ public class User implements AdvancedItem {
     public String[] websiteUrls;
     public String biography;
     
-    public PortraitsData portraits;    
+    public PortraitsData portraits;
+    
+    public Boolean isContact;
+    public Boolean isMutual;
+    public Set<SubscriptionType> subscriptonsStatus;
 
     public final static class FieldsKeys {
         

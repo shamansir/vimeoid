@@ -81,11 +81,15 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
         titleBar = findViewById(R.id.titleBar);
         initTitleBar((ImageView)titleBar.findViewById(R.id.subjectIcon),
                      (TextView)titleBar.findViewById(R.id.subjectTitle),
-                     (ImageView)titleBar.findViewById(R.id.resultIcon));        
+                     (ImageView)titleBar.findViewById(R.id.resultIcon));
+        
+        prepare(getIntent().getExtras());
         
         loadNextPage(adapter);
         
     }   
+    
+    protected void prepare(Bundle extras) { };
     
     protected String getContextMenuTitle(int position) { 
         return getString(R.string.context_menu); 

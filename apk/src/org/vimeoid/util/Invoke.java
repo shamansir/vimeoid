@@ -11,6 +11,7 @@ import org.vimeoid.activity.user.list.VideosActivity;
 import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.connection.simple.VimeoProvider;
 import org.vimeoid.dto.advanced.Video;
+import org.vimeoid.dto.advanced.SubscriptionData.SubscriptionType;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -52,6 +53,8 @@ public final class Invoke {
         public static final String SUBSCRIPTIONS_STATUS = "v_subscr_status";
         public static final String IS_CONTACT = "v_is_contact";
         public static final String IS_MUTUAL = "v_is_mutual";
+        public static final String IS_LIKE = "v_is_like";
+        public static final String IS_WATCHLATER = "v_is_watchlater";
         
     }    
 
@@ -218,13 +221,33 @@ public final class Invoke {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, authUri));
         }
         
+        public static void showUserPage(Activity parent, org.vimeoid.dto.advanced.User user) {
+            parent.startActivity(new Intent(parent, UserActivity.class)
+                                     .putExtra(Extras.API_METHOD, Methods.people.getInfo)
+                                     .putExtra(Extras.API_PARAMS, new ApiParams().add("user_id", String.valueOf(user.id))
+                                                                                 .toBundle())
+                                                                                 
+                                     .putExtra(Extras.USER_ID, user.id)
+                                     
+                                     //.putExtra(Extras.USERNAME, displayName)
+                                     .putExtra(Extras.SUBJ_ICON, R.drawable.contact)
+                                     .putExtra(Extras.SUBJ_TITLE, user.username)
+                                     .putExtra(Extras.RES_ICON, R.drawable.info)
+                                     
+                                     .putExtra(Extras.SUBSCRIPTIONS_STATUS, SubscriptionType.toArray(user.subscriptonsStatus))
+                                     .putExtra(Extras.IS_CONTACT, user.isContact)
+                                     .putExtra(Extras.IS_MUTUAL, user.isMutual));
+        }
+        
         public static void showUserPage(Activity parent, long userId, String username) {
             parent.startActivity(new Intent(parent, UserActivity.class)
                                      .putExtra(Extras.API_METHOD, Methods.people.getInfo)
                                      .putExtra(Extras.API_PARAMS, new ApiParams().add("user_id", String.valueOf(userId))
                                                                                  .toBundle())
+                                                                                 
                                      .putExtra(Extras.USER_ID, userId)
-                                     //.putExtra(Extras.USERNAME, username)
+                                     
+                                     //.putExtra(Extras.USERNAME, fullName)
                                      .putExtra(Extras.SUBJ_ICON, R.drawable.contact)
                                      .putExtra(Extras.SUBJ_TITLE, username)
                                      .putExtra(Extras.RES_ICON, R.drawable.info));
@@ -258,11 +281,16 @@ public final class Invoke {
                                      .putExtra(Extras.API_METHOD, Methods.videos.getInfo)
                                      .putExtra(Extras.API_PARAMS, new ApiParams().add("video_id", String.valueOf(video.id))
                                                                                  .toBundle())
+                                                                                 
                                      .putExtra(Extras.USER_ID, video.uploaderId)
                                      .putExtra(Extras.VIDEO_ID, video.id)
+                                     
                                      .putExtra(Extras.SUBJ_ICON, R.drawable.video)
                                      .putExtra(Extras.SUBJ_TITLE, video.title)
-                                     .putExtra(Extras.RES_ICON, R.drawable.info));            
+                                     .putExtra(Extras.RES_ICON, R.drawable.info)
+                                     
+                                     .putExtra(Extras.IS_LIKE, video.isLike)
+                                     .putExtra(Extras.IS_WATCHLATER, video.isWatchLater));
         }
         
         public static void playVideo(Activity parent, org.vimeoid.dto.advanced.Video video) {
