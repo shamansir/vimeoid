@@ -134,10 +134,16 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnIt
 		if (lastSelected != null) lastSelected.findViewById(R.id.playVideo).setVisibility(View.INVISIBLE);		
 	}    
     
-    protected int[] getRequiredMarkers(Video video) {
-        if (video.isLike && !video.isWatchLater) { return new int[] { R.drawable.like_marker }; };
-        if (!video.isLike && video.isWatchLater) { return new int[] { R.drawable.watchlater_marker }; };
-        if (video.isLike && video.isWatchLater) { return new int[] { R.drawable.like_marker, R.drawable.watchlater_marker }; };
+    protected int[] getRequiredMarkers(Video video) {        
+        if (((video.isLike != null) && video.isLike) &&
+            ((video.isWatchLater == null) || !video.isWatchLater)) 
+                               { return new int[] { R.drawable.like_marker }; };
+        if (((video.isLike == null) || !video.isLike) && 
+            ((video.isWatchLater != null) && video.isWatchLater)) 
+                               { return new int[] { R.drawable.watchlater_marker }; };
+        if (((video.isLike != null) && video.isLike) && 
+            ((video.isWatchLater != null) || video.isWatchLater)) 
+                               { return new int[] { R.drawable.like_marker, R.drawable.watchlater_marker }; };
         return new int[0];
     }
     
@@ -170,7 +176,7 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnIt
         final Set<Long> videosList = new HashSet<Long>();
         videosList.add(Long.valueOf(15166258));
         for (Video video: getItems()) {
-            if (videosList.contains(video.getId())) video.isLike = true;
+            video.isLike = videosList.contains(video.getId());
         }
         holder.invalidateViews();        
     }
@@ -179,7 +185,7 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnIt
         final Set<Long> videosList = new HashSet<Long>();
         videosList.add(Long.valueOf(14011251));
         for (Video video: getItems()) {
-            if (videosList.contains(video.getId())) video.isWatchLater = true;
+            video.isWatchLater = videosList.contains(video.getId());
         }
         holder.invalidateViews();
     }

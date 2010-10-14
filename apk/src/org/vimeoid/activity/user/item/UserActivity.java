@@ -112,9 +112,7 @@ public class UserActivity extends SingleItemActivity<User> {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        
-        final Bundle extras = getIntent().getExtras(); 
+    protected void prepare(Bundle extras) {
         
         currentUserId = VimeoApi.getUserLoginData(this).id;
         subjectUserId = extras.getLong(Invoke.Extras.USER_ID);        
@@ -125,12 +123,10 @@ public class UserActivity extends SingleItemActivity<User> {
         
         if (currentUserId != subjectUserId) {
             
-            if (extras.containsKey(Invoke.Extras.SUBSCRIPTIONS_STATUS)) {
+            if (extras.containsKey(Invoke.Extras.SUBSCRIPTIONS_STATUS) && 
+                (extras.get(Invoke.Extras.SUBSCRIPTIONS_STATUS) != null)) {
                 String[] types = extras.getStringArray(Invoke.Extras.SUBSCRIPTIONS_STATUS);
-                subscriptionsStatus = new HashSet<SubscriptionType>();
-                for (int i = 0; i < types.length; i++) {
-                    subscriptionsStatus.add(SubscriptionType.fromString(types[i]));
-                }
+                if (types != null) subscriptionsStatus = SubscriptionType.fromArray(types);
             } else {
                 secondaryTasks.addListTask(LOAD_SUBSCRIPTIONS_TASK, Methods.people.getSubscriptions, 
                                                                     new ApiParams().add("types", 
@@ -142,12 +138,14 @@ public class UserActivity extends SingleItemActivity<User> {
             }
             
             
-            if (extras.containsKey(Invoke.Extras.IS_MUTUAL)) {
-                isMutual = extras.getBoolean(Invoke.Extras.IS_MUTUAL);
+            if (extras.containsKey(Invoke.Extras.IS_MUTUAL) && 
+                (extras.get(Invoke.Extras.IS_MUTUAL) != null)) {
+                isMutual = (Boolean)extras.getBoolean(Invoke.Extras.IS_MUTUAL);
             }            
             
-            if (extras.containsKey(Invoke.Extras.IS_CONTACT)) {
-                isContact = extras.getBoolean(Invoke.Extras.IS_CONTACT);
+            if (extras.containsKey(Invoke.Extras.IS_CONTACT) && 
+                (extras.get(Invoke.Extras.IS_CONTACT) != null)) {
+                isContact = (Boolean)extras.get(Invoke.Extras.IS_CONTACT);
             } else {
                 // TODO: secondaryTasks.add(taskId, apiMethod, params); (infinite task)
                 secondaryTasks.addListTask(LOAD_CONTACTS_TASK, Methods.contacts.getAll, 
@@ -155,20 +153,7 @@ public class UserActivity extends SingleItemActivity<User> {
                                            contactsReceiver, -1, 50);
             }
             
-        }
-        
-        super.onCreate(savedInstanceState);
-    }
-    
-    @Override
-    protected void prepare(Bundle extras) {
-        // FIXME: move secondary tasks preparation here
-        
-        // FIXME: check if passed extras not null
-        
-        // FIXME: use fromArray in SubscriptionType
-        
-        // FIXME: use not getBoolean but cast to Boolean to check for null
+        }        
     }
 
     @Override
