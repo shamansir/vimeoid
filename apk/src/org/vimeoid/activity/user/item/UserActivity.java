@@ -159,6 +159,17 @@ public class UserActivity extends SingleItemActivity<User> {
         
         super.onCreate(savedInstanceState);
     }
+    
+    @Override
+    protected void prepare(Bundle extras) {
+        // FIXME: move secondary tasks preparation here
+        
+        // FIXME: check if passed extras not null
+        
+        // FIXME: use fromArray in SubscriptionType
+        
+        // FIXME: use not getBoolean but cast to Boolean to check for null
+    }
 
     @Override
     protected User extractFromJson(JSONObject jsonObj) throws JSONException {

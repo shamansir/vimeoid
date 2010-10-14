@@ -66,6 +66,7 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     protected void onCreate(Bundle savedInstanceState) {
         apiMethod = getIntent().getStringExtra(Invoke.Extras.API_METHOD);
         params = ApiParams.fromBundle(getIntent().getBundleExtra(Invoke.Extras.API_PARAMS));
+        
         super.onCreate(savedInstanceState);
     }
     

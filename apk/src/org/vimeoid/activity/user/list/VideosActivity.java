@@ -77,21 +77,19 @@ public class VideosActivity extends ItemsListActivity<Video> {
     }
     
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void prepare(Bundle extras) {
         
         currentUserId = VimeoApi.getUserLoginData(this).id;
         
-        final Video.SortType currentSortType = (Video.SortType) getIntent().getExtras().get(Invoke.Extras.API_SORT_TYPE);
+        final Video.SortType currentSortType = (Video.SortType) extras.get(Invoke.Extras.API_SORT_TYPE);
         
         // check if fits period
         secondaryTasks.addListTask(GET_LIKES_TASK, Methods.videos.getLikes, new ApiParams().add("user_id", String.valueOf(currentUserId))
-        		                                                                           .add("sort", currentSortType.toString()), 
-        		                                                            likesReceiver, 3, 30);
+                                                                                           .add("sort", currentSortType.toString()), 
+                                                                            likesReceiver, 3, 30);
         secondaryTasks.addListTask(GET_WATCHSLATER_TASK, Methods.albums.getWatchLater, new ApiParams().add("user_id", String.valueOf(currentUserId))
                                                                                                       .add("sort", currentSortType.toString()), 
                                                                             watchLatersReceiver, 3, 30);
-        
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -170,7 +168,7 @@ public class VideosActivity extends ItemsListActivity<Video> {
             }
 
             @Override
-            protected int onError() { return R.string.failed_to_add_watch_later; }
+            protected int onError() { return R.string.failed_to_modify_watch_later; }
 
         }.execute(new ApiParams().add("video_id", String.valueOf(video.id)));
         

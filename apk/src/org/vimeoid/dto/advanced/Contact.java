@@ -23,8 +23,6 @@ import org.json.JSONObject;
  */
 public class Contact extends User {
 
-    public boolean isMutual;
-    
     public static final class FieldsKeys {
         public static final String MULTIPLE_KEY = "contacts";
         public static final String SINGLE_KEY = "contact";

@@ -2,7 +2,6 @@ package org.vimeoid.activity.user;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.vimeoid.R;
 import org.vimeoid.util.Dialogs;
 
 import android.app.Activity;
@@ -31,7 +30,7 @@ public abstract class QuickApiTask extends ApiTask {
             @Override public void run() {
                 Log.e(TAG, apiMethod + " : " + message);
                 final int errorString = onError();
-                Dialogs.makeLongToast(parent, ((errorString != -1) ? R.string.failed_to_add_watch_later + " : " : "") + message);                                    
+                Dialogs.makeLongToast(parent, ((errorString != -1) ? errorString + " : " : "") + message);                                    
             }
         });
     }

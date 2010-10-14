@@ -3,6 +3,7 @@
  */
 package org.vimeoid.dto.advanced;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -29,12 +30,14 @@ public class SubscriptionData {
     
     public Map<SubscriptionType, Set<Long>> data;    
     
-    public enum SubscriptionType { LIKES, UPLOADS, APPEARS, CHANNEL, ;
+    public enum SubscriptionType { LIKES, UPLOADS, APPEARS, CHANNEL, GROUP;
 
         public static SubscriptionType fromString(String value) {
             if ("likes".equals(value)) return LIKES;
             if ("uploads".equals(value)) return UPLOADS;
             if ("appears".equals(value)) return APPEARS;
+            if ("channel".equals(value)) return CHANNEL;
+            if ("group".equals(value)) return GROUP;
             return null;
         } 
         
@@ -49,6 +52,23 @@ public class SubscriptionData {
             }
             return buffer.toString();
         }
+
+        public static String[] toArray(Set<SubscriptionType> subscriptonsStatus) {
+            final String[] result = new String[subscriptonsStatus.size()];
+            int i = 0;
+            for (SubscriptionType type: subscriptonsStatus) {
+                result[i++] = type.toString();
+            }
+            return result; 
+        }
+        
+        public static Set<SubscriptionType> fromArray(String[] subscriptonsStatus) {
+            final Set<SubscriptionType> result = new HashSet<SubscriptionType>();
+            for (String typeStr: subscriptonsStatus) {
+                result.add(fromString(typeStr));
+            }
+            return result;
+        }        
     
     };    
     
@@ -63,6 +83,7 @@ public class SubscriptionData {
     }
     
     public SubscriptionData() {
+        data = new HashMap<SubscriptionType, Set<Long>>();
         for (SubscriptionType type: SubscriptionType.values()) {
             data.put(type, new HashSet<Long>());
         }
