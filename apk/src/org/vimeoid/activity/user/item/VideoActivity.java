@@ -119,12 +119,14 @@ public class VideoActivity extends SingleItemActivity<Video> {
         // TODO: video likers
         // TODO: video comments as activity
         
-        // Operations section
-        int operationsSection = actionsAdapter.addSection(getString(R.string.operations));
-        // like
-        initLikeAction(actionsAdapter.addAction(operationsSection, isLike ? R.drawable.like : R.drawable.like_not, R.string.like));
-        // watch later
-        initWatchLaterAction(actionsAdapter.addAction(operationsSection, isWatchLater ? R.drawable.watchlater : R.drawable.watchlater_not, R.string.watch_later));
+    	if (currentUserId != ownerId) {
+	        // Operations section
+	        int operationsSection = actionsAdapter.addSection(getString(R.string.operations));
+	        // like
+	        initLikeAction(actionsAdapter.addAction(operationsSection, isLike ? R.drawable.like : R.drawable.like_not, R.string.like));
+	        // watch later
+	        initWatchLaterAction(actionsAdapter.addAction(operationsSection, isWatchLater ? R.drawable.watchlater : R.drawable.watchlater_not, R.string.watch_later));
+    	}
         
         // TODO: add "watch later" and "like" if it is not owner video
         // Statistics section

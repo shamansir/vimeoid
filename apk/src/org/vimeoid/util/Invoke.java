@@ -60,7 +60,7 @@ public final class Invoke {
 
     public static class Guest {
     
-        // Video
+        // =============================================================== Video
         
         protected static Uri getUploaderPageUri(org.vimeoid.dto.simple.Video video) {
             return Uri.withAppendedPath(VimeoProvider.BASE_URI, "/user/" + getUploaderId(video) + "/info");
@@ -114,7 +114,7 @@ public final class Invoke {
                                     .putExtra(Extras.SUBJ_TITLE, video.uploaderName));
         }
         
-        // User
+        // ================================================================ User
 
 		public static void selectApperancesOf(Activity parent, org.vimeoid.dto.simple.User user) {
             parent.startActivity(new Intent(Intent.ACTION_VIEW, 
@@ -151,7 +151,7 @@ public final class Invoke {
                                      .putExtra(Extras.RES_ICON, R.drawable.channel));          
         }        
         
-        // Channel
+        // ============================================================= Channel
         
         public static void pickChannel(Activity parent, org.vimeoid.dto.simple.Channel channel) {
             parent.setResult(Activity.RESULT_OK, new Intent()
@@ -185,7 +185,7 @@ public final class Invoke {
                                      .putExtra(Extras.RES_ICON, R.drawable.video));
         }
         
-        // Album
+        // =============================================================== Album
         
         public static void pickAlbum(Activity parent, org.vimeoid.dto.simple.Album album) {
             parent.setResult(Activity.RESULT_OK, new Intent()
@@ -220,6 +220,8 @@ public final class Invoke {
             // TODO: ensure Uri matches http://vimeo.com/...
             parent.startActivity(new Intent(Intent.ACTION_VIEW, authUri));
         }
+        
+        // ================================================================ User
         
         public static void showUserPage(Activity parent, org.vimeoid.dto.advanced.User user) {
             parent.startActivity(new Intent(parent, UserActivity.class)
@@ -257,6 +259,8 @@ public final class Invoke {
             showUserPage(parent, userId, username);
         }
 
+        // =============================================================== Video
+        
         public static void selectVideosBy(Activity parent, org.vimeoid.dto.advanced.User user) {
             parent.startActivity(new Intent(parent, VideosActivity.class)
                                      .putExtra(Extras.API_METHOD, Methods.videos.getAll)
