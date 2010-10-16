@@ -8,6 +8,7 @@ import java.util.Set;
 import org.vimeoid.dto.advanced.SubscriptionData.SubscriptionType;
 
 import android.view.View;
+import android.widget.AdapterView;
 
 /**
  * <dl>
@@ -25,13 +26,13 @@ import android.view.View;
  */
 public interface UsersDataReceiver {
     
-    public void gotVideosCount(View view, long userId, int videosCount);  
-    public void gotAlbumsCount(View view, long userId, int videosCount);
-    public void gotChannelsCount(View view, long userId, int videosCount);
-    public void gotContactsCount(View view, long userId, int videosCount);
-    public void gotLocation(View view, long userId, String location);
-    public void gotSubscriptions(View view, long userId, Set<SubscriptionType> subscriptions);
-    public void gotIsContact(View view, long userId, Boolean isContact); 
-    public void gotMarkers(View view, long userId, Boolean isStaffMember, Boolean isPlusMember);
+    public void gotVideosCount(AdapterView<?> holder, View view, long userId, int videosCount);  
+    public void gotAlbumsCount(AdapterView<?> holder, View view, long userId, int videosCount);
+    public void gotChannelsCount(AdapterView<?> holder, View view, long userId, int videosCount);
+    public void gotContactsCount(AdapterView<?> holder, View view, long userId, int videosCount);
+    public void gotLocation(AdapterView<?> holder, View view, long userId, String location);
+    public void gotSubscriptions(AdapterView<?> holder, View view, long userId, Set<SubscriptionType> subscriptions);
+    public void gotIsContact(AdapterView<?> holder, View view, long userId, Boolean isContact); 
+    public void gotMarkers(AdapterView<?> holder, View view, long userId, Boolean isStaffMember, Boolean isPlusMember);
 
 }

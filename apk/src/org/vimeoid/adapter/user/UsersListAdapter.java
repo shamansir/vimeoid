@@ -20,6 +20,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -88,13 +89,13 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
         imageLoader.displayImage(user.portraits.small.url, itemHolder.ivPortrait);
               
         itemHolder.tvName.setText(user.displayName + " [" + user.username + "]");
-        itemHolder.tvLocation.setText(user.location);
+        itemHolder.tvLocation.setText((user.location != null) ? user.location : "?");
         injectInfo(itemHolder.llTags, position, user.fromStaff, user.isPlusMember, user.isMutual);
         
-        itemHolder.tvVideos.setText(String.valueOf(user.videosCount));
-        itemHolder.tvAlbums.setText(String.valueOf(user.albumsCount));
-        itemHolder.tvChannels.setText(String.valueOf(user.channelsCount));
-        itemHolder.tvContacts.setText(String.valueOf(user.contactsCount));
+        itemHolder.tvVideos.setText((user.videosCount >= 0) ? String.valueOf(user.videosCount) : "?");
+        itemHolder.tvAlbums.setText((user.albumsCount >= 0) ? String.valueOf(user.albumsCount) : "?");
+        itemHolder.tvChannels.setText((user.channelsCount >= 0) ? String.valueOf(user.channelsCount) : "?");
+        itemHolder.tvContacts.setText((user.contactsCount >= 0) ? String.valueOf(user.contactsCount) : "?");
         
         MarkersSupport.injectMarkers(layoutInflater, itemHolder.vgMarkers, getRequiredMarkers(user));
         
@@ -207,48 +208,47 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
 
 
     @Override
-    public void gotAlbumsCount(View view, long userId, int videosCount) {
+    public void gotAlbumsCount(AdapterView<?> holder, View view, long userId, int videosCount) {
         // TODO Auto-generated method stub
     }
 
     @Override
-    public void gotChannelsCount(View view, long userId, int videosCount) {
-        // TODO Auto-generated method stub
-    }
-
-
-    @Override
-    public void gotContactsCount(View view, long userId, int videosCount) {
+    public void gotChannelsCount(AdapterView<?> holder, View view, long userId, int videosCount) {
         // TODO Auto-generated method stub
     }
 
 
     @Override
-    public void gotLocation(View view, long userId, String location) {
+    public void gotContactsCount(AdapterView<?> holder, View view, long userId, int videosCount) {
         // TODO Auto-generated method stub
     }
 
 
     @Override
-    public void gotSubscriptions(View view, long userId,
-            Set<SubscriptionType> subscriptions) {
+    public void gotLocation(AdapterView<?> holder, View view, long userId, String location) {
         // TODO Auto-generated method stub
     }
 
 
     @Override
-    public void gotVideosCount(View view, long userId, int videosCount) {
+    public void gotSubscriptions(AdapterView<?> holder, View view, long userId, Set<SubscriptionType> subscriptions) {
+        // TODO Auto-generated method stub
+    }
+
+
+    @Override
+    public void gotVideosCount(AdapterView<?> holder, View view, long userId, int videosCount) {
         // TODO Auto-generated method stub
     }
 
     @Override
-    public void gotIsContact(View view, long userId, Boolean isContact) {
+    public void gotIsContact(AdapterView<?> holder, View view, long userId, Boolean isContact) {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public void gotMarkers(View view, long userId, Boolean isStaffMember,
+    public void gotMarkers(AdapterView<?> holder, View view, long userId, Boolean isStaffMember,
             Boolean isPlusMember) {
         // TODO Auto-generated method stub
         

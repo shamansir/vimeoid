@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Vimeo</string>
+    <string name="app_name">Vimeo</string>    
     <!-- notifications -->
     <string name="no_iternet_connection">No connection. Please enable Internet connection</string>
     <string name="vimeo_not_reachable">Connection exists, but Vimeo site is not reachable... Please fix the problem</string>
@@ -8,7 +8,7 @@
     <string name="please_do_not_touch">Don\'t mess with me!</string>
     <string name="unknown">Unknown</string>
     <string name="unknown_item">Unknown item</string>
-    <string name="caching_video">Loading video...</string>
+    <string name="caching_video">Loading video...</string>    
     <string name="currently_not_supported">This action is not supported currently</string>
     <string name="no_space_for_video_cache">There is no free space to make cache of this file. Required: {required}KB | Actual: {actual}KB </string>
     <string name="failed_to_get_video_stream">Failed to get video stream (No mobile version of video)</string>
