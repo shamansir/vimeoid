@@ -21,12 +21,12 @@
         <TextView android:id="@+id/albumItemTitle"
                   android:layout_width="fill_parent" 
                   android:layout_height="wrap_content"
+                  android:text="Title"
                   android:textSize="@dimen/item_title_font_size"
                   android:textColor="@color/item_title"
                   android:lines="1"
                   android:ellipsize="marquee"                 
-                  android:scrollHorizontally="true"
-                  android:text="Titlegyfj" />
+                  android:scrollHorizontally="true" />
         <!-- <TextView android:id="@+id/albumItemAuthor"
                   android:layout_width="fill_parent" 
                   android:layout_height="fill_parent"
@@ -41,12 +41,12 @@
                   android:layout_width="fill_parent" 
                   android:layout_height="wrap_content"
                   android:layout_marginTop="2dp"
+                  android:text="Updated on 48/12/39"                  
                   android:textSize="@dimen/item_tags_font_size"
                   android:textColor="@color/item_subtitle"
                   android:lines="1"
                   android:ellipsize="marquee"
-                  android:scrollHorizontally="true"
-                  android:text="Created onghyj" />                            
+                  android:scrollHorizontally="true" />                            
      </LinearLayout>
      <LinearLayout android:orientation="horizontal"
                    android:layout_width="fill_parent"
@@ -57,9 +57,9 @@
                    android:layout_height="fill_parent"
                    android:layout_weight="0.2"
                    android:gravity="right|center_vertical"
+                   android:text="videos"      
                    android:textSize="@dimen/item_subtitle_font_size"
-                   android:layout_marginRight="5dp"
-                   android:text="123378559" />
+                   android:layout_marginRight="5dp" />
          <ImageView android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

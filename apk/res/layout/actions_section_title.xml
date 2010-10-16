@@ -7,6 +7,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:gravity="center_vertical"
+                android:text="Actions Group Title"
                 android:textSize="@dimen/actions_group_title_font_size"
                 android:textColor="@color/actions_group_title_text"
                 android:textStyle="bold"
