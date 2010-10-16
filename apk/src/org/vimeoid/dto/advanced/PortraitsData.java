@@ -29,10 +29,10 @@ public class PortraitsData {
         public String url;
     }
     
-    public Portrait nano;
-    public Portrait small;
-    public Portrait medium;
-    public Portrait large;
+    public Portrait nano; // 30x30
+    public Portrait small; // 75x75
+    public Portrait medium; // 100x100
+    public Portrait large; // 300x300
     
     public static class FieldsKeys {
         public static final String SINGLE_KEY = "portrait";

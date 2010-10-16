@@ -29,10 +29,10 @@ public class ThumbnailsData {
         public String url;
     }
     
-    public Thumbnail small;
-    public Thumbnail medium;
-    public Thumbnail large;
-    public Thumbnail huge;
+    public Thumbnail small; // 100x75
+    public Thumbnail medium; // 200x150
+    public Thumbnail large; // 640x480, 640x360, 640x400, ...
+    public Thumbnail huge; // 1280x720, 1280x800, ...
     
     public static class FieldsKeys {
         public static final String SINGLE_KEY = "thumbnail";
