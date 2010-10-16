@@ -92,4 +92,8 @@
     <string name="created_by">{name}</string>
     <!-- album page -->
     <string name="updated_on">{time}</string>
+    <!-- users page -->
+    <string name="staff_caps">STAFF</string>
+    <string name="plus_caps">PLUS</string>
+    <string name="mutual_caps">MUTUAL</string>    
 </resources>

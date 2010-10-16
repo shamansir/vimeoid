@@ -5,6 +5,7 @@ package org.vimeoid.dto.advanced;
 
 import java.util.Set;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.dto.advanced.SubscriptionData.SubscriptionType;
@@ -51,8 +52,8 @@ public class User implements AdvancedItem {
     public long videosLiked;
     
     public long contactsCount;
-    //public long albumsCount;
-    //public long channelsCount;
+    public long albumsCount;
+    public long channelsCount;
     
     public String location;
     public String[] websiteUrls;
@@ -125,10 +126,19 @@ public class User implements AdvancedItem {
         return user;
     }
     
+	public static User[] collectListFromJson(JSONObject jsonObj) throws JSONException {
+        final JSONArray dataArray = jsonObj.getJSONObject(FieldsKeys.MULTIPLE_KEY)
+		        						   .getJSONArray(FieldsKeys.SINGLE_KEY);
+		final User[] users = new User[dataArray.length()];
+		for (int i = 0; i < dataArray.length(); i++) {
+			users[i] = extractFromJson(dataArray.getJSONObject(i));
+		}
+		return users;
+	}
+    
     public static User collectFromJson(JSONObject jsonObj) throws JSONException {
         return extractFromJson(jsonObj.getJSONObject(FieldsKeys.SINGLE_KEY));
     }
     
     public long getId() { return id; }
-
 }
