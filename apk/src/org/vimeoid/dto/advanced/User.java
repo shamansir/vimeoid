@@ -40,20 +40,20 @@ public class User implements AdvancedItem {
     public String displayName;
     public String username;
     public /*long*/ String createdOn;
-    public boolean fromStaff;
-    public boolean isPlusMember;
+    public Boolean fromStaff = null;
+    public Boolean isPlusMember = null;
     
     public String profileUrl;
     public String videosUrl;
     
-    public long uploadsCount;
-    public long videosCount;
-    public long videosAppearsIn;
-    public long videosLiked;
+    public long videosCount = -1;    
+    public long uploadsCount = -1;
+    public long videosAppearsIn = -1;
+    public long videosLiked = -1;
     
-    public long contactsCount;
-    public long albumsCount;
-    public long channelsCount;
+    public long contactsCount = -1;
+    public long albumsCount = -1;
+    public long channelsCount = -1;
     
     public String location;
     public String[] websiteUrls;
@@ -61,9 +61,9 @@ public class User implements AdvancedItem {
     
     public PortraitsData portraits;
     
-    public Boolean isContact;
-    public Boolean isMutual;
-    public Set<SubscriptionType> subscriptonsStatus;
+    public Boolean isContact = null;
+    public Boolean isMutual = null;
+    public Set<SubscriptionType> subscriptonsStatus = null;
 
     public final static class FieldsKeys {
         

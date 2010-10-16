@@ -38,23 +38,27 @@ import android.widget.TextView;
  * @date Sep 29, 2010 8:31:27 PM 
  *
  */
-public class UsersListAdapter extends JsonObjectsAdapter<User> {
-	
+public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersDataReceiver {
+    
     private final LayoutInflater layoutInflater;
     private final ImageLoader imageLoader;
+    private final UsersDataProvider provider;
     
-    public UsersListAdapter(Context context, LayoutInflater inflater) {
+    private Set<Long> requests = new HashSet<Long>();
+    
+    public UsersListAdapter(Context context, LayoutInflater inflater, UsersDataProvider provider) {
         super(Video.FieldsKeys.MULTIPLE_KEY);
         
         this.layoutInflater = inflater;        
         this.imageLoader = new ImageLoader(context, R.drawable.thumb_loading_square_small, R.drawable.unknown_status);
+        this.provider = provider;
     }
     
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         UserItemViewHolder itemHolder = null;
         
-        final User user = (User)getItem(position); 
+        final User user = (User)getItem(position);       
         
         if (convertView == null) {
             
@@ -94,6 +98,11 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> {
         
         MarkersSupport.injectMarkers(layoutInflater, itemHolder.vgMarkers, getRequiredMarkers(user));
         
+        if (!requests.contains(user.id)) {
+            provider.requestData(convertView, user.id, this);
+            requests.add(user.id);
+        }
+                
         return convertView;
     }
     
@@ -194,6 +203,55 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> {
         TextView tvContacts;
         
         ViewGroup vgMarkers;
+    }
+
+
+    @Override
+    public void gotAlbumsCount(View view, long userId, int videosCount) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void gotChannelsCount(View view, long userId, int videosCount) {
+        // TODO Auto-generated method stub
+    }
+
+
+    @Override
+    public void gotContactsCount(View view, long userId, int videosCount) {
+        // TODO Auto-generated method stub
+    }
+
+
+    @Override
+    public void gotLocation(View view, long userId, String location) {
+        // TODO Auto-generated method stub
+    }
+
+
+    @Override
+    public void gotSubscriptions(View view, long userId,
+            Set<SubscriptionType> subscriptions) {
+        // TODO Auto-generated method stub
+    }
+
+
+    @Override
+    public void gotVideosCount(View view, long userId, int videosCount) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void gotIsContact(View view, long userId, Boolean isContact) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void gotMarkers(View view, long userId, Boolean isStaffMember,
+            Boolean isPlusMember) {
+        // TODO Auto-generated method stub
+        
     }
 
 
