@@ -9,6 +9,7 @@ import org.vimeoid.activity.base.ItemsListActivity_;
 import org.vimeoid.activity.base.ListApiTask_;
 import org.vimeoid.activity.base.ListApiTask_.Reactor;
 import org.vimeoid.adapter.JsonObjectsAdapter;
+import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.util.AdvancedItem;
 import org.vimeoid.util.ApiParams;
 import org.vimeoid.util.Dialogs;
@@ -39,6 +40,9 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     
     private boolean ranSecondaryTasks = false;
     
+    private long currentUserId; // FIXME: get these values in the parent activities
+    private long subjectUserId; // FIXME: get these values in the parent activities
+    
     public ItemsListActivity(int mainView) {
     	super(mainView, 0);
     	
@@ -60,10 +64,22 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     }
     
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        final Bundle extras = getIntent().getExtras();
+        
+        currentUserId = VimeoApi.getUserLoginData(this).id;
+        if (!extras.containsKey(Invoke.Extras.USER_ID)) 
+            throw new IllegalArgumentException("Subject User ID must be passed in extras"); 
+        subjectUserId = extras.getLong(Invoke.Extras.USER_ID);
+        
+        super.onCreate(savedInstanceState);
+    }
+    
+    @Override
     protected ApiParams collectTaskParams(Bundle extras) {
         apiMethod = extras.getString(Invoke.Extras.API_METHOD);
-        params = ApiParams.fromBundle(extras.getBundle(Invoke.Extras.API_PARAMS));        
-
+        params = ApiParams.fromBundle(extras.getBundle(Invoke.Extras.API_PARAMS));
+        
         return params;
     }
     
@@ -142,6 +158,9 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
         }         
         return super.onOptionsItemSelected(item);
         
-    }   
+    }
+    
+    public long getCurrentUserId() { return currentUserId; }
+    public long getSubjectUserId() { return subjectUserId; }
 
 }

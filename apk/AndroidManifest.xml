@@ -121,6 +121,10 @@
                 <data android:mimeType="vnd.android.cursor.item/vnd.vimeo.user" />
             </intent-filter>
         </activity>
+        <!-- USER: USERS -->
+        <activity android:label="Users"
+                  android:name=".activity.user.list.UsersActivity"
+                  android:theme="@android:style/Theme.NoTitleBar" />
         <!-- USER: USER -->
         <activity android:label="User"
                   android:name=".activity.user.item.UserActivity"

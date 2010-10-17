@@ -11,7 +11,6 @@ import org.vimeoid.activity.user.QuickApiTask;
 import org.vimeoid.activity.user.SingleItemActivity;
 import org.vimeoid.adapter.LActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
-import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.dto.advanced.Video;
 import org.vimeoid.util.ApiParams;
@@ -52,9 +51,7 @@ public class VideoActivity extends SingleItemActivity<Video> {
     private Boolean isLike;
     private Boolean isWatchLater;
     
-    private long currentUserId;
     private long subjectVideoId;
-    private long ownerId;
     
     public VideoActivity() {
         super(R.layout.view_single_video);
@@ -84,11 +81,7 @@ public class VideoActivity extends SingleItemActivity<Video> {
     @Override
     protected void prepare(Bundle extras) {
         
-        currentUserId = VimeoApi.getUserLoginData(this).id;
-        
-        ownerId = extras.getLong(Invoke.Extras.USER_ID);
-        
-        if (currentUserId != ownerId) {
+        if (getCurrentUserId() != getSubjectUserId()) {
             
             if (extras.containsKey(Invoke.Extras.IS_LIKE) && 
                 (extras.get(Invoke.Extras.IS_LIKE) != null)) {
@@ -105,6 +98,7 @@ public class VideoActivity extends SingleItemActivity<Video> {
             }
             
         }
+        
     }
 
     @Override
@@ -119,7 +113,7 @@ public class VideoActivity extends SingleItemActivity<Video> {
         // TODO: video likers
         // TODO: video comments as activity
         
-    	if (currentUserId != ownerId) {
+    	if (getCurrentUserId() != getSubjectUserId()) {
 	        // Operations section
 	        int operationsSection = actionsAdapter.addSection(getString(R.string.operations));
 	        // like

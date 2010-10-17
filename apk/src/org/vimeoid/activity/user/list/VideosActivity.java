@@ -16,7 +16,6 @@ import org.vimeoid.activity.user.ItemsListActivity;
 import org.vimeoid.adapter.JsonObjectsAdapter;
 import org.vimeoid.adapter.user.VideosListAdapter;
 import org.vimeoid.adapter.user.VideosListAdapter.ThumbClickListener;
-import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.dto.advanced.PagingData;
 import org.vimeoid.dto.advanced.Video;
@@ -24,7 +23,6 @@ import org.vimeoid.util.ApiParams;
 import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
 import org.vimeoid.util.PagingData_;
-import org.vimeoid.util.Invoke.Extras;
 
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -56,9 +54,6 @@ public class VideosActivity extends ItemsListActivity<Video> {
     private final VideosIdsReceiver likesReceiver;
     private final VideosIdsReceiver watchLatersReceiver;
     
-    private long currentUserId; // FIXME: get these values in the parent activities
-    private long subjectUserId; // FIXME: get these values in the parent activities
-    
     public VideosActivity() {
         super();
         
@@ -81,8 +76,7 @@ public class VideosActivity extends ItemsListActivity<Video> {
     @Override
     protected void prepare(Bundle extras) {
         
-        currentUserId = VimeoApi.getUserLoginData(this).id;
-        subjectUserId = extras.getLong(Extras.USER_ID);
+        final long subjectUserId = getSubjectUserId();
         
         final Video.SortType currentSortType = (Video.SortType) extras.get(Invoke.Extras.API_SORT_TYPE);
         
@@ -118,7 +112,7 @@ public class VideosActivity extends ItemsListActivity<Video> {
         final Resources resources = getResources();
         
         QuickAction qa = new QuickAction(view);
-        if (video.uploaderId != currentUserId) {
+        if (video.uploaderId != getCurrentUserId()) {
             qa.addActionItem(getString(R.string.qa_later), resources.getDrawable(video.isWatchLater 
                                                                                  ? R.drawable.watchlater_white 
                                                                                  : R.drawable.watchlater_white_not), 

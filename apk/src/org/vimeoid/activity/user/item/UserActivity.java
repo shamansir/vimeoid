@@ -15,7 +15,6 @@ import org.vimeoid.activity.user.QuickApiTask;
 import org.vimeoid.activity.user.SingleItemActivity;
 import org.vimeoid.adapter.LActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
-import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.dto.advanced.Album;
 import org.vimeoid.dto.advanced.Channel;
@@ -72,9 +71,6 @@ public class UserActivity extends SingleItemActivity<User> {
     private LActionItem addContactAction;
     private LActionItem isMutualAction;
     
-    private long currentUserId;
-    private long subjectUserId;
-    
     private Set<SubscriptionType> subscriptionsStatus; // Likes / Uploads / Appears
     private Boolean isContact;
     private Boolean isMutual;
@@ -87,6 +83,8 @@ public class UserActivity extends SingleItemActivity<User> {
         
         subscriptionsReceiver = new SubscriptionsReceiver() {
             @Override public void onComplete() {
+                final long subjectUserId = getSubjectUserId();
+                
                 subscriptionsStatus = new HashSet<SubscriptionType>();
                 if (subscriptions.data.get(SubscriptionType.LIKES).contains(subjectUserId)) { 
                     subscriptionsStatus.add(SubscriptionType.LIKES);
@@ -115,15 +113,15 @@ public class UserActivity extends SingleItemActivity<User> {
 
     @Override
     protected void prepare(Bundle extras) {
+        super.prepare(extras);        
         
-        currentUserId = VimeoApi.getUserLoginData(this).id;
-        subjectUserId = extras.getLong(Invoke.Extras.USER_ID);        
+        final long subjectUserId = getSubjectUserId();
         
         secondaryTasks.add(LOAD_PORTRAITS_TASK, Methods.people.getPortraitUrls, new ApiParams().add("user_id", String.valueOf(subjectUserId)));
         secondaryTasks.add(LOAD_ALBUMS_TASK, Methods.albums.getAll, new ApiParams().add("user_id", String.valueOf(subjectUserId)));
         secondaryTasks.add(LOAD_CHANNELS_TASK, Methods.channels.getAll, new ApiParams().add("user_id", String.valueOf(subjectUserId)));
         
-        if (currentUserId != subjectUserId) {
+        if (getCurrentUserId() != subjectUserId) {
             
             if (extras.containsKey(Invoke.Extras.SUBSCRIPTIONS_STATUS) && 
                 (extras.get(Invoke.Extras.SUBSCRIPTIONS_STATUS) != null)) {
@@ -156,6 +154,7 @@ public class UserActivity extends SingleItemActivity<User> {
             }
             
         }        
+        
     }
 
     @Override
@@ -165,6 +164,9 @@ public class UserActivity extends SingleItemActivity<User> {
 
     @Override
     protected SectionedActionsAdapter fillWithActions(SectionedActionsAdapter actionsAdapter, final User user) {
+        
+        final long subjectUserId = getSubjectUserId();
+        final long currentUserId = getCurrentUserId();
 
     	// ========================= STATISTICS ================================
         int statsSection = actionsAdapter.addSection(getString(R.string.statistics));
@@ -326,10 +328,12 @@ public class UserActivity extends SingleItemActivity<User> {
     
     private LActionItem initSubscriptionAction(final LActionItem actionItem, final SubscriptionType type) {
         
-        actionItem.icon = subscriptionsStatus.contains(type) ? R.drawable.subscribe : R.drawable.subscribe_not; 
+        actionItem.icon = subscriptionsStatus.contains(type) ? R.drawable.subscribe : R.drawable.subscribe_not;        
 
         actionItem.onClick = new OnClickListener() {
             @Override public void onClick(View v) {
+                final long subjectUserId = getSubjectUserId();
+                
                 new QuickApiTask(UserActivity.this, subscriptionsStatus.contains(type) 
                                                     ? Methods.people.removeSubscription
                                                     : Methods.people.addSubscription) {
@@ -370,6 +374,8 @@ public class UserActivity extends SingleItemActivity<User> {
 
         actionItem.onClick = new OnClickListener() {
             @Override public void onClick(View v) {
+                final long subjectUserId = getSubjectUserId();
+                
                 new QuickApiTask(UserActivity.this, isContact 
                                                     ? Methods.people.removeContact
                                                     : Methods.people.addContact) {
@@ -438,6 +444,8 @@ public class UserActivity extends SingleItemActivity<User> {
 
         @Override
         public void addSource(JSONObject page) throws Exception {
+            final long subjectUserId = getSubjectUserId();
+            
             received += 
                 page.getJSONObject(Contact.FieldsKeys.MULTIPLE_KEY)
                     .getInt(PagingData.FieldsKeys.ON_THIS_PAGE);

@@ -104,7 +104,8 @@ public class User implements AdvancedItem {
         user.createdOn = jsonObj.getString(FieldsKeys.CREATED_ON);
         user.fromStaff = Utils.adaptBoolean(jsonObj.getInt(FieldsKeys.IS_STAFF));
         user.isPlusMember = Utils.adaptBoolean(jsonObj.getInt(FieldsKeys.IS_PLUS));
-        user.isMutual = Utils.adaptBoolean(jsonObj.getInt(FieldsKeys.IS_MUTUAL));
+        if (jsonObj.has(FieldsKeys.IS_MUTUAL)) 
+            user.isMutual = Utils.adaptBoolean(jsonObj.getInt(FieldsKeys.IS_MUTUAL));
         
         user.displayName = jsonObj.getString(FieldsKeys.NAME);
         user.username = jsonObj.getString(FieldsKeys.USERNAME);

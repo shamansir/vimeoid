@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.R;
 import org.vimeoid.activity.base.SingleItemActivity_;
+import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.util.AdvancedItem;
 import org.vimeoid.util.ApiParams;
 import org.vimeoid.util.Dialogs;
@@ -40,6 +41,9 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     
     protected final ApiTasksQueue secondaryTasks;
     
+    private long currentUserId;    
+    private long subjectUserId;
+    
     public SingleItemActivity(int mainView) {
         super(mainView);
         
@@ -64,10 +68,22 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        apiMethod = getIntent().getStringExtra(Invoke.Extras.API_METHOD);
-        params = ApiParams.fromBundle(getIntent().getBundleExtra(Invoke.Extras.API_PARAMS));
+        final Bundle extras = getIntent().getExtras();
+        
+        currentUserId = VimeoApi.getUserLoginData(this).id;
+        if (!extras.containsKey(Invoke.Extras.USER_ID)) 
+            throw new IllegalArgumentException("Subject User ID must be passed in extras"); 
+        subjectUserId = extras.getLong(Invoke.Extras.USER_ID);
         
         super.onCreate(savedInstanceState);
+    }
+    
+    @Override
+    protected void prepare(Bundle extras) {
+        apiMethod = getIntent().getStringExtra(Invoke.Extras.API_METHOD);
+        params = ApiParams.fromBundle(getIntent().getBundleExtra(Invoke.Extras.API_PARAMS));
+
+        super.prepare(extras);
     }
     
     protected abstract ItemType extractFromJson(JSONObject jsonObj) throws JSONException;
@@ -93,6 +109,9 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     }
     
     public void onSecondaryTaskPerfomed(int id, JSONObject result)  throws JSONException { }
+    
+    public long getCurrentUserId() { return currentUserId; };
+    public long getSubjectUserId() { return subjectUserId; };
     
     protected class ItemApiTask extends ApiTask {
 

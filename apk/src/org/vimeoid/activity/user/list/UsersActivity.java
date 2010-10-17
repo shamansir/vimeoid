@@ -9,13 +9,11 @@ import org.vimeoid.activity.user.ItemsListActivity;
 import org.vimeoid.adapter.JsonObjectsAdapter;
 import org.vimeoid.adapter.user.UsersDataProvider;
 import org.vimeoid.adapter.user.UsersListAdapter;
-import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.dto.advanced.User;
 import org.vimeoid.util.ApiParams;
 import org.vimeoid.util.Invoke;
 
-import android.os.Bundle;
 import android.view.View;
 
 /**
@@ -37,15 +35,6 @@ import android.view.View;
 
 public class UsersActivity extends ItemsListActivity<User> implements UsersDataProvider {
     
-    private long currentUserId; // FIXME: get these values in the parent activities
-    private long subjectUserId; // FIXME: get these values in the parent activities
-        
-    @Override
-    protected void prepare(Bundle extras) {
-        currentUserId = VimeoApi.getUserLoginData(this).id;
-        
-    }
-
     @Override
     protected JsonObjectsAdapter<User> createAdapter() {
         return new UsersListAdapter(this, getLayoutInflater(), this);
@@ -100,6 +89,8 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
         // channels.getAll: channels count
         // albums.getAll: albums count
         // people.getSubscriptions: subscriptions status
+        final long subjectUserId = getSubjectUserId();
+        
         new ApiTask(Methods.people.getInfo) {
             @Override public void onAnswerReceived(JSONObject jsonObj) throws JSONException {
                 final JSONObject userObj = jsonObj.getJSONObject(User.FieldsKeys.SINGLE_KEY);
