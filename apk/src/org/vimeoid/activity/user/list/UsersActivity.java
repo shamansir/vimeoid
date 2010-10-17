@@ -10,6 +10,7 @@ import org.vimeoid.adapter.JsonObjectsAdapter;
 import org.vimeoid.adapter.user.UsersDataProvider;
 import org.vimeoid.adapter.user.UsersListAdapter;
 import org.vimeoid.connection.advanced.Methods;
+import org.vimeoid.dto.advanced.Contact;
 import org.vimeoid.dto.advanced.User;
 import org.vimeoid.util.ApiParams;
 import org.vimeoid.util.Invoke;
@@ -37,7 +38,12 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
     
     @Override
     protected JsonObjectsAdapter<User> createAdapter() {
-        return new UsersListAdapter(this, getLayoutInflater(), this);
+        // FIXME: separate activity for contacts
+        return new UsersListAdapter(Contact.FieldsKeys.MULTIPLE_KEY, this, getLayoutInflater(), this) {
+            @Override protected User[] extractItems(JSONObject jsonObject) throws JSONException {
+                return Contact.collectListFromJson(jsonObject);
+            }            
+        };
     }
     
     @Override
@@ -128,6 +134,6 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
 
         }.execute(new ApiParams().add("video_id", String.valueOf(video.id)));
         
-    } */
+    } */    
        
 }

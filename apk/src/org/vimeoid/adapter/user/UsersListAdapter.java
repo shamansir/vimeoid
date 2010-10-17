@@ -11,7 +11,6 @@ import org.json.JSONObject;
 import org.vimeoid.R;
 import org.vimeoid.adapter.JsonObjectsAdapter;
 import org.vimeoid.dto.advanced.User;
-import org.vimeoid.dto.advanced.Video;
 import org.vimeoid.dto.advanced.SubscriptionData.SubscriptionType;
 
 import com.fedorvlasov.lazylist.ImageLoader;
@@ -46,8 +45,8 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> {
     
     private Set<Long> requests = new HashSet<Long>();
     
-    public UsersListAdapter(Context context, LayoutInflater inflater, UsersDataProvider provider) {
-        super(Video.FieldsKeys.MULTIPLE_KEY);
+    public UsersListAdapter(String dataKey, Context context, LayoutInflater inflater, UsersDataProvider provider) {
+        super(dataKey);
         
         this.layoutInflater = inflater;        
         this.imageLoader = new ImageLoader(context, R.drawable.thumb_loading_square_small, R.drawable.unknown_status);

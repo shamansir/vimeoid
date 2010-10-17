@@ -101,27 +101,36 @@ public class User implements AdvancedItem {
         final User user = new User();
         
         user.id = jsonObj.getLong(FieldsKeys.ID);
-        user.createdOn = jsonObj.getString(FieldsKeys.CREATED_ON);
+        if (jsonObj.has(FieldsKeys.CREATED_ON)) 
+            user.createdOn = jsonObj.getString(FieldsKeys.CREATED_ON);
         user.fromStaff = Utils.adaptBoolean(jsonObj.getInt(FieldsKeys.IS_STAFF));
         user.isPlusMember = Utils.adaptBoolean(jsonObj.getInt(FieldsKeys.IS_PLUS));
-        if (jsonObj.has(FieldsKeys.IS_MUTUAL)) 
+        if (jsonObj.has(FieldsKeys.IS_MUTUAL))
             user.isMutual = Utils.adaptBoolean(jsonObj.getInt(FieldsKeys.IS_MUTUAL));
         
         user.displayName = jsonObj.getString(FieldsKeys.NAME);
         user.username = jsonObj.getString(FieldsKeys.USERNAME);
-        user.location = jsonObj.getString(FieldsKeys.LOCATION);
+        if (jsonObj.has(FieldsKeys.LOCATION))
+            user.location = jsonObj.getString(FieldsKeys.LOCATION);
         
-        user.websiteUrls = Utils.stringArrayFromJson(jsonObj.getJSONArray(FieldsKeys.URL));
-        user.biography = jsonObj.getString(FieldsKeys.BIO);
+        if (jsonObj.has(FieldsKeys.URL))
+            user.websiteUrls = Utils.stringArrayFromJson(jsonObj.getJSONArray(FieldsKeys.URL));
+        if (jsonObj.has(FieldsKeys.BIO))
+            user.biography = jsonObj.getString(FieldsKeys.BIO);
         
         user.profileUrl = jsonObj.getString(FieldsKeys.PROFILE_URL);
         user.videosUrl = jsonObj.getString(FieldsKeys.VIDEOS_URL);
         
-        user.uploadsCount = jsonObj.getLong(FieldsKeys.NUM_OF_UPLOADS);
-        user.videosCount = jsonObj.getLong(FieldsKeys.NUM_OF_VIDEOS);
-        user.videosLiked = jsonObj.getLong(FieldsKeys.NUM_OF_LIKES);
-        user.videosAppearsIn = jsonObj.getLong(FieldsKeys.NUM_OF_APPEARANCES);
-        user.contactsCount = jsonObj.getLong(FieldsKeys.NUM_OF_CONTACTS);
+        if (jsonObj.has(FieldsKeys.NUM_OF_UPLOADS))
+            user.uploadsCount = jsonObj.getLong(FieldsKeys.NUM_OF_UPLOADS);
+        if (jsonObj.has(FieldsKeys.NUM_OF_VIDEOS))
+            user.videosCount = jsonObj.getLong(FieldsKeys.NUM_OF_VIDEOS);
+        if (jsonObj.has(FieldsKeys.NUM_OF_LIKES))
+            user.videosLiked = jsonObj.getLong(FieldsKeys.NUM_OF_LIKES);
+        if (jsonObj.has(FieldsKeys.NUM_OF_APPEARANCES))
+            user.videosAppearsIn = jsonObj.getLong(FieldsKeys.NUM_OF_APPEARANCES);
+        if (jsonObj.has(FieldsKeys.NUM_OF_CONTACTS))
+            user.contactsCount = jsonObj.getLong(FieldsKeys.NUM_OF_CONTACTS);
         
         if (jsonObj.has(PortraitsData.FieldsKeys.MULTIPLE_KEY)) 
             user.portraits = PortraitsData.collectFromJson(jsonObj);

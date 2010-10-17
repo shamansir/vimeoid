@@ -51,4 +51,14 @@ public class Contact extends User {
         return false;
     }
     
+    public static User[] collectListFromJson(JSONObject jsonObj) throws JSONException {
+        final JSONArray dataArray = jsonObj.getJSONObject(FieldsKeys.MULTIPLE_KEY)
+                                           .getJSONArray(FieldsKeys.SINGLE_KEY);
+        final User[] users = new User[dataArray.length()];
+        for (int i = 0; i < dataArray.length(); i++) {
+            users[i] = extractFromJson(dataArray.getJSONObject(i));
+        }
+        return users;
+    }    
+    
 }
