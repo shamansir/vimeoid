@@ -76,11 +76,12 @@ public class User implements AdvancedItem {
         public static final String CREATED_ON = "created_on";
         public static final String IS_STAFF = "is_staff";
         public static final String IS_PLUS = "is_plus";
+        public static final String IS_MUTUAL = "mutual";
         
         public static final String NAME = "display_name";
+        public static final String REALNAME = "realname";
         public static final String USERNAME = "username";  
         public static final String LOCATION = "location";
-        // realname
         
         public static final String URL = "url";
         public static final String BIO = "bio";
@@ -103,6 +104,7 @@ public class User implements AdvancedItem {
         user.createdOn = jsonObj.getString(FieldsKeys.CREATED_ON);
         user.fromStaff = Utils.adaptBoolean(jsonObj.getInt(FieldsKeys.IS_STAFF));
         user.isPlusMember = Utils.adaptBoolean(jsonObj.getInt(FieldsKeys.IS_PLUS));
+        user.isMutual = Utils.adaptBoolean(jsonObj.getInt(FieldsKeys.IS_MUTUAL));
         
         user.displayName = jsonObj.getString(FieldsKeys.NAME);
         user.username = jsonObj.getString(FieldsKeys.USERNAME);

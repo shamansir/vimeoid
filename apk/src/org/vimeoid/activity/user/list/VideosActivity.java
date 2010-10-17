@@ -24,6 +24,7 @@ import org.vimeoid.util.ApiParams;
 import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
 import org.vimeoid.util.PagingData_;
+import org.vimeoid.util.Invoke.Extras;
 
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -55,7 +56,8 @@ public class VideosActivity extends ItemsListActivity<Video> {
     private final VideosIdsReceiver likesReceiver;
     private final VideosIdsReceiver watchLatersReceiver;
     
-    private long currentUserId;
+    private long currentUserId; // FIXME: get these values in the parent activities
+    private long subjectUserId; // FIXME: get these values in the parent activities
     
     public VideosActivity() {
         super();
@@ -80,14 +82,15 @@ public class VideosActivity extends ItemsListActivity<Video> {
     protected void prepare(Bundle extras) {
         
         currentUserId = VimeoApi.getUserLoginData(this).id;
+        subjectUserId = extras.getLong(Extras.USER_ID);
         
         final Video.SortType currentSortType = (Video.SortType) extras.get(Invoke.Extras.API_SORT_TYPE);
         
         // check if fits period
-        secondaryTasks.addListTask(GET_LIKES_TASK, Methods.videos.getLikes, new ApiParams().add("user_id", String.valueOf(currentUserId))
+        secondaryTasks.addListTask(GET_LIKES_TASK, Methods.videos.getLikes, new ApiParams().add("user_id", String.valueOf(subjectUserId))
                                                                                            .add("sort", currentSortType.toString()), 
                                                                             likesReceiver, 3, 30);
-        secondaryTasks.addListTask(GET_WATCHSLATER_TASK, Methods.albums.getWatchLater, new ApiParams().add("user_id", String.valueOf(currentUserId))
+        secondaryTasks.addListTask(GET_WATCHSLATER_TASK, Methods.albums.getWatchLater, new ApiParams().add("user_id", String.valueOf(subjectUserId))
                                                                                                       .add("sort", currentSortType.toString()), 
                                                                             watchLatersReceiver, 3, 30);
     }

@@ -7,10 +7,10 @@ import org.vimeoid.R;
 import org.vimeoid.activity.Player;
 import org.vimeoid.activity.user.item.UserActivity;
 import org.vimeoid.activity.user.item.VideoActivity;
+import org.vimeoid.activity.user.list.UsersActivity;
 import org.vimeoid.activity.user.list.VideosActivity;
 import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.connection.simple.VimeoProvider;
-import org.vimeoid.dto.advanced.Video;
 import org.vimeoid.dto.advanced.SubscriptionData.SubscriptionType;
 
 import android.app.Activity;
@@ -223,6 +223,10 @@ public final class Invoke {
         
         // ================================================================ User
         
+        public static void selectUser(Activity parent, org.vimeoid.dto.advanced.User user) {
+            showUserPage(parent, user);
+        }
+        
         public static void showUserPage(Activity parent, org.vimeoid.dto.advanced.User user) {
             parent.startActivity(new Intent(parent, UserActivity.class)
                                      .putExtra(Extras.API_METHOD, Methods.people.getInfo)
@@ -267,7 +271,7 @@ public final class Invoke {
                                      .putExtra(Extras.API_PARAMS, new ApiParams().add("user_id", String.valueOf(user.id))
                                                                                  .add("full_response", "1")
                                                                                  .toBundle())
-                                     .putExtra(Extras.API_SORT_TYPE, Video.SortType.NEWEST)                                                                                 
+                                     .putExtra(Extras.API_SORT_TYPE, org.vimeoid.dto.advanced.Video.SortType.NEWEST)                                                                                 
                                      .putExtra(Extras.USER_ID, user.id)
                                      //.putExtra(Extras.USERNAME, user.username)
                                      .putExtra(Extras.SUBJ_ICON, R.drawable.contact)
@@ -314,8 +318,16 @@ public final class Invoke {
         }
 
         public static void selectContactsOf(Activity parent, org.vimeoid.dto.advanced.User user) {
-            // TODO Auto-generated method stub
-            
+            parent.startActivity(new Intent(parent, UsersActivity.class)
+                                     .putExtra(Extras.API_METHOD, Methods.contacts.getAll)
+                                     .putExtra(Extras.API_PARAMS, new ApiParams().add("user_id", String.valueOf(user.id))
+                                                                                 .toBundle())
+                                     .putExtra(Extras.API_SORT_TYPE, org.vimeoid.dto.advanced.User.SortType.ALPHABETICAL)                                                                                 
+                                     .putExtra(Extras.USER_ID, user.id)
+                                     //.putExtra(Extras.USERNAME, user.username)
+                                     .putExtra(Extras.SUBJ_ICON, R.drawable.contact)
+                                     .putExtra(Extras.SUBJ_TITLE, user.username)
+                                     .putExtra(Extras.RES_ICON, R.drawable.contact));
         }
 
         public static void selectApperancesOf(Activity parent, org.vimeoid.dto.advanced.User user) {

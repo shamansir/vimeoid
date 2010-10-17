@@ -17,6 +17,8 @@ import org.vimeoid.adapter.LActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.connection.VimeoApi;
 import org.vimeoid.connection.advanced.Methods;
+import org.vimeoid.dto.advanced.Album;
+import org.vimeoid.dto.advanced.Channel;
 import org.vimeoid.dto.advanced.Contact;
 import org.vimeoid.dto.advanced.PagingData;
 import org.vimeoid.dto.advanced.PortraitsData;
@@ -304,14 +306,16 @@ public class UserActivity extends SingleItemActivity<User> {
                 imageLoader.displayImage(mediumPortraitUrl, uploaderPortrait);
             }; break;
             case LOAD_ALBUMS_TASK: {
-                final int albumsCount = result.getJSONObject("albums").getInt("total");                
+                final int albumsCount = result.getJSONObject(Album.FieldsKeys.MULTIPLE_KEY)
+                                              .getInt(Album.FieldsKeys.TOTAL);                
                 Log.d(TAG, "got albums count, its " + albumsCount);
                 albumAction.title = Utils.format(getString(R.string.num_of_albums), "num", String.valueOf(albumsCount));
                 if (albumsCount == 0) albumAction.onClick = null;
                 getActionsList().invalidateViews();
             }; break;
             case LOAD_CHANNELS_TASK: {
-                final int channelsCount = result.getJSONObject("channels").getInt("total");                
+                final int channelsCount = result.getJSONObject(Channel.FieldsKeys.MULTIPLE_KEY)
+                                                .getInt(Channel.FieldsKeys.TOTAL);                
                 Log.d(TAG, "got channels count, its " + channelsCount);
                 channelAction.title = Utils.format(getString(R.string.num_of_channels), "num", String.valueOf(channelsCount));
                 if (channelsCount == 0) channelAction.onClick = null;

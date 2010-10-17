@@ -20,7 +20,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -39,7 +38,7 @@ import android.widget.TextView;
  * @date Sep 29, 2010 8:31:27 PM 
  *
  */
-public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersDataReceiver {
+public class UsersListAdapter extends JsonObjectsAdapter<User> {
     
     private final LayoutInflater layoutInflater;
     private final ImageLoader imageLoader;
@@ -100,7 +99,8 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
         MarkersSupport.injectMarkers(layoutInflater, itemHolder.vgMarkers, getRequiredMarkers(user));
         
         if (!requests.contains(user.id)) {
-            provider.requestData(convertView, user.id, this);
+            // location, videos count, albums count, channels count, contacts count, subscriptions status      
+            provider.requestData(convertView, position, user);
             requests.add(user.id);
         }
                 
@@ -205,54 +205,5 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
         
         ViewGroup vgMarkers;
     }
-
-
-    @Override
-    public void gotAlbumsCount(AdapterView<?> holder, View view, long userId, int videosCount) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void gotChannelsCount(AdapterView<?> holder, View view, long userId, int videosCount) {
-        // TODO Auto-generated method stub
-    }
-
-
-    @Override
-    public void gotContactsCount(AdapterView<?> holder, View view, long userId, int videosCount) {
-        // TODO Auto-generated method stub
-    }
-
-
-    @Override
-    public void gotLocation(AdapterView<?> holder, View view, long userId, String location) {
-        // TODO Auto-generated method stub
-    }
-
-
-    @Override
-    public void gotSubscriptions(AdapterView<?> holder, View view, long userId, Set<SubscriptionType> subscriptions) {
-        // TODO Auto-generated method stub
-    }
-
-
-    @Override
-    public void gotVideosCount(AdapterView<?> holder, View view, long userId, int videosCount) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void gotIsContact(AdapterView<?> holder, View view, long userId, Boolean isContact) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void gotMarkers(AdapterView<?> holder, View view, long userId, Boolean isStaffMember,
-            Boolean isPlusMember) {
-        // TODO Auto-generated method stub
-        
-    }
-
 
 }

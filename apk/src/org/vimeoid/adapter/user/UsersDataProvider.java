@@ -3,6 +3,8 @@
  */
 package org.vimeoid.adapter.user;
 
+import org.vimeoid.dto.advanced.User;
+
 import android.view.View;
 
 /**
@@ -21,6 +23,6 @@ import android.view.View;
  */
 public interface UsersDataProvider {
 
-    public void requestData(View view, long userId, UsersDataReceiver receiver);
+    public void requestData(View view, int position, User user);
 
 }
