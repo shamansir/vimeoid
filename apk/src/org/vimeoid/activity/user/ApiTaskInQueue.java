@@ -21,27 +21,38 @@ import org.json.JSONObject;
  *
  */
 public class ApiTaskInQueue extends ApiTask implements IApiTaskWithNextTask {
+    
+    public static interface TaskListener {
+        public void onPerformed(JSONObject jsonObj) throws Exception;  
+    };
 
     private final int taskId;
     private IApiTaskWithNextTask nextTask = null;
     private final SuccessiveApiTasksSupport performer;
+    private final TaskListener listener;
     
     public ApiTaskInQueue(SuccessiveApiTasksSupport performer, int taskId, String apiMethod) {
+        this(performer, taskId, apiMethod, null);
+    }
+    
+    protected ApiTaskInQueue(SuccessiveApiTasksSupport performer, int taskId, String apiMethod, TaskListener listener) {
         super(apiMethod);
         this.taskId = taskId;
         this.performer = performer;
+        this.listener = listener;
     }
     
     @Override
     protected void onPostExecute(JSONObject jsonObj) {
-        super.onPostExecute(jsonObj);            
-        if (nextTask != null)
-            try {
+        super.onPostExecute(jsonObj);
+        try {        
+            if (listener != null) listener.onPerformed(jsonObj);
+            if (nextTask != null) {
                 performer.execute(nextTask);
-            } catch (Exception e) {
-                onAnyError(e, "Error while executing task " + nextTask.getId());
-            }
-        else performer.finish();
+            } else performer.finish();
+        } catch (Exception e) {
+            onAnyError(e, "Error while executing task " + nextTask.getId());
+        }        
     }
     
     @Override

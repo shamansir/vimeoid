@@ -4,8 +4,9 @@ import net.londatiga.android.QuickAction;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.vimeoid.activity.user.ApiTask;
+import org.vimeoid.activity.user.ApiTasksQueue;
 import org.vimeoid.activity.user.ItemsListActivity;
+import org.vimeoid.activity.user.ApiTaskInQueue.TaskListener;
 import org.vimeoid.adapter.JsonObjectsAdapter;
 import org.vimeoid.adapter.user.UsersDataProvider;
 import org.vimeoid.adapter.user.UsersListAdapter;
@@ -13,6 +14,7 @@ import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.dto.advanced.Contact;
 import org.vimeoid.dto.advanced.User;
 import org.vimeoid.util.ApiParams;
+import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
 
 import android.util.Log;
@@ -38,6 +40,19 @@ import android.view.View;
 public class UsersActivity extends ItemsListActivity<User> implements UsersDataProvider {
 	
 	public static final String TAG = "UsersActivity";
+	
+	private final ApiTasksQueue infoTasksQueue;
+	
+	public UsersActivity() {
+	    infoTasksQueue = new ApiTasksQueue() {
+            
+            @Override public void onError(Exception e, String message) {
+                Log.e(TAG, message + " / " + e.getLocalizedMessage());
+                Dialogs.makeExceptionToast(UsersActivity.this, message, e);
+            }
+            
+        };
+	}
     
     @Override
     protected JsonObjectsAdapter<User> createAdapter() {
@@ -45,7 +60,7 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
         return new UsersListAdapter(Contact.FieldsKeys.MULTIPLE_KEY, this, getLayoutInflater(), this) {
             @Override protected User[] extractItems(JSONObject jsonObject) throws JSONException {
                 return Contact.collectListFromJson(jsonObject);
-            }            
+            }
         };
     }
     
@@ -98,17 +113,23 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
         // channels.getAll: channels count
         // albums.getAll: albums count
         // people.getSubscriptions: subscriptions status
-        new ApiTask(Methods.people.getInfo) {
-            @Override public void onAnswerReceived(JSONObject jsonObj) throws JSONException {
-                final JSONObject userObj = jsonObj.getJSONObject(User.FieldsKeys.SINGLE_KEY);
-                user.location = userObj.getString(User.FieldsKeys.LOCATION);
-                user.videosCount = userObj.getLong(User.FieldsKeys.NUM_OF_VIDEOS);
-                user.contactsCount = userObj.getLong(User.FieldsKeys.NUM_OF_CONTACTS);
-                Log.d(TAG, "Got info for user " + user.id + ", position: " + position);
-                //getListView().getChildAt(position).invalidate();
-                view.invalidate();
-            }
-        }.execute(new ApiParams().add("user_id", String.valueOf(user.id))); 
+        infoTasksQueue.add(infoTasksQueue.size(), Methods.people.getInfo, 
+                           new ApiParams().add("user_id", String.valueOf(user.id)),
+                           new TaskListener() {
+                            
+                            @Override
+                            public void onPerformed(JSONObject jsonObj) throws JSONException {
+                                final JSONObject userObj = jsonObj.getJSONObject(User.FieldsKeys.SINGLE_KEY);
+                                user.location = userObj.getString(User.FieldsKeys.LOCATION);
+                                user.videosCount = userObj.getLong(User.FieldsKeys.NUM_OF_VIDEOS);
+                                user.contactsCount = userObj.getLong(User.FieldsKeys.NUM_OF_CONTACTS);
+                                Log.d(TAG, "Got info for user " + user.id + ", position: " + position);
+                                //getListView().getChildAt(position).invalidate();
+                                view.invalidate();
+                            }
+                            
+                        });
+        if (!infoTasksQueue.started()) infoTasksQueue.run();
     };
         
     /* private void switchWatchLaterStatus(final int position, final Video video, final QActionItem item) {

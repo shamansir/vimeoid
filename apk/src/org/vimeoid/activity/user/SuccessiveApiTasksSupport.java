@@ -35,4 +35,7 @@ public interface SuccessiveApiTasksSupport {
     public void execute(IApiTaskWithNextTask nextTask) throws Exception;
     public void onError(Exception e, String message);
     
+    public boolean started();
+    public boolean running();
+    
 }

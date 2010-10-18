@@ -40,13 +40,14 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     
     private boolean ranSecondaryTasks = false;
     
-    private long currentUserId; // FIXME: get these values in the parent activities
-    private long subjectUserId; // FIXME: get these values in the parent activities
+    private long currentUserId;
+    private long subjectUserId;
     
     public ItemsListActivity(int mainView) {
     	super(mainView, 0);
     	
     	secondaryTasks = new ApiTasksQueue() {
+    	    
             @Override public void onPerfomed(int taskId, JSONObject result) throws JSONException {
                 super.onPerfomed(taskId, result);
                 onSecondaryTaskPerfomed(taskId, result);
@@ -56,6 +57,7 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
                 Log.e(TAG, message + " / " + e.getLocalizedMessage());
                 Dialogs.makeExceptionToast(ItemsListActivity.this, message, e);
             }
+            
         };
     }
     
