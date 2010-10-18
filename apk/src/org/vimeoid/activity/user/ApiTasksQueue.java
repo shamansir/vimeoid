@@ -88,7 +88,7 @@ public abstract class ApiTasksQueue implements SuccessiveApiTasksSupport {
             } catch (Exception e) {
                 onError(e, e.getLocalizedMessage());
             }
-        else throw new IllegalStateException("Queue is already running");
+        else throw new IllegalStateException("Queue is empty");
     }
     
     @Override

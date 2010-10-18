@@ -110,7 +110,7 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
     protected void whenPageReceived(JSONObject page) {
         if (!ranSecondaryTasks) {
             ranSecondaryTasks = true;
-            secondaryTasks.run();
+            if (!secondaryTasks.isEmpty()) secondaryTasks.run();
         }
     }
     

@@ -15,6 +15,7 @@ import org.vimeoid.dto.advanced.User;
 import org.vimeoid.util.ApiParams;
 import org.vimeoid.util.Invoke;
 
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -35,6 +36,8 @@ import android.view.View;
  */
 
 public class UsersActivity extends ItemsListActivity<User> implements UsersDataProvider {
+	
+	public static final String TAG = "UsersActivity";
     
     @Override
     protected JsonObjectsAdapter<User> createAdapter() {
@@ -90,22 +93,22 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
     }
 
     @Override
-    public void requestData(View view, final int position, final User user) {
+    public void requestData(final View view, final int position, final User user) {
         // people.getInfo : location, videos count, contacts count,
         // channels.getAll: channels count
         // albums.getAll: albums count
         // people.getSubscriptions: subscriptions status
-        final long subjectUserId = getSubjectUserId();
-        
         new ApiTask(Methods.people.getInfo) {
             @Override public void onAnswerReceived(JSONObject jsonObj) throws JSONException {
                 final JSONObject userObj = jsonObj.getJSONObject(User.FieldsKeys.SINGLE_KEY);
                 user.location = userObj.getString(User.FieldsKeys.LOCATION);
                 user.videosCount = userObj.getLong(User.FieldsKeys.NUM_OF_VIDEOS);
-                user.contactsCount = userObj.getLong(User.FieldsKeys.NUM_OF_CONTACTS);                
-                getListView().getChildAt(position).invalidate();
+                user.contactsCount = userObj.getLong(User.FieldsKeys.NUM_OF_CONTACTS);
+                Log.d(TAG, "Got info for user " + user.id + ", position: " + position);
+                //getListView().getChildAt(position).invalidate();
+                view.invalidate();
             }
-        }.execute(new ApiParams().add("user_id", String.valueOf(subjectUserId))); 
+        }.execute(new ApiParams().add("user_id", String.valueOf(user.id))); 
     };
         
     /* private void switchWatchLaterStatus(final int position, final Video video, final QActionItem item) {
