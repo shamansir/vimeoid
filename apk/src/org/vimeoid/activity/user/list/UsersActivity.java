@@ -113,6 +113,8 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
         // channels.getAll: channels count
         // albums.getAll: albums count
         // people.getSubscriptions: subscriptions status
+        Log.d(TAG, "requesting data for user " + user.id + " (" + user.displayName 
+                                                         + ") at position " + position);
         infoTasksQueue.add(infoTasksQueue.size(), Methods.people.getInfo, 
                            new ApiParams().add("user_id", String.valueOf(user.id)),
                            new TaskListener() {
@@ -123,7 +125,7 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
                                 user.location = userObj.getString(User.FieldsKeys.LOCATION);
                                 user.videosCount = userObj.getLong(User.FieldsKeys.NUM_OF_VIDEOS);
                                 user.contactsCount = userObj.getLong(User.FieldsKeys.NUM_OF_CONTACTS);
-                                Log.d(TAG, "Got info for user " + user.id + ", position: " + position);
+                                Log.d(TAG, "Got info for user " + user.id + " (" + user.displayName + ") , position: " + position);
                                 //getListView().getChildAt(position).invalidate();
                                 view.invalidate();
                             }

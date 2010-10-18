@@ -57,7 +57,7 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
             @Override public void onError(final Exception e, final String message) {
             	runOnUiThread(new Runnable() {
 					@Override public void run() {
-		                Log.e(TAG, message + " / " + e.getLocalizedMessage());
+		                Log.e(TAG, message + " / " + ((e != null) ? e.getLocalizedMessage() : "?"));
 		                Dialogs.makeExceptionToast(SingleItemActivity.this, message, e);
 					}
 				});

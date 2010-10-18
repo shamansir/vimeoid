@@ -54,6 +54,7 @@ public class SubscriptionData {
         }
 
         public static String[] toArray(Set<SubscriptionType> subscriptonsStatus) {
+            if (subscriptonsStatus == null) return new String[0];
             final String[] result = new String[subscriptonsStatus.size()];
             int i = 0;
             for (SubscriptionType type: subscriptonsStatus) {
