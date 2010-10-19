@@ -9,6 +9,7 @@ import org.vimeoid.activity.user.ItemsListActivity;
 import org.vimeoid.activity.user.ApiTaskInQueue.TaskListener;
 import org.vimeoid.adapter.JsonObjectsAdapter;
 import org.vimeoid.adapter.user.UsersDataProvider;
+import org.vimeoid.adapter.user.UsersDataReceiver;
 import org.vimeoid.adapter.user.UsersListAdapter;
 import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.dto.advanced.Contact;
@@ -109,26 +110,24 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
     }
 
     @Override
-    public void requestData(final View view, final int position, final User user) {
+    public void requestData(final int position, final long userId, final UsersDataReceiver receiver) {
         // people.getInfo : location, videos count, contacts count,
         // channels.getAll: channels count
         // albums.getAll: albums count
         // people.getSubscriptions: subscriptions status
-        Log.d(TAG, "requesting data for user " + user.id + " (" + user.displayName 
-                                                         + ") at position " + position);
+        Log.d(TAG, "requesting data for position " + position);
         infoTasksQueue.add(infoTasksQueue.size(), Methods.people.getInfo, 
-                           new ApiParams().add("user_id", String.valueOf(user.id)),
+                           new ApiParams().add("user_id", String.valueOf(userId)),
                            new TaskListener() {
                             
                             @Override
                             public void onPerformed(JSONObject jsonObj) throws JSONException {
                                 final JSONObject userObj = jsonObj.getJSONObject(User.FieldsKeys.SINGLE_KEY);
-                                user.location = userObj.getString(User.FieldsKeys.LOCATION);
-                                user.videosCount = userObj.getLong(User.FieldsKeys.NUM_OF_VIDEOS);
-                                user.contactsCount = userObj.getLong(User.FieldsKeys.NUM_OF_CONTACTS);
-                                Log.d(TAG, "Got info for user " + user.id + " (" + user.displayName + ") , position: " + position);
-                                //getListView().getChildAt(position).invalidate();
-                                view.invalidate();
+                                receiver.gotPersonalInfo(getListView(), position,
+                                                         userObj.getString(User.FieldsKeys.LOCATION), 
+                                                         userObj.getLong(User.FieldsKeys.NUM_OF_UPLOADS), 
+                                                         userObj.getLong(User.FieldsKeys.NUM_OF_CONTACTS));
+                                Log.d(TAG, "Got info for user " + userId + ", position: " + position);
                             }
                             
                         });

@@ -25,6 +25,8 @@ import android.content.Context;
 import android.os.Environment;
 import android.os.StatFs;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 
 /**
  * <dl>
@@ -257,6 +259,13 @@ public class Utils {
 	        array[i] = jsonArr.getString(i);
 	    }
 	    return array;
+	}
+	
+	public static View getItemViewIfVisible(AdapterView<?> holder, int itemPos) {
+	    int firstPosition = holder.getFirstVisiblePosition();
+	    int wantedChild = itemPos - firstPosition;
+	    if (wantedChild < 0 || wantedChild >= holder.getChildCount()) return null;
+	    return holder.getChildAt(wantedChild);
 	}
 	
 }

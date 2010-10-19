@@ -12,6 +12,7 @@ import org.vimeoid.R;
 import org.vimeoid.adapter.JsonObjectsAdapter;
 import org.vimeoid.dto.advanced.User;
 import org.vimeoid.dto.advanced.SubscriptionData.SubscriptionType;
+import org.vimeoid.util.Utils;
 
 import com.fedorvlasov.lazylist.ImageLoader;
 
@@ -20,6 +21,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,7 +40,7 @@ import android.widget.TextView;
  * @date Sep 29, 2010 8:31:27 PM 
  *
  */
-public class UsersListAdapter extends JsonObjectsAdapter<User> {
+public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersDataReceiver {
 	
 	public static final String TAG = "UsersListAdapter"; 
     
@@ -87,23 +89,24 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> {
             
         }
         
+        Log.d(TAG, "portrait for " + user.displayName + " " + user.portraits.small.url);
         imageLoader.displayImage(user.portraits.small.url, itemHolder.ivPortrait);
               
         itemHolder.tvName.setText(user.displayName + " [" + user.username + "]");
-        itemHolder.tvLocation.setText((user.location != null) ? user.location : "?");
+        itemHolder.tvLocation.setText((user.location != null) ? user.location : "-");
         injectInfo(itemHolder.llTags, position, user.fromStaff, user.isPlusMember, user.isMutual);
         
-        itemHolder.tvVideos.setText((user.videosCount >= 0) ? String.valueOf(user.videosCount) : "?");
-        itemHolder.tvAlbums.setText((user.albumsCount >= 0) ? String.valueOf(user.albumsCount) : "?");
-        itemHolder.tvChannels.setText((user.channelsCount >= 0) ? String.valueOf(user.channelsCount) : "?");
-        itemHolder.tvContacts.setText((user.contactsCount >= 0) ? String.valueOf(user.contactsCount) : "?");
+        itemHolder.tvVideos.setText((user.uploadsCount >= 0) ? String.valueOf(user.uploadsCount) : "-");
+        itemHolder.tvAlbums.setText((user.albumsCount >= 0) ? String.valueOf(user.albumsCount) : "-");
+        itemHolder.tvChannels.setText((user.channelsCount >= 0) ? String.valueOf(user.channelsCount) : "-");
+        itemHolder.tvContacts.setText((user.contactsCount >= 0) ? String.valueOf(user.contactsCount) : "-");
         
         MarkersSupport.injectMarkers(layoutInflater, itemHolder.vgMarkers, getRequiredMarkers(user));
         
-        Log.d(TAG, "checking is requested for " + user.id + " / " + user.displayName);
+        // Log.d(TAG, "checking is requested for " + user.id + " / " + user.displayName);
         if (!requests.contains(user.id)) {
             // location, videos count, albums count, channels count, contacts count, subscriptions status      
-            provider.requestData(convertView, position, user);
+            provider.requestData(position, user.id, this);
             requests.add(user.id);
         }
                 
@@ -192,6 +195,24 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> {
         holder.getChildAt(position).invalidate();
         return subject;
     } */
+    
+    @Override
+    public void gotPersonalInfo(AdapterView<?> holder, int position, String location, 
+                                long uploadsCount, long contactsCount) {
+        final User user = (User)getItem(position);
+        user.location = location;
+        user.uploadsCount = uploadsCount;
+        user.contactsCount = contactsCount;
+        Log.d(TAG, "user " + user.id + " / " + user.displayName + " " +
+                   user.location + " " + user.uploadsCount + " " + user.contactsCount + 
+                   " child at position " + position + " " + Utils.getItemViewIfVisible(holder, position));
+        final View itemView = Utils.getItemViewIfVisible(holder, position);
+        if (itemView != null) {
+            ((TextView)itemView.findViewById(R.id.userItemLocation)).setText((user.location != null) ? user.location : "");
+            ((TextView)itemView.findViewById(R.id.userItemNumOfVideos)).setText((user.uploadsCount >= 0) ? String.valueOf(user.uploadsCount) : "-");
+            ((TextView)itemView.findViewById(R.id.userItemNumOfContacts)).setText((user.contactsCount >= 0) ? String.valueOf(user.contactsCount) : "-");
+        }
+    }    
     
     private class UserItemViewHolder {
         

@@ -51,6 +51,7 @@ public class ApiTaskInQueue extends ApiTask implements IApiTaskWithNextTask {
                 performer.execute(nextTask);
             } else performer.finish();
         } catch (Exception e) {
+            //Log.e("ApiTask", e)
             onAnyError(e, "Error while executing task " + ((nextTask != null) ? nextTask.getId() : taskId));
         }        
     }

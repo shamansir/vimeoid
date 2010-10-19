@@ -178,7 +178,7 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnIt
         for (Video video: getItems()) {
             video.isLike = videosList.contains(video.getId());
         }
-        holder.invalidateViews();        
+        holder.invalidateViews();
     }
 
     public void updateWatchLaters(ListView holder, Set<Long> videosIds) {
@@ -193,7 +193,11 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnIt
     public Video switchWatchLater(AdapterView<?> holder, int position) {
         final Video subject = (Video)getItem(position);
         subject.isWatchLater = !subject.isWatchLater;
-        holder.getChildAt(position).invalidate();
+        final View itemView = Utils.getItemViewIfVisible(holder, position);
+        if (itemView != null) {
+            itemView.invalidate();
+            MarkersSupport.injectMarkers(layoutInflater, (ViewGroup)itemView.findViewById(R.id.markersArea), getRequiredMarkers(subject));
+        }
         return subject;
     }
     

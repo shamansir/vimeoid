@@ -32,8 +32,9 @@
 	        <TextView android:id="@+id/userItemLocation"
 	                  android:layout_width="wrap_content" 
 	                  android:layout_height="wrap_content"
-	                  android:layout_weight="0.9" 
-                      android:text="Location, Country"	                  
+	                  android:layout_weight="0.9"
+	                  android:layout_gravity="right|top"
+                      android:text="Location, Country"
 	                  android:textSize="@dimen/item_subtitle_font_size"
 	                  android:textColor="@color/item_subtitle" />
                  <!-- android:lines="1"
