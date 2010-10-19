@@ -3,6 +3,10 @@
  */
 package org.vimeoid.adapter.user;
 
+import java.util.Set;
+
+import org.vimeoid.dto.advanced.SubscriptionData.SubscriptionType;
+
 import android.widget.AdapterView;
 
 /**
@@ -23,5 +27,8 @@ public interface UsersDataReceiver {
     
     public void gotPersonalInfo(AdapterView<?> holder, int position, String location, 
                                 long videosCount, long contactsCount);
+    public void gotChannelsCount(AdapterView<?> holder, int position, long channelsCount);
+    public void gotAlbumsCount(AdapterView<?> holder, int position, long albumsCount);
+    public void gotSubsrcriptions(AdapterView<?> holder, int position, Set<SubscriptionType> types);
 
 }

@@ -118,8 +118,8 @@ public class UserActivity extends SingleItemActivity<User> {
         final long subjectUserId = getSubjectUserId();
         
         secondaryTasks.add(LOAD_PORTRAITS_TASK, Methods.people.getPortraitUrls, new ApiParams().add("user_id", String.valueOf(subjectUserId)));
-        secondaryTasks.add(LOAD_ALBUMS_TASK, Methods.albums.getAll, new ApiParams().add("user_id", String.valueOf(subjectUserId)));
-        secondaryTasks.add(LOAD_CHANNELS_TASK, Methods.channels.getAll, new ApiParams().add("user_id", String.valueOf(subjectUserId)));
+        secondaryTasks.add(LOAD_ALBUMS_TASK, Methods.albums.getAll, new ApiParams().add("user_id", String.valueOf(subjectUserId)).add("per_page", "1"));
+        secondaryTasks.add(LOAD_CHANNELS_TASK, Methods.channels.getAll, new ApiParams().add("user_id", String.valueOf(subjectUserId)).add("per_page", "1"));
         
         if (getCurrentUserId() != subjectUserId) {
             

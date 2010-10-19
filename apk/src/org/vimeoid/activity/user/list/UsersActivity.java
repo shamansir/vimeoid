@@ -12,6 +12,8 @@ import org.vimeoid.adapter.user.UsersDataProvider;
 import org.vimeoid.adapter.user.UsersDataReceiver;
 import org.vimeoid.adapter.user.UsersListAdapter;
 import org.vimeoid.connection.advanced.Methods;
+import org.vimeoid.dto.advanced.Album;
+import org.vimeoid.dto.advanced.Channel;
 import org.vimeoid.dto.advanced.Contact;
 import org.vimeoid.dto.advanced.User;
 import org.vimeoid.util.ApiParams;
@@ -131,6 +133,28 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
                             }
                             
                         });
+        infoTasksQueue.add(infoTasksQueue.size(), Methods.channels.getAll, 
+                new ApiParams().add("user_id", String.valueOf(userId)).add("per_page", "1"),
+                new TaskListener() {
+                 
+                 @Override
+                 public void onPerformed(JSONObject jsonObj) throws JSONException {
+                     receiver.gotChannelsCount(getListView(), position, 
+                              jsonObj.getJSONObject(Channel.FieldsKeys.MULTIPLE_KEY).getLong(Channel.FieldsKeys.TOTAL));
+                 }
+                 
+             });
+        infoTasksQueue.add(infoTasksQueue.size(), Methods.albums.getAll, 
+                new ApiParams().add("user_id", String.valueOf(userId)).add("per_page", "1"),
+                new TaskListener() {
+                 
+                 @Override
+                 public void onPerformed(JSONObject jsonObj) throws JSONException {
+                     receiver.gotAlbumsCount(getListView(), position, 
+                              jsonObj.getJSONObject(Album.FieldsKeys.MULTIPLE_KEY).getLong(Album.FieldsKeys.TOTAL));
+                 }
+                 
+             });        
         if (!infoTasksQueue.started()) infoTasksQueue.run();
     };
         

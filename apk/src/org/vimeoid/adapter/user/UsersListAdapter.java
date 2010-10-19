@@ -92,7 +92,7 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
         Log.d(TAG, "portrait for " + user.displayName + " " + user.portraits.small.url);
         imageLoader.displayImage(user.portraits.small.url, itemHolder.ivPortrait);
               
-        itemHolder.tvName.setText(user.displayName + " [" + user.username + "]");
+        itemHolder.tvName.setText(user.displayName + " : " + user.username);
         itemHolder.tvLocation.setText((user.location != null) ? user.location : "-");
         injectInfo(itemHolder.llTags, position, user.fromStaff, user.isPlusMember, user.isMutual);
         
@@ -212,6 +212,33 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
             ((TextView)itemView.findViewById(R.id.userItemNumOfVideos)).setText((user.uploadsCount >= 0) ? String.valueOf(user.uploadsCount) : "-");
             ((TextView)itemView.findViewById(R.id.userItemNumOfContacts)).setText((user.contactsCount >= 0) ? String.valueOf(user.contactsCount) : "-");
         }
+    }
+    
+
+    @Override
+    public void gotAlbumsCount(AdapterView<?> holder, int position, long albumsCount) {
+        final User user = (User)getItem(position);
+        user.albumsCount = albumsCount;
+        final View itemView = Utils.getItemViewIfVisible(holder, position);
+        if (itemView != null) {
+            ((TextView)itemView.findViewById(R.id.userItemNumOfAlbums)).setText((user.albumsCount >= 0) ? String.valueOf(user.albumsCount) : "-");
+        }
+    }
+
+    @Override
+    public void gotChannelsCount(AdapterView<?> holder, int position, long channelsCount) {
+        final User user = (User)getItem(position);
+        user.channelsCount = channelsCount;
+        final View itemView = Utils.getItemViewIfVisible(holder, position);
+        if (itemView != null) {
+            ((TextView)itemView.findViewById(R.id.userItemNumOfChannels)).setText((user.channelsCount >= 0) ? String.valueOf(user.channelsCount) : "-");
+        }
+    }
+    
+    @Override
+    public void gotSubsrcriptions(AdapterView<?> holder, int position, Set<SubscriptionType> types) {
+        // TODO Auto-generated method stub
+        
     }    
     
     private class UserItemViewHolder {
@@ -229,5 +256,6 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
         
         ViewGroup vgMarkers;
     }
+
 
 }

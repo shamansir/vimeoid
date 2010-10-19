@@ -19,7 +19,7 @@
 	    <TextView android:id="@+id/userItemDisplayName"
                   android:layout_width="fill_parent" 
 	              android:layout_height="wrap_content"
-                  android:text="Display Name [username]"	              
+                  android:text="Display Name : user55689"	              
 	              android:textSize="@dimen/item_title_font_size"
 	              android:textColor="@color/item_title"
 	              android:lines="1"
