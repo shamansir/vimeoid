@@ -47,6 +47,7 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
 	    infoTasksQueue = new ApiTasksQueue() {
             
             @Override public void onError(Exception e, String message) {
+            	if (e != null) e.printStackTrace();
                 Log.e(TAG, message + " / " + e.getLocalizedMessage());
                 Dialogs.makeExceptionToast(UsersActivity.this, message, e);
             }

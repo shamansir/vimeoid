@@ -16,6 +16,7 @@ import org.vimeoid.dto.advanced.SubscriptionData.SubscriptionType;
 import com.fedorvlasov.lazylist.ImageLoader;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,8 @@ import android.widget.TextView;
  *
  */
 public class UsersListAdapter extends JsonObjectsAdapter<User> {
+	
+	public static final String TAG = "UsersListAdapter"; 
     
     private final LayoutInflater layoutInflater;
     private final ImageLoader imageLoader;
@@ -97,6 +100,7 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> {
         
         MarkersSupport.injectMarkers(layoutInflater, itemHolder.vgMarkers, getRequiredMarkers(user));
         
+        Log.d(TAG, "checking is requested for " + user.id + " / " + user.displayName);
         if (!requests.contains(user.id)) {
             // location, videos count, albums count, channels count, contacts count, subscriptions status      
             provider.requestData(convertView, position, user);
