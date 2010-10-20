@@ -117,7 +117,7 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
         // channels.getAll: channels count
         // albums.getAll: albums count
         // people.getSubscriptions: subscriptions status
-        Log.d(TAG, "requesting data for position " + position);
+        Log.d(TAG, "requestData: creating tasks to collect data for " + position + " / " + userId);
         infoTasksQueue.add(infoTasksQueue.size(), Methods.people.getInfo, 
                            new ApiParams().add("user_id", String.valueOf(userId)),
                            new TaskListener() {
@@ -129,7 +129,7 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
                                                          userObj.getString(User.FieldsKeys.LOCATION), 
                                                          userObj.getLong(User.FieldsKeys.NUM_OF_UPLOADS), 
                                                          userObj.getLong(User.FieldsKeys.NUM_OF_CONTACTS));
-                                Log.d(TAG, "Got info for user " + userId + ", position: " + position);
+                                Log.d(TAG, "Got general info for user " + userId + ", position: " + position);
                             }
                             
                         });
@@ -141,6 +141,7 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
                  public void onPerformed(JSONObject jsonObj) throws JSONException {
                      receiver.gotChannelsCount(getListView(), position, 
                               jsonObj.getJSONObject(Channel.FieldsKeys.MULTIPLE_KEY).getLong(Channel.FieldsKeys.TOTAL));
+                     Log.d(TAG, "Got channels info for user " + userId + ", position: " + position);
                  }
                  
              });
@@ -152,6 +153,7 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
                  public void onPerformed(JSONObject jsonObj) throws JSONException {
                      receiver.gotAlbumsCount(getListView(), position, 
                               jsonObj.getJSONObject(Album.FieldsKeys.MULTIPLE_KEY).getLong(Album.FieldsKeys.TOTAL));
+                     Log.d(TAG, "Got albums info for user " + userId + ", position: " + position);
                  }
                  
              });        

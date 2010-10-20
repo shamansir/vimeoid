@@ -61,7 +61,6 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
 		                Dialogs.makeExceptionToast(SingleItemActivity.this, message, e);
 					}
 				});
-
             }
         };
     }
@@ -137,9 +136,14 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
         }
 
         @Override
-        protected void onAnyError(Exception e, String message) {
-            Log.e(TAG, message + " / " + e.getLocalizedMessage());
-            Dialogs.makeExceptionToast(SingleItemActivity.this, message, e);
+        protected void onAnyError(final Exception e, final String message) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.e(TAG, message + " / " + e.getLocalizedMessage());
+                    Dialogs.makeExceptionToast(SingleItemActivity.this, message, e);
+                }
+            });
         }
 
     }

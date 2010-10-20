@@ -62,7 +62,7 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
     public View getView(final int position, View convertView, ViewGroup parent) {
         UserItemViewHolder itemHolder = null;
         
-        final User user = (User)getItem(position);       
+        final User user = (User)getItem(position);
         
         if (convertView == null) {
             
@@ -89,11 +89,11 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
             
         }
         
-        Log.d(TAG, "portrait for " + user.displayName + " " + user.portraits.small.url);
+        Log.d(TAG, "(" + position + ") portrait for " + user.displayName + " " + user.portraits.small.url);
         imageLoader.displayImage(user.portraits.small.url, itemHolder.ivPortrait);
               
         itemHolder.tvName.setText(user.displayName + " : " + user.username);
-        itemHolder.tvLocation.setText((user.location != null) ? user.location : "-");
+        itemHolder.tvLocation.setText((user.location != null) ? user.location : "");
         injectInfo(itemHolder.llTags, position, user.fromStaff, user.isPlusMember, user.isMutual);
         
         itemHolder.tvVideos.setText((user.uploadsCount >= 0) ? String.valueOf(user.uploadsCount) : "-");
@@ -103,8 +103,9 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
         
         MarkersSupport.injectMarkers(layoutInflater, itemHolder.vgMarkers, getRequiredMarkers(user));
         
-        // Log.d(TAG, "checking is requested for " + user.id + " / " + user.displayName);
+        //Log.d(TAG, "getView: checking is requested for " + user.id + " / " + user.displayName);
         if (!requests.contains(user.id)) {
+            Log.d(TAG, "getView: yep, I haven't requested for user " + user.displayName);
             // location, videos count, albums count, channels count, contacts count, subscriptions status      
             provider.requestData(position, user.id, this);
             requests.add(user.id);
@@ -203,9 +204,9 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
         user.location = location;
         user.uploadsCount = uploadsCount;
         user.contactsCount = contactsCount;
-        Log.d(TAG, "user " + user.id + " / " + user.displayName + " " +
+        Log.d(TAG, "gotPersonalInfo: user " + user.id + " / " + user.displayName + " " +
                    user.location + " " + user.uploadsCount + " " + user.contactsCount + 
-                   " child at position " + position + " " + Utils.getItemViewIfVisible(holder, position));
+                   " child at position " + position);
         final View itemView = Utils.getItemViewIfVisible(holder, position);
         if (itemView != null) {
             ((TextView)itemView.findViewById(R.id.userItemLocation)).setText((user.location != null) ? user.location : "");
@@ -219,6 +220,7 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
     public void gotAlbumsCount(AdapterView<?> holder, int position, long albumsCount) {
         final User user = (User)getItem(position);
         user.albumsCount = albumsCount;
+        Log.d(TAG, "gotAlbumsCount: user " + user.id + " / " + user.displayName);
         final View itemView = Utils.getItemViewIfVisible(holder, position);
         if (itemView != null) {
             ((TextView)itemView.findViewById(R.id.userItemNumOfAlbums)).setText((user.albumsCount >= 0) ? String.valueOf(user.albumsCount) : "-");
@@ -229,6 +231,7 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
     public void gotChannelsCount(AdapterView<?> holder, int position, long channelsCount) {
         final User user = (User)getItem(position);
         user.channelsCount = channelsCount;
+        Log.d(TAG, "gotChannelsCount: user " + user.id + " / " + user.displayName);
         final View itemView = Utils.getItemViewIfVisible(holder, position);
         if (itemView != null) {
             ((TextView)itemView.findViewById(R.id.userItemNumOfChannels)).setText((user.channelsCount >= 0) ? String.valueOf(user.channelsCount) : "-");
