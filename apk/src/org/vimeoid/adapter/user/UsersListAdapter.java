@@ -111,6 +111,7 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
             requests.add(user.id);
         }
                 
+        Log.d(TAG, "returning convertView for " + position + " / " + user.displayName);
         return convertView;
     }
     

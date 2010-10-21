@@ -124,12 +124,14 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
                             
                             @Override
                             public void onPerformed(JSONObject jsonObj) throws JSONException {
+                            	
                                 final JSONObject userObj = jsonObj.getJSONObject(User.FieldsKeys.SINGLE_KEY);
                                 receiver.gotPersonalInfo(getListView(), position,
                                                          userObj.getString(User.FieldsKeys.LOCATION), 
                                                          userObj.getLong(User.FieldsKeys.NUM_OF_UPLOADS), 
                                                          userObj.getLong(User.FieldsKeys.NUM_OF_CONTACTS));
                                 Log.d(TAG, "Got general info for user " + userId + ", position: " + position);
+                                //onContentChanged();
                             }
                             
                         });
@@ -142,6 +144,7 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
                      receiver.gotChannelsCount(getListView(), position, 
                               jsonObj.getJSONObject(Channel.FieldsKeys.MULTIPLE_KEY).getLong(Channel.FieldsKeys.TOTAL));
                      Log.d(TAG, "Got channels info for user " + userId + ", position: " + position);
+                     //onContentChanged();
                  }
                  
              });
@@ -154,10 +157,14 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
                      receiver.gotAlbumsCount(getListView(), position, 
                               jsonObj.getJSONObject(Album.FieldsKeys.MULTIPLE_KEY).getLong(Album.FieldsKeys.TOTAL));
                      Log.d(TAG, "Got albums info for user " + userId + ", position: " + position);
+                     //onContentChanged();
                  }
                  
              });        
-        if (!infoTasksQueue.started()) infoTasksQueue.run();
+        if (!infoTasksQueue.started()) {
+        	Log.d(TAG, "requestData: tasks are ready, queue is not started, will run it");
+        	infoTasksQueue.run();
+        }
     };
         
     /* private void switchWatchLaterStatus(final int position, final Video video, final QActionItem item) {

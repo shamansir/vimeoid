@@ -141,8 +141,6 @@ public abstract class ApiTasksQueue implements SuccessiveApiTasksSupport {
         size = 0;        
     }
     
-    
-    
     public boolean isEmpty() {
         return (firstTask == null);
     }
