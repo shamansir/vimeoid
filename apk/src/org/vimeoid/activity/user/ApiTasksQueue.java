@@ -29,7 +29,7 @@ import android.util.Log;
  * @date Oct 1, 2010 10:22:29 PM 
  *
  */
-public abstract class ApiTasksQueue implements SuccessiveApiTasksSupport {
+public abstract class ApiTasksQueue implements SuccessiveApiTasksSupport, Runnable {
 	
 	public static final String TAG = "ApiTasksQueue";   
 
