@@ -208,13 +208,12 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
         Log.d(TAG, "gotPersonalInfo: user " + user.id + " / " + user.displayName + " " +
                    user.location + " " + user.uploadsCount + " " + user.contactsCount + 
                    " child at position " + position);
-        notifyDataSetChanged();
-        /* final View itemView = Utils.getItemViewIfVisible(holder, position);
+        final View itemView = Utils.getItemViewIfVisible(holder, position);
         if (itemView != null) {
             ((TextView)itemView.findViewById(R.id.userItemLocation)).setText((user.location != null) ? user.location : "");
             ((TextView)itemView.findViewById(R.id.userItemNumOfVideos)).setText((user.uploadsCount >= 0) ? String.valueOf(user.uploadsCount) : "-");
             ((TextView)itemView.findViewById(R.id.userItemNumOfContacts)).setText((user.contactsCount >= 0) ? String.valueOf(user.contactsCount) : "-");
-        } */
+        }
     }
     
 
@@ -223,12 +222,11 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
         final User user = (User)getItem(position);
         user.albumsCount = albumsCount;
         Log.d(TAG, "gotAlbumsCount: user " + user.id + " / " + user.displayName);
-        notifyDataSetChanged();
-        /* final View itemView = Utils.getItemViewIfVisible(holder, position);
+        final View itemView = Utils.getItemViewIfVisible(holder, position);
         if (itemView != null) {
             ((TextView)itemView.findViewById(R.id.userItemNumOfAlbums)).setText((user.albumsCount >= 0) ? String.valueOf(user.albumsCount) : "-");
             notifyDataSetChanged();
-        }*/
+        }
     }
 
     @Override
@@ -236,11 +234,10 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
         final User user = (User)getItem(position);
         user.channelsCount = channelsCount;
         Log.d(TAG, "gotChannelsCount: user " + user.id + " / " + user.displayName);
-        notifyDataSetChanged();
-        /* final View itemView = Utils.getItemViewIfVisible(holder, position);
+        final View itemView = Utils.getItemViewIfVisible(holder, position);
         if (itemView != null) {
             ((TextView)itemView.findViewById(R.id.userItemNumOfChannels)).setText((user.channelsCount >= 0) ? String.valueOf(user.channelsCount) : "-");            
-        } */
+        }
     }
     
     @Override
