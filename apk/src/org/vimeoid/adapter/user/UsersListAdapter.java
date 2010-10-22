@@ -210,9 +210,13 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
                    " child at position " + position);
         final View itemView = Utils.getItemViewIfVisible(holder, position);
         if (itemView != null) {
-            ((TextView)itemView.findViewById(R.id.userItemLocation)).setText((user.location != null) ? user.location : "");
-            ((TextView)itemView.findViewById(R.id.userItemNumOfVideos)).setText((user.uploadsCount >= 0) ? String.valueOf(user.uploadsCount) : "-");
-            ((TextView)itemView.findViewById(R.id.userItemNumOfContacts)).setText((user.contactsCount >= 0) ? String.valueOf(user.contactsCount) : "-");
+            final UserItemViewHolder itemHolder = (UserItemViewHolder) itemView.getTag();
+            itemHolder.tvLocation.setText((user.location != null) ? user.location : "");
+            itemHolder.tvVideos.setText((user.uploadsCount >= 0) ? String.valueOf(user.uploadsCount) : "-");
+            itemHolder.tvContacts.setText((user.contactsCount >= 0) ? String.valueOf(user.contactsCount) : "-");
+            //((TextView)itemView.findViewById(R.id.userItemLocation)).setText((user.location != null) ? user.location : "");
+            //((TextView)itemView.findViewById(R.id.userItemNumOfVideos)).setText((user.uploadsCount >= 0) ? String.valueOf(user.uploadsCount) : "-");
+            //((TextView)itemView.findViewById(R.id.userItemNumOfContacts)).setText((user.contactsCount >= 0) ? String.valueOf(user.contactsCount) : "-");
         }
     }
     
@@ -224,8 +228,8 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
         Log.d(TAG, "gotAlbumsCount: user " + user.id + " / " + user.displayName);
         final View itemView = Utils.getItemViewIfVisible(holder, position);
         if (itemView != null) {
-            ((TextView)itemView.findViewById(R.id.userItemNumOfAlbums)).setText((user.albumsCount >= 0) ? String.valueOf(user.albumsCount) : "-");
-            notifyDataSetChanged();
+            ((UserItemViewHolder) itemView.getTag()).tvAlbums.setText((user.albumsCount >= 0) ? String.valueOf(user.albumsCount) : "-");
+            //((TextView)itemView.findViewById(R.id.userItemNumOfAlbums)).setText((user.albumsCount >= 0) ? String.valueOf(user.albumsCount) : "-");
         }
     }
 
@@ -236,7 +240,8 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
         Log.d(TAG, "gotChannelsCount: user " + user.id + " / " + user.displayName);
         final View itemView = Utils.getItemViewIfVisible(holder, position);
         if (itemView != null) {
-            ((TextView)itemView.findViewById(R.id.userItemNumOfChannels)).setText((user.channelsCount >= 0) ? String.valueOf(user.channelsCount) : "-");            
+            ((UserItemViewHolder) itemView.getTag()).tvChannels.setText((user.channelsCount >= 0) ? String.valueOf(user.channelsCount) : "-");
+            //((TextView)itemView.findViewById(R.id.userItemNumOfChannels)).setText((user.channelsCount >= 0) ? String.valueOf(user.channelsCount) : "-");            
         }
     }
     
