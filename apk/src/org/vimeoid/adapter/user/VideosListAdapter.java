@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.R;
 import org.vimeoid.adapter.JsonObjectsAdapter;
+import org.vimeoid.adapter.TagsSupport;
 import org.vimeoid.dto.advanced.Video;
 import org.vimeoid.util.Utils;
 
@@ -105,7 +106,7 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnIt
         itemHolder.tvTitle.setText(video.title);
         itemHolder.tvAuthor.setText(video.uploaderName);
         itemHolder.tvDuration.setText(Utils.adaptDuration(video.duration));
-        injectTags(itemHolder.llTags, position, video.tags);
+        TagsSupport.injectTags(layoutInflater, video.tags, itemHolder.llTags);
         
         itemHolder.tvLikes.setText(String.valueOf(video.likesCount));
         itemHolder.tvPlays.setText(String.valueOf(video.playsCount));
@@ -145,20 +146,6 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnIt
             ((video.isWatchLater != null) || video.isWatchLater)) 
                                { return new int[] { R.drawable.like_marker, R.drawable.watchlater_marker }; };
         return new int[0];
-    }
-    
-    protected void injectTags(final ViewGroup holder, final int curPosition, final String[] tags) {
-        holder.removeAllViews();
-        if (tags.length == 0) {
-            holder.addView(layoutInflater.inflate(R.layout.no_tags_for_item, null));
-            return;
-        }
-        
-        for (final String tag: tags) {
-            final View tagStruct = layoutInflater.inflate(R.layout.tag_for_the_item, null);
-            ((TextView)tagStruct.findViewById(R.id.tagItem)).setText(tag);
-            holder.addView(tagStruct);
-        }
     }
     
     @Override

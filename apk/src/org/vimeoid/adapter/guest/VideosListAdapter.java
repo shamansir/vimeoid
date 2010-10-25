@@ -5,6 +5,7 @@ package org.vimeoid.adapter.guest;
 
 import org.vimeoid.R;
 import org.vimeoid.adapter.EasyCursorsAdapter;
+import org.vimeoid.adapter.TagsSupport;
 import org.vimeoid.dto.simple.Video;
 import org.vimeoid.util.Utils;
 
@@ -80,27 +81,13 @@ public class VideosListAdapter extends EasyCursorsAdapter<Video> {
         itemHolder.tvTitle.setText(video.title);
         itemHolder.tvAuthor.setText(video.uploaderName);
         itemHolder.tvDuration.setText(Utils.adaptDuration(video.duration));
-        injectTags(video.tags, itemHolder.llTags, position);
+        TagsSupport.injectTags(layoutInflater, video.tags, itemHolder.llTags);
         
         itemHolder.tvLikes.setText(String.valueOf(video.likesCount));
         itemHolder.tvPlays.setText(String.valueOf(video.playsCount));
         itemHolder.tvComments.setText(String.valueOf(video.commentsCount));
         
         return convertView;
-    }
-    
-    protected void injectTags(final String[] tags, final ViewGroup group, final int curPosition) {
-    	group.removeAllViews();
-    	if (tags.length == 0) {
-    		group.addView(layoutInflater.inflate(R.layout.no_tags_for_item, null));
-    		return;
-    	}
-    	
-    	for (final String tag: tags) {
-    		final View tagStruct = layoutInflater.inflate(R.layout.tag_for_the_item, null);
-    		((TextView)tagStruct.findViewById(R.id.tagItem)).setText(tag);
-    		group.addView(tagStruct);
-    	}
     }
     
     @Override

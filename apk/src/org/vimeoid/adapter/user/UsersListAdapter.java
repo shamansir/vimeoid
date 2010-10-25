@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.vimeoid.R;
 import org.vimeoid.adapter.JsonObjectsAdapter;
+import org.vimeoid.adapter.TagsSupport;
 import org.vimeoid.dto.advanced.User;
 import org.vimeoid.dto.advanced.SubscriptionData.SubscriptionType;
 import org.vimeoid.util.Utils;
@@ -135,24 +136,18 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
         
         int infoCount = 0;
         if ((isStaff != null) && isStaff) {
-        	final View tagStruct = layoutInflater.inflate(R.layout.tag_for_the_item, null);
-            ((TextView)tagStruct.findViewById(R.id.tagItem)).setText(R.string.staff_caps);
-            ((TextView)tagStruct.findViewById(R.id.tagItem)).setBackgroundResource(R.drawable.small_orange_tag_shape);
-            holder.addView(tagStruct);
+            holder.addView(TagsSupport.makeTag(layoutInflater, R.string.plus_caps, 
+                                                               R.drawable.small_orange_tag_shape));            
             infoCount++;
         }
         if ((isPlus != null) && isPlus) {
-        	final View tagStruct = layoutInflater.inflate(R.layout.tag_for_the_item, null);
-            ((TextView)tagStruct.findViewById(R.id.tagItem)).setText(R.string.plus_caps);
-            ((TextView)tagStruct.findViewById(R.id.tagItem)).setBackgroundResource(R.drawable.small_blue_tag_shape);
-            holder.addView(tagStruct);
+            holder.addView(TagsSupport.makeTag(layoutInflater, R.string.plus_caps, 
+                                                               R.drawable.small_blue_tag_shape));
             infoCount++;
         }
         if ((isMutual != null) && isMutual) {
-        	final View tagStruct = layoutInflater.inflate(R.layout.tag_for_the_item, null);
-            ((TextView)tagStruct.findViewById(R.id.tagItem)).setText(R.string.mutual_caps);
-            ((TextView)tagStruct.findViewById(R.id.tagItem)).setBackgroundResource(R.drawable.small_red_tag_shape);
-            holder.addView(tagStruct);
+            holder.addView(TagsSupport.makeTag(layoutInflater, R.string.mutual_caps, 
+                                                               R.drawable.small_red_tag_shape));
             infoCount++;
         }        
         
@@ -172,32 +167,6 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
         return User.collectListFromJson(jsonObject);
     }
 
-    /*
-    public void updateLikes(ListView holder, Set<Long> videosIds) {
-        final Set<Long> videosList = new HashSet<Long>();
-        videosList.add(Long.valueOf(15166258));
-        for (Video video: getItems()) {
-            video.isLike = videosList.contains(video.getId());
-        }
-        holder.invalidateViews();        
-    }
-
-    public void updateWatchLaters(ListView holder, Set<Long> videosIds) {
-        final Set<Long> videosList = new HashSet<Long>();
-        videosList.add(Long.valueOf(14011251));
-        for (Video video: getItems()) {
-            video.isWatchLater = videosList.contains(video.getId());
-        }
-        holder.invalidateViews();
-    }
-    
-    public Video switchWatchLater(AdapterView<?> holder, int position) {
-        final Video subject = (Video)getItem(position);
-        subject.isWatchLater = !subject.isWatchLater;
-        holder.getChildAt(position).invalidate();
-        return subject;
-    } */
-    
     @Override
     public void gotPersonalInfo(AdapterView<?> holder, int position, String location, 
                                 long uploadsCount, long contactsCount) {
@@ -214,9 +183,6 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
             itemHolder.tvLocation.setText((user.location != null) ? user.location : "");
             itemHolder.tvVideos.setText((user.uploadsCount >= 0) ? String.valueOf(user.uploadsCount) : "-");
             itemHolder.tvContacts.setText((user.contactsCount >= 0) ? String.valueOf(user.contactsCount) : "-");
-            //((TextView)itemView.findViewById(R.id.userItemLocation)).setText((user.location != null) ? user.location : "");
-            //((TextView)itemView.findViewById(R.id.userItemNumOfVideos)).setText((user.uploadsCount >= 0) ? String.valueOf(user.uploadsCount) : "-");
-            //((TextView)itemView.findViewById(R.id.userItemNumOfContacts)).setText((user.contactsCount >= 0) ? String.valueOf(user.contactsCount) : "-");
         }
     }
     
@@ -229,7 +195,6 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
         final View itemView = Utils.getItemViewIfVisible(holder, position);
         if (itemView != null) {
             ((UserItemViewHolder) itemView.getTag()).tvAlbums.setText((user.albumsCount >= 0) ? String.valueOf(user.albumsCount) : "-");
-            //((TextView)itemView.findViewById(R.id.userItemNumOfAlbums)).setText((user.albumsCount >= 0) ? String.valueOf(user.albumsCount) : "-");
         }
     }
 
@@ -241,7 +206,6 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
         final View itemView = Utils.getItemViewIfVisible(holder, position);
         if (itemView != null) {
             ((UserItemViewHolder) itemView.getTag()).tvChannels.setText((user.channelsCount >= 0) ? String.valueOf(user.channelsCount) : "-");
-            //((TextView)itemView.findViewById(R.id.userItemNumOfChannels)).setText((user.channelsCount >= 0) ? String.valueOf(user.channelsCount) : "-");            
         }
     }
     
