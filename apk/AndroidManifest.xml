@@ -12,7 +12,8 @@
         <!-- WELCOME --> 
         <activity android:label="@string/app_name" 
                   android:name=".activity.Welcome"
-                  android:theme="@android:style/Theme.NoTitleBar">
+                  android:theme="@android:style/Theme.NoTitleBar"
+                  android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -32,7 +33,7 @@
         <activity android:label="Player"
                   android:name=".activity.Player"
                   android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-                  android:screenOrientation="landscape" android:noHistory="true"/>
+                  android:screenOrientation="landscape" android:noHistory="true" />
         <!-- GUEST: VIDEO -->
         <activity android:label="Video"
                   android:name=".activity.guest.item.VideoActivity"
