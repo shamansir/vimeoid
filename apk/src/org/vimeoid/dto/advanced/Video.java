@@ -140,11 +140,13 @@ public class Video implements AdvancedItem {
     }
     
     public static Video[] collectListFromJson(JSONObject jsonObj) throws JSONException {
-        final JSONArray dataArray = jsonObj.getJSONObject(FieldsKeys.MULTIPLE_KEY)
-                                           .getJSONArray(FieldsKeys.SINGLE_KEY);
-        final Video[] videos = new Video[dataArray.length()];
-        for (int i = 0; i < dataArray.length(); i++) {
-            videos[i] = extractFromJson(dataArray.getJSONObject(i));
+        if (!jsonObj.has(FieldsKeys.MULTIPLE_KEY)) return new Video[0];
+        final JSONObject jsonColl = jsonObj.getJSONObject(FieldsKeys.MULTIPLE_KEY);
+        if (!jsonColl.has(FieldsKeys.SINGLE_KEY)) return new Video[0];        
+        final JSONArray array = jsonColl.getJSONArray(FieldsKeys.SINGLE_KEY);
+        final Video[] videos = new Video[array.length()];
+        for (int i = 0; i < array.length(); i++) {
+            videos[i] = extractFromJson(array.getJSONObject(i));
         }
         return videos;
     }    
@@ -154,11 +156,13 @@ public class Video implements AdvancedItem {
     }
     
     public static String[] extractIdsList(JSONObject page) throws JSONException {
-        final JSONArray dataArray = page.getJSONObject(FieldsKeys.MULTIPLE_KEY)
-                                        .getJSONArray(FieldsKeys.SINGLE_KEY);
-        final String[] ids = new String[dataArray.length()];
-        for (int i = 0; i < dataArray.length(); i++) {
-            ids[i] = dataArray.getJSONObject(i).getString(FieldsKeys.ID);
+        if (!page.has(FieldsKeys.MULTIPLE_KEY)) return new String[0];
+        final JSONObject jsonColl = page.getJSONObject(FieldsKeys.MULTIPLE_KEY);
+        if (!jsonColl.has(FieldsKeys.SINGLE_KEY)) return new String[0];        
+        final JSONArray array = jsonColl.getJSONArray(FieldsKeys.SINGLE_KEY);        
+        final String[] ids = new String[array.length()];
+        for (int i = 0; i < array.length(); i++) {
+            ids[i] = array.getJSONObject(i).getString(FieldsKeys.ID);
         }
         return ids;    
     }

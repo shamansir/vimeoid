@@ -31,8 +31,10 @@ public class Contact extends User {
     }
     
     public static boolean contactWithIdExist(JSONObject page, long testUserId) throws JSONException {
-        final JSONArray array = page.getJSONObject(FieldsKeys.MULTIPLE_KEY)
-                                    .getJSONArray(FieldsKeys.SINGLE_KEY);
+        if (!page.has(FieldsKeys.MULTIPLE_KEY)) return false;
+        final JSONObject jsonColl = page.getJSONObject(FieldsKeys.MULTIPLE_KEY);
+        if (!jsonColl.has(FieldsKeys.SINGLE_KEY)) return false;
+        final JSONArray array = jsonColl.getJSONArray(FieldsKeys.SINGLE_KEY);
         for (int i = 0; i < array.length(); i++) {
             if (array.getJSONObject(i).getLong(User.FieldsKeys.ID) == testUserId) return true;
         }
@@ -40,8 +42,10 @@ public class Contact extends User {
     }
 
     public static boolean checkIsMutualById(JSONObject page, long testUserId) throws JSONException {
-        final JSONArray array = page.getJSONObject(FieldsKeys.MULTIPLE_KEY)
-                                    .getJSONArray(FieldsKeys.SINGLE_KEY);
+        if (!page.has(FieldsKeys.MULTIPLE_KEY)) return false;
+        final JSONObject jsonColl = page.getJSONObject(FieldsKeys.MULTIPLE_KEY);
+        if (!jsonColl.has(FieldsKeys.SINGLE_KEY)) return false;
+        final JSONArray array = jsonColl.getJSONArray(FieldsKeys.SINGLE_KEY);
         for (int i = 0; i < array.length(); i++) {
             final JSONObject userObj = array.getJSONObject(i); 
             if (userObj.getLong(User.FieldsKeys.ID) == testUserId) {
@@ -52,11 +56,13 @@ public class Contact extends User {
     }
     
     public static User[] collectListFromJson(JSONObject jsonObj) throws JSONException {
-        final JSONArray dataArray = jsonObj.getJSONObject(FieldsKeys.MULTIPLE_KEY)
-                                           .getJSONArray(FieldsKeys.SINGLE_KEY);
-        final User[] users = new User[dataArray.length()];
-        for (int i = 0; i < dataArray.length(); i++) {
-            users[i] = extractFromJson(dataArray.getJSONObject(i));
+        if (!jsonObj.has(FieldsKeys.MULTIPLE_KEY)) return new User[0];
+        final JSONObject jsonColl = jsonObj.getJSONObject(FieldsKeys.MULTIPLE_KEY);
+        if (!jsonColl.has(FieldsKeys.SINGLE_KEY)) return new User[0];
+        final JSONArray array = jsonColl.getJSONArray(FieldsKeys.SINGLE_KEY);
+        final User[] users = new User[array.length()];
+        for (int i = 0; i < array.length(); i++) {
+            users[i] = extractFromJson(array.getJSONObject(i));
         }
         return users;
     }    

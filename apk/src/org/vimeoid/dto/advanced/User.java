@@ -139,11 +139,13 @@ public class User implements AdvancedItem {
     }
     
 	public static User[] collectListFromJson(JSONObject jsonObj) throws JSONException {
-        final JSONArray dataArray = jsonObj.getJSONObject(FieldsKeys.MULTIPLE_KEY)
-		        						   .getJSONArray(FieldsKeys.SINGLE_KEY);
-		final User[] users = new User[dataArray.length()];
-		for (int i = 0; i < dataArray.length(); i++) {
-			users[i] = extractFromJson(dataArray.getJSONObject(i));
+        if (!jsonObj.has(FieldsKeys.MULTIPLE_KEY)) return new User[0];
+        final JSONObject jsonColl = jsonObj.getJSONObject(FieldsKeys.MULTIPLE_KEY);
+        if (!jsonColl.has(FieldsKeys.SINGLE_KEY)) return new User[0];        
+        final JSONArray array = jsonColl.getJSONArray(FieldsKeys.SINGLE_KEY);	    
+		final User[] users = new User[array.length()];
+		for (int i = 0; i < array.length(); i++) {
+			users[i] = extractFromJson(array.getJSONObject(i));
 		}
 		return users;
 	}
