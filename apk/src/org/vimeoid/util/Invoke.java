@@ -237,7 +237,7 @@ public final class Invoke {
                                      
                                      //.putExtra(Extras.USERNAME, displayName)
                                      .putExtra(Extras.SUBJ_ICON, R.drawable.contact)
-                                     .putExtra(Extras.SUBJ_TITLE, user.username)
+                                     .putExtra(Extras.SUBJ_TITLE, user.displayName)
                                      .putExtra(Extras.RES_ICON, R.drawable.info)
                                      
                                      .putExtra(Extras.SUBSCRIPTIONS_STATUS, SubscriptionType.toArray(user.subscriptonsStatus))
@@ -275,7 +275,7 @@ public final class Invoke {
                                      .putExtra(Extras.USER_ID, user.id)
                                      //.putExtra(Extras.USERNAME, user.username)
                                      .putExtra(Extras.SUBJ_ICON, R.drawable.contact)
-                                     .putExtra(Extras.SUBJ_TITLE, user.username)
+                                     .putExtra(Extras.SUBJ_TITLE, user.displayName)
                                      .putExtra(Extras.RES_ICON, R.drawable.video));
         }
         
@@ -326,18 +326,36 @@ public final class Invoke {
                                      .putExtra(Extras.USER_ID, user.id)
                                      //.putExtra(Extras.USERNAME, user.username)
                                      .putExtra(Extras.SUBJ_ICON, R.drawable.contact)
-                                     .putExtra(Extras.SUBJ_TITLE, user.username)
+                                     .putExtra(Extras.SUBJ_TITLE, user.displayName)
                                      .putExtra(Extras.RES_ICON, R.drawable.contact));
         }
 
         public static void selectApperancesOf(Activity parent, org.vimeoid.dto.advanced.User user) {
-            // TODO Auto-generated method stub
-            
+            parent.startActivity(new Intent(parent, VideosActivity.class)
+                                                    .putExtra(Extras.API_METHOD, Methods.videos.getAppearsIn)
+                                                    .putExtra(Extras.API_PARAMS, new ApiParams().add("user_id", String.valueOf(user.id))
+                                                                                                .add("full_response", "1")
+                                                                                                .toBundle())
+                                                    .putExtra(Extras.API_SORT_TYPE, org.vimeoid.dto.advanced.Video.SortType.NEWEST)                                                                                 
+                                                    .putExtra(Extras.USER_ID, user.id)
+                                                    //.putExtra(Extras.USERNAME, user.username)
+                                                    .putExtra(Extras.SUBJ_ICON, R.drawable.contact)
+                                                    .putExtra(Extras.SUBJ_TITLE, user.displayName)
+                                                    .putExtra(Extras.RES_ICON, R.drawable.appearance));
         }
 
         public static void selectLikesOf(Activity parent, org.vimeoid.dto.advanced.User user) {
-            // TODO Auto-generated method stub
-            
+            parent.startActivity(new Intent(parent, VideosActivity.class)
+                                                    .putExtra(Extras.API_METHOD, Methods.videos.getLikes)
+                                                    .putExtra(Extras.API_PARAMS, new ApiParams().add("user_id", String.valueOf(user.id))
+                                                                                                .add("full_response", "1")
+                                                                                                .toBundle())
+                                                    .putExtra(Extras.API_SORT_TYPE, org.vimeoid.dto.advanced.Video.SortType.NEWEST)                                                                                 
+                                                    .putExtra(Extras.USER_ID, user.id)
+                                                    //.putExtra(Extras.USERNAME, user.username)
+                                                    .putExtra(Extras.SUBJ_ICON, R.drawable.contact)
+                                                    .putExtra(Extras.SUBJ_TITLE, user.displayName)
+                                                    .putExtra(Extras.RES_ICON, R.drawable.like));
         }
 
         public static void selectSubsriptionsOf(Activity parent, org.vimeoid.dto.advanced.User user) {

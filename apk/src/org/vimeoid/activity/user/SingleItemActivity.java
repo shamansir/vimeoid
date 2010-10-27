@@ -140,7 +140,7 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.e(TAG, message + " / " + e.getLocalizedMessage());
+                    Log.e(TAG, message + ((e != null) ? (" / " + e.getLocalizedMessage()) : ""));
                     Dialogs.makeExceptionToast(SingleItemActivity.this, message, e);
                 }
             });

@@ -124,7 +124,8 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnIt
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 		//Log.d("VLA", "Thumb at " + position + " is selected");
-		if (lastSelected != null) lastSelected.findViewById(R.id.playVideo).setVisibility(View.INVISIBLE); 
+	    if (position >= getCount()) return;
+		if (lastSelected != null) lastSelected.findViewById(R.id.playVideo).setVisibility(View.INVISIBLE);		
 		view.findViewById(R.id.playVideo).setVisibility(View.VISIBLE);
 		lastSelected = view;
 	}

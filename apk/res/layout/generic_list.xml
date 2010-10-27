@@ -5,16 +5,19 @@
     	android:layout_height="fill_parent">
     <include android:id="@+id/titleBar" 
              layout="@layout/item_subject_titlebar" />
-    <include android:id="@+id/progressBar"
-             layout="@layout/progress_bar_line" />
-	<ListView android:id="@android:id/list"
-	          android:layout_width="fill_parent"
-	          android:layout_height="fill_parent"
-	          android:transcriptMode="disabled"
-	          android:divider="#f333"
-	          android:dividerHeight="1dp"
-	          android:listSelector="@drawable/selector_bg"
-	          android:fastScrollEnabled="true" />
+    <FrameLayout android:layout_width="fill_parent"
+                 android:layout_height="wrap_content">
+		<ListView android:id="@android:id/list"
+		          android:layout_width="fill_parent"
+		          android:layout_height="fill_parent"
+		          android:transcriptMode="disabled"
+		          android:divider="#f333"
+		          android:dividerHeight="1dp"
+		          android:listSelector="@drawable/selector_bg"
+		          android:fastScrollEnabled="true" />
+        <include android:id="@+id/progressBar"
+                 layout="@layout/progress_bar_line" />		          
+    </FrameLayout>	          
     <include android:id="@+id/emptyView"
-             layout="@layout/item_list_empty" />	      
+             layout="@layout/item_list_empty" />      
 </LinearLayout>

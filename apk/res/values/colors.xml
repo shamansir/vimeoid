@@ -10,7 +10,7 @@
         <color name="item_action_bg">#66cccccc</color>
         <color name="item_tag_bg">#66663333</color>
         <color name="duration_bg">#33666666</color>
-        <color name="progress_bg">#cc333333</color>
+        <color name="progress_bg">#66333333</color>
         <color name="actions_group_title_bg">#ff666666</color>        
         <color name="action_item_text">#ff333333</color>
         <color name="actions_group_title_text">#ffeeeeee</color>

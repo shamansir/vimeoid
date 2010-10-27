@@ -69,6 +69,7 @@ public class Tag implements AdvancedItem {
     }
     
     public static String[] collectQuickListFromJson(JSONObject jsonObj) throws JSONException {
+        if (!jsonObj.has(FieldsKeys.MULTIPLE_KEY)) return new String[0];
         final JSONArray array = jsonObj.getJSONObject(FieldsKeys.MULTIPLE_KEY)
                                        .getJSONArray(FieldsKeys.SINGLE_KEY);
         final String[] result = new String[array.length()];
