@@ -102,7 +102,7 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
         itemHolder.tvChannels.setText((user.channelsCount >= 0) ? String.valueOf(user.channelsCount) : "-");
         itemHolder.tvContacts.setText((user.contactsCount >= 0) ? String.valueOf(user.contactsCount) : "-");
         
-        MarkersSupport.injectMarkers(layoutInflater, itemHolder.vgMarkers, getRequiredMarkers(user));
+        MarkersSupport.injectMarkers(itemHolder.vgMarkers, getRequiredMarkers(user));
         
         //Log.d(TAG, "getView: checking is requested for " + user.id + " / " + user.displayName);
         if (!requests.contains(user.id)) {

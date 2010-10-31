@@ -112,7 +112,7 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnIt
         itemHolder.tvPlays.setText(String.valueOf(video.playsCount));
         itemHolder.tvComments.setText(String.valueOf(video.commentsCount));
         
-        MarkersSupport.injectMarkers(layoutInflater, itemHolder.vgMarkers, getRequiredMarkers(video));
+        MarkersSupport.injectMarkers(itemHolder.vgMarkers, getRequiredMarkers(video));
         
         /* if (video.isLike) convertView.setBackgroundResource(R.drawable.like_marker);
         else if (video.isWatchLater) convertView.setBackgroundResource(R.drawable.watchlater_marker);
@@ -184,7 +184,7 @@ public class VideosListAdapter extends JsonObjectsAdapter<Video> implements OnIt
         final View itemView = Utils.getItemViewIfVisible(holder, position);
         if (itemView != null) {
             itemView.invalidate();
-            MarkersSupport.injectMarkers(layoutInflater, (ViewGroup)itemView.findViewById(R.id.markersArea), getRequiredMarkers(subject));
+            MarkersSupport.injectMarkers((ViewGroup)itemView.findViewById(R.id.markersArea), getRequiredMarkers(subject));
         }
         return subject;
     }

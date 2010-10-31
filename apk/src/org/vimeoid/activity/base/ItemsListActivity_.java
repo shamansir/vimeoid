@@ -113,6 +113,14 @@ public abstract class ItemsListActivity_<ItemType, AdapterType extends BaseAdapt
     }
     
     @Override
+    protected void onPause() {
+        super.onPause();
+        
+        hideProgressBar();
+        //if (mainTask != null) mainTask.cancel(true);
+    }
+    
+    @Override
     protected final void onListItemClick(ListView l, View v, int position, long id) {
 
         if (!isLoadMoreButton(position)) {

@@ -69,6 +69,13 @@ public abstract class SingleItemActivity_<ItemType> extends Activity {
     protected void setLoadManually(boolean value) {
         loadManually = value;
     }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        
+        hideProgressBar();
+    }    
 
     protected void prepare(Bundle extras) { };
     

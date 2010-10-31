@@ -2,4 +2,6 @@
 <ImageView xmlns:android="http://schemas.android.com/apk/res/android" 
            android:layout_width="@dimen/marker_side"
            android:layout_height="@dimen/marker_side"
+           android:minHeight="@dimen/marker_side"
+           android:minWidth="@dimen/marker_side"
            android:layout_margin="1dp" />

@@ -2,20 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="wrap_content"
-              android:layout_height="wrap_content" />
-     <!-- <ImageView android:id="@+id/firstMarker"
-                android:layout_width="@dimen/marker_side"
-                android:layout_height="@dimen/marker_side"
-                android:layout_margin="1dp"                            
-                android:src="@drawable/like_marker" />
-     <ImageView android:id="@+id/secondMarker"
-                android:layout_width="@dimen/marker_side"
-                android:layout_height="@dimen/marker_side"
-                android:layout_margin="1dp"                            
-                android:src="@drawable/subscription_marker" />
-     <ImageView android:id="@+id/thirdMarker"
-                android:layout_width="@dimen/marker_side"
-                android:layout_height="@dimen/marker_side"
-                android:layout_margin="1dp"                            
-                android:src="@drawable/watchlater_marker" />                            
-</LinearLayout>  -->
+              android:layout_height="wrap_content">
+     <include android:id="@+id/fourthMarker"
+              layout="@layout/marker_for_the_item" />
+     <include android:id="@+id/thirdMarker"
+              layout="@layout/marker_for_the_item" />
+     <include android:id="@+id/secondMarker"
+              layout="@layout/marker_for_the_item" />
+     <include android:id="@+id/firstMarker"
+              layout="@layout/marker_for_the_item" />              
+</LinearLayout>
