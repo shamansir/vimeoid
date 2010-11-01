@@ -62,6 +62,7 @@
     <string name="subscribe_uploads">Subscribe uploads</string>
     <string name="subscribe_appearences">Subscribe appearances</string>
     <string name="add_contact">Add contact</string>
+    <string name="remove_contact">Remove contact</string>
     <string name="added_contact">Added contact</string>
     <string name="removed_contact">Removed contact</string>
     <!-- video page -->

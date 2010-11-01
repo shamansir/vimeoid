@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.vimeoid.R;
 import org.vimeoid.adapter.LActionItem.LActionsSection;
+import org.vimeoid.util.Utils;
 
 import com.fedorvlasov.lazylist.ImageLoader;
 
@@ -197,7 +198,7 @@ public class SectionedActionsAdapter extends BaseAdapter implements OnItemClickL
     }
 
     public int addSection(String title) {
-        final LActionsSection newSection = new LActionsSection(sections.size(), title); 
+        final LActionsSection newSection = new LActionsSection(itemsCount, sections.size(), title); 
         sections.add(newSection);
         itemsCount++;
         return newSection.id;
@@ -206,10 +207,12 @@ public class SectionedActionsAdapter extends BaseAdapter implements OnItemClickL
     private LActionItem addAction(int section, int icon, String iconUrl, String title) {
         if (section >= sections.size() || (section < 0)) throw new IllegalArgumentException("No section with such id (" + section + ") resgistered");
         final LActionsSection subjSection = sections.get(section);
-        final LActionItem newAction = (icon != -1) ? new LActionItem(subjSection, icon, title) : new LActionItem(subjSection, iconUrl, title); 
+        final LActionItem newAction = (icon != -1) 
+                                      ? new LActionItem(itemsCount, subjSection, icon, title) 
+                                      : new LActionItem(itemsCount, subjSection, iconUrl, title); 
         subjSection.addAction(newAction);
         itemsCount++;
-        return newAction;        
+        return newAction;
     }
     
     public LActionItem addAction(int section, String iconUrl, String title) {
@@ -248,7 +251,7 @@ public class SectionedActionsAdapter extends BaseAdapter implements OnItemClickL
 		if (getItemViewType(position) == ITEM_VIEW_TYPE) {
 			final LActionItem item = (LActionItem) getItem(position);
 			if (item.onClick != null) item.onClick(view);
-			parent.getChildAt(position).invalidate();
+			Utils.forceInvalidate(parent, position);
 		}
 	}
 

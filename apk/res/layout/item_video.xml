@@ -48,14 +48,15 @@
                  <!-- android:lines="1"
                       android:ellipsize="marquee"
                       android:scrollHorizontally="true" -->
-            <include android:id="@+id/markersArea"
-                     layout="@layout/markers"
-                     android:layout_weight="0.1"
-                     android:layout_marginRight="-5dp"
-                     android:layout_marginTop="2dp" 
-                     android:layout_gravity="right|bottom"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content" />
+            <LinearLayout android:id="@+id/markersArea"
+	                      android:layout_weight="0.1"
+	                      android:layout_marginRight="-5dp"
+	                      android:layout_marginTop="2dp" 
+	                      android:layout_gravity="right|bottom"
+	                      android:layout_width="wrap_content"
+	                      android:layout_height="wrap_content">
+                <include layout="@layout/markers" />	                      
+	        </LinearLayout>            
         </LinearLayout>
         <LinearLayout android:id="@+id/videoItemTags"
                       android:layout_width="fill_parent" 

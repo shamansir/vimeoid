@@ -218,6 +218,8 @@ public class VideoActivity extends SingleItemActivity<Video> {
             }
         };
         
+        //Utils.forceInvalidate(getActionsList(), actionItem.position);
+        
         return actionItem;
         
     }
@@ -252,6 +254,8 @@ public class VideoActivity extends SingleItemActivity<Video> {
                 }.execute(new ApiParams().add("video_id", String.valueOf(subjectVideoId)));
             }
         };
+        
+        //Utils.forceInvalidate(getActionsList(), actionItem.position);
         
         return actionItem;
         

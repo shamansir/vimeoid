@@ -31,6 +31,7 @@ public class LActionItem {
         
         public final int id;
         public final String title;
+        protected final int position;        
         protected final List<LActionItem> actions = new LinkedList<LActionItem>();
         
         void addAction(LActionItem action) {
@@ -45,9 +46,10 @@ public class LActionItem {
             return actions.size();
         }
         
-        LActionsSection(int id, String title) {
+        LActionsSection(int position, int id, String title) {
             this.id = id;
             this.title = title;
+            this.position = position;
         }
 
 		public boolean contains(LActionItem action) {
@@ -61,21 +63,23 @@ public class LActionItem {
     public String title = null;
     public OnClickListener onClick = null;
     public final String iconUrl;
+    public final int position;
     public RenderingAdapter adapter = null;  
     
-    private LActionItem(LActionsSection section, int icon, String iconUrl, String title) {
+    private LActionItem(int position, LActionsSection section, int icon, String iconUrl, String title) {
         this.section = section;
+        this.position = position;
         this.icon = icon;
         this.title = title;
         this.iconUrl = iconUrl;        
     }
     
-    LActionItem(LActionsSection section, int icon, String title) {
-        this(section, icon, null, title);
+    LActionItem(int position, LActionsSection section, int icon, String title) {
+        this(position, section, icon, null, title);
     }
     
-    LActionItem(LActionsSection section, String iconUrl, String title) {
-        this(section, -1, iconUrl, title);
+    LActionItem(int position, LActionsSection section, String iconUrl, String title) {
+        this(position, section, -1, iconUrl, title);
     }
     
     public void onClick(View view) {

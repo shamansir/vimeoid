@@ -364,13 +364,16 @@ public class UserActivity extends SingleItemActivity<User> {
             }
         };
         
+        //Utils.forceInvalidate(getActionsList(), actionItem.position);
+        
         return actionItem;
         
     }
     
     private LActionItem initAddContactAction(final LActionItem actionItem) {
         
-        actionItem.icon = isContact ? R.drawable.contact : R.drawable.contact_not; 
+        actionItem.icon = isContact ? R.drawable.contact : R.drawable.contact_not;
+        actionItem.title = getString(isContact ? R.string.remove_contact : R.string.add_contact);
 
         actionItem.onClick = new OnClickListener() {
             @Override public void onClick(View v) {
@@ -393,6 +396,9 @@ public class UserActivity extends SingleItemActivity<User> {
                         actionItem.icon =  
                                 isContact ? R.drawable.contact
                                           : R.drawable.contact_not;
+                        actionItem.title = getString(
+                                isContact ? R.string.remove_contact 
+                                          : R.string.add_contact);
                         
                     }
 
@@ -401,7 +407,8 @@ public class UserActivity extends SingleItemActivity<User> {
                     
                 }.execute(new ApiParams().add("user_id", String.valueOf(subjectUserId)));
             }
-        };
+        };        
+        //Utils.forceInvalidate(getActionsList(), actionItem.position);
         
         return actionItem;
         
@@ -410,8 +417,8 @@ public class UserActivity extends SingleItemActivity<User> {
     private LActionItem initIsMutualAction(final LActionItem actionItem) {
         actionItem.icon = isMutual ? R.drawable.mutual : R.drawable.mutual_not; 
         actionItem.title = getString(isMutual ? R.string.mutual : R.string.not_mutual);
+        //Utils.forceInvalidate(getActionsList(), actionItem.position);
         return actionItem;
-        
     }      
     
     protected abstract static class SubscriptionsReceiver implements ApiPagesReceiver<JSONObject> {

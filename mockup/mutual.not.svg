@@ -15,7 +15,7 @@
    version="1.1"
    inkscape:version="0.47pre4 r22446"
    sodipodi:docname="mutual.not.svg"
-   inkscape:export-filename="/home/shamansir/Workspace/vimeoid/apk/res/drawable/mutual.png"
+   inkscape:export-filename="/home/shamansir/Workspace/vimeoid/apk/res/drawable/mutual_not.png"
    inkscape:export-xdpi="10.8"
    inkscape:export-ydpi="10.8">
   <defs
@@ -56,23 +56,41 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.33854814"
-     inkscape:cx="199.7807"
-     inkscape:cy="214.03509"
+     inkscape:zoom="1.14"
+     inkscape:cx="60.964912"
+     inkscape:cy="200"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1010"
+     inkscape:window-width="1366"
+     inkscape:window-height="695"
      inkscape:window-x="0"
      inkscape:window-y="25"
-     inkscape:window-maximized="1">
+     inkscape:window-maximized="1"
+     inkscape:snap-nodes="false"
+     inkscape:snap-global="false">
     <sodipodi:guide
        orientation="0,1"
-       position="-321.61017,199.57627"
+       position="-317.54386,340.35088"
        id="guide3612" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="-446.49123,400"
+       id="guide2967" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="-165.78947,0"
+       id="guide2969" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="351.75439,59.649123"
+       id="guide2971" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="-345.61404,199.12281"
+       id="guide2973" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -92,20 +110,19 @@
      id="layer1"
      transform="translate(0,-652.36217)">
     <path
-       style="fill:#113e7a;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
-       d="M 139.47368,44.736842 12.280702,200.42373 138.59649,327.19298 139.47368,44.736842 z"
+       style="fill:#113e7a;fill-opacity:1;stroke:none"
+       d="M 141.22807,712.88848 14.035088,853.23936 140.35088,995.34462 141.22807,712.88848 z"
        id="path3670"
-       transform="translate(0,652.36217)"
        sodipodi:nodetypes="cccc" />
     <path
        style="fill:#113e7a;fill-opacity:1;stroke:none"
-       d="m 96.5,148.25 0,98.25 85.07072,0 17.53838,-46.0625 -30.00685,-25.21656 6.83525,-26.97094 -79.4375,0 z m 100.40625,0 36.41447,52.1875 -24.55318,30.27248 14.90571,15.79002 88.608,0 0,-98.25 -115.375,0 z"
+       d="m 93.875,150 0,98.25 88.125,0 11.875,-14.90625 L 161.40625,200.875 187.71875,167.53125 178.9375,150 93.875,150 z m 125.3125,0 -17.4375,38.59375 29.84375,7.03125 -14.91721,26.30154 13.47971,26.32346 79.5,0 0,-98.25 -90.46875,0 z"
        transform="translate(0,652.36217)"
        id="rect3672"
-       sodipodi:nodetypes="cccccccccccccc" />
+       sodipodi:nodetypes="cccccccccccccccc" />
     <path
        style="fill:#113e7a;fill-opacity:1;stroke:none"
-       d="M 260.08772,697.09901 387.2807,852.7859 260.96491,979.55515 260.08772,697.09901 z"
+       d="M 262.7193,712.88848 388.15789,853.23936 263.59649,995.34462 262.7193,712.88848 z"
        id="path3670-1"
        sodipodi:nodetypes="cccc" />
   </g>

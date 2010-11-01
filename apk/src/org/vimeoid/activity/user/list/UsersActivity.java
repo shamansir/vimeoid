@@ -161,7 +161,7 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
                  }
                  
              });
-        if (!infoTasksQueue.started()) {
+        if (!infoTasksQueue.started() && !infoTasksQueue.isEmpty()) {
         	Log.d(TAG, "requestData: tasks are ready, queue is not started, will run it");
         	new Thread(infoTasksQueue, "Load secondary data").start();
         }

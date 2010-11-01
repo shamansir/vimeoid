@@ -63,6 +63,7 @@ public class Contact extends User {
         final User[] users = new User[array.length()];
         for (int i = 0; i < array.length(); i++) {
             users[i] = extractFromJson(array.getJSONObject(i));
+            users[i].isContact = true;
         }
         return users;
     }    
