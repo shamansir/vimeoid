@@ -59,6 +59,8 @@ public class Welcome extends Activity {
         
         setContentView(R.layout.welcome);
         
+        //VimeoApi.forgetCredentials(this); // for testing
+        
         if (VimeoApi.weKnowUser(this)) {
             tryToEnterAsUser();
         } else {

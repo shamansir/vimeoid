@@ -56,6 +56,7 @@ public class VimeoApi {
     
     public static final Uri OAUTH_CALLBACK_URL = Uri.parse("vimeoid://oauth.done");
     public static final String OAUTH_API_PREFERENCES_ID = "org.vimeoid.vimeoauth";
+    public static final String PERMISSION_LEVEL = "write";
     
     private static final String OAUTH_TOKEN_PARAM = "user_oauth_public";
     private static final String OAUTH_TOKEN_SECRET_PARAM = "user_oauth_secret";
@@ -135,7 +136,8 @@ public class VimeoApi {
         
     public static Uri requestForOAuthUri() throws OAuthMessageSignerException, OAuthNotAuthorizedException, 
                                            OAuthExpectationFailedException, OAuthCommunicationException {
-        return JsonOverHttp.use().retreiveOAuthRequestToken(OAUTH_CALLBACK_URL);
+        return Uri.parse(JsonOverHttp.use().retreiveOAuthRequestToken(OAUTH_CALLBACK_URL).toString() + "&permission=" + VimeoApi.PERMISSION_LEVEL); 
+        /*return JsonOverHttp.use().retreiveOAuthRequestToken(OAUTH_CALLBACK_URL));*/
     }
     
     public static void ensureOAuthCallbackAndSaveToken(Context context, Uri callbackUri) throws 
