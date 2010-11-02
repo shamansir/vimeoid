@@ -383,8 +383,7 @@ public class UserActivity extends SingleItemActivity<User> {
                                                     ? Methods.people.removeContact
                                                     : Methods.people.addContact) {
 
-                    @Override
-                    protected void onOk() {
+                    @Override protected void onOk() {
                         isContact = !isContact;
                         
                         // TODO: add icon to toast
@@ -400,10 +399,16 @@ public class UserActivity extends SingleItemActivity<User> {
                                 isContact ? R.string.remove_contact 
                                           : R.string.add_contact);
                         
+                        Log.d(TAG, "isContact: " + isContact +
+                                   "result: " + (isContact ? R.string.added_contact
+                                                           : R.string.removed_contact) +
+                                   "action title: " + actionItem.title);
+                        
+                        Utils.forceInvalidate(getActionsList(), actionItem.position);
                     }
 
                     @Override
-                    protected int onError() { return R.string.failed_to_subscribe; }                            
+                    protected int onError() { return R.string.failed_to_perform; }                            
                     
                 }.execute(new ApiParams().add("user_id", String.valueOf(subjectUserId)));
             }

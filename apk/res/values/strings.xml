@@ -58,6 +58,7 @@
     <string name="mutual">Mutual</string>
     <string name="not_mutual">Not mutual</string>
     <string name="failed_to_subscribe">Failed to subscribe</string>
+    <string name="failed_to_perform">Failed to perform</string>
     <string name="subscribe_likes">Subscribe likes</string>
     <string name="subscribe_uploads">Subscribe uploads</string>
     <string name="subscribe_appearences">Subscribe appearances</string>

@@ -267,11 +267,15 @@ public class Utils {
 	    if (wantedChild < 0 || wantedChild >= holder.getChildCount()) return null;
 	    return holder.getChildAt(wantedChild);
 	}
-
     
     public static void forceInvalidate(AdapterView<?> parent, int position) {
         final View itemView = getItemViewIfVisible(parent, position);
         if (itemView != null) itemView.invalidate();        
     }
+    
+    public static void forcePostInvalidate(AdapterView<?> parent, int position) {
+        final View itemView = getItemViewIfVisible(parent, position);
+        if (itemView != null) itemView.postInvalidate();        
+    }    
 	
 }

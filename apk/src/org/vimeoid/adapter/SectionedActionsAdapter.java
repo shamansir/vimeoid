@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.vimeoid.R;
 import org.vimeoid.adapter.LActionItem.LActionsSection;
-import org.vimeoid.util.Utils;
 
 import com.fedorvlasov.lazylist.ImageLoader;
 
@@ -251,7 +250,7 @@ public class SectionedActionsAdapter extends BaseAdapter implements OnItemClickL
 		if (getItemViewType(position) == ITEM_VIEW_TYPE) {
 			final LActionItem item = (LActionItem) getItem(position);
 			if (item.onClick != null) item.onClick(view);
-			Utils.forceInvalidate(parent, position);
+			//Utils.forceInvalidate(parent, position);
 		}
 	}
 
