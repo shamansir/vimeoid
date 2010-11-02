@@ -404,6 +404,7 @@ public class UserActivity extends SingleItemActivity<User> {
                                                            : R.string.removed_contact) +
                                    "action title: " + actionItem.title);
                         
+                        // FIXME: not invalidates
                         Utils.forceInvalidate(getActionsList(), actionItem.position);
                     }
 
