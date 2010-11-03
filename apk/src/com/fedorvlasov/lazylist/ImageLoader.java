@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Stack;
 
+import org.vimeoid.util.ImagesByUrlProjector;
 import org.vimeoid.util.Utils;
 
 import android.app.Activity;
@@ -35,8 +36,8 @@ import android.widget.ImageView;
  * @date Sep 5, 2010 7:19:01 PM 
  *
  */
-public class ImageLoader {
-	
+public class ImageLoader implements ImagesByUrlProjector {
+    
 	public static final String TAG = "ImageLoader";
 	
 	public static final String CACHE_DIR_NAME = "__imgldcache"; 

@@ -376,7 +376,7 @@ public class UserActivity extends SingleItemActivity<User> {
         actionItem.title = getString(isContact ? R.string.remove_contact : R.string.add_contact);
 
         actionItem.onClick = new OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override public void onClick(final View v) {
                 final long subjectUserId = getSubjectUserId();
                 
                 new QuickApiTask(UserActivity.this, isContact 
@@ -404,8 +404,8 @@ public class UserActivity extends SingleItemActivity<User> {
                                                            : R.string.removed_contact) +
                                    "action title: " + actionItem.title);
                         
-                        // FIXME: not invalidates
-                        Utils.forceInvalidate(getActionsList(), actionItem.position);
+                        actionItem.invalidate();
+                        
                     }
 
                     @Override

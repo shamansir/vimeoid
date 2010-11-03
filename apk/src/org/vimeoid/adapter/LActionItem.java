@@ -6,9 +6,11 @@ package org.vimeoid.adapter;
 import java.util.LinkedList;
 import java.util.List;
 
-import android.content.Context;
+import org.vimeoid.util.ImagesByUrlProjector;
+
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -55,6 +57,10 @@ public class LActionItem {
 		public boolean contains(LActionItem action) {
 			return actions.contains(action);
 		}
+
+        protected void inject(SectionHeaderHolder itemHolder) {
+            itemHolder.tvTitle.setText(title);            
+        }
         
     }
     
@@ -64,7 +70,9 @@ public class LActionItem {
     public OnClickListener onClick = null;
     public final String iconUrl;
     public final int position;
-    public RenderingAdapter adapter = null;  
+    public RenderingAdapter adapter = null;
+    private ImagesByUrlProjector imgProjector;
+    private ActionItemHolder lastHolder; 
     
     private LActionItem(int position, LActionsSection section, int icon, String iconUrl, String title) {
         this.section = section;
@@ -86,8 +94,46 @@ public class LActionItem {
         if (onClick != null) onClick.onClick(view);
     }
     
-    public static interface RenderingAdapter {
-        public TextView render(Context context, TextView source, String value);
+    public void invalidate() {
+        inject(lastHolder);
     }
+    
+    protected void inject(final ActionItemHolder holder) {
+        holder.tvTitle.setText(title);
+        if (adapter != null) {
+            adapter.render(holder.tvTitle, title);
+        }
+        
+        if (icon != -1) {
+            holder.ivIcon.setImageResource(icon);
+        } else if ((iconUrl != null) && (iconUrl.length() > 0)) {
+            if (imgProjector != null) {
+                imgProjector.displayImage(iconUrl, holder.ivIcon);
+            } else throw new IllegalStateException("ImagesLoader must be initialized to load images");
+        }
+        
+        holder.ivFwd.setVisibility((onClick == null) ? View.GONE : View.VISIBLE);
+        //if (item.onClick != null) convertView.setOnClickListener(item.onClick);
+        
+        lastHolder = holder;
+    }
+    
+    public static interface RenderingAdapter {
+        public TextView render(TextView source, String value);
+    }
+
+    protected void setImagesProjector(ImagesByUrlProjector imgProjector) {
+        this.imgProjector = imgProjector;
+    }
+    
+    protected static class SectionHeaderHolder {
+        TextView tvTitle;
+    }
+    
+    protected static class ActionItemHolder {
+        ImageView ivIcon;
+        TextView tvTitle;
+        ImageView ivFwd;
+    }    
 
 }

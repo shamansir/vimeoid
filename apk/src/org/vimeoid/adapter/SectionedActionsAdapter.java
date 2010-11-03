@@ -7,12 +7,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.vimeoid.R;
+import org.vimeoid.adapter.LActionItem.ActionItemHolder;
 import org.vimeoid.adapter.LActionItem.LActionsSection;
+import org.vimeoid.adapter.LActionItem.SectionHeaderHolder;
 
 import com.fedorvlasov.lazylist.ImageLoader;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,8 +137,9 @@ public class SectionedActionsAdapter extends BaseAdapter implements OnItemClickL
     	final int viewType = getItemViewType(position);
     	
         if (viewType == IGNORE_ITEM_VIEW_TYPE) throw new IllegalStateException("Failed to get object at position " + position);
-        
-        Log.d(TAG, "generating view for item " + position + ", view type " + viewType);
+
+        // FIXME: called very much of times when invalidating action        
+        //Log.d(TAG, "generating view for item " + position + ", view type " + viewType);
         
         if (viewType == SECTION_VIEW_TYPE) {
         	
@@ -153,12 +155,12 @@ public class SectionedActionsAdapter extends BaseAdapter implements OnItemClickL
             	itemHolder = (SectionHeaderHolder)convertView.getTag();
             }
             
-            itemHolder.tvTitle.setText(section.title);
+            section.inject(itemHolder);
             
         } else if (viewType == ITEM_VIEW_TYPE) {
             
         	final LActionItem item = (LActionItem) getItem(position);
-            ActionItemHolder itemHolder = null;
+            ActionItemHolder itemHolder = null;            
             
             if (convertView == null) {
            	    convertView = inflater.inflate(actionLayout, parent, false);
@@ -171,21 +173,7 @@ public class SectionedActionsAdapter extends BaseAdapter implements OnItemClickL
            	    itemHolder = (ActionItemHolder)convertView.getTag();
            }
            
-           itemHolder.tvTitle.setText(item.title);
-           if (item.adapter != null) {
-        	   item.adapter.render(context, itemHolder.tvTitle, item.title);
-           }
-           
-           if (item.icon != -1) {
-               itemHolder.ivIcon.setImageResource(item.icon);
-           } else if ((item.iconUrl != null) && (item.iconUrl.length() > 0)) {
-               if (imagesLoader != null) {
-                   imagesLoader.displayImage(item.iconUrl, itemHolder.ivIcon);
-               } else throw new IllegalStateException("ImagesLoader must be initialized to load images");
-           }
-           
-           itemHolder.ivFwd.setVisibility((item.onClick == null) ? View.GONE : View.VISIBLE);
-           //if (item.onClick != null) convertView.setOnClickListener(item.onClick);           
+           item.inject(itemHolder);
             
         }
         
@@ -210,6 +198,7 @@ public class SectionedActionsAdapter extends BaseAdapter implements OnItemClickL
                                       ? new LActionItem(itemsCount, subjSection, icon, title) 
                                       : new LActionItem(itemsCount, subjSection, iconUrl, title); 
         subjSection.addAction(newAction);
+        newAction.setImagesProjector(imagesLoader);
         itemsCount++;
         return newAction;
     }
@@ -233,17 +222,7 @@ public class SectionedActionsAdapter extends BaseAdapter implements OnItemClickL
     public void clear() {
         itemsCount = 0;
         sections.clear();
-    }
-    
-    private class SectionHeaderHolder {
-        TextView tvTitle;
-    }
-    
-    private class ActionItemHolder {
-        ImageView ivIcon;
-        TextView tvTitle;
-        ImageView ivFwd;
-    }
+    }   
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

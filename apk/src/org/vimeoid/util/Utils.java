@@ -268,8 +268,9 @@ public class Utils {
 	    return holder.getChildAt(wantedChild);
 	}
     
-    public static void forceInvalidate(AdapterView<?> parent, int position) {
+    public static void invalidateByPos(AdapterView<?> parent, int position) {
         final View itemView = getItemViewIfVisible(parent, position);
+        Log.d(TAG, "Trying to invalidate view " + itemView + " at pos " + position + " ");        
         if (itemView != null) itemView.invalidate();        
     }
     
