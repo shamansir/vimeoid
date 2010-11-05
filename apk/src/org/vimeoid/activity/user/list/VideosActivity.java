@@ -80,7 +80,7 @@ public class VideosActivity extends ItemsListActivity<Video> {
         
         final Video.SortType currentSortType = (Video.SortType) extras.get(Invoke.Extras.API_SORT_TYPE);
         
-        // check if fits period
+        // TODO: check if fits period and run when loading new page if required         
         secondaryTasks.addListTask(GET_LIKES_TASK, Methods.videos.getLikes, new ApiParams().add("user_id", String.valueOf(subjectUserId))
                                                                                            .add("sort", currentSortType.toString()), 
                                                                             likesReceiver, 3, 30);

@@ -11,6 +11,8 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.vimeoid.activity.base.ApiPagesReceiver;
+import org.vimeoid.util.PagingData_;
 
 /**
  * <dl>
@@ -107,5 +109,30 @@ public class SubscriptionData {
             destination.data.get(type).add(subjectId);
         }
     }
+    
+    public static abstract class PeopleSubscriptionsReceiver implements ApiPagesReceiver<JSONObject> {
+        
+        private final SubscriptionData subscriptions = new SubscriptionData();
+        private int received = 0;
+
+        @Override
+        public void addSource(JSONObject page) throws Exception {
+            received += 
+                page.getJSONObject(Contact.FieldsKeys.MULTIPLE_KEY)
+                    .getInt(PagingData.FieldsKeys.ON_THIS_PAGE);
+            passTo(page, subscriptions);
+        }
+
+        @Override public int getCount() { return received; }
+
+        @Override
+        public PagingData_ getCurrentPagingData(JSONObject lastPage) throws JSONException {
+            return PagingData.collectFromJson(lastPage, SubscriptionData.FieldsKeys.MULTIPLE_KEY);
+        }
+        
+        public SubscriptionData getSubscriptions() { return subscriptions; }
+        
+    }
+    
 
 }

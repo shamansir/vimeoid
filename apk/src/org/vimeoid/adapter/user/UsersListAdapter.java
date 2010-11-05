@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import org.vimeoid.R;
 import org.vimeoid.adapter.JsonObjectsAdapter;
 import org.vimeoid.adapter.TagsSupport;
+import org.vimeoid.dto.advanced.SubscriptionData;
 import org.vimeoid.dto.advanced.User;
 import org.vimeoid.dto.advanced.SubscriptionData.SubscriptionType;
 import org.vimeoid.util.Utils;
@@ -22,9 +23,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 /**
@@ -168,7 +169,7 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
     }
 
     @Override
-    public void gotPersonalInfo(AdapterView<?> holder, int position, String location, 
+    public void gotPersonalInfo(ListView holder, int position, String location, 
                                 long uploadsCount, long contactsCount) {
         final User user = (User)getItem(position);
         user.location = location;
@@ -188,7 +189,7 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
     
 
     @Override
-    public void gotAlbumsCount(AdapterView<?> holder, int position, long albumsCount) {
+    public void gotAlbumsCount(ListView holder, int position, long albumsCount) {
         final User user = (User)getItem(position);
         user.albumsCount = albumsCount;
         Log.d(TAG, "gotAlbumsCount: user " + user.id + " / " + user.displayName);
@@ -199,7 +200,7 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
     }
 
     @Override
-    public void gotChannelsCount(AdapterView<?> holder, int position, long channelsCount) {
+    public void gotChannelsCount(ListView holder, int position, long channelsCount) {
         final User user = (User)getItem(position);
         user.channelsCount = channelsCount;
         Log.d(TAG, "gotChannelsCount: user " + user.id + " / " + user.displayName);
@@ -210,9 +211,15 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
     }
     
     @Override
-    public void gotSubsrcriptions(AdapterView<?> holder, int position, Set<SubscriptionType> types) {
-        // TODO Auto-generated method stub
-        
+    public void gotSubscriptionData(ListView holder, SubscriptionData subscriptions) {
+        for (User user: getItems()) {
+            final Set<SubscriptionType> set = new HashSet<SubscriptionType>();
+            if (subscriptions.data.get(SubscriptionType.UPLOADS).contains(user.id)) set.add(SubscriptionType.UPLOADS);
+            if (subscriptions.data.get(SubscriptionType.LIKES).contains(user.id)) set.add(SubscriptionType.LIKES);
+            if (subscriptions.data.get(SubscriptionType.APPEARS).contains(user.id)) set.add(SubscriptionType.APPEARS);
+            user.subscriptonsStatus = set;
+        }
+        holder.invalidateViews();
     }    
     
     private class UserItemViewHolder {

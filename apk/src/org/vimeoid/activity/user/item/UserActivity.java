@@ -24,6 +24,7 @@ import org.vimeoid.dto.advanced.PortraitsData;
 import org.vimeoid.dto.advanced.SubscriptionData;
 import org.vimeoid.dto.advanced.User;
 import org.vimeoid.dto.advanced.SubscriptionData.SubscriptionType;
+import org.vimeoid.dto.advanced.SubscriptionData.PeopleSubscriptionsReceiver;
 import org.vimeoid.util.ApiParams;
 import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
@@ -81,9 +82,10 @@ public class UserActivity extends SingleItemActivity<User> {
     public UserActivity() {
         super(R.layout.view_single_user);
         
-        subscriptionsReceiver = new SubscriptionsReceiver() {
+        subscriptionsReceiver = new PeopleSubscriptionsReceiver() {
             @Override public void onComplete() {
                 final long subjectUserId = getSubjectUserId();
+                final SubscriptionData subscriptions = getSubscriptions();
                 
                 subscriptionsStatus = new HashSet<SubscriptionType>();
                 if (subscriptions.data.get(SubscriptionType.LIKES).contains(subjectUserId)) { 
@@ -128,6 +130,7 @@ public class UserActivity extends SingleItemActivity<User> {
                 String[] types = extras.getStringArray(Invoke.Extras.SUBSCRIPTIONS_STATUS);
                 if (types != null) subscriptionsStatus = SubscriptionType.fromArray(types);
             } else {
+                // FIXME: just mark as "unknown"
                 secondaryTasks.addListTask(LOAD_SUBSCRIPTIONS_TASK, Methods.people.getSubscriptions, 
                                                                     new ApiParams().add("types", 
                                                     SubscriptionType.list(new SubscriptionType[] { SubscriptionType.LIKES, 
@@ -147,7 +150,7 @@ public class UserActivity extends SingleItemActivity<User> {
                 (extras.get(Invoke.Extras.IS_CONTACT) != null)) {
                 isContact = (Boolean)extras.get(Invoke.Extras.IS_CONTACT);
             } else {
-                // TODO: secondaryTasks.add(taskId, apiMethod, params); (infinite task)
+                // FIXME: just mark as "unknown"
                 secondaryTasks.addListTask(LOAD_CONTACTS_TASK, Methods.contacts.getAll, 
                                                                new ApiParams().add("user_id", String.valueOf(subjectUserId)), 
                                            contactsReceiver, -1, 50);
@@ -283,7 +286,6 @@ public class UserActivity extends SingleItemActivity<User> {
         // TODO: user activity (did / happened)
         // TODO: user groups
         // TODO: add search somewhere
-        // TODO: mutual contacts
         
         return actionsAdapter;
     }
@@ -427,34 +429,12 @@ public class UserActivity extends SingleItemActivity<User> {
         return actionItem;
     }      
     
-    protected abstract static class SubscriptionsReceiver implements ApiPagesReceiver<JSONObject> {
-        
-        protected SubscriptionData subscriptions = new SubscriptionData();
-        protected int received = 0;
-
-        @Override
-        public void addSource(JSONObject page) throws Exception {
-            received += 
-                page.getJSONObject(Contact.FieldsKeys.MULTIPLE_KEY)
-                    .getInt(PagingData.FieldsKeys.ON_THIS_PAGE);
-            SubscriptionData.passTo(page, subscriptions);
-        }
-
-        @Override public int getCount() { return received; }
-
-        @Override
-        public PagingData_ getCurrentPagingData(JSONObject lastPage) throws JSONException {
-            return PagingData.collectFromJson(lastPage, SubscriptionData.FieldsKeys.MULTIPLE_KEY);
-        }
-        
-    }  
-    
     protected abstract class ContactsReceiver implements ApiPagesReceiver<JSONObject> {
         
         protected boolean isContact = false;
         protected boolean isMutual = false;
         protected int received = 0;
-
+        
         @Override
         public void addSource(JSONObject page) throws Exception {
             final long subjectUserId = getSubjectUserId();
@@ -475,6 +455,6 @@ public class UserActivity extends SingleItemActivity<User> {
             return PagingData.collectFromJson(lastPage, Contact.FieldsKeys.MULTIPLE_KEY);
         }
         
-    }     
-
+    }    
+        
 }

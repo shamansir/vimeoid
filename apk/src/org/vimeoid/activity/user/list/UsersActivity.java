@@ -4,6 +4,7 @@ import net.londatiga.android.QuickAction;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.vimeoid.activity.base.ApiPagesReceiver;
 import org.vimeoid.activity.user.ApiTasksQueue;
 import org.vimeoid.activity.user.ItemsListActivity;
 import org.vimeoid.activity.user.ApiTaskInQueue.TaskListener;
@@ -16,10 +17,13 @@ import org.vimeoid.dto.advanced.Album;
 import org.vimeoid.dto.advanced.Channel;
 import org.vimeoid.dto.advanced.Contact;
 import org.vimeoid.dto.advanced.User;
+import org.vimeoid.dto.advanced.SubscriptionData.PeopleSubscriptionsReceiver;
+import org.vimeoid.dto.advanced.SubscriptionData.SubscriptionType;
 import org.vimeoid.util.ApiParams;
 import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
 
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
@@ -41,12 +45,14 @@ import android.view.View;
  */
 
 public class UsersActivity extends ItemsListActivity<User> implements UsersDataProvider {
+    
+    public static final String TAG = "UsersActivity";
 	
-	public static final String TAG = "UsersActivity";
-	
-	private final ApiTasksQueue infoTasksQueue;
+	private final ApiTasksQueue infoTasksQueue;	
+	private final ApiPagesReceiver<JSONObject> subscriptionsReceiver;
 	
 	public UsersActivity() {
+	    
 	    infoTasksQueue = new ApiTasksQueue() {
             
             @Override public void onError(Exception e, String message) {
@@ -56,6 +62,13 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
             }
             
         };
+        
+        subscriptionsReceiver = new PeopleSubscriptionsReceiver() {
+            @Override public void onComplete() {
+                ((UsersDataReceiver)getAdapter()).gotSubscriptionData(getListView(), getSubscriptions());
+            }
+        };
+        
 	}
     
     @Override
@@ -71,6 +84,14 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
     @Override
     protected void onItemSelected(User user) { 
         Invoke.User_.selectUser(this, user);
+    }
+    
+    @Override
+    protected void prepare(Bundle extras) {
+        secondaryTasks.addListTask(0, Methods.people.getSubscriptions, new ApiParams().add("types", 
+                SubscriptionType.list(new SubscriptionType[] { SubscriptionType.LIKES, SubscriptionType.UPLOADS, SubscriptionType.APPEARS })), 
+                                       subscriptionsReceiver, -1, 50);
+        // if not contacts activity, request for contacts
     }
     
     @Override
@@ -193,6 +214,6 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
 
         }.execute(new ApiParams().add("video_id", String.valueOf(video.id)));
         
-    } */    
-       
+    } */
+    
 }
