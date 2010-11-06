@@ -117,18 +117,16 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
     }
     
     protected int[] getRequiredMarkers(User user) {
-    	final Set<Integer> markers = new HashSet<Integer>();
-    	if ((user.isContact != null) && user.isContact) markers.add(R.drawable.contact_marker);
+        final int[] markers = new int[4];
+        markers[0] = ((user.isContact != null) && user.isContact) ? R.drawable.contact_marker : 0;
     	if (user.subscriptonsStatus != null) {
-    		if (user.subscriptonsStatus.contains(SubscriptionType.LIKES)) markers.add(R.drawable.like_marker);
-    		if (user.subscriptonsStatus.contains(SubscriptionType.UPLOADS)) markers.add(R.drawable.upload_marker);
-    		if (user.subscriptonsStatus.contains(SubscriptionType.APPEARS)) markers.add(R.drawable.appear_marker);
+            if (user.subscriptonsStatus.contains(SubscriptionType.UPLOADS)) markers[3] = R.drawable.upload_marker;    	    
+    		if (user.subscriptonsStatus.contains(SubscriptionType.LIKES))   markers[2] = R.drawable.like_marker;
+    		if (user.subscriptonsStatus.contains(SubscriptionType.APPEARS)) markers[1] = R.drawable.appear_marker;
+    	} else {
+    	    markers[1] = 0; markers[2] = 0; markers[3] = 0;   
     	}
-    	final int[] result = new int[markers.size()];
-    	int i = 0; for (Integer value: markers) { result[i] = value; i++; }
-    	/*String forLog = ""; for (int residx = 0; residx < result.length; residx++) forLog += (residx + ">" + result[residx] + ","); 
-    	Log.d(TAG, "contact:" + user.isContact + ";subscriptions:" + user.subscriptonsStatus + ";result:" + forLog); */
-        return result;
+        return markers;
     }
     
     protected void injectInfo(final ViewGroup holder, final int curPosition, final Boolean isStaff,
@@ -155,7 +153,8 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
         
         if (infoCount == 0) {
             holder.addView(layoutInflater.inflate(R.layout.no_tags_for_item, null));
-        }                
+        }
+        
     }
     
     @Override
@@ -213,11 +212,6 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
     
     @Override
     public void gotSubscriptionData(ListView holder, SubscriptionType type, Set<Long> values) {
-        //Log.d(TAG, "Got subscriptions data: " + subscriptions.toString());
-        /* for (SubscriptionType type: subscriptions.data.keySet()) {
-            Log.d(TAG, type.toString() + ":");            
-            for (Long id: subscriptions.data.get(type)) Log.d(TAG, " - " + id);
-        } */
         for (User user: getItems()) {      
             if (user.subscriptonsStatus == null) user.subscriptonsStatus = new HashSet<SubscriptionType>();
             if (values.contains(user.id)) user.subscriptonsStatus.add(type);

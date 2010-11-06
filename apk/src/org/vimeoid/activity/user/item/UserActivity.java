@@ -358,6 +358,8 @@ public class UserActivity extends SingleItemActivity<User> {
                                           ? R.drawable.subscribe
                                           : R.drawable.subscribe_not;
                         
+                        actionItem.invalidate();
+                        
                     }
 
                     @Override
