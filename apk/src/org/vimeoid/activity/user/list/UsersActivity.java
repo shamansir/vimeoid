@@ -16,8 +16,9 @@ import org.vimeoid.connection.advanced.Methods;
 import org.vimeoid.dto.advanced.Album;
 import org.vimeoid.dto.advanced.Channel;
 import org.vimeoid.dto.advanced.Contact;
+import org.vimeoid.dto.advanced.SubscriptionData;
 import org.vimeoid.dto.advanced.User;
-import org.vimeoid.dto.advanced.SubscriptionData.PeopleSubscriptionsReceiver;
+import org.vimeoid.dto.advanced.SubscriptionData.SubscriptionsReceiver;
 import org.vimeoid.dto.advanced.SubscriptionData.SubscriptionType;
 import org.vimeoid.util.ApiParams;
 import org.vimeoid.util.Dialogs;
@@ -51,6 +52,8 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
 	private final ApiTasksQueue infoTasksQueue;	
 	private final ApiPagesReceiver<JSONObject> subscriptionsReceiver;
 	
+	private boolean gotSubscriptionsData = false;
+	
 	public UsersActivity() {
 	    
 	    infoTasksQueue = new ApiTasksQueue() {
@@ -63,9 +66,11 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
             
         };
         
-        subscriptionsReceiver = new PeopleSubscriptionsReceiver() {
-            @Override public void onComplete() {
+        subscriptionsReceiver = new SubscriptionsReceiver(SubscriptionData.FieldsKeys.MULTIPLE_KEY) {
+            @Override public void onComplete() {                
+                gotSubscriptionsData = true;
                 ((UsersDataReceiver)getAdapter()).gotSubscriptionData(getListView(), getSubscriptions());
+                runInfoTasksIfNotStarted(); // this done to make no conflicts between http-connections
             }
         };
         
@@ -182,11 +187,15 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
                  }
                  
              });
-        if (!infoTasksQueue.started() && !infoTasksQueue.isEmpty()) {
-        	Log.d(TAG, "requestData: tasks are ready, queue is not started, will run it");
-        	new Thread(infoTasksQueue, "Load secondary data").start();
-        }
+        runInfoTasksIfNotStarted();
     };
+    
+    private void runInfoTasksIfNotStarted() {
+        if (gotSubscriptionsData && !infoTasksQueue.started() && !infoTasksQueue.isEmpty()) {
+            Log.d(TAG, "requestData: tasks are ready, queue is not started, will run it");
+            new Thread(infoTasksQueue, "Load secondary data").start();
+        }        
+    }
         
     /* private void switchWatchLaterStatus(final int position, final Video video, final QActionItem item) {
         final Resources resources = getResources();

@@ -24,7 +24,7 @@ import org.vimeoid.dto.advanced.PortraitsData;
 import org.vimeoid.dto.advanced.SubscriptionData;
 import org.vimeoid.dto.advanced.User;
 import org.vimeoid.dto.advanced.SubscriptionData.SubscriptionType;
-import org.vimeoid.dto.advanced.SubscriptionData.PeopleSubscriptionsReceiver;
+import org.vimeoid.dto.advanced.SubscriptionData.SubscriptionsReceiver;
 import org.vimeoid.util.ApiParams;
 import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
@@ -82,7 +82,8 @@ public class UserActivity extends SingleItemActivity<User> {
     public UserActivity() {
         super(R.layout.view_single_user);
         
-        subscriptionsReceiver = new PeopleSubscriptionsReceiver() {
+        subscriptionsReceiver = new SubscriptionsReceiver(Contact.FieldsKeys.MULTIPLE_KEY) {
+            
             @Override public void onComplete() {
                 final long subjectUserId = getSubjectUserId();
                 final SubscriptionData subscriptions = getSubscriptions();

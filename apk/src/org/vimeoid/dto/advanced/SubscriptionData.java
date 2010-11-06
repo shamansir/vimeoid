@@ -110,15 +110,21 @@ public class SubscriptionData {
         }
     }
     
-    public static abstract class PeopleSubscriptionsReceiver implements ApiPagesReceiver<JSONObject> {
+    public static abstract class SubscriptionsReceiver implements ApiPagesReceiver<JSONObject> {
+        
+        private final String rootKey;
         
         private final SubscriptionData subscriptions = new SubscriptionData();
         private int received = 0;
+        
+        public SubscriptionsReceiver(final String rootKey) {
+            this.rootKey = rootKey;
+        }
 
         @Override
         public void addSource(JSONObject page) throws Exception {
             received += 
-                page.getJSONObject(Contact.FieldsKeys.MULTIPLE_KEY)
+                page.getJSONObject(rootKey)
                     .getInt(PagingData.FieldsKeys.ON_THIS_PAGE);
             passTo(page, subscriptions);
         }
