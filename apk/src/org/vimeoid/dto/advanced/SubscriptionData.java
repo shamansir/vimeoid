@@ -30,7 +30,7 @@ import org.vimeoid.util.PagingData_;
  */
 public class SubscriptionData {
     
-    public Map<SubscriptionType, Set<Long>> data;    
+    public final Map<SubscriptionType, Set<Long>> data;    
     
     public enum SubscriptionType { LIKES, UPLOADS, APPEARS, CHANNEL, GROUP;
 
@@ -54,6 +54,14 @@ public class SubscriptionData {
             }
             return buffer.toString();
         }
+        
+        public static String list(Set<SubscriptionType> types) {
+            final StringBuffer buffer = new StringBuffer();
+            for (SubscriptionType type: types) {
+                buffer.append(type.toString()).append(',');
+            }
+            return buffer.toString();
+        }        
 
         public static String[] toArray(Set<SubscriptionType> subscriptonsStatus) {
             if (subscriptonsStatus == null) return new String[0];
@@ -90,6 +98,17 @@ public class SubscriptionData {
         for (SubscriptionType type: SubscriptionType.values()) {
             data.put(type, new HashSet<Long>());
         }
+    }
+    
+    @Override
+    public String toString() {
+        final StringBuffer result = new StringBuffer();
+        for (SubscriptionType type: data.keySet()) {
+            result.append(type.toString()).append(':');
+            for (Long id: data.get(type)) result.append(id).append(',');
+            result.append(';');
+        }
+        return result.toString();
     }
     
     public static SubscriptionData collectFromJson(JSONObject page) throws JSONException {

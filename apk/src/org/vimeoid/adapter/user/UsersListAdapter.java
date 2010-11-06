@@ -11,7 +11,6 @@ import org.json.JSONObject;
 import org.vimeoid.R;
 import org.vimeoid.adapter.JsonObjectsAdapter;
 import org.vimeoid.adapter.TagsSupport;
-import org.vimeoid.dto.advanced.SubscriptionData;
 import org.vimeoid.dto.advanced.User;
 import org.vimeoid.dto.advanced.SubscriptionData.SubscriptionType;
 import org.vimeoid.util.Utils;
@@ -126,7 +125,9 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
     		if (user.subscriptonsStatus.contains(SubscriptionType.APPEARS)) markers.add(R.drawable.appear_marker);
     	}
     	final int[] result = new int[markers.size()];
-    	int i = 0; for (Integer value: markers) { result[i] = value; i++; } 
+    	int i = 0; for (Integer value: markers) { result[i] = value; i++; }
+    	/*String forLog = ""; for (int residx = 0; residx < result.length; residx++) forLog += (residx + ">" + result[residx] + ","); 
+    	Log.d(TAG, "contact:" + user.isContact + ";subscriptions:" + user.subscriptonsStatus + ";result:" + forLog); */
         return result;
     }
     
@@ -211,13 +212,16 @@ public class UsersListAdapter extends JsonObjectsAdapter<User> implements UsersD
     }
     
     @Override
-    public void gotSubscriptionData(ListView holder, SubscriptionData subscriptions) {
-        for (User user: getItems()) {
-            final Set<SubscriptionType> set = new HashSet<SubscriptionType>();
-            if (subscriptions.data.get(SubscriptionType.UPLOADS).contains(user.id)) set.add(SubscriptionType.UPLOADS);
-            if (subscriptions.data.get(SubscriptionType.LIKES).contains(user.id)) set.add(SubscriptionType.LIKES);
-            if (subscriptions.data.get(SubscriptionType.APPEARS).contains(user.id)) set.add(SubscriptionType.APPEARS);
-            user.subscriptonsStatus = set;
+    public void gotSubscriptionData(ListView holder, SubscriptionType type, Set<Long> values) {
+        //Log.d(TAG, "Got subscriptions data: " + subscriptions.toString());
+        /* for (SubscriptionType type: subscriptions.data.keySet()) {
+            Log.d(TAG, type.toString() + ":");            
+            for (Long id: subscriptions.data.get(type)) Log.d(TAG, " - " + id);
+        } */
+        for (User user: getItems()) {      
+            if (user.subscriptonsStatus == null) user.subscriptonsStatus = new HashSet<SubscriptionType>();
+            if (values.contains(user.id)) user.subscriptonsStatus.add(type);
+            else user.subscriptonsStatus.remove(type);
         }
         holder.invalidateViews();
     }    

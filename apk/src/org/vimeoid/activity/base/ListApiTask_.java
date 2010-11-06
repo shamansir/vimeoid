@@ -151,6 +151,7 @@ public abstract class ListApiTask_<Params, Result> extends ApiTask_<Params, Resu
     @Override
     protected void onAnyError(Exception e, String message) {
         Log.e(TAG, message + " / " + ((e != null) ? e.getLocalizedMessage() : "?"));
+        e.printStackTrace();
         if (reactor != null) reactor.onError(e, message);
     }
     

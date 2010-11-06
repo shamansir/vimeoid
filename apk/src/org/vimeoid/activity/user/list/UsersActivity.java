@@ -48,11 +48,18 @@ import android.view.View;
 public class UsersActivity extends ItemsListActivity<User> implements UsersDataProvider {
     
     public static final String TAG = "UsersActivity";
+    
+    protected static final int SUBSCR_LIKES_TASK = 1;
+    protected static final int SUBSCR_UPLOADS_TASK = 2;
+    protected static final int SUBSCR_APPEARS_TASK = 3;
 	
-	private final ApiTasksQueue infoTasksQueue;	
-	private final ApiPagesReceiver<JSONObject> subscriptionsReceiver;
+	private final ApiTasksQueue infoTasksQueue;
 	
-	private boolean gotSubscriptionsData = false;
+	private final ApiPagesReceiver<JSONObject> likesSubsReceiver;
+	private final ApiPagesReceiver<JSONObject> uploadsSubsReceiver;
+	private final ApiPagesReceiver<JSONObject> appearsSubsReceiver;
+	
+	private int subscrTasksPerformed = 0;
 	
 	public UsersActivity() {
 	    
@@ -66,10 +73,32 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
             
         };
         
-        subscriptionsReceiver = new SubscriptionsReceiver(SubscriptionData.FieldsKeys.MULTIPLE_KEY) {
+        likesSubsReceiver = new SubscriptionsReceiver(SubscriptionData.FieldsKeys.MULTIPLE_KEY) {
             @Override public void onComplete() {                
-                gotSubscriptionsData = true;
-                ((UsersDataReceiver)getAdapter()).gotSubscriptionData(getListView(), getSubscriptions());
+                ((UsersDataReceiver)getAdapter()).gotSubscriptionData(getListView(),
+                                                                      SubscriptionType.LIKES,
+                                                                      getSubscriptions().data.get(SubscriptionType.LIKES));
+                subscrTasksPerformed++;                
+                runInfoTasksIfNotStarted(); // this done to make no conflicts between http-connections
+            }
+        };
+        
+        uploadsSubsReceiver = new SubscriptionsReceiver(SubscriptionData.FieldsKeys.MULTIPLE_KEY) {
+            @Override public void onComplete() {                
+                ((UsersDataReceiver)getAdapter()).gotSubscriptionData(getListView(),
+                                                                      SubscriptionType.UPLOADS,
+                                                                      getSubscriptions().data.get(SubscriptionType.UPLOADS));
+                subscrTasksPerformed++;                
+                runInfoTasksIfNotStarted(); // this done to make no conflicts between http-connections
+            }
+        };
+        
+        appearsSubsReceiver = new SubscriptionsReceiver(SubscriptionData.FieldsKeys.MULTIPLE_KEY) {
+            @Override public void onComplete() {                
+                ((UsersDataReceiver)getAdapter()).gotSubscriptionData(getListView(),
+                                                                      SubscriptionType.APPEARS,
+                                                                      getSubscriptions().data.get(SubscriptionType.APPEARS));
+                subscrTasksPerformed++;                
                 runInfoTasksIfNotStarted(); // this done to make no conflicts between http-connections
             }
         };
@@ -93,9 +122,15 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
     
     @Override
     protected void prepare(Bundle extras) {
-        secondaryTasks.addListTask(0, Methods.people.getSubscriptions, new ApiParams().add("types", 
-                SubscriptionType.list(new SubscriptionType[] { SubscriptionType.LIKES, SubscriptionType.UPLOADS, SubscriptionType.APPEARS })), 
-                                       subscriptionsReceiver, -1, 50);
+        secondaryTasks.addListTask(SUBSCR_LIKES_TASK, Methods.people.getSubscriptions, 
+                                                      new ApiParams().add("types", SubscriptionType.LIKES.toString()), 
+                                                      likesSubsReceiver, -1, 50);
+        secondaryTasks.addListTask(SUBSCR_UPLOADS_TASK, Methods.people.getSubscriptions, 
+                                                        new ApiParams().add("types", SubscriptionType.UPLOADS.toString()), 
+                                                        uploadsSubsReceiver, -1, 50);
+        secondaryTasks.addListTask(SUBSCR_APPEARS_TASK, Methods.people.getSubscriptions, 
+                                                        new ApiParams().add("types", SubscriptionType.APPEARS.toString()), 
+                                                        appearsSubsReceiver, -1, 50);
         // if not contacts activity, request for contacts
     }
     
@@ -191,7 +226,7 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
     };
     
     private void runInfoTasksIfNotStarted() {
-        if (gotSubscriptionsData && !infoTasksQueue.started() && !infoTasksQueue.isEmpty()) {
+        if ((3 == subscrTasksPerformed) && !infoTasksQueue.started() && !infoTasksQueue.isEmpty()) {
             Log.d(TAG, "requestData: tasks are ready, queue is not started, will run it");
             new Thread(infoTasksQueue, "Load secondary data").start();
         }        

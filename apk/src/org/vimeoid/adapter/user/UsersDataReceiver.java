@@ -3,7 +3,9 @@
  */
 package org.vimeoid.adapter.user;
 
-import org.vimeoid.dto.advanced.SubscriptionData;
+import java.util.Set;
+
+import org.vimeoid.dto.advanced.SubscriptionData.SubscriptionType;
 
 import android.widget.ListView;
 
@@ -27,6 +29,6 @@ public interface UsersDataReceiver {
                                 long videosCount, long contactsCount);
     public void gotChannelsCount(ListView holder, int position, long channelsCount);
     public void gotAlbumsCount(ListView holder, int position, long albumsCount);
-    public void gotSubscriptionData(ListView holder, SubscriptionData subscriptions);
+    public void gotSubscriptionData(ListView holder, SubscriptionType type, Set<Long> values);
 
 }
