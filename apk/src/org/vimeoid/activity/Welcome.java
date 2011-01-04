@@ -61,9 +61,10 @@ public class Welcome extends Activity {
         
         //VimeoApi.forgetCredentials(this); // for testing
         
-        if (VimeoApi.weKnowUser(this)) {
+        // This does automatic login
+        /* if (VimeoApi.weKnowUser(this)) {
             tryToEnterAsUser();
-        } else {
+        } else { */
             
             final Button enterButton = (Button) findViewById(R.id.enterButton);
             enterButton.setOnClickListener(new OnClickListener() {
@@ -80,7 +81,7 @@ public class Welcome extends Activity {
                 
             });
             
-        }
+        // }
         
     }
     

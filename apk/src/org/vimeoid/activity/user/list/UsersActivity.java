@@ -63,6 +63,7 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
 	
 	public UsersActivity() {
 	    
+	    // FIXME: Join two queues instead of trying to synchronize them
 	    infoTasksQueue = new ApiTasksQueue() {
             
             @Override public void onError(Exception e, String message) {
@@ -184,8 +185,7 @@ public class UsersActivity extends ItemsListActivity<User> implements UsersDataP
                            new TaskListener() {
                             
                             @Override
-                            public void onPerformed(JSONObject jsonObj) throws JSONException {
-                            	
+                            public void onPerformed(JSONObject jsonObj) throws JSONException {                            	
                                 final JSONObject userObj = jsonObj.getJSONObject(User.FieldsKeys.SINGLE_KEY);
                                 receiver.gotPersonalInfo(getListView(), position,
                                                          userObj.getString(User.FieldsKeys.LOCATION), 

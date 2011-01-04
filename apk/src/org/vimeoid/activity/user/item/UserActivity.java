@@ -261,7 +261,6 @@ public class UserActivity extends SingleItemActivity<User> {
          
         if (currentUserId != subjectUserId) {
         	
-        	
             int operationsSection = actionsAdapter.addSection(getString(R.string.operations));
             
             // subscribe
