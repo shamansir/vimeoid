@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.vimeoid.adapter;
 
 import java.util.LinkedList;

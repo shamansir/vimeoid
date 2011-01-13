@@ -87,6 +87,7 @@ public abstract class SingleItemActivity<ItemType extends AdvancedItem> extends 
     
     protected abstract ItemType extractFromJson(JSONObject jsonObj) throws JSONException;
     
+    @Override
     protected void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon) {
         subjectIcon.setImageResource(getIntent().getIntExtra(Invoke.Extras.SUBJ_ICON, R.drawable.info));
         subjectTitle.setText(getIntent().hasExtra(Invoke.Extras.SUBJ_TITLE) 

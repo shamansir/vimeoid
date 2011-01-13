@@ -77,37 +77,36 @@ public class VideoActivity extends SingleItemActivity<Video> {
     	int statsSection = actionsAdapter.addSection(getString(R.string.statistics));
     	// tags
     	if (video.tags.length > 0) actionsAdapter.addAction(statsSection, R.drawable.tag, 
-    							 Utils.format(getString(R.string.tags_are), "list",
-    										 Utils.adaptTags(video.tags, getString(R.string.none_of_tags))));
+    							 getString(R.string.tags_are,
+    									   Utils.adaptTags(video.tags, getString(R.string.none_of_tags))));
     	// number of plays
     	actionsAdapter.addAction(statsSection, R.drawable.play, 
-    			                 Utils.format(getString(R.string.num_of_plays), "num", String.valueOf(video.playsCount)));
+    			                 getQString(R.plurals.num_of_plays, (int)video.playsCount));
     	// number of likes
     	actionsAdapter.addAction(statsSection, R.drawable.like, 
-    			                 Utils.format(getString(R.string.num_of_likes), "num", String.valueOf(video.likesCount)));
+    			                 getQString(R.plurals.num_of_likes, (int)video.likesCount));
     	// number of comments
     	actionsAdapter.addAction(statsSection, R.drawable.comment_video, 
-    			                 Utils.format(getString(R.string.num_of_comments), "num", String.valueOf(video.commentsCount)));
+    			                 getQString(R.plurals.num_of_comments, (int)video.commentsCount));
     	
     	
     	// Information section
     	int infoSection = actionsAdapter.addSection(getString(R.string.information));
     	// duration
     	actionsAdapter.addAction(infoSection, R.drawable.duration,
-			     				 Utils.format(getString(R.string.duration_is), "time", Utils.adaptDuration(video.duration)));    	
+			     				 getString(R.string.duration_is, Utils.adaptDuration(video.duration)));    	
     	// uploader
     	final LActionItem userAction = actionsAdapter.addAction(infoSection, R.drawable.contact, 
-    			                 Utils.format(getString(R.string.uploaded_by), "name", video.uploaderName));
+    			                 getString(R.string.uploaded_by, video.uploaderName));
     	userAction.onClick =  new OnClickListener() {
     		@Override public void onClick(View v) { Invoke.Guest.selectUploader(VideoActivity.this, video); };
 		};
 		// uploaded on
     	actionsAdapter.addAction(infoSection, R.drawable.upload,
-    							 Utils.format(getString(R.string.uploaded_on), "time", video.uploadedOn));
+    							 getString(R.string.uploaded_on, video.uploadedOn));
     	// dimensions
     	actionsAdapter.addAction(infoSection, R.drawable.dimensions,
-    						     Utils.format(getString(R.string.dimensions_are), "width", String.valueOf(video.width),
-    						    		                                          "height", String.valueOf(video.height)));
+    						     getString(R.string.dimensions_are, video.width, video.height));
     	return actionsAdapter;
     	
     }

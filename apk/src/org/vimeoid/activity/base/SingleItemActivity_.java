@@ -90,7 +90,7 @@ public abstract class SingleItemActivity_<ItemType> extends Activity {
         final SectionedActionsAdapter actionsAdapter = new SectionedActionsAdapter(this, getLayoutInflater(), imageLoader);
         actionsList.setAdapter(fillWithActions(actionsAdapter, item));
         actionsList.setOnItemClickListener(actionsAdapter);
-        actionsList.invalidate();        
+        actionsList.invalidate();
     }
     
     protected final ListView getActionsList() {
@@ -108,5 +108,9 @@ public abstract class SingleItemActivity_<ItemType> extends Activity {
     public final void setProgressBarVisibile(boolean value) {
         progressBar.setVisibility(value ? View.VISIBLE : View.GONE);
     }    
+    
+    public final String getQString(int resId, int quantity) {
+        return getResources().getQuantityString(resId, quantity);
+    }
     
 }

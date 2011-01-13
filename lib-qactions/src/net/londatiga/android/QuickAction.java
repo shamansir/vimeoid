@@ -24,6 +24,7 @@ import net.londatiga.android.QActionItem.QActionClickListener;
  * @author Lorensius. W. T
  */
 public class QuickAction extends CustomPopupWindow {
+    
 	private final View root;
 	private final ImageView mArrowUp;
 	private final ImageView mArrowDown;

@@ -79,6 +79,7 @@ public abstract class ListApiTask_<Params, Result> extends ApiTask_<Params, Resu
         if (reactor != null) reactor.beforeRequest();
     }
     
+    @Override
     protected final Params prepareParams(Params... params) {
         curParams = paramsForPage(super.prepareParams(params), curPage, perPage);
         return curParams;

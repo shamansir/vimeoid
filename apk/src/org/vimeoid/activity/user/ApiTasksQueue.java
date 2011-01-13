@@ -118,10 +118,12 @@ public abstract class ApiTasksQueue implements SuccessiveApiTasksSupport, Runnab
         task.execute(tasksParams.get(task.getId())).get();
     }
     
+    @Override
     public boolean started() {
         return started;
     }
-    
+
+    @Override    
     public boolean running() {
         return running;
     }
@@ -130,6 +132,7 @@ public abstract class ApiTasksQueue implements SuccessiveApiTasksSupport, Runnab
         return size;
     }
     
+    @Override    
     public void finish() {
         firstTask = null;
         lastTask = null;

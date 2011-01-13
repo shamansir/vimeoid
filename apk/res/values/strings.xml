@@ -10,7 +10,7 @@
     <string name="unknown_item">Unknown item</string>
     <string name="caching_video">Loading video...</string>    
     <string name="currently_not_supported">This action is not supported currently</string>
-    <string name="no_space_for_video_cache">There is no free space to make cache of this file. Required: {required}KB | Actual: {actual}KB </string>
+    <string name="no_space_for_video_cache">There is no free space to make cache of this file. Required: %1$dKB | Actual: %2$dKB </string>
     <string name="failed_to_get_video_stream">Failed to get video stream (No mobile version of video)</string>
     <!-- main menu -->
     <string name="refresh">Refresh</string>
@@ -23,7 +23,7 @@
     <string name="no_items_in_list">No items</string>
     <!-- context menus -->
     <string name="context_menu">Context menu</string>
-    <string name="video_is">Video {title}</string>
+    <string name="video_is">Video %s</string>
     <string name="view_video_info">View info</string>
     <string name="view_author_info">View author info</string>
     <string name="view_channel_info">View info</string>    
@@ -67,33 +67,62 @@
     <string name="added_contact">Added contact</string>
     <string name="removed_contact">Removed contact</string>
     <!-- video page -->
-    <string name="num_of_plays">{num} plays</string>
-    <string name="num_of_likes">{num} likes</string>
-    <string name="num_of_comments">{num} comments</string>
-    <string name="uploaded_by">{name}</string>
-    <string name="uploaded_on">{time}</string>    
-    <string name="tags_are">{list}</string>
+    <plurals name="num_of_plays">
+        <item quantity="one">1 play</item>
+        <item quantity="other">%d plays</item>
+    </plurals>
+    <plurals name="num_of_likes">
+        <item quantity="one">1 like</item>
+        <item quantity="other">%d likes</item>
+    </plurals>
+    <plurals name="num_of_comments">
+        <item quantity="one">1 comment</item>
+        <item quantity="other">%d comments</item>
+    </plurals>
+    <string name="uploaded_by">%s</string>
+    <string name="uploaded_on">%s</string>
     <string name="none_of_tags">[none]</string>
-    <string name="dimensions_are">{width}x{height}</string>
-    <string name="duration_is">{time}</string>    
+    <string name="tags_are">%s</string>
+    <string name="dimensions_are">%1$dx%2$d</string>
+    <string name="duration_is">%s</string>    
     <string name="no_description_supplied">[No description supplied]</string>    
     <!-- user page -->
-    <string name="num_of_videos">{num} videos</string>
-    <string name="num_of_albums">{num} albums</string>
-    <string name="num_of_channels">{num} channels</string>
-    <string name="num_of_contacts">{num} contacts</string>
-    <string name="num_of_appearances">Appears in {num} videos</string>
+    <plurals name="num_of_videos">
+        <item quantity="one">1 video</item>
+        <item quantity="other">%d videos</item>
+    </plurals>
+    <string name="num_of_albums_unknown">\? videos</string>
+    <plurals name="num_of_albums">
+        <item quantity="one">1 album</item>
+        <item quantity="other">%d albums</item>
+    </plurals>
+    <string name="num_of_channels_unknown">\? channels</string>
+    <plurals name="num_of_channels">
+        <item quantity="one">1 channel</item>
+        <item quantity="other">%d channels</item>
+    </plurals>
+    <plurals name="num_of_contacts">
+        <item quantity="one">1 contact</item>
+        <item quantity="other">%d contacts</item>
+    </plurals>
+    <plurals name="num_of_appearances">
+        <item quantity="one">Appears in 1 video</item>
+        <item quantity="other">Appears in %d videos</item>
+    </plurals>
     <string name="user_from_staff">Staff member</string>
     <string name="user_is_plus_member">Plus member</string>
-    <string name="subscriptions">Subsriptions</string>    
-    <string name="location_is">{place}</string>
-    <string name="created_on">{time}</string>    
+    <string name="subscriptions">Subscriptions</string>    
+    <string name="location_is">%s</string>
+    <string name="created_on">%s</string>    
     <string name="no_biography_supplied">[No biography supplied]</string>    
-    <!-- channel page -->    
-    <string name="num_of_subscribers">{num} subscribers</string>
-    <string name="created_by">{name}</string>
+    <!-- channel page -->
+    <plurals name="num_of_subscribers">
+        <item quantity="one">1 subscriber</item>
+        <item quantity="other">%d subscribers</item>
+    </plurals>
+    <string name="created_by">%s</string>
     <!-- album page -->
-    <string name="updated_on">{time}</string>
+    <string name="updated_on">%s</string>
     <!-- users page -->
     <string name="staff_caps">STAFF</string>
     <string name="plus_caps">PLUS</string>

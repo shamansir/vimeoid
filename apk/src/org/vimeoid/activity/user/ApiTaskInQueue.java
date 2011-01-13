@@ -61,8 +61,9 @@ public class ApiTaskInQueue extends ApiTask implements IApiTaskWithNextTask {
         performer.onPerfomed(taskId, jsonObj);
     }
     
-    public int getId() { return taskId; }
+    @Override public int getId() { return taskId; }
     
+    @Override 
     public void setNextTask(IApiTaskWithNextTask nextTask) {
         if (this.nextTask != null) throw new IllegalStateException("Next task is already set");
         this.nextTask = nextTask;

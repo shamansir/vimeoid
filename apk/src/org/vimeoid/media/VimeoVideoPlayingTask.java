@@ -11,9 +11,10 @@ import java.io.InputStream;
 
 import org.vimeoid.R;
 import org.vimeoid.connection.FailedToGetVideoStreamException;
-import org.vimeoid.connection.VideoLinkRequestException;
+import org.vimeoid.connection.VideoStreamRequestException;
 import org.vimeoid.connection.VimeoVideoStreamer;
 import org.vimeoid.util.Utils;
+import org.vimeoid.util.Utils.VideoQuality;
 
 import android.content.Context;
 import android.media.AudioManager;
@@ -92,7 +93,13 @@ public class VimeoVideoPlayingTask extends AsyncTask<Long, Long, FileInputStream
 		final long videoId = params[0];
 		
 		try {
-			InputStream videoStream = VimeoVideoStreamer.getVideoStream(videoId);
+		    InputStream videoStream = null;
+			try {
+			    videoStream = VimeoVideoStreamer.getVideoStream(videoId, VideoQuality.MOBILE);
+			} catch (FailedToGetVideoStreamException ftgvse) {
+			    videoStream = VimeoVideoStreamer.getVideoStream(videoId, VideoQuality.SD);
+			}
+			
 			if (videoStream == null) {
 				Log.e(TAG, "The returned video stream is null, so I will not play anything :(");
 				return null;
@@ -102,10 +109,10 @@ public class VimeoVideoPlayingTask extends AsyncTask<Long, Long, FileInputStream
 			
 			Log.d(TAG, "Starting the media thread");
 			
-			File streamFile = File.createTempFile(STREAM_FILE_NAME, ".dat", cacheDir);
+			final File streamFile = File.createTempFile(STREAM_FILE_NAME, ".dat", cacheDir);
 			streamFile.deleteOnExit();
 
-			FileOutputStream out = new FileOutputStream(streamFile);
+			final FileOutputStream out = new FileOutputStream(streamFile);
 			byte buf[] = new byte[COPY_CHUNK_SIZE];
 				 
 			Log.i(TAG, "Now we will write stream to file");
@@ -127,7 +134,7 @@ public class VimeoVideoPlayingTask extends AsyncTask<Long, Long, FileInputStream
 			onNoSpaceForVideoCache(nsfvce.getRequiredSpace(), nsfvce.getActualSpace());
 		} catch (FailedToGetVideoStreamException ftgvse) {
 		    onFailedToGetVideoStream();
-		} catch (VideoLinkRequestException vle) { onException(vle); }
+		} catch (VideoStreamRequestException vle) { onException(vle); }
 	      catch (IOException ioe) { onException(ioe); }
 	      /* finally {
 	    	  videoStream.close();

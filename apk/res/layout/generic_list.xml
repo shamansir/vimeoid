@@ -12,7 +12,7 @@
 		          android:layout_height="fill_parent"
 		          android:transcriptMode="disabled"
 		          android:divider="#f333"
-		          android:dividerHeight="1dp"
+		          android:dividerHeight="1dp"		          
 		          android:listSelector="@drawable/selector_bg"
 		          android:fastScrollEnabled="true" />
         <include android:id="@+id/progressBar"

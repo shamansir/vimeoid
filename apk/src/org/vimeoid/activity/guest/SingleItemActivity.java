@@ -57,6 +57,7 @@ public abstract class SingleItemActivity<ItemType extends SimpleItem> extends Si
     
     protected abstract ItemType extractFromCursor(Cursor cursor, int position);    
     
+    @Override
     protected void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon) {
         callInfo = VimeoProvider.collectCallInfo(contentUri);        
         

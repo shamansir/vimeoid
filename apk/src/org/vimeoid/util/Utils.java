@@ -48,6 +48,8 @@ public class Utils {
 	
 	public static final String CACHE_DIR_NAME = "__vimeo_v_cache";
 	
+	public enum VideoQuality { MOBILE, SD, HD };
+	
 	private static File cacheDir = null;
 	private static boolean cacheDirCreated = false;
 	
@@ -78,14 +80,14 @@ public class Utils {
                               .add(name4, value4);
     }
     
-    public static String format(String source, String... params) {
+    /* public static String format(String source, String... params) {
         String result = source;
         int pos = 0;
         while (pos < params.length) {
             result = result.replaceAll("\\{" + params[pos++] + "\\}", params[pos++]);
         }
         return result;
-    }
+    } */
     
     public static String adaptDuration(long duration) {
     	final long remainder = duration % 60; 

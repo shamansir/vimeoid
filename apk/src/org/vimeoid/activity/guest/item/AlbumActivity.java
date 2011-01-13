@@ -9,7 +9,6 @@ import org.vimeoid.adapter.LActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.dto.simple.Album;
 import org.vimeoid.util.Invoke;
-import org.vimeoid.util.Utils;
 
 import android.database.Cursor;
 import android.text.Html;
@@ -63,7 +62,7 @@ public class AlbumActivity extends SingleItemActivity<Album> {
     	int statsSection = actionsAdapter.addSection(getString(R.string.statistics));
     	// number of videos
     	final LActionItem videoAction = actionsAdapter.addAction(statsSection, R.drawable.video, 
-    			          Utils.format(getString(R.string.num_of_videos), "num", String.valueOf(album.videosCount)));
+    			                        getQString(R.plurals.num_of_videos, (int)album.videosCount));
     	if (album.videosCount > 0) {
     	    videoAction.onClick =  new OnClickListener() {
                 @Override public void onClick(View v) { Invoke.Guest.selectAlbumContent(AlbumActivity.this, album); };
@@ -74,13 +73,13 @@ public class AlbumActivity extends SingleItemActivity<Album> {
     	int infoSection = actionsAdapter.addSection(getString(R.string.information));
         // creator
         final LActionItem userAction = actionsAdapter.addAction(infoSection, R.drawable.contact, 
-                                 Utils.format(getString(R.string.uploaded_by), "name", album.creatorDisplayName));
+                                       getString(R.string.uploaded_by, album.creatorDisplayName));
         userAction.onClick =  new OnClickListener() {
             @Override public void onClick(View v) { Invoke.Guest.selectCreator(AlbumActivity.this, album); };
         };    	
     	// updated on
     	actionsAdapter.addAction(infoSection, R.drawable.duration,
-			     				 Utils.format(getString(R.string.updated_on), "time", album.lastModifiedOn));
+			     				 getString(R.string.updated_on, album.lastModifiedOn));
     	return actionsAdapter;
     	
     }

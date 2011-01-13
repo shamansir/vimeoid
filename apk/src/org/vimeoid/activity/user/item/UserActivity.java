@@ -29,7 +29,6 @@ import org.vimeoid.util.ApiParams;
 import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
 import org.vimeoid.util.PagingData_;
-import org.vimeoid.util.Utils;
 
 import android.os.Bundle;
 import android.text.Html;
@@ -176,7 +175,7 @@ public class UserActivity extends SingleItemActivity<User> {
         int statsSection = actionsAdapter.addSection(getString(R.string.statistics));
         // number of videos
         final LActionItem videoAction = actionsAdapter.addAction(statsSection, R.drawable.video, 
-                                 Utils.format(getString(R.string.num_of_videos), "num", String.valueOf(user.videosCount)));
+                                        getQString(R.plurals.num_of_videos, (int)user.videosCount));
         if (user.videosCount > 0) {
             videoAction.onClick =  new OnClickListener() {
                 @Override public void onClick(View v) { Invoke.User_.selectVideosBy(UserActivity.this, user); };
@@ -184,7 +183,7 @@ public class UserActivity extends SingleItemActivity<User> {
         }
         // number of albums
         albumAction = actionsAdapter.addAction(statsSection, R.drawable.album, 
-                      Utils.format(getString(R.string.num_of_albums), "num", "?"));
+                                     getString(R.string.num_of_albums_unknown));
         albumAction.onClick =  new OnClickListener() {
             @Override public void onClick(View v) { 
                 Invoke.User_.selectAlbumsOf(UserActivity.this, user);
@@ -192,13 +191,13 @@ public class UserActivity extends SingleItemActivity<User> {
         };
         // number of channels
         channelAction = actionsAdapter.addAction(statsSection, R.drawable.channel, 
-                        Utils.format(getString(R.string.num_of_channels), "num", "?"));
+                                       getString(R.string.num_of_channels_unknown));
         channelAction.onClick =  new OnClickListener() {
                 @Override public void onClick(View v) { Invoke.User_.selectChannelsOf(UserActivity.this, user); };
         };
         // number of contacts
         final LActionItem contactAction = actionsAdapter.addAction(statsSection, R.drawable.contact, 
-                        Utils.format(getString(R.string.num_of_contacts), "num", String.valueOf(user.contactsCount)));
+                                          getQString(R.plurals.num_of_contacts, (int)user.contactsCount));
         if (user.contactsCount > 0) {
             contactAction.onClick =  new OnClickListener() {
                 @Override public void onClick(View v) { Invoke.User_.selectContactsOf(UserActivity.this, user); };
@@ -206,7 +205,7 @@ public class UserActivity extends SingleItemActivity<User> {
         }
         // number of appearances
         final LActionItem appearanceAction = actionsAdapter.addAction(statsSection, R.drawable.appearance, 
-                        Utils.format(getString(R.string.num_of_appearances), "num", String.valueOf(user.videosAppearsIn)));
+                                             getQString(R.plurals.num_of_appearances, (int)user.videosAppearsIn));
         if (user.videosAppearsIn > 0) {
             appearanceAction.onClick =  new OnClickListener() {
                 @Override public void onClick(View v) { Invoke.User_.selectApperancesOf(UserActivity.this, user); };
@@ -214,7 +213,7 @@ public class UserActivity extends SingleItemActivity<User> {
         }
         // number of likes
         final LActionItem likeAction = actionsAdapter.addAction(statsSection, R.drawable.like, 
-                        Utils.format(getString(R.string.num_of_likes), "num", String.valueOf(user.videosLiked)));
+                                       getQString(R.plurals.num_of_likes, (int)user.videosLiked));
         if (user.videosLiked > 0) { 
             likeAction.onClick =  new OnClickListener() {
                 @Override public void onClick(View v) { Invoke.User_.selectLikesOf(UserActivity.this, user); };
@@ -222,7 +221,7 @@ public class UserActivity extends SingleItemActivity<User> {
         }
         // subscriptions
         final LActionItem subscriptionAction = actionsAdapter.addAction(statsSection, R.drawable.subscribe, 
-                                                                                     getString(R.string.subscriptions));
+                                                              getString(R.string.subscriptions));
         subscriptionAction.onClick =  new OnClickListener() {
             @Override public void onClick(View v) { Invoke.User_.selectSubsriptionsOf(UserActivity.this, user); };
         };        
@@ -232,11 +231,11 @@ public class UserActivity extends SingleItemActivity<User> {
         // location
         if (user.location.length() > 0) {
             actionsAdapter.addAction(infoSection, R.drawable.location,
-                    Utils.format(getString(R.string.location_is), "place", user.location));                 
+                           getString(R.string.location_is, user.location));                 
         }
         // created on
         actionsAdapter.addAction(infoSection, R.drawable.duration,
-                                 Utils.format(getString(R.string.created_on), "time", user.createdOn));
+                       getString(R.string.created_on, user.createdOn));
         // from staff
         if (user.fromStaff) {
             actionsAdapter.addAction(infoSection, R.drawable.staff, getString(R.string.user_from_staff));    
@@ -313,7 +312,7 @@ public class UserActivity extends SingleItemActivity<User> {
                 final int albumsCount = result.getJSONObject(Album.FieldsKeys.MULTIPLE_KEY)
                                               .getInt(Album.FieldsKeys.TOTAL);                
                 Log.d(TAG, "got albums count, its " + albumsCount);
-                albumAction.title = Utils.format(getString(R.string.num_of_albums), "num", String.valueOf(albumsCount));
+                albumAction.title = getQString(R.plurals.num_of_albums, albumsCount);
                 if (albumsCount == 0) albumAction.onClick = null;
                 getActionsList().invalidateViews();
             }; break;
@@ -321,7 +320,7 @@ public class UserActivity extends SingleItemActivity<User> {
                 final int channelsCount = result.getJSONObject(Channel.FieldsKeys.MULTIPLE_KEY)
                                                 .getInt(Channel.FieldsKeys.TOTAL);                
                 Log.d(TAG, "got channels count, its " + channelsCount);
-                channelAction.title = Utils.format(getString(R.string.num_of_channels), "num", String.valueOf(channelsCount));
+                channelAction.title = getQString(R.plurals.num_of_channels, channelsCount);
                 if (channelsCount == 0) channelAction.onClick = null;
                 getActionsList().invalidateViews();
             }; break;            

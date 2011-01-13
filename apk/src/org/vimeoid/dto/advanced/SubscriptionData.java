@@ -43,7 +43,7 @@ public class SubscriptionData {
             return null;
         } 
         
-        public String toString() {
+        @Override public String toString() {
             return super.name().toLowerCase();
         }
         

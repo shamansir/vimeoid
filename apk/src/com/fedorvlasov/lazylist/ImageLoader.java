@@ -36,6 +36,7 @@ import android.widget.ImageView;
  * @date Sep 5, 2010 7:19:01 PM 
  *
  */
+// TODO: Make it singleton?
 public class ImageLoader implements ImagesByUrlProjector {
     
 	public static final String TAG = "ImageLoader";
@@ -188,7 +189,7 @@ public class ImageLoader implements ImagesByUrlProjector {
     }
     
     class PhotosLoader extends Thread {
-        public void run() {
+        @Override public void run() {
             try {
                 while(true)
                 {

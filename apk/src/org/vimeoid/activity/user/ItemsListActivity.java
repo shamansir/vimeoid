@@ -100,6 +100,7 @@ public abstract class ItemsListActivity<ItemType extends AdvancedItem> extends
         return listTask;
     }
     
+    @Override
     protected void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon) {
         subjectIcon.setImageResource(getIntent().getIntExtra(Invoke.Extras.SUBJ_ICON, R.drawable.info));
         subjectTitle.setText(getIntent().hasExtra(Invoke.Extras.SUBJ_TITLE) 

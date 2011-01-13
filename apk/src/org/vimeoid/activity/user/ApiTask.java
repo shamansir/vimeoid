@@ -50,6 +50,7 @@ public abstract class ApiTask extends ApiTask_<ApiParams, JSONObject> {
         return null;
     }
     
+    @Override
     protected ApiParams prepareParams(ApiParams... paramsList) {
         if (paramsList.length <= 0) return null;
         if (paramsList.length > 1) throw new UnsupportedOperationException("This task do not supports several params lists");

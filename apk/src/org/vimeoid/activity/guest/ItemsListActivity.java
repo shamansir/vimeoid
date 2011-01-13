@@ -63,6 +63,7 @@ public abstract class ItemsListActivity<ItemType extends SimpleItem> extends
         task.execute(params);
     }
 
+    @Override
     protected void initTitleBar(ImageView subjectIcon, TextView subjectTitle, ImageView resultIcon) {
         callInfo = VimeoProvider.collectCallInfo(contentUri);        
         

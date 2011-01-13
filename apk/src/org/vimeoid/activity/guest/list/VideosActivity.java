@@ -72,7 +72,7 @@ public class VideosActivity extends ItemsListActivity<Video> {
 	
 	@Override
 	public String getContextMenuTitle(int position) { 
-	    return Utils.format(getString(R.string.video_is), "title", Utils.crop(getItem(position).title, 20)); 
+	    return getString(R.string.video_is, Utils.crop(getItem(position).title, 20)); 
 	};
     
 }

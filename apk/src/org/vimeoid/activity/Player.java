@@ -6,7 +6,6 @@ import org.vimeoid.R;
 import org.vimeoid.media.VimeoVideoPlayingTask;
 import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
-import org.vimeoid.util.Utils;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -37,29 +36,28 @@ public class Player extends Activity {
 		    
 		    private ProgressDialog progressDialog;
 			
-			protected void onPreExecute() {
+			@Override protected void onPreExecute() {
 			    progressDialog = ProgressDialog.show(Player.this, "", getString(R.string.caching_video), true);
 				super.onPreExecute();
 			};
 			
-			protected void onPostExecute(FileInputStream dataSource) {
+			@Override protected void onPostExecute(FileInputStream dataSource) {
 			    progressDialog.dismiss();
 				super.onPostExecute(dataSource);                
 			};
 			
-			protected void onNoSpaceForVideoCache(final long required, final long actual) {
+			@Override protected void onNoSpaceForVideoCache(final long required, final long actual) {
 				runOnUiThread(new Runnable() {					
 					@Override public void run() {
-						Dialogs.makeLongToast(Player.this, Utils.format(getString(R.string.no_space_for_video_cache), 
-			                       						   "required", String.valueOf(required >> 10),
-			                       						   "actual", String.valueOf(actual >> 10)));
+						Dialogs.makeLongToast(Player.this, getString(R.string.no_space_for_video_cache, 
+			                       						             required >> 10, actual >> 10));
 						
 					}
 				}); 
 				finish();				
 			};
 			
-			protected void onFailedToGetVideoStream() {
+			@Override protected void onFailedToGetVideoStream() {
                 runOnUiThread(new Runnable() {                  
                     @Override public void run() {
                         Dialogs.makeLongToast(Player.this, getString(R.string.failed_to_get_video_stream));

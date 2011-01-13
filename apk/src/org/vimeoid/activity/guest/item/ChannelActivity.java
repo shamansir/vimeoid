@@ -9,7 +9,6 @@ import org.vimeoid.adapter.LActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.dto.simple.Channel;
 import org.vimeoid.util.Invoke;
-import org.vimeoid.util.Utils;
 
 import android.database.Cursor;
 import android.text.Html;
@@ -68,7 +67,7 @@ public class ChannelActivity extends SingleItemActivity<Channel> {
         int statsSection = actionsAdapter.addSection(getString(R.string.statistics));
         // number of videos
         final LActionItem videoAction = actionsAdapter.addAction(statsSection, R.drawable.video, 
-                                 Utils.format(getString(R.string.num_of_videos), "num", String.valueOf(channel.videosCount)));
+                                        getQString(R.plurals.num_of_videos, (int)channel.videosCount));
         if (channel.videosCount > 0) {
             videoAction.onClick = new OnClickListener() {
                 @Override public void onClick(View v) { Invoke.Guest.selectChannelContent(ChannelActivity.this, channel); };
@@ -76,20 +75,20 @@ public class ChannelActivity extends SingleItemActivity<Channel> {
         }
         // number of subsribers
         actionsAdapter.addAction(statsSection, R.drawable.subscribe, 
-                                 Utils.format(getString(R.string.num_of_subscribers), "num", String.valueOf(channel.subscribersCount)));
+                                 getQString(R.plurals.num_of_subscribers, (int)channel.subscribersCount));
         
         // Information section
         int infoSection = actionsAdapter.addSection(getString(R.string.information));
         //actionsAdapter.addAction(infoSection, R.drawable.info, channel.logoHeader);
         // creator
         final LActionItem creatorAction = actionsAdapter.addAction(infoSection, R.drawable.contact,
-                                 Utils.format(getString(R.string.created_by), "name", channel.creatorDisplayName));
+                                 getString(R.string.created_by, channel.creatorDisplayName));
         creatorAction.onClick = new OnClickListener() {
             @Override public void onClick(View v) { Invoke.Guest.selectCreator(ChannelActivity.this, channel); };
         };        
         // created on
         actionsAdapter.addAction(infoSection, R.drawable.duration,
-                                 Utils.format(getString(R.string.created_on), "time", channel.createdOn));
+                                 getString(R.string.created_on, channel.createdOn));
         return actionsAdapter;
     }
 

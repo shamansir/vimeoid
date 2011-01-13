@@ -27,7 +27,7 @@ import android.widget.TextView;
  * @date Sep 13, 2010 9:32:41 PM 
  *
  */
-public class LActionItem {
+public class LActionItem implements OnClickListener {
     
     public static class LActionsSection {
         
@@ -90,6 +90,7 @@ public class LActionItem {
         this(position, section, -1, iconUrl, title);
     }
     
+    @Override
     public void onClick(View view) {
         if (onClick != null) onClick.onClick(view);
     }

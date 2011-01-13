@@ -121,6 +121,7 @@ public abstract class EasyCursorsAdapter<ItemType extends SimpleItem>
         return pd;
     }
         
+    @Override
     protected void finalize() {
         for (int i = 0; i < cursorsCount; i++) {
             cursors[i].close();

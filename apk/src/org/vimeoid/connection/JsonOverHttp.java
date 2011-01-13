@@ -177,15 +177,15 @@ public class JsonOverHttp {
     
     protected Uri retreiveOAuthRequestToken(final Uri callbackUri) throws OAuthMessageSignerException, OAuthNotAuthorizedException, 
                                                                      OAuthExpectationFailedException, OAuthCommunicationException {
-        if (consumer == null) throw new IllegalStateException("OAuth Consumer is not set, call initOuathConfiguration before");
+        if (consumer == null) throw new IllegalStateException("OAuth Consumer is not set, call subscribeOAuth before");
         Log.d(TAG, "Retrieving OAuth request token");
         return Uri.parse(provider.retrieveRequestToken(consumer, callbackUri.toString()));
     }
     
     protected void retreiveOAuthAccessToken(final Uri uri) throws OAuthMessageSignerException, OAuthNotAuthorizedException, 
     											        OAuthExpectationFailedException, OAuthCommunicationException {
-    	if (consumer == null) throw new IllegalStateException("OAuth Consumer is not set, call initOuathConfiguration before");
-        if (provider == null) throw new IllegalStateException("OAuth provider is not ready, call initOuathConfiguration befor");
+    	if (consumer == null) throw new IllegalStateException("OAuth Consumer is not set, call subscribeOAuth before");
+        if (provider == null) throw new IllegalStateException("OAuth provider is not ready, call subscribeOAuth before");
         
         Log.d(TAG, "Started to extract OAuth token");
         if (uri != null) {
@@ -206,8 +206,8 @@ public class JsonOverHttp {
     protected String executeWithOAuth(final URI uri, ApiParams params) throws ClientProtocolException, IOException, NoSuchAlgorithmException, 
     																				    OAuthMessageSignerException, OAuthExpectationFailedException, 
     																					OAuthCommunicationException {
-        if (consumer == null) throw new IllegalStateException("OAuth Consumer is not set, call initOuathConfiguration");
-        if (provider == null) throw new IllegalStateException("OAuth Provider is not ready, call initOuathConfiguration");
+        if (consumer == null) throw new IllegalStateException("OAuth Consumer is not set, call subscribeOAuth before");
+        if (provider == null) throw new IllegalStateException("OAuth Provider is not ready, call subscribeOAuth before");
         
         Log.d(TAG, "executing Uri " + uri + " : " + params.toString() + " with OAuth");
         HttpPost post = new HttpPost(uri);
