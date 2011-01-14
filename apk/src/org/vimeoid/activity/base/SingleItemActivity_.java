@@ -110,7 +110,7 @@ public abstract class SingleItemActivity_<ItemType> extends Activity {
     }    
     
     public final String getQString(int resId, int quantity) {
-        return getResources().getQuantityString(resId, quantity);
+        return getResources().getQuantityString(resId, quantity, quantity);
     }
     
 }

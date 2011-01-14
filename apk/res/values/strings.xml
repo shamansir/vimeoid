@@ -68,15 +68,15 @@
     <string name="removed_contact">Removed contact</string>
     <!-- video page -->
     <plurals name="num_of_plays">
-        <item quantity="one">1 play</item>
+        <item quantity="one">%d play</item>
         <item quantity="other">%d plays</item>
     </plurals>
     <plurals name="num_of_likes">
-        <item quantity="one">1 like</item>
+        <item quantity="one">%d like</item>
         <item quantity="other">%d likes</item>
     </plurals>
     <plurals name="num_of_comments">
-        <item quantity="one">1 comment</item>
+        <item quantity="one">%d comment</item>
         <item quantity="other">%d comments</item>
     </plurals>
     <string name="uploaded_by">%s</string>
@@ -88,25 +88,25 @@
     <string name="no_description_supplied">[No description supplied]</string>    
     <!-- user page -->
     <plurals name="num_of_videos">
-        <item quantity="one">1 video</item>
+        <item quantity="one">%d video</item>
         <item quantity="other">%d videos</item>
     </plurals>
     <string name="num_of_albums_unknown">\? videos</string>
     <plurals name="num_of_albums">
-        <item quantity="one">1 album</item>
+        <item quantity="one">%d album</item>
         <item quantity="other">%d albums</item>
     </plurals>
     <string name="num_of_channels_unknown">\? channels</string>
     <plurals name="num_of_channels">
-        <item quantity="one">1 channel</item>
+        <item quantity="one">%d channel</item>
         <item quantity="other">%d channels</item>
     </plurals>
     <plurals name="num_of_contacts">
-        <item quantity="one">1 contact</item>
+        <item quantity="one">%d contact</item>
         <item quantity="other">%d contacts</item>
     </plurals>
     <plurals name="num_of_appearances">
-        <item quantity="one">Appears in 1 video</item>
+        <item quantity="one">Appears in %d video</item>
         <item quantity="other">Appears in %d videos</item>
     </plurals>
     <string name="user_from_staff">Staff member</string>
@@ -117,7 +117,7 @@
     <string name="no_biography_supplied">[No biography supplied]</string>    
     <!-- channel page -->
     <plurals name="num_of_subscribers">
-        <item quantity="one">1 subscriber</item>
+        <item quantity="one">%d subscriber</item>
         <item quantity="other">%d subscribers</item>
     </plurals>
     <string name="created_by">%s</string>
