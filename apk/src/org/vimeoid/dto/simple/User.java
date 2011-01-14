@@ -132,7 +132,7 @@ public class User implements SimpleItem {
         user.mediumPortraitUrl = cursor.getString(cursor.getColumnIndex(User.FieldsKeys.PORTRAIT_MEDIUM)); 
         
         user.biography = cursor.getString(cursor.getColumnIndex(User.FieldsKeys.BIO));
-        user.createdOn = cursor.getString(cursor.getColumnIndex(User.FieldsKeys.CREATED_ON));
+        user.createdOn = Utils.adaptDate(cursor.getString(cursor.getColumnIndex(User.FieldsKeys.CREATED_ON)));
         
         user.videosAppearsIn = cursor.getLong(cursor.getColumnIndex(User.FieldsKeys.NUM_OF_APPEARANCES));
         user.videosLiked = cursor.getLong(cursor.getColumnIndex(User.FieldsKeys.NUM_OF_LIKES));

@@ -9,6 +9,7 @@ import org.vimeoid.adapter.LActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.dto.simple.Channel;
 import org.vimeoid.util.Invoke;
+import org.vimeoid.util.Utils;
 
 import android.database.Cursor;
 import android.text.Html;
@@ -67,7 +68,7 @@ public class ChannelActivity extends SingleItemActivity<Channel> {
         int statsSection = actionsAdapter.addSection(getString(R.string.statistics));
         // number of videos
         final LActionItem videoAction = actionsAdapter.addAction(statsSection, R.drawable.video, 
-                                        getQString(R.plurals.num_of_videos, (int)channel.videosCount));
+                                        Utils.quantity(this, R.plurals.num_of_videos, (int)channel.videosCount));
         if (channel.videosCount > 0) {
             videoAction.onClick = new OnClickListener() {
                 @Override public void onClick(View v) { Invoke.Guest.selectChannelContent(ChannelActivity.this, channel); };
@@ -75,7 +76,7 @@ public class ChannelActivity extends SingleItemActivity<Channel> {
         }
         // number of subsribers
         actionsAdapter.addAction(statsSection, R.drawable.subscribe, 
-                                 getQString(R.plurals.num_of_subscribers, (int)channel.subscribersCount));
+                                 Utils.quantity(this, R.plurals.num_of_subscribers, (int)channel.subscribersCount));
         
         // Information section
         int infoSection = actionsAdapter.addSection(getString(R.string.information));

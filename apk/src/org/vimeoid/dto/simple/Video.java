@@ -139,7 +139,7 @@ public class Video implements SimpleItem {
     	video.mediumUploaderPortraitUrl = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.USER_IMG_MEDIUM)); 
     	
         video.description = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.DESCRIPTION));
-        video.uploadedOn = cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.UPLOADED_ON));
+        video.uploadedOn = Utils.adaptDate(cursor.getString(cursor.getColumnIndex(Video.FieldsKeys.UPLOADED_ON)));
         
         video.width = cursor.getInt(cursor.getColumnIndex(Video.FieldsKeys.WIDTH));
         video.height = cursor.getInt(cursor.getColumnIndex(Video.FieldsKeys.HEIGHT));

@@ -9,6 +9,7 @@ import org.vimeoid.adapter.LActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.dto.simple.Album;
 import org.vimeoid.util.Invoke;
+import org.vimeoid.util.Utils;
 
 import android.database.Cursor;
 import android.text.Html;
@@ -62,7 +63,7 @@ public class AlbumActivity extends SingleItemActivity<Album> {
     	int statsSection = actionsAdapter.addSection(getString(R.string.statistics));
     	// number of videos
     	final LActionItem videoAction = actionsAdapter.addAction(statsSection, R.drawable.video, 
-    			                        getQString(R.plurals.num_of_videos, (int)album.videosCount));
+    			                        Utils.quantity(this, R.plurals.num_of_videos, (int)album.videosCount));
     	if (album.videosCount > 0) {
     	    videoAction.onClick =  new OnClickListener() {
                 @Override public void onClick(View v) { Invoke.Guest.selectAlbumContent(AlbumActivity.this, album); };

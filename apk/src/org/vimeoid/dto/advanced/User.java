@@ -102,7 +102,7 @@ public class User implements AdvancedItem {
         
         user.id = jsonObj.getLong(FieldsKeys.ID);
         if (jsonObj.has(FieldsKeys.CREATED_ON)) 
-            user.createdOn = jsonObj.getString(FieldsKeys.CREATED_ON);
+            user.createdOn = Utils.adaptDate(jsonObj.getString(FieldsKeys.CREATED_ON));
         user.fromStaff = Utils.adaptBoolean(jsonObj.getInt(FieldsKeys.IS_STAFF));
         user.isPlusMember = Utils.adaptBoolean(jsonObj.getInt(FieldsKeys.IS_PLUS));
         if (jsonObj.has(FieldsKeys.IS_MUTUAL))
@@ -155,4 +155,5 @@ public class User implements AdvancedItem {
     }
     
     public long getId() { return id; }
+    
 }

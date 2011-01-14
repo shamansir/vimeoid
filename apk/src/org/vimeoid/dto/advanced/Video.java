@@ -112,8 +112,8 @@ public class Video implements AdvancedItem {
         video.title = jsonObj.getString(FieldsKeys.TITLE);
         video.description = jsonObj.getString(FieldsKeys.DESCRIPTION);
         
-        video.uploadedOn = jsonObj.getString(FieldsKeys.UPLOADED_ON);
-        video.modifiedOn = jsonObj.getString(FieldsKeys.MODIFIED_ON);
+        video.uploadedOn = Utils.adaptDate(jsonObj.getString(FieldsKeys.UPLOADED_ON));
+        video.modifiedOn = Utils.adaptDate(jsonObj.getString(FieldsKeys.MODIFIED_ON));
         
         video.likesCount = jsonObj.getLong(FieldsKeys.NUM_OF_LIKES);
         video.playsCount = jsonObj.getLong(FieldsKeys.NUM_OF_PLAYS);

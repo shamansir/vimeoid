@@ -13,6 +13,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,6 +26,7 @@ import org.vimeoid.connection.ContentType;
 import android.content.Context;
 import android.os.Environment;
 import android.os.StatFs;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -43,6 +46,8 @@ import android.widget.AdapterView;
  *
  */
 public class Utils {
+    
+    // TODO: group with inner classes
 	
 	public static final String TAG = "Utils";
 	
@@ -52,6 +57,10 @@ public class Utils {
 	
 	private static File cacheDir = null;
 	private static boolean cacheDirCreated = false;
+	
+	private static SimpleDateFormat srcFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	
+	// ------------------------------ API --------------------------------------
 	
     public static ApiParams quickApiParams(String name1, String value1) {        
         return new ApiParams().add(name1, value1);
@@ -80,6 +89,53 @@ public class Utils {
                               .add(name4, value4);
     }
     
+    public static String validateShortcutOrId(final String shortcut) { 
+        if (!shortcut.matches("^[\\d\\w_]+$")) throw new IllegalArgumentException("Not correct schortcut or _ID: " + shortcut);
+        return shortcut;
+    }
+    
+    public static String validateId(final String id) { 
+        if (!id.matches("^\\d+$")) throw new IllegalArgumentException("Not correct _ID: " + id);
+        return id;
+    }
+    
+    public static String validateActionName(String action) {
+        if (!action.matches("^[\\w_]+$")) throw new IllegalArgumentException("Not correct action name: " + action);
+        return action;
+    }
+    
+    public static String authorIdFromProfileUrl(String uploaderProfileUrl) {
+        return uploaderProfileUrl.substring(17);
+    }
+    
+    // ------------------------------ Vimeoid ----------------------------------
+    
+    public static int drawableByContent(ContentType contentType) {
+        if (contentType == null) return R.drawable.info;
+        switch (contentType) {
+            case ACTIVITY: return R.drawable.activity;
+            case ALBUM:    return R.drawable.album;
+            case CHANNEL:  return R.drawable.channel;
+            case COMMENT:  return R.drawable.comment;
+            case GROUP:    return R.drawable.group;
+            case MESSAGE:  return R.drawable.message;
+            case TAG:      return R.drawable.tag;
+            case USER:     return R.drawable.contact;
+            case VIDEO:    return R.drawable.video;
+            default: return R.drawable.icon;
+        }
+    }
+    
+    // ------------------------------ Adapt / Format ---------------------------
+    
+    public static String crop(String value, int howMuch) {
+        return (value.length() <= howMuch) ? value : (value.substring(0, howMuch - 3) + "...");  
+    }
+    
+    public static String quantity(Context context, int resId, int quantity) {
+        return context.getResources().getQuantityString(resId, quantity, quantity);
+    }
+    
     /* public static String format(String source, String... params) {
         String result = source;
         int pos = 0;
@@ -96,6 +152,16 @@ public class Utils {
     
     public static boolean adaptBoolean(int value) {
     	return (value == 0) ? false : true;
+    }
+    
+    // gets date in format yyyy-MM-dd hh:mm:ss
+    // returns in dd MMM yyyy hh:mm format
+    public static String adaptDate(String date) {
+        try {
+            return DateFormat.format("dd MMM yyyy kk:mm", srcFormat.parse(date)).toString();
+        } catch (ParseException e) {
+            return "## #### #### ##:##";
+        }
     }
     
     public static String[] extractTags(String source) {
@@ -121,6 +187,16 @@ public class Utils {
     	return adaptTags(tags, noneText, " / ");
     }
     
+    public static String[] stringArrayFromJson(JSONArray jsonArr) throws JSONException {
+        final String[] array = new String[jsonArr.length()];
+        for (int i = 0; i < jsonArr.length(); i++) {
+            array[i] = jsonArr.getString(i);
+        }
+        return array;
+    }
+        
+    // ------------------------------ Network ----------------------------------
+    
     public static int lookupHost(String hostname) {
         InetAddress inetAddress;
         try {
@@ -136,46 +212,9 @@ public class Utils {
                 | ((addrBytes[1] & 0xff) << 8)
                 |  (addrBytes[0] & 0xff);
         return addr;
-    }    
+    }        
     
-    public static String validateShortcutOrId(final String shortcut) { 
-        if (!shortcut.matches("^[\\d\\w_]+$")) throw new IllegalArgumentException("Not correct schortcut or _ID: " + shortcut);
-        return shortcut;
-    }
-    
-    public static String validateId(final String id) { 
-        if (!id.matches("^\\d+$")) throw new IllegalArgumentException("Not correct _ID: " + id);
-        return id;
-    }
-    
-    public static String validateActionName(String action) {
-        if (!action.matches("^[\\w_]+$")) throw new IllegalArgumentException("Not correct action name: " + action);
-        return action;
-    }    
-    
-    public static String crop(String value, int howMuch) {
-        return (value.length() <= howMuch) ? value : (value.substring(0, howMuch - 3) + "...");  
-    }
-    
-    public static int drawableByContent(ContentType contentType) {
-        if (contentType == null) return R.drawable.info;
-        switch (contentType) {
-            case ACTIVITY: return R.drawable.activity;
-            case ALBUM:    return R.drawable.album;
-            case CHANNEL:  return R.drawable.channel;
-            case COMMENT:  return R.drawable.comment;
-            case GROUP:    return R.drawable.group;
-            case MESSAGE:  return R.drawable.message;
-            case TAG:      return R.drawable.tag;
-            case USER:     return R.drawable.contact;
-            case VIDEO:    return R.drawable.video;
-            default: return R.drawable.icon;
-        }
-    }
-
-    public static String authorIdFromProfileUrl(String uploaderProfileUrl) {
-        return uploaderProfileUrl.substring(17);
-    }
+    // ------------------------ Files: Streams / Cache -------------------------
     
     public static void copyStream(InputStream is, OutputStream os) {
         final int buffer_size=1024;
@@ -255,13 +294,7 @@ public class Utils {
         return stat.getAvailableBlocks() * stat.getBlockSize();
 	}
 	
-	public static String[] stringArrayFromJson(JSONArray jsonArr) throws JSONException {
-	    final String[] array = new String[jsonArr.length()];
-	    for (int i = 0; i < jsonArr.length(); i++) {
-	        array[i] = jsonArr.getString(i);
-	    }
-	    return array;
-	}
+	// ------------------------ Views ------------------------------------------
 	
 	public static View getItemViewIfVisible(AdapterView<?> holder, int itemPos) {
 	    int firstPosition = holder.getFirstVisiblePosition();
@@ -279,6 +312,6 @@ public class Utils {
     public static void forcePostInvalidate(AdapterView<?> parent, int position) {
         final View itemView = getItemViewIfVisible(parent, position);
         if (itemView != null) itemView.postInvalidate();        
-    }    
-	
+    }        
+        
 }

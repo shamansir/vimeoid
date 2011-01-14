@@ -109,8 +109,4 @@ public abstract class SingleItemActivity_<ItemType> extends Activity {
         progressBar.setVisibility(value ? View.VISIBLE : View.GONE);
     }    
     
-    public final String getQString(int resId, int quantity) {
-        return getResources().getQuantityString(resId, quantity, quantity);
-    }
-    
 }

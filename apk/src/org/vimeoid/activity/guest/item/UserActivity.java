@@ -9,6 +9,7 @@ import org.vimeoid.adapter.LActionItem;
 import org.vimeoid.adapter.SectionedActionsAdapter;
 import org.vimeoid.dto.simple.User;
 import org.vimeoid.util.Invoke;
+import org.vimeoid.util.Utils;
 
 import android.database.Cursor;
 import android.text.Html;
@@ -67,7 +68,7 @@ public class UserActivity extends SingleItemActivity<User> {
         int statsSection = actionsAdapter.addSection(getString(R.string.statistics));
         // number of videos
         final LActionItem videoAction = actionsAdapter.addAction(statsSection, R.drawable.video, 
-                                        getQString(R.plurals.num_of_videos, (int)user.videosUploaded));
+                                        Utils.quantity(this, R.plurals.num_of_videos, (int)user.videosUploaded));
         if (user.videosUploaded > 0) {
             videoAction.onClick =  new OnClickListener() {
                 @Override public void onClick(View v) { Invoke.Guest.selectVideosBy(UserActivity.this, user); };
@@ -75,7 +76,7 @@ public class UserActivity extends SingleItemActivity<User> {
         }
         // number of albums
         final LActionItem albumAction = actionsAdapter.addAction(statsSection, R.drawable.album, 
-                                        getQString(R.plurals.num_of_albums, (int)user.albumsCount));
+                                        Utils.quantity(this, R.plurals.num_of_albums, (int)user.albumsCount));
         if (user.albumsCount > 0) {
             albumAction.onClick =  new OnClickListener() {
                 @Override public void onClick(View v) { Invoke.Guest.selectAlbumsOf(UserActivity.this, user); };
@@ -83,7 +84,7 @@ public class UserActivity extends SingleItemActivity<User> {
         }
         // number of channels
         final LActionItem channelAction = actionsAdapter.addAction(statsSection, R.drawable.channel, 
-                                          getQString(R.plurals.num_of_channels, (int)user.channelsCount));
+                                          Utils.quantity(this, R.plurals.num_of_channels, (int)user.channelsCount));
         if (user.channelsCount > 0) {
             channelAction.onClick =  new OnClickListener() {
                 @Override public void onClick(View v) { Invoke.Guest.selectChannelsOf(UserActivity.this, user); };
@@ -91,10 +92,10 @@ public class UserActivity extends SingleItemActivity<User> {
         }
         // number of contacts
         actionsAdapter.addAction(statsSection, R.drawable.contact, 
-                       getQString(R.plurals.num_of_contacts, (int)user.contactsCount));
+                       Utils.quantity(this, R.plurals.num_of_contacts, (int)user.contactsCount));
         // number of appearances
         final LActionItem appearanceAction = actionsAdapter.addAction(statsSection, R.drawable.appearance,
-                       getQString(R.plurals.num_of_appearances, (int)user.videosAppearsIn));
+                          Utils.quantity(this, R.plurals.num_of_appearances, (int)user.videosAppearsIn));
         if (user.videosAppearsIn > 0) {
             appearanceAction.onClick =  new OnClickListener() {
                 @Override public void onClick(View v) { Invoke.Guest.selectApperancesOf(UserActivity.this, user); };
@@ -102,7 +103,7 @@ public class UserActivity extends SingleItemActivity<User> {
         }
         // number of likes
         final LActionItem likeAction = actionsAdapter.addAction(statsSection, R.drawable.like, 
-                       getQString(R.plurals.num_of_likes, (int)user.videosLiked));
+                          Utils.quantity(this, R.plurals.num_of_likes, (int)user.videosLiked));
         if (user.videosLiked > 0) {	
         	likeAction.onClick =  new OnClickListener() {
                 @Override public void onClick(View v) { Invoke.Guest.selectLikesOf(UserActivity.this, user); };

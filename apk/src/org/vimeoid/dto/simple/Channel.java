@@ -4,6 +4,7 @@
 package org.vimeoid.dto.simple;
 
 import org.vimeoid.util.SimpleItem;
+import org.vimeoid.util.Utils;
 
 import android.database.Cursor;
 
@@ -89,7 +90,7 @@ public class Channel implements SimpleItem {
         channel.logoHeader = cursor.getString(cursor.getColumnIndex(Channel.FieldsKeys.LOGO));
         channel.creatorDisplayName = cursor.getString(cursor.getColumnIndex(Channel.FieldsKeys.CREATOR_DISPLAY_NAME));        
         channel.creatorId = cursor.getLong(cursor.getColumnIndex(Channel.FieldsKeys.CREATOR_ID));
-        channel.createdOn = cursor.getString(cursor.getColumnIndex(Channel.FieldsKeys.CREATED_ON)); 
+        channel.createdOn = Utils.adaptDate(cursor.getString(cursor.getColumnIndex(Channel.FieldsKeys.CREATED_ON))); 
         channel.videosCount = cursor.getLong(cursor.getColumnIndex(Channel.FieldsKeys.NUM_OF_VIDEOS));
         channel.subscribersCount = cursor.getLong(cursor.getColumnIndex(Channel.FieldsKeys.NUM_OF_SUBSCRIBERS));
         

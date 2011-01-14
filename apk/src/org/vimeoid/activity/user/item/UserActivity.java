@@ -29,6 +29,7 @@ import org.vimeoid.util.ApiParams;
 import org.vimeoid.util.Dialogs;
 import org.vimeoid.util.Invoke;
 import org.vimeoid.util.PagingData_;
+import org.vimeoid.util.Utils;
 
 import android.os.Bundle;
 import android.text.Html;
@@ -175,7 +176,7 @@ public class UserActivity extends SingleItemActivity<User> {
         int statsSection = actionsAdapter.addSection(getString(R.string.statistics));
         // number of videos
         final LActionItem videoAction = actionsAdapter.addAction(statsSection, R.drawable.video, 
-                                        getQString(R.plurals.num_of_videos, (int)user.videosCount));
+                                        Utils.quantity(this, R.plurals.num_of_videos, (int)user.videosCount));
         if (user.videosCount > 0) {
             videoAction.onClick =  new OnClickListener() {
                 @Override public void onClick(View v) { Invoke.User_.selectVideosBy(UserActivity.this, user); };
@@ -197,7 +198,7 @@ public class UserActivity extends SingleItemActivity<User> {
         };
         // number of contacts
         final LActionItem contactAction = actionsAdapter.addAction(statsSection, R.drawable.contact, 
-                                          getQString(R.plurals.num_of_contacts, (int)user.contactsCount));
+                                          Utils.quantity(this, R.plurals.num_of_contacts, (int)user.contactsCount));
         if (user.contactsCount > 0) {
             contactAction.onClick =  new OnClickListener() {
                 @Override public void onClick(View v) { Invoke.User_.selectContactsOf(UserActivity.this, user); };
@@ -205,7 +206,7 @@ public class UserActivity extends SingleItemActivity<User> {
         }
         // number of appearances
         final LActionItem appearanceAction = actionsAdapter.addAction(statsSection, R.drawable.appearance, 
-                                             getQString(R.plurals.num_of_appearances, (int)user.videosAppearsIn));
+                                             Utils.quantity(this, R.plurals.num_of_appearances, (int)user.videosAppearsIn));
         if (user.videosAppearsIn > 0) {
             appearanceAction.onClick =  new OnClickListener() {
                 @Override public void onClick(View v) { Invoke.User_.selectApperancesOf(UserActivity.this, user); };
@@ -213,7 +214,7 @@ public class UserActivity extends SingleItemActivity<User> {
         }
         // number of likes
         final LActionItem likeAction = actionsAdapter.addAction(statsSection, R.drawable.like, 
-                                       getQString(R.plurals.num_of_likes, (int)user.videosLiked));
+                                       Utils.quantity(this, R.plurals.num_of_likes, (int)user.videosLiked));
         if (user.videosLiked > 0) { 
             likeAction.onClick =  new OnClickListener() {
                 @Override public void onClick(View v) { Invoke.User_.selectLikesOf(UserActivity.this, user); };
@@ -312,7 +313,7 @@ public class UserActivity extends SingleItemActivity<User> {
                 final int albumsCount = result.getJSONObject(Album.FieldsKeys.MULTIPLE_KEY)
                                               .getInt(Album.FieldsKeys.TOTAL);                
                 Log.d(TAG, "got albums count, its " + albumsCount);
-                albumAction.title = getQString(R.plurals.num_of_albums, albumsCount);
+                albumAction.title = Utils.quantity(this, R.plurals.num_of_albums, albumsCount);
                 if (albumsCount == 0) albumAction.onClick = null;
                 getActionsList().invalidateViews();
             }; break;
@@ -320,7 +321,7 @@ public class UserActivity extends SingleItemActivity<User> {
                 final int channelsCount = result.getJSONObject(Channel.FieldsKeys.MULTIPLE_KEY)
                                                 .getInt(Channel.FieldsKeys.TOTAL);                
                 Log.d(TAG, "got channels count, its " + channelsCount);
-                channelAction.title = getQString(R.plurals.num_of_channels, channelsCount);
+                channelAction.title = Utils.quantity(this, R.plurals.num_of_channels, channelsCount);
                 if (channelsCount == 0) channelAction.onClick = null;
                 getActionsList().invalidateViews();
             }; break;            

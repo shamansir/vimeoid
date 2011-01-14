@@ -4,6 +4,7 @@
 package org.vimeoid.dto.simple;
 
 import org.vimeoid.util.SimpleItem;
+import org.vimeoid.util.Utils;
 
 import android.database.Cursor;
 
@@ -88,7 +89,7 @@ public class Album implements SimpleItem {
         
         album.id = cursor.getLong(cursor.getColumnIndex(Album.FieldsKeys._ID));
         album.title = cursor.getString(cursor.getColumnIndex(Album.FieldsKeys.TITLE));
-        album.createdOn = cursor.getString(cursor.getColumnIndex(Album.FieldsKeys.CREATED_ON));        
+        album.createdOn = Utils.adaptDate(cursor.getString(cursor.getColumnIndex(Album.FieldsKeys.CREATED_ON)));        
         album.lastModifiedOn = cursor.getString(cursor.getColumnIndex(Album.FieldsKeys.MODIFIED_ON));        
         album.videosCount = cursor.getLong(cursor.getColumnIndex(Album.FieldsKeys.NUM_OF_VIDEOS));        
         

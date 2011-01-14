@@ -60,6 +60,5 @@ public class Operation implements SimpleItem {
     public int videoLikesCount;
     public int videoPlaysCount;
     public int videoCommentsCount;
-    
 
 }

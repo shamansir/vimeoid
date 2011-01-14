@@ -131,13 +131,13 @@ public class VideoActivity extends SingleItemActivity<Video> {
                                            Utils.adaptTags(video.tags, getString(R.string.none_of_tags))));
         // number of plays
         actionsAdapter.addAction(statsSection, R.drawable.play, 
-                                 getQString(R.plurals.num_of_plays, (int)video.playsCount));
+                                 Utils.quantity(this, R.plurals.num_of_plays, (int)video.playsCount));
         // number of likes
         actionsAdapter.addAction(statsSection, R.drawable.like, 
-                                 getQString(R.plurals.num_of_likes, (int)video.likesCount));        
+                                 Utils.quantity(this, R.plurals.num_of_likes, (int)video.likesCount));        
         // number of comments
         actionsAdapter.addAction(statsSection, R.drawable.comment_video, 
-                                 getQString(R.plurals.num_of_comments, (int)video.commentsCount));
+                                 Utils.quantity(this, R.plurals.num_of_comments, (int)video.commentsCount));
         
         
         // Information section
