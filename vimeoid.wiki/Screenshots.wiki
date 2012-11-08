@@ -1,0 +1,112 @@
+#summary Screenshots of the application
+#labels Featured,Phase-Design
+
+== Screenshots ==
+
+==== Welcome screen ====
+
+http://vimeoid.googlecode.com/hg/screens/welcome.png
+
+<table cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td>
+
+<table cellspacing="0" cellpadding="2px">
+
+<thead>
+<tr colspan="2"><td><h3>User Screens</h3></td></tr>
+</thead> 
+
+<tbody>
+<tr>
+<td align="center">*Videos list*</td>
+<td align="center">*Single video*</td>
+</tr> 
+<tr>
+<td>http://vimeoid.googlecode.com/hg/screens/user_videos.png</td>
+<td>http://vimeoid.googlecode.com/hg/screens/user_video.png</td>
+</tr>
+<tr>
+<td align="center">*Users list*</td>
+<td align="center">*Single user*</td>
+</tr> 
+<tr>
+<td>http://vimeoid.googlecode.com/hg/screens/user_users.png</td>
+<td>http://vimeoid.googlecode.com/hg/screens/user_user.png</td>
+</tr>
+<tr>
+<td align="center">*Channels list*</td>
+<td align="center">*Single channel*</td>
+</tr> 
+<tr>
+<td align="center" valign="middle">_Coming soon_</td>
+<td align="center" valign="middle">_Coming soon_</td>
+</tr>
+<tr>
+<td align="center">*Albums list*</td>
+<td align="center">*Single album*</td>
+</tr> 
+<tr>
+<td align="center" valign="middle">_Coming soon_</td>
+<td align="center" valign="middle">_Coming soon_</td>
+</tr>
+<tr>
+<td align="center">*Comments list*</td>
+<td align="center">*Single comment*</td>
+</tr> 
+<tr>
+<td align="center" valign="middle">_Coming soon_</td>
+<td align="center" valign="middle">_Coming soon_</td>
+</tr>
+</tbody>
+
+</table>
+
+</td>
+</tr>
+<tr>
+<td>
+<table>
+<thead>
+<tr colspan="2"><td><h3>Guest Screens</h3></td></tr>
+</thead> 
+<tbody>
+<tr>
+<td align="center">*Videos list*</td>
+<td align="center">*Single video*</td>
+</tr> 
+<tr>
+<td>http://vimeoid.googlecode.com/hg/screens/guest_videos.png</td>
+<td>http://vimeoid.googlecode.com/hg/screens/guest_video.png</td>
+</tr>
+<tr>
+<td align="center">*Users list*</td>
+<td align="center">*Single user*</td>
+</tr> 
+<tr>
+<td align="center" valign="middle">_No such screen_</td>
+<td>http://vimeoid.googlecode.com/hg/screens/guest_user.png</td>
+</tr>
+<tr>
+<td align="center">*Channels list*</td>
+<td align="center">*Single channel*</td>
+</tr> 
+<tr>
+<td>http://vimeoid.googlecode.com/hg/screens/guest_channels.png</td>
+<td>http://vimeoid.googlecode.com/hg/screens/guest_channel.png</td>
+</tr>
+<tr>
+<td align="center">*Albums list*</td>
+<td align="center">*Single album*</td>
+</tr> 
+<tr>
+<td>http://vimeoid.googlecode.com/hg/screens/guest_albums.png</td>
+<td>http://vimeoid.googlecode.com/hg/screens/guest_album.png</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
